@@ -1,0 +1,214 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "Add New Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row text">
+    <div class="col-md-10 offset-md-1">
+        <p>
+            <h4>Add Product</h4>
+        </p>
+
+        <form asp-action="CreateProduct" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                <input type="submit" value="Create" class="btn btn-success float-right" />
+            </div>
+
+            @*Tab Nav*@
+            <ul class="nav nav-tabs nav-justified">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#info" data-toggle="tab">Primary Information</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#images" data-toggle="tab">Images</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#variants" data-toggle="tab">Variants</a>
+                </li>
+            </ul>
+
+            @*Tab Content*@
+            <div class="tab-content" style="margin-top: 15px">
+                @*Primary Info*@
+                <div id="info" class="tab-pane active fade in">
+                    <div class="row form-group">
+
+                        <div class="col col-md-8">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+
+
+                            <label asp-for="Description" class="control-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="col col-md-4">
+                            <label asp-for="ProductCategoryId" class="control-label"></label>
+                            <div>
+                                @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "ProductCategoryId" })
+                                @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
+                            </div>
+
+
+                            <label asp-for="StatusId" class="control-label"></label>
+                            <div>
+                                @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "StatusId" })
+                                @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
+                            </div>
+
+
+                            <label asp-for="GenderId" class="control-label"></label>
+                            <div>
+                                @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "GenderId" })
+                                @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                @*Images*@
+                <div id="images" class="tab-pane fade">
+                    <table class=" table order-list tblImages">                            
+                        <thead>                                
+                            <tr>                                    
+                                <td colspan="5" style="text-align: left;">                                        
+                                    <a id="addimage" class="btn btn-info text-white">                                            
+                                        <i class="bi bi-plus-circle"></i>&nbsp;Add Image                                        
+                                    </a>                                    
+                                </td>                                
+                            </tr>                            
+                        </thead>                            
+                        <tbody>                                
+                            <tr>
+                                <td class="col-sm-4 text-center">
+                                    <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
+                                </td>
+                                <td class="col-sm-4">
+                                    <div class="custom-file">
+                                        <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                    </div>
+                                </td>
+                                <td class="col-sm-2">
+                                    <a class="deleteRow"></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                @*Variants*@
+                <div id="variants" class="tab-pane fade">
+                    <table class=" table order-list tblVariants">
+                        <thead>
+                            <tr>
+                                <td colspan="5" style="text-align: left;">
+                                    <a id="addvariant" class="btn btn-info text-white">
+                                        <i class="bi bi-plus-circle"></i>&nbsp;Add Variant
+                                    </a>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="col-sm-4">
+                                    <label class="control-label">Size</label>
+                                    @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Code"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
+                                    @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })
+                                </td>
+                                <td class="col-sm-4">
+                                    <label class="control-label">Color</label>
+                                    @Html.DropDownListFor(x => Model.ColorId, new SelectList(Model.Colors, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "ColorId" })
+                                    @Html.ValidationMessageFor(x => x.ColorId, "", new { @class = "text-danger" })
+                                </td>
+                                <td class="col-sm-4">
+                                    <label class="control-label">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control" />
+                                </td>
+                                <td class="col-sm-2">
+                                    <a class="deleteRow"></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#ImageFile").on("change", function () {
+            var output = document.getElementById('ImagePreview');
+            output.src = $(this).val();
+        });
+
+        //add image
+        $(document).ready(function () {
+            var counter = 0;
+
+            $("#addimage").on("click", function () {
+                var newRow = $("<tr>");
+                var cols = "";
+
+                cols += '<td class="text-center"><img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em"' + counter + '"/></td>';
+                cols += '<td><input asp-for="ImageFile" accept="image/*" class="form-control-file"' + counter + '/></td>';
+                cols += '<td><input type="button" class="ibtnDelImage btn btn-md btn-danger" value="Delete"></td>';
+                newRow.append(cols);
+
+                $("table.order-list.tblImages").append(newRow);
+                counter++;
+            });
+
+            $("table.order-list.tblImages").on("click", ".ibtnDelImage", function (event) {
+                $(this).closest("tr").remove();
+                counter -= 1
+            });
+        });
+
+        //add variant
+        $(document).ready(function () {
+            var counter = 0;
+
+            $("#addvariant").on("click", function () {
+                var newRow = $("<tr>");
+                var cols = "";
+
+                cols += '<td><label class="control-label">Size</label><input type="text" name="size" class="form-control"' + counter + '"/></td>';
+                cols += '<td><label class="control-label">Color</label><input type="text" name="color" class="form-control"' + counter + '"/></td>';
+                cols += '<td><label class="control-label">Quantity</label><input type="number" name="quantity" class="form-control"' + counter + '/></td>';
+                cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
+                newRow.append(cols);
+
+                $("table.order-list.tblVariants").append(newRow);
+                counter++;
+            });
+
+            $("table.order-list.tblVariants").on("click", ".ibtnDelVariant", function (event) {
+                $(this).closest("tr").remove();
+                counter -= 1
+            });
+        });
+
+        function calculateRow(row) {
+            var price = +row.find('input[name^="price"]').val();
+
+        }
+
+        function calculateGrandTotal() {
+            var grandTotal = 0;
+            $("table.order-list").find('input[name^="price"]').each(function () {
+                grandTotal += +$(this).val();
+            });
+            $("#grandtotal").text(grandTotal.toFixed(2));
+        }
+    </script>
+}

@@ -1,0 +1,128 @@
+﻿@model IEnumerable<OrderDetails>
+
+@{
+    ViewData["Title"] = "Order Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-title">
+    <h2>Orders</h2>
+</div>
+
+<div class="page-body">
+    <div class="row">
+        <div class="col col-xl-8">
+            <div class="table-responsive-md">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td class="align-middle">
+                                <strong>
+                                    @*@Html.DisplayFor(modelItem => item.Name)*@
+                                    Item Name
+                                </strong>
+                            </td>
+                            <td class="align-middle col-2" rowspan="5">
+                                <div class="btn">
+                                    <strong>
+                                        <a asp-controller="Administrator" asp-action="UnderConstruction" class="btn btn-block">&nbsp;UPDATE ORDER STATUS</a>
+                                    </strong>
+                                </div>
+                                <div class="btn btn-block"><strong>&nbsp;CANCEL ORDER</strong></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle col-lg-auto">
+                                @*<strong>@Html.DisplayFor(modelItem => item.Description)</strong>*@
+                                Item Description
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle col-lg-auto">
+                                Payment Mode: --
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle col-lg-auto">
+                                Estimated Delivery: --
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle col-lg-auto">
+                                STATUS: --
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col col-xl-4">
+            @*In-Transit*@
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr class="text-center">
+                                <th colspan="2">In-Transit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="align-middle">
+                                    @*<img alt="@item.Name" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" width="100" height="100" />*@
+                                    Item Name
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle">
+                                    @*@Html.DisplayFor(modelItem => item.Name)*@
+                                    Item Description
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle">
+                                    @*<font color="#ff0000"><strong>DAYS LEFT: --</strong></font>*@
+                                    Order Date: --
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @*Delivered*@
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr class="text-center">
+                                <th colspan="2">Delivered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="align-middle">
+                                    @*<img alt="@item.Name" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" width="100" height="100" />*@
+                                    Item Name
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle">
+                                    @*@Html.DisplayFor(modelItem => item.Name)*@
+                                    Item Description
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle">
+                                    @*<font color="#ff0000"><strong>DAYS LEFT: --</strong></font>*@
+                                    Date Delivered: --
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

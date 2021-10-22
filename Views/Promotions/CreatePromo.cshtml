@@ -1,0 +1,85 @@
+﻿@model Promos
+
+@{
+    ViewData["Title"] = "Add New Promo";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row text">
+    <div class="col-md-10 offset-md-1">
+        <p>
+            <h4>Add Promo</h4>
+        </p>
+
+        <form asp-action="CreatePromo" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                <input type="submit" value="Create" class="btn btn-success float-right" />
+            </div>
+
+            @*Tab Nav*@
+            <ul class="nav nav-tabs nav-justified">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#info" data-toggle="tab">Primary Information</a>
+                </li>
+            </ul>
+
+            @*Tab Content*@
+            <div class="tab-content" style="margin-top: 15px">
+                @*Primary Info*@
+                <div id="info" class="tab-pane active fade in">
+                    <div class="row form-group">
+                        <div class="col col-md-4">
+                            <img id="ImagePreview" src="~/images/default-image.gif" style="width:20em; height:35em" />
+                        </div>
+
+                        <div class="col col-md-8">
+                            <div class="custom-file">
+                                <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                            </div>
+
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+
+
+                            <label asp-for="Description" class="control-label"></label>
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+
+
+                            <label asp-for="StartDate" class="control-label"></label>
+                            <input asp-for="StartDate" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+
+
+                            <label asp-for="EndDate" class="control-label"></label>
+                            <input asp-for="EndDate" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+                            <div class="col">
+                            </div>
+
+
+                            <label asp-for="SalePercentage" class="control-label"></label>
+                            <input asp-for="SalePercentage" class="form-control" type="number" />
+                            <span asp-validation-for="SalePercentage" class="text-danger"></span>
+
+
+                            <label asp-for="PromoCategory" class="control-label"></label>
+                            <input asp-for="PromoCategory" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#Image").on("change", function () {
+            var output = document.getElementById('ImagePreview');
+            output.src = $(this).val();
+        });
+    </script>
+}

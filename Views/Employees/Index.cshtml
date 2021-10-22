@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Employees>
+
+@{
+    ViewData["Title"] = "Employee Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-title">
+    <h2>Employees</h2>
+</div>
+
+<div class="page-body">
+    <div class="text-white" style="position: fixed; right: 25px; top: 25px">
+        <a asp-controller="Employees" asp-action="CreateEmployee" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i>&nbsp;Add New Employee
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive-md col-xl-auto">
+                <table class="table">
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="align-middle col-lg-3">
+                                    <img alt="@item.EmployeeFirstName" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" width="150" height="150" />
+                                </td>
+                                <td class="align-middle">
+                                    <strong>@Html.DisplayFor(modelItem => item.EmployeeLastName)</strong>
+                                </td>
+                                <td class="align-middle col-2">
+                                    <div class="btn">
+                                        <strong>
+                                            <a asp-controller="Administrator" asp-action="UnderConstruction" class="btn btn-block">&nbsp;UPDATE ACCOUNT</a>
+                                        </strong>
+                                    </div>
+                                </td>
+                                <td class="align-middle col-2">
+                                    <div class="btn btn-block"><strong>&nbsp;DELETE ACCOUNT</strong></div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @*Banned Accounts*@
+        <div class="col col-xl-5">
+            <div class="table-responsive-md">
+                <table class="table">
+                    <thead>
+                        <tr class="text-center">
+                            <th colspan="3">Banned/Disabled Accounts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Take(2))
+                        {
+                        <tr>
+                            <td class="align-middle">
+                                <img alt="@item.EmployeeFirstName" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" width="100" height="100" />
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.EmployeeFirstName)
+                            </td>
+                            <td class="align-middle">
+                                <div class="btn btn-block"><strong>&nbsp;UNBAN</strong></div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

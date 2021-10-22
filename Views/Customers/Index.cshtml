@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Customers>
+
+@{
+    ViewData["Title"] = "Customer Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-title">
+    <h2>Customers</h2>
+</div>
+
+<div class="page-body">
+    <div class="text-white" style="position: fixed; right: 25px; top: 25px">
+        <a asp-controller="Customers" asp-action="CreateCustomer" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i>&nbsp;Add New Customer
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive-md col-xl-auto">
+                <table class="table">
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td class="align-middle col-lg-3">
+                                <img alt="@item.CustomerFirstName" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" width="150" height="150" />
+                            </td>
+                            <td class="align-middle">
+                                <strong>@Html.DisplayFor(modelItem => item.CustomerLastName)</strong>
+                            </td>
+                            <td class="align-middle col-2">
+                                <div class="btn">
+                                    <strong>
+                                        <a asp-controller="Administrator" asp-action="UnderConstruction" class="btn btn-block">&nbsp;UPDATE ACCOUNT</a>
+                                    </strong>
+                                </div>
+                            </td>
+                            <td class="align-middle col-2">
+                                <div class="btn btn-block"><strong>&nbsp;DELETE ACCOUNT</strong></div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

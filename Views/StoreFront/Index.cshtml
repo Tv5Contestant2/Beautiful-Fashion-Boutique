@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container justify-content-center">
+    @*Promotions*@
+    <div class="row">
+        <a asp-area="" asp-controller="StoreFront" asp-action="Trending"><img src="~/images/banners/banner-4.jpg" height="560" /></a>
+    </div>
+
+
+    @*Categories*@
+    <div class="row justify-content-center">
+        <div class="card" style="width: 25rem; margin-top: 15px; margin-left: 40px">
+            <a asp-area="" asp-controller="StoreFront" asp-action="ShopAll">
+                <img class="card-img-top" src="~/images/categories/category_clothing.jpeg" alt="Card image cap">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">Shop All</h5>
+                <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+            </div>
+        </div>
+        <div style="width: 20rem; margin: 15px">
+            <a asp-area="" asp-controller="StoreFront" asp-action="Mens">
+                <img class="card-img-top" src="~/images/categories/category_apparel_accessories.jpg" alt="Card image cap">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">Men's Apparel</h5>
+                <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+            </div>
+        </div>
+        <div style="width: 20rem; margin: 15px">
+            <a asp-area="" asp-controller="StoreFront" asp-action="Womens">
+                <img class="card-img-top" src="~/images/categories/category_apparel.jpeg" alt="Card image cap">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">Women's Apparel</h5>
+                <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+            </div>
+        </div>
+    </div>
+</div>
