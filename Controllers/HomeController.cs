@@ -20,7 +20,7 @@ namespace ECommerce1.Controllers
             return RedirectToAction("Index","StoreFront");
         }
 
-        public IActionResult Login()
+        public IActionResult SignIn()
         {
             return View();
         }
@@ -31,7 +31,7 @@ namespace ECommerce1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([Bind("Username,EmployeePass")] Employees employees)
+        public async Task<IActionResult> SignIn([Bind("Username,EmployeePass")] Employees employees)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace ECommerce1.Controllers
                 return RedirectToAction();
             }
         }
-        public IActionResult Registration()
+        public IActionResult SignUp()
         {
             return View();
         }

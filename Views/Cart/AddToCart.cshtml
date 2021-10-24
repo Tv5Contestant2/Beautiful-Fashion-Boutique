@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "Add to Cart";
+}
+
+<div class="container-fluid main-container">
+    @*Breadcrumbs*@
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Mens">Men's</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+
+    @*Content*@
+    <div class="row">
+        <div class="content col-md-9 offset-md-2">
+            <div class="row">
+                <div class="col col-md-4">
+                    <img src="~/images/jeans/jeans-1.jpg" width="350" />
+                </div>
+                <div class="col col-md-6">
+                    <div class="badge badge-success float-right p-2">
+                        <h5>&nbsp; In-Stock &nbsp; </h5>
+                    </div>
+                    <div class="panel-title">
+                        <h4>Product Title</h4>
+                        <h6>Php 1,200.00</h6>
+                    </div>
+                    <div class="panel-body">
+                        <label class="control-label py-2"><strong>Select Size</strong></label>
+                        <div>
+                            <a href="#" class="badge badge-light col-lg-2 p-2">S</a>
+                            <a href="#" class="badge badge-light col-lg-2 p-2">M</a>
+                            <a href="#" class="badge badge-info col-lg-2 p-2">L</a>
+                        </div>
+
+                        <label class="control-label py-2"><strong>Select Color</strong></label>
+                        <div>
+                            <a href="#" class="badge badge-info col-lg-2 p-2">Gray</a>
+                            <a href="#" class="badge badge-light col-lg-2 p-2">Black</a>
+                            <a href="#" class="badge badge-light col-lg-2 p-2">Blue</a>
+                        </div>
+
+                        <label class="control-label py-2"><strong>Quantity</strong></label>
+                        <div class="col-3">
+                            <input class="form-control" type="number" />
+                        </div>
+                    </div>
+
+                    <div class="panel-footer offset-md-5" style="margin-top: 25px">
+                        <button class="btn btn-info py-10">
+                            <i class="fas fa-cart-plus">&nbsp; </i> Add to cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            @*Product Reviews*@
+            <div class="row px-3">
+                <h4>Product Reviews</h4>
+            </div>
+
+            <div class="row">
+                <div class="col col-md-1">
+                    <img src="~/images/default-avatar.jpg" width="60" />
+                </div>
+
+                <div class="col-2 col-md-10">
+                    <div class="row">
+                        <h6>Customer Name</h6>
+                        <div class="offset-md-8">
+                            <i class="fas fa-star px-1"></i>
+                            <i class="fas fa-star px-1"></i>
+                            <i class="fas fa-star px-1"></i>
+                            <i class="fas fa-star px-1"></i>
+                            <i class="fas fa-star-half px-1"></i>
+                            <strong>4.5</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="text-justify">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col col-md-1">
+                    <img src="~/images/default-avatar.jpg" width="60" />
+                </div>
+
+                <div class="col-2 col-md-10">
+                    <div class="row">
+                        <h6>Customer Name</h6>
+                        <div class="offset-md-8">
+                            <i class="fas fa-star px-1"></i>
+                            <i class="fas fa-star px-1"></i>
+                            <i class="fas fa-star px-1"></i>
+                            <i class="fas fa-star px-1"></i>
+                            <i class="far fa-star px-1"></i>
+                            <strong>4.0</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="text-justify">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

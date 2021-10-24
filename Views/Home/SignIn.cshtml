@@ -1,0 +1,37 @@
+﻿@model Employees
+
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="container-fluid main-container">
+    @*Content*@
+    <div class="content col-md-10 offset-md-2">
+        <div class="row">
+            <div class="col col-md-6 offset-md-2">
+                <h1 class="offset-md-5">Sign In</h1>
+                <form asp-action="SignIn" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label> Username</label>
+                        <input asp-for="Username" class="form-control" />
+
+                        <label> Password</label>
+                        <input asp-for="EmployeePass" class="form-control" type="password" />
+
+                        <div style="margin-top: 15px">
+                            <a asp-area="" asp-controller="Home" asp-action="UnderConstruction">Forgot your password?</a>
+
+                            <span class="float-right">
+                                <input type="submit" class="btn btn-info" value="Sign In" />
+                            </span>
+                        </div>
+
+                        <div class="text-center">Not yet registered? <a asp-area="" asp-controller="Home" asp-action="SignUp">Click here</a></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

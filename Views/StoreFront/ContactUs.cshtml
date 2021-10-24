@@ -2,27 +2,60 @@
     ViewData["Title"] = "Contact Us";
 }
 
-<div class="container">
-    <div class="text-center">
-        <h1>Contact Us</h1>
-    </div>
+<div class="container-fluid main-container">
+    @*Breadcrumbs*@
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
 
-    <div class="col col-lg-8 col-lg-offset-2 justify-content-center">
-        <div class="form-group">
-            <label>Email Address</label>
-            <input class="form-control" />
+    @*Content*@
+    <div class="content col-md-12 offset-md-1">
+        <div class="row">
+            <div class="col col-md-3">
+                <div class="row">
+                    <h5>STORE HOURS</h5>
+                    <br />
+                    <p>We're open 9:30 AM to 7:30 PM, Mondays to Sundays</p>
+                </div>
 
-            <label>Name</label>
-            <input class="form-control" />
+                <div class="row">
+                    <h5>WHERE IS OUR PHYSICAL STORE?</h5>
+                    <p>
+                        We are located at Zone III (POB.), City of Dasmarinas
+                        <br /> Cavite, Region IV-A (CALABARZON)
+                    </p>
+                </div>
 
-            <label>Contact Number</label>
-            <input class="form-control" />
+                @*Google Maps*@
+                <div class="row"></div>
+            </div>
 
-            <label>Message</label>
-            <textarea class="form-control" rows="10"></textarea>
+            <div class="col col-md-6 offset-md-1">
+                <h1 class="text-center">Contact Us</h1>
+                <h6>Got a concern or questions about us? Send us a message and we'll respond as soon as possible.</h6>
 
-            <div class="float-right" style="margin-top: 15px">
-                <input type="button" class="btn btn-info" value="Send Message" />
+                <div class="row">
+                    <div class="row form-group">
+                        <label>Email Address</label>
+                        <input class="form-control" />
+
+                        <label>Name</label>
+                        <input class="form-control" />
+
+                        <label>Contact Number</label>
+                        <input class="form-control" />
+
+                        <label>Message</label>
+                        <textarea class="form-control" rows="5"></textarea>
+
+                        <div class="float-right" style="margin-top: 15px">
+                            <input type="button" class="btn btn-info" value="Send Message" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

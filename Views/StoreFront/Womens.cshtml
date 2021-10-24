@@ -1,55 +1,126 @@
 ﻿@{
-    ViewData["Title"] = "Womens";
-
+    ViewData["Title"] = "Women's";
+    ViewData["Root"] = "Women's";
 }
 
-<div class="container d-flex justify-content-center">
-    <div class="row">
-        <div class="card" style="width: 20rem; margin: 15px">
-            <img class="card-img-top" src="~/images/shirts/shirt-1.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title"><a href="#">Nike Shirt - Orange</a></h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
-            </div>
-        </div>
+<div class="container-fluid main-container">
+    @*Breadcrumbs*@
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
 
-        <div class="card" style="width: 20rem; margin: 15px">
-            <img class="card-img-top" src="~/images/accessories/bracelet-1.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title"><a href="#">Bracelet</a></h5>
-                <p class="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
-            </div>
-        </div>
+    @*Content*@
+    <div class="content col-md-12">
+        <div class="row">
+            <div class="col col-md-3 form-group">
+                <h5>FILTER</h5>
+                <input class="form-control" placeholder="Search..." />
 
-        <div class="card" style="width: 20rem; margin: 15px">
-            <img class="card-img-top" src="~/images/shoes/shoes-4.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title"><a href="#">Nike Shoes - Floral</a></h5>
-                <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-            </div>
-        </div>
+                <label>Sort By</label>
+                <select class="form-control">
+                    <option>Name: A to Z</option>
+                    <option>Name: Z to A</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Most Reviewed</option>
+                </select>
 
-        <div class="card" style="width: 20rem; margin: 15px">
-            <img class="card-img-top" src="~/images/shoes/shoes-5.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title"><a href="#">Nike Shoes - Gray/Floral</a></h5>
-                <p class="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
+                <label>View By</label>
+                <select class="form-control">
+                    <option>Grid</option>
+                    <option>List</option>
+                </select>
             </div>
-        </div>
 
-        <div class="card" style="width: 20rem; margin: 15px">
-            <img class="card-img-top" src="~/images/shirts/shirt-2.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title"><a href="#">Loose Shirt - Orange</a></h5>
-                <p class="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
-            </div>
-        </div>
+            <div class="col col-md-9">
+                <div class="row">
+                    <div class="card" style="width: 20rem; margin: 15px">
+                        <img class="card-img-top" src="~/images/shirts/shirt-1.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
+                            <a asp-area="" asp-controller="Home" asp-action="UnderConstruction" class="btn btn-link float-right">
+                                <i class="fas fa-cart-plus"></i>
+                            </a>
 
-        <div class="card" style="width: 20rem; margin: 15px">
-            <img class="card-img-top" src="~/images/accessories/ring-1.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title"><a href="#">Ring - Torquoise</a></h5>
-                <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                            <h5 class="card-title"><a href="#">Nike Shirt - Orange</a></h5>
+                            <label class="badge badge-info p-2">Php 1,200</label>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width: 20rem; margin: 15px">
+                        <img class="card-img-top" src="~/images/accessories/bracelet-1.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
+                            <a asp-area="" asp-controller="Home" asp-action="UnderConstruction" class="btn btn-link float-right">
+                                <i class="fas fa-cart-plus"></i>
+                            </a>
+
+                            <h5 class="card-title"><a href="#">Bracelet</a></h5>
+                            <label class="badge badge-info p-2">Php 1,200</label>
+                            <p class="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width: 20rem; margin: 15px">
+                        <img class="card-img-top" src="~/images/shoes/shoes-4.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
+                            <a asp-area="" asp-controller="Home" asp-action="UnderConstruction" class="btn btn-link float-right">
+                                <i class="fas fa-cart-plus"></i>
+                            </a>
+
+                            <h5 class="card-title"><a href="#">Nike Shoes - Floral</a></h5>
+                            <label class="badge badge-info p-2">Php 3,500</label>
+                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width: 20rem; margin: 15px">
+                        <img class="card-img-top" src="~/images/shoes/shoes-5.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
+                            <a asp-area="" asp-controller="Home" asp-action="UnderConstruction" class="btn btn-link float-right">
+                                <i class="fas fa-cart-plus"></i>
+                            </a>
+
+                            <h5 class="card-title"><a href="#">Nike Shoes - Gray/Floral</a></h5>
+                            <label class="badge badge-info p-2">Php 3,500</label>
+                            <p class="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width: 20rem; margin: 15px">
+                        <img class="card-img-top" src="~/images/shirts/shirt-2.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
+                            <a asp-area="" asp-controller="Home" asp-action="UnderConstruction" class="btn btn-link float-right">
+                                <i class="fas fa-cart-plus"></i>
+                            </a>
+
+                            <h5 class="card-title"><a href="#">Loose Shirt - Orange</a></h5>
+                            <label class="badge badge-info p-2">Php 1,500</label>
+                            <p class="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width: 20rem; margin: 15px">
+                        <img class="card-img-top" src="~/images/accessories/ring-1.jpg" alt="Card image cap">
+                        <div class="card-body">
+                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
+                            <a asp-area="" asp-controller="Home" asp-action="UnderConstruction" class="btn btn-link float-right">
+                                <i class="fas fa-cart-plus"></i>
+                            </a>
+
+                            <h5 class="card-title"><a href="#">Ring - Torquoise</a></h5>
+                            <label class="badge badge-info p-2">Php 1,000</label>
+                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
