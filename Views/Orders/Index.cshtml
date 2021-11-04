@@ -1,128 +1,133 @@
 ﻿@model IEnumerable<OrderDetails>
 
-@{
+    @{
     ViewData["Title"] = "Order Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-}
+    }
 
-<div class="page-title">
-    <h2>Orders</h2>
-</div>
+    <script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
 
-<div class="page-body">
-    <div class="row">
-        <div class="col col-xl-8">
-            <div class="table-responsive-md">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td class="align-middle">
-                                <strong>
-                                    @*@Html.DisplayFor(modelItem => item.Name)*@
-                                    Item Name
-                                </strong>
-                            </td>
-                            <td class="align-middle col-2" rowspan="5">
-                                <div class="btn">
-                                    <strong>
-                                        <a asp-controller="Administrator" asp-action="UnderConstruction" class="btn btn-block">&nbsp;UPDATE ORDER STATUS</a>
-                                    </strong>
-                                </div>
-                                <div class="btn btn-block"><strong>&nbsp;CANCEL ORDER</strong></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle col-lg-auto">
-                                @*<strong>@Html.DisplayFor(modelItem => item.Description)</strong>*@
-                                Item Description
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle col-lg-auto">
-                                Payment Mode: --
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle col-lg-auto">
-                                Estimated Delivery: --
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle col-lg-auto">
-                                STATUS: --
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    <div class="container-fluid main-container">
+        <div class="row">
+            <h2>Order Management</h2>
+        </div>
+
+        @*Search*@
+        <div class="row">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" style="width:350px">
+                <div class="col">
+                    <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-info float-right" type="button">
+                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Manage Order
+                    </a>
+                    <button class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
+                    <button class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
+                </div>
             </div>
         </div>
 
-        <div class="col col-xl-4">
-            @*In-Transit*@
-            <div class="row">
-                <div class="table-responsive">
-                    <table class="table">
+        <div class="row mt-3" style="margin-left: -30px" width="auto">
+
+            @*Grid*@
+            <div class="col-9">
+                <div class="table-responsive-md">
+                    <table class="table table-striped">
                         <thead>
-                            <tr class="text-center">
-                                <th colspan="2">In-Transit</th>
+                            <tr>
+                                <th>#</th>
+                                <th>Order Id</th>
+                                <th>Customer Name</th>
+                                <th>Mode of Payment</th>
+                                <th>Status</th>
+                                <th>Delivery Status</th>
+                                <th>Estimated Delivery</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @*@foreach (var item in Model)
+                        {*@
                             <tr>
-                                <td class="align-middle">
-                                    @*<img alt="@item.Name" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" width="100" height="100" />*@
-                                    Item Name
+                                <td>1</td>
+                                <td>00002131</td>
+                                <td>Angelina Jolie</td>
+                                <td>Cash on Delivery</td>
+                                <td><span class="status text-success">&bull;</span> Paid</td>
+                                <td><span class="status text-muted">&bull;</span> In-Transit</td>
+                                <td>12/01/2021</td>
+                                <td>
+                                    <a href="#" class="edit" title="Update" data-toggle="tooltip"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
+                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="align-middle">
-                                    @*@Html.DisplayFor(modelItem => item.Name)*@
-                                    Item Description
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="align-middle">
-                                    @*<font color="#ff0000"><strong>DAYS LEFT: --</strong></font>*@
-                                    Order Date: --
-                                </td>
-                            </tr>
+                        @*}*@
                         </tbody>
                     </table>
+                    <div class="clearfix">
+                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                        <ul class="pagination">
+                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            @*Delivered*@
-            <div class="row">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr class="text-center">
-                                <th colspan="2">Delivered</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="align-middle">
-                                    @*<img alt="@item.Name" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" width="100" height="100" />*@
-                                    Item Name
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="align-middle">
-                                    @*@Html.DisplayFor(modelItem => item.Name)*@
-                                    Item Description
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="align-middle">
-                                    @*<font color="#ff0000"><strong>DAYS LEFT: --</strong></font>*@
-                                    Date Delivered: --
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+            @*Statistics*@
+            <div class="col-md-3">
+                <div class="card card-stats">
+                    <div class="card-title m-auto">
+                        <span class="h2 font-weight-bold">Statistics</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @*Delivered*@
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                    <i class="fas fa-thumbs-up"></i>
+                                </div>
+                            </div>
+                            <div class="col col-auto mb-3">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Delivered</h5>
+                                <span class="h2 font-weight-bold mb-0">0</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @*In-Transit*@
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                    <i class="fas fa-sync-alt"></i>
+                                </div>
+                            </div>
+                            <div class="col col-auto mb-3">
+                                <h5 class="card-title text-uppercase text-muted mb-0">In-Transit</h5>
+                                <span class="h2 font-weight-bold mb-0">1</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @*Out For Delivery*@
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                            </div>
+                            <div class="col col-auto mb-3">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Out For Delivery</h5>
+                                <span class="h2 font-weight-bold mb-0">0</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

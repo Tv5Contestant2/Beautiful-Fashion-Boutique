@@ -1,50 +1,85 @@
 ﻿@model IEnumerable<Customers>
 
-@{
+    @{
     ViewData["Title"] = "Customer Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-}
+    }
 
-<div class="page-title">
-    <h2>Customers</h2>
-</div>
+    <script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
 
-<div class="page-body">
-    <div class="text-white" style="position: fixed; right: 25px; top: 25px">
-        <a asp-controller="Customers" asp-action="CreateCustomer" class="btn btn-success">
-            <i class="fas fa-plus-circle"></i>&nbsp;Add New Customer
-        </a>
-    </div>
+    <div class="container-fluid main-container">
+        <div class="row">
+            <h2>Customer Management</h2>
+        </div>
 
-    <div class="row">
-        <div class="col">
-            <div class="table-responsive-md col-xl-auto">
-                <table class="table">
-                    <tbody>
-                        @foreach (var item in Model)
+        @*Search*@
+        <div class="row">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" style="width:350px">
+                <div class="col">
+                    <a asp-controller="Customers" asp-action="CreateCustomer" class="btn btn-info float-right" type="button">
+                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Customer
+                    </a>
+                    <button class="btn btn-success" type="button"><i class="fas fa-list"></i></button>
+                    <button class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3" style="margin-left: -30px" width="auto">
+
+            @*Grid*@
+            <div class="col-12">
+                <div class="table-responsive-md">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email Address</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
                         {
-                        <tr>
-                            <td class="align-middle col-lg-3">
-                                <img alt="@item.CustomerFirstName" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" width="150" height="150" />
-                            </td>
-                            <td class="align-middle">
-                                <strong>@Html.DisplayFor(modelItem => item.CustomerLastName)</strong>
-                            </td>
-                            <td class="align-middle col-2">
-                                <div class="btn">
-                                    <strong>
-                                        <a asp-controller="Administrator" asp-action="UnderConstruction" class="btn btn-block">&nbsp;UPDATE ACCOUNT</a>
-                                    </strong>
-                                </div>
-                            </td>
-                            <td class="align-middle col-2">
-                                <div class="btn btn-block"><strong>&nbsp;DELETE ACCOUNT</strong></div>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.CustomerFirstName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.CustomerLastName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.CustomerEmail)</td>
+                                <td><span class="status text-success">&bull;</span> Active</td>
+                                <td>
+                                    <a href="#" class="edit" title="Update" data-toggle="tooltip"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
+                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
+                                </td>
+                            </tr>
                         }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                    <div class="clearfix">
+                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                        <ul class="pagination">
+                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
