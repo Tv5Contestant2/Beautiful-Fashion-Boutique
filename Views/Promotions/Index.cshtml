@@ -1,72 +1,72 @@
 ﻿@model IEnumerable<Promos>
 
-    @{
+@{
     ViewData["Title"] = "Promos and Discounts Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    }
+}
 
-    <script>
+<script>
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
-    </script>
+</script>
 
-    <div class="container-fluid main-container">
-        <div class="row">
-            <h2>Promos and Discounts Management</h2>
-        </div>
+<div class="container-fluid main-container">
+    <div class="row">
+        <h2>Promos and Discounts Management</h2>
+    </div>
 
-        @*Search*@
-        <div class="row">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" style="width:350px">
-                <div class="col">
-                    <a asp-controller="Promotions" asp-action="CreatePromo" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Promo and Discount
-                    </a>
-                    <button class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
-                    <button class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
-                </div>
+    @*Search*@
+    <div class="row">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" style="width:350px">
+            <div class="col">
+                <a asp-controller="Promotions" asp-action="CreatePromo" class="btn btn-info float-right" type="button">
+                    <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Promo and Discount
+                </a>
+                @*<button class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
+                <button class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>*@
             </div>
         </div>
+    </div>
 
-        <div class="row mt-3" style="margin-left: -30px" width="auto">
+    <div class="row mt-3" style="margin-left: -30px" width="auto">
 
-            @*Grid*@
-            <div class="col-9">
-                <div class="table-responsive-md">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Promo Name</th>
-                                <th>Description</th>
-                                <th>Sale %</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
+        @*Grid*@
+        <div class="col-9">
+            <div class="table-responsive-md">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Promo Name</th>
+                            <th>Description</th>
+                            <th>Sale %</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                                <td>@item.Id</td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
+                                    @item.Name
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Description)
+                                    @item.Description
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.SalePercentage)
+                                    @item.SalePercentage
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.StartDate)
+                                    @item.StartDate
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.EndDate)
+                                    @item.EndDate
                                 </td>
                                 <td><span class="status text-success">&bull;</span> On-Going</td>
                                 <td>
@@ -75,69 +75,108 @@
                                 </td>
                             </tr>
                         }
-                        </tbody>
-                    </table>
-                    <div class="clearfix">
-                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                        <ul class="pagination">
-                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                        </ul>
-                    </div>
+                    </tbody>
+                </table>
+                <div class="clearfix">
+                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <ul class="pagination">
+                        <li class="page-item disabled"><a href="#">Previous</a></li>
+                        <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                        <li class="page-item"><a href="#" class="page-link">2</a></li>
+                        <li class="page-item"><a href="#" class="page-link">3</a></li>
+                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
 
-            @*Statistics*@
-            <div class="col-md-3">
-                <div class="card card-stats">
-                    <div class="card-title m-auto">
-                        <span class="h2 font-weight-bold">Statistics</span>
+        @*Statistics*@
+        <div class="col-md-3">
+            <div class="card card-stats">
+                <div class="card-title m-auto">
+                    <span class="h2 font-weight-bold">Statistics</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @*On-Going*@
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                <i class="fas fa-thumbs-up"></i>
+                            </div>
+                        </div>
+                        <div class="col col-auto mb-3">
+                            <h5 class="card-title text-uppercase text-muted mb-0">On-Going</h5>
+                            <span class="h2 font-weight-bold mb-0">1</span>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @*On-Going*@
-                            <div class="col-auto">
-                                <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                    <i class="fas fa-thumbs-up"></i>
-                                </div>
-                            </div>
-                            <div class="col col-auto mb-3">
-                                <h5 class="card-title text-uppercase text-muted mb-0">On-Going</h5>
-                                <span class="h2 font-weight-bold mb-0">1</span>
+                    <div class="row">
+                        @*Ending Soon*@
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                <i class="fas fa-sync-alt"></i>
                             </div>
                         </div>
-                        <div class="row">
-                            @*Ending Soon*@
-                            <div class="col-auto">
-                                <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                    <i class="fas fa-sync-alt"></i>
-                                </div>
-                            </div>
-                            <div class="col col-auto mb-3">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Ending Soon</h5>
-                                <span class="h2 font-weight-bold mb-0">0</span>
+                        <div class="col col-auto mb-3">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Ending Soon</h5>
+                            <span class="h2 font-weight-bold mb-0">0</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*Coming Soon*@
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                <i class="fas fa-exclamation-triangle"></i>
                             </div>
                         </div>
-                        <div class="row">
-                            @*Coming Soon*@
-                            <div class="col-auto">
-                                <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                            </div>
-                            <div class="col col-auto mb-3">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Coming Soon</h5>
-                                <span class="h2 font-weight-bold mb-0">0</span>
-                            </div>
+                        <div class="col col-auto mb-3">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Coming Soon</h5>
+                            <span class="h2 font-weight-bold mb-0">0</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div style="position: fixed; bottom: 10px; right: 10px">
+        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-info">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnGrid").click(function () {
+            $("#dvThumbnail").hide();
+            $("#dvGrid").show();
+        });
+
+        $("#btnThumbnail").click(function () {
+            $("#dvGrid").hide();
+            $("#dvThumbnail").show();
+        });
+    });
+
+</script>
+

@@ -44,6 +44,8 @@ namespace ECommerce1.Models
 
         public int SizeId { get; set; }
 
+        public decimal Price { get; set; }
+
         #region Enumerables
         public IEnumerable<Color> Colors { get; set; }
         public IEnumerable<Gender> Genders { get; set; }

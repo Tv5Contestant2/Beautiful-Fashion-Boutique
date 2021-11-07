@@ -1,133 +1,169 @@
 ﻿@model IEnumerable<OrderDetails>
 
-    @{
+@{
     ViewData["Title"] = "Order Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    }
+}
 
-    <script>
+<script>
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
-    </script>
+</script>
 
-    <div class="container-fluid main-container">
-        <div class="row">
-            <h2>Order Management</h2>
-        </div>
+<div class="container-fluid main-container">
+    <div class="row">
+        <h2>Order Management</h2>
+    </div>
 
-        @*Search*@
-        <div class="row">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" style="width:350px">
-                <div class="col">
-                    <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Manage Order
-                    </a>
-                    <button class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
-                    <button class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
-                </div>
+    @*Search*@
+    <div class="row">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" style="width:350px">
+            <div class="col">
+                <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-info float-right" type="button">
+                    <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Manage Order
+                </a>
             </div>
         </div>
+    </div>
 
-        <div class="row mt-3" style="margin-left: -30px" width="auto">
+    <div class="row mt-3" style="margin-left: -30px" width="auto">
 
-            @*Grid*@
-            <div class="col-9">
-                <div class="table-responsive-md">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Order Id</th>
-                                <th>Customer Name</th>
-                                <th>Mode of Payment</th>
-                                <th>Status</th>
-                                <th>Delivery Status</th>
-                                <th>Estimated Delivery</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @*@foreach (var item in Model)
-                        {*@
-                            <tr>
-                                <td>1</td>
-                                <td>00002131</td>
-                                <td>Angelina Jolie</td>
-                                <td>Cash on Delivery</td>
-                                <td><span class="status text-success">&bull;</span> Paid</td>
-                                <td><span class="status text-muted">&bull;</span> In-Transit</td>
-                                <td>12/01/2021</td>
-                                <td>
-                                    <a href="#" class="edit" title="Update" data-toggle="tooltip"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
-                                </td>
-                            </tr>
+        @*Grid*@
+        <div class="col-9">
+            <div class="table-responsive-md">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Order Id</th>
+                            <th>Customer Name</th>
+                            <th>Mode of Payment</th>
+                            <th>Status</th>
+                            <th>Delivery Status</th>
+                            <th>Estimated Delivery</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var item in Model)
+                            {*@
+                        <tr>
+                            <td>1</td>
+                            <td>00002131</td>
+                            <td>Angelina Jolie</td>
+                            <td>Cash on Delivery</td>
+                            <td><span class="status text-success">&bull;</span> Paid</td>
+                            <td><span class="status text-muted">&bull;</span> In-Transit</td>
+                            <td>12/01/2021</td>
+                            <td>
+                                <a href="#" class="edit" title="Update" data-toggle="tooltip"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
+                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
+                            </td>
+                        </tr>
                         @*}*@
-                        </tbody>
-                    </table>
-                    <div class="clearfix">
-                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                        <ul class="pagination">
-                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                        </ul>
-                    </div>
+                    </tbody>
+                </table>
+                <div class="clearfix">
+                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <ul class="pagination">
+                        <li class="page-item disabled"><a href="#">Previous</a></li>
+                        <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                        <li class="page-item"><a href="#" class="page-link">2</a></li>
+                        <li class="page-item"><a href="#" class="page-link">3</a></li>
+                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
 
-            @*Statistics*@
-            <div class="col-md-3">
-                <div class="card card-stats">
-                    <div class="card-title m-auto">
-                        <span class="h2 font-weight-bold">Statistics</span>
+        @*Statistics*@
+        <div class="col-md-3">
+            <div class="card card-stats">
+                <div class="card-title m-auto">
+                    <span class="h2 font-weight-bold">Statistics</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @*Delivered*@
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                <i class="fas fa-thumbs-up"></i>
+                            </div>
+                        </div>
+                        <div class="col col-auto mb-3">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Delivered</h5>
+                            <span class="h2 font-weight-bold mb-0">0</span>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @*Delivered*@
-                            <div class="col-auto">
-                                <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                    <i class="fas fa-thumbs-up"></i>
-                                </div>
-                            </div>
-                            <div class="col col-auto mb-3">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Delivered</h5>
-                                <span class="h2 font-weight-bold mb-0">0</span>
+                    <div class="row">
+                        @*In-Transit*@
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                <i class="fas fa-sync-alt"></i>
                             </div>
                         </div>
-                        <div class="row">
-                            @*In-Transit*@
-                            <div class="col-auto">
-                                <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                    <i class="fas fa-sync-alt"></i>
-                                </div>
-                            </div>
-                            <div class="col col-auto mb-3">
-                                <h5 class="card-title text-uppercase text-muted mb-0">In-Transit</h5>
-                                <span class="h2 font-weight-bold mb-0">1</span>
+                        <div class="col col-auto mb-3">
+                            <h5 class="card-title text-uppercase text-muted mb-0">In-Transit</h5>
+                            <span class="h2 font-weight-bold mb-0">1</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*Out For Delivery*@
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                <i class="fas fa-exclamation-triangle"></i>
                             </div>
                         </div>
-                        <div class="row">
-                            @*Out For Delivery*@
-                            <div class="col-auto">
-                                <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                            </div>
-                            <div class="col col-auto mb-3">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Out For Delivery</h5>
-                                <span class="h2 font-weight-bold mb-0">0</span>
-                            </div>
+                        <div class="col col-auto mb-3">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Out For Delivery</h5>
+                            <span class="h2 font-weight-bold mb-0">0</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div style="position: fixed; bottom: 10px; right: 10px">
+        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-info">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnGrid").click(function () {
+            $("#dvThumbnail").hide();
+            $("#dvGrid").show();
+        });
+
+        $("#btnThumbnail").click(function () {
+            $("#dvGrid").hide();
+            $("#dvThumbnail").show();
+        });
+    });
+
+</script>

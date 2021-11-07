@@ -11,124 +11,144 @@
             <h4>Add Customer</h4>
         </p>
 
-        <form asp-action="CreateCustomer" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
+        <div class="form-group">
+            <form asp-action="CreateCustomer" enctype="multipart/form-data" class="hidden">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
                 <input type="submit" value="Create" class="btn btn-success float-right" />
-            </div>
 
-            @*Tab Nav*@
-            <ul class="nav nav-tabs nav-justified">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#info" data-toggle="tab">Primary Information</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#contact" data-toggle="tab">Contact Information</a>
-                </li>
-            </ul>
-
-            @*Tab Content*@
-            <div class="tab-content" style="margin-top: 15px">
-                @*Primary Info*@
-                <div id="info" class="tab-pane active fade in">
-                    <div class="row form-group">
-
-                        <div class="col col-md-4">
-                            <img id="ImagePreview" src="~/images/default-avatar.jpg" style="width:15em; height:15em" />
+                <div id="accordion">
+                    <div class="card mt-2">
+                        <div class="card-header" id="headingOne">
+                            <b>PRIMARY INFORMATION</b>
+                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="far fa-plus-square"></i>
+                            </a>
                         </div>
 
-                        <div class="col col-md-8">
-                            <div class="custom-file">
-                                <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+
+                                @*Primary Info*@
+                                <div class="row form-group">
+
+                                    <div class="col col-md-8">
+                                        <label asp-for="CustomerFirstName" class="control-label"></label>
+                                        <input asp-for="CustomerFirstName" class="form-control" />
+                                        <span asp-validation-for="CustomerFirstName" class="text-danger"></span>
+
+
+                                        <label asp-for="CustomerLastName" class="control-label"></label>
+                                        <input asp-for="CustomerLastName" class="form-control" />
+                                        <span asp-validation-for="CustomerLastName" class="text-danger"></span>
+
+
+                                        <label asp-for="CustomerBirthday" class="control-label"></label>
+                                        <input asp-for="CustomerBirthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+
+
+                                        <label asp-for="GenderId" class="control-label"></label>
+                                        <div>
+                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "AlternateTitle"), htmlAttributes: new { @class = "form-control", id = "GenderId" })
+                                            @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-md-4">
+                                        <div class="row form-group">
+
+                                            <div class="col col-md-4">
+                                                <img id="ImagePreview" src="~/images/default-avatar.jpg" style="width:15em; height:15em" />
+                                            </div>
+
+                                            <div class="col col-md-8">
+                                                <div class="custom-file">
+                                                    <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <b>CONTACT INFORMATION</b>
+                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="far fa-plus-square"></i>
+                            </a>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
 
-                            <label asp-for="CustomerFirstName" class="control-label"></label>
-                            <input asp-for="CustomerFirstName" class="form-control" />
-                            <span asp-validation-for="CustomerFirstName" class="text-danger"></span>
+                                @*Contact Information*@
+                                <div class="row">
+                                    <div class="row col-md-12">
+                                        <div class="col col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="CustomerEmail" class="control-label"></label>
+                                                <input asp-for="CustomerEmail" class="form-control" />
+                                                <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="CustomerPass" class="control-label"></label>
+                                                <input asp-for="CustomerPass" class="form-control" type="password" />
+                                                <span asp-validation-for="CustomerPass" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label asp-for="CustomerBlock" class="control-label"></label>
+                                                <input asp-for="CustomerBlock" class="form-control" />
+                                                <span asp-validation-for="CustomerBlock" class="text-danger"></span>
 
 
-                            <label asp-for="CustomerLastName" class="control-label"></label>
-                            <input asp-for="CustomerLastName" class="form-control" />
-                            <span asp-validation-for="CustomerLastName" class="text-danger"></span>
+                                                <label asp-for="CustomerLot" class="control-label"></label>
+                                                <input asp-for="CustomerLot" class="form-control" />
+                                                <span asp-validation-for="CustomerLot" class="text-danger"></span>
 
 
-                            <label asp-for="CustomerBirthday" class="control-label"></label>
-                            <input asp-for="CustomerBirthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+                                                <label asp-for="CustomerBaranggay" class="control-label"></label>
+                                                <input asp-for="CustomerBaranggay" class="form-control" />
+                                                <span asp-validation-for="CustomerBaranggay" class="text-danger"></span>
 
 
-                            <label asp-for="GenderId" class="control-label"></label>
-                            <div>
-                                @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "AlternateTitle"), htmlAttributes: new { @class = "form-control", id = "GenderId" })
-                                @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                                <label asp-for="CustomerCity" class="control-label"></label>
+                                                <input asp-for="CustomerCity" class="form-control" />
+                                                <span asp-validation-for="CustomerCity" class="text-danger"></span>
+
+
+                                                <label asp-for="ContactNumber" class="control-label"></label>
+                                                <input asp-for="ContactNumber" class="form-control" />
+                                                <span asp-validation-for="ContactNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                @*Contact Information*@
-            <div id="contact" class="tab-pane fade">
-                <div class="row">
-                    <div class="col col-md-6">
-                        <div class="form-group">
-                            <label asp-for="CustomerEmail" class="control-label"></label>
-                            <input asp-for="CustomerEmail" class="form-control" />
-                            <span asp-validation-for="CustomerEmail" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="col col-md-6">
-                        <div class="form-group">
-                            <label asp-for="CustomerPass" class="control-label"></label>
-                            <input asp-for="CustomerPass" class="form-control" type="password" />
-                            <span asp-validation-for="CustomerPass" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label asp-for="CustomerBlock" class="control-label"></label>
-                            <input asp-for="CustomerBlock" class="form-control" />
-                            <span asp-validation-for="CustomerBlock" class="text-danger"></span>
-
-
-                            <label asp-for="CustomerLot" class="control-label"></label>
-                            <input asp-for="CustomerLot" class="form-control" />
-                            <span asp-validation-for="CustomerLot" class="text-danger"></span>
-
-
-                            <label asp-for="CustomerBaranggay" class="control-label"></label>
-                            <input asp-for="CustomerBaranggay" class="form-control" />
-                            <span asp-validation-for="CustomerBaranggay" class="text-danger"></span>
-
-
-                            <label asp-for="CustomerCity" class="control-label"></label>
-                            <input asp-for="CustomerCity" class="form-control" />
-                            <span asp-validation-for="CustomerCity" class="text-danger"></span>
-
-
-                            <label asp-for="ContactNumber" class="control-label"></label>
-                            <input asp-for="ContactNumber" class="form-control" />
-                            <span asp-validation-for="ContactNumber" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        $("#Image").on("change", function () {
+        $("#ImageFile").on("change", function () {
             var output = document.getElementById('ImagePreview');
             output.src = $(this).val();
         });
+
     </script>
 }
+

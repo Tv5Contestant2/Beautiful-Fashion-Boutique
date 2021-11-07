@@ -1,12 +1,8 @@
-﻿using ECommerce1.Data;
-using ECommerce1.Data.Repositories;
-using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -14,17 +10,16 @@ namespace ECommerce1.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductsService _service;
-        private readonly AppDBContext _appDBContext;
-
-        public ProductsController(IProductsService service, AppDBContext appDBContext)
+       
+        public ProductsController(IProductsService service)
         {
             _service = service;
-            _appDBContext = appDBContext;
         }
 
         public async Task<IActionResult> Index()
         {
             var data = await _service.GetAllProducts();
+
             return View(data);
         }
 
@@ -36,7 +31,7 @@ namespace ECommerce1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([Bind("Name,Description,ImageId,Title,ImageFile,ProductCategoryId,StatusId,GenderId")]Product product)
+        public async Task<IActionResult> CreateProduct(Product product)
         {
             await Task.Delay(0);
 
@@ -65,6 +60,14 @@ namespace ECommerce1.Controllers
                 return View(product);
 
             _service.CreateProduct(product);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteProduct(long id)
+        { 
+            if (id != 0) _service.DeleteProduct(id);
+
             return RedirectToAction(nameof(Index));
         }
     }

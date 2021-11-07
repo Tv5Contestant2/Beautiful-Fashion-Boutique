@@ -5,12 +5,6 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
-
 <div class="container-fluid main-container">
     <div class="row">
         <h2>Product Management</h2>
@@ -24,24 +18,23 @@
                 <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-info float-right" type="button">
                     <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Product
                 </a>
-                <button class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
-                <button class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
+                <button id="btnGrid" class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
+                <button id="btnThumbnail" class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
             </div>
         </div>
     </div>
 
     <div class="row mt-3" style="margin-left: -30px" width="auto">
-
-        @*Grid*@
         <div class="col-9">
-            <div class="table-responsive-md">
+            @*Grid View*@
+            <div id="dvGrid" class="table-responsive-md">
                 <table class="table table-striped">
-                    <thead >
+                    <thead>
                         <tr>
                             <th>#</th>
                             <th>Image</th>
                             <th>Product Name</th>
-                            <th>Date Created</th>
+                            <th>Price</th>
                             <th>Quantity</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -50,22 +43,40 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                            <td>
-                                <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>04/10/2013</td>
-                            <td>10</td>
-                            <td><span class="status text-success">&bull;</span> In-stock</td>
-                            <td>
-                                <a href="#" class="edit" title="Update" data-toggle="tooltip"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
-                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
-                            </td>
-                        </tr>
+                            var status = Enum.GetName(typeof(ECommerce1.Data.Enums.StatusEnum), item.StatusId);
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>
+                                    <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="@item.Name">
+                                </td>
+                                <td>@item.Name</td>
+                                <td>Php @item.Price.ToString("#,##0.00")</td>
+                                <td>@item.StockQty</td>
+                                <td>
+                                    @{ if (item.StatusId == (int)ECommerce1.Data.Enums.StatusEnum.InStock)
+                                        {
+                                            status = "In-Stock";
+                                            <span class="status text-success">&bull;</span> @status
+                                        }
+                                        else if (item.StatusId == (int)ECommerce1.Data.Enums.StatusEnum.OutOfStock)
+                                        {
+                                            status = "Out-Of-Stock";
+                                            <span class="status text-warning">&bull;</span> @status
+                                        }
+                                        else if (item.StatusId == (int)ECommerce1.Data.Enums.StatusEnum.PhasedOut)
+                                        {
+                                            status = "Phased-Out";
+                                            <span class="status text-danger">&bull;</span> @status
+                                        }}
+                                </td>                                    
+                                <td>
+                                    <a href="#" class="edit" title="Update" data-toggle="tooltip"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
+                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
+                                    @*<a asp-controller="Products" asp-action="DeleteProduct" class="delete" title="Delete" data-toggle="tooltip">
+                                        <i class="fas fa-trash-alt">&#xE5C9;</i>
+                                    </a>*@
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -73,23 +84,43 @@
                     <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
                     <ul class="pagination">
                         <li class="page-item disabled"><a href="#">Previous</a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
+                        <li class="page-item active"><a href="#" class="page-link">1</a></li>
                         <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">4</a></li>
-                        <li class="page-item"><a href="#" class="page-link">5</a></li>
+                        <li class="page-item"><a href="#" class="page-link">3</a></li>
                         <li class="page-item"><a href="#" class="page-link">Next</a></li>
                     </ul>
                 </div>
             </div>
+
+            @*Thumbnail View*@
+            <div id="dvThumbnail" class="row" style="display: none;">
+                @foreach (var item in Model)
+                {
+                    <div class="card" style="width: 15rem; margin: 0px 15px 15px 15px">
+                        <img class="card-img-top" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                        <div class="card-body">
+                            <a href="#" class="btn btn-link float-right delete" title="Delete" data-toggle="tooltip">
+                                <i class="fas fa-trash-alt">&#xE5C9;</i>
+                            </a>
+                            <a href="#" class="btn btn-link float-right edit" title="Update" data-toggle="tooltip">
+                                <i class="fas fa-pencil-alt">&#xE8B8;</i>
+                            </a>
+
+                            <h5 class="card-title"><a href="#">@item.Name</a></h5>
+                            <label class="badge badge-info p-2">Php @item.Price.ToString("#,##0.00")</label>
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
 
 
-        @*Statistics*@
+        @*Stock Count*@
         <div class="col-md-3">
             <div class="card card-stats">
                 <div class="card-title m-auto">
-                    <span class="h2 font-weight-bold">Statistics</span>
+                    <span class="h2 font-weight-bold">Stock Count</span>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -132,4 +163,44 @@
             </div>
         </div>
     </div>
+    <div style="position: fixed; bottom: 10px; right: 10px">
+        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-info">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
 </div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnGrid").click(function () {
+            $("#dvThumbnail").hide();
+            $("#dvGrid").show();
+        });
+
+        $("#btnThumbnail").click(function () {
+            $("#dvGrid").hide();
+            $("#dvThumbnail").show();
+        });
+    });
+
+</script>

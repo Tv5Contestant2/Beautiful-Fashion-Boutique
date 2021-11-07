@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Product>
+
+@{
     ViewData["Title"] = "Men's";
 }
 
@@ -13,114 +15,145 @@
 
     @*Content*@
     <div class="content col-md-12">
+        @*Search*@
         <div class="row">
-            <div class="col col-md-3 form-group">
-                <h5>FILTER</h5>
-                <input class="form-control" placeholder="Search..." />
-
-                <label>Sort By</label>
-                <select class="form-control">
-                    <option>Name: A to Z</option>
-                    <option>Name: Z to A</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Most Reviewed</option>
-                </select>
-
-                <label>View By</label>
-                <select class="form-control">
-                    <option>Grid</option>
-                    <option>List</option>
-                </select>
+            <div class="input-group">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Search" />
+                </div>
+                <div class="col">
+                    <select class="form-control">
+                        <option>Sort By</option>
+                        <option>Name: A to Z</option>
+                        <option>Name: Z to A</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Most Reviewed</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-control">
+                        <option>Category</option>
+                        @foreach (var item in ViewBag.ProductCategories)
+                        {
+                            <option>@item.Title</option>
+                        }
+                    </select>
+                </div>
+                <div class="row float-right">
+                    <button id="btnGrid" class="btn btn-info ml-5" type="button"><i class="fas fa-list"></i></button>
+                    <button id="btnThumbnail" class="btn btn-info mr-3 ml-2" type="button"><i class="fas fa-th-large"></i></button>
+                </div>
             </div>
+        </div>
 
-            <div class="col col-md-9">
-                <div class="row">
-                    <div class="card" style="width: 20rem; margin: 15px">
-                        <img class="card-img-top" src="~/images/jeans/jeans-1.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
-                            <a asp-area="" asp-controller="Cart" asp-action="AddToCart" class="btn btn-link float-right">
-                                <i class="fas fa-cart-plus"></i>
-                            </a>
+        @*Thumbnail View*@
+        <div id="dvThumbnail" class="row">
+            @foreach (var item in Model)
+            {
+                <div class="card" style="width: 20rem; margin: 15px">
+                    <img class="card-img-top" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                    <div class="card-body">
+                        <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
+                        <a asp-area="" asp-controller="Cart" asp-action="AddToCart" class="btn btn-link float-right">
+                            <i class="fas fa-cart-plus"></i>
+                        </a>
 
-                            <h5 class="card-title"><a href="#">Levis Jeans</a></h5>
-                            <label class="badge badge-info p-2">Php 1,200</label>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
-                        </div>
+                        <h5 class="card-title"><a href="#">@Html.DisplayFor(modelItem => item.Name)</a></h5>
+                        <label class="badge badge-info p-2">Php @Html.DisplayFor(modelItem => item.Price)</label>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
                     </div>
+                </div>
+            }
+        </div>
 
-                    <div class="card" style="width: 20rem; margin: 15px">
-                        <img class="card-img-top" src="~/images/accessories/belt-1.jpeg" alt="Card image cap">
-                        <div class="card-body">
-                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
-                            <a asp-area="" asp-controller="Cart" asp-action="AddToCart" class="btn btn-link float-right">
-                                <i class="fas fa-cart-plus"></i>
-                            </a>
-
-                            <h5 class="card-title"><a href="#">Leather Belt</a></h5>
-                            <label class="badge badge-info p-2">Php 300</label>
-                            <p class="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
-                        </div>
-                    </div>
-
-                    <div class="card" style="width: 20rem; margin: 15px">
-                        <img class="card-img-top" src="~/images/shoes/shoes-1.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
-                            <a asp-area="" asp-controller="Cart" asp-action="AddToCart" class="btn btn-link float-right">
-                                <i class="fas fa-cart-plus"></i>
-                            </a>
-
-                            <h5 class="card-title"><a href="#">Adidas Shoes - Red</a></h5>
-                            <label class="badge badge-info p-2">Php 3,000</label>
-                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                        </div>
-                    </div>
-
-                    <div class="card" style="width: 20rem; margin: 15px">
-                        <img class="card-img-top" src="~/images/shoes/shoes-2.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
-                            <a asp-area="" asp-controller="Cart" asp-action="AddToCart" class="btn btn-link float-right">
-                                <i class="fas fa-cart-plus"></i>
-                            </a>
-
-                            <h5 class="card-title"><a href="#">Adidas Shoes - Blue</a></h5>
-                            <label class="badge badge-info p-2">Php 3,000</label>
-                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                        </div>
-                    </div>
-
-                    <div class="card" style="width: 20rem; margin: 15px">
-                        <img class="card-img-top" src="~/images/accessories/cap-1.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
-                            <a asp-area="" asp-controller="Cart" asp-action="AddToCart" class="btn btn-link float-right">
-                                <i class="fas fa-cart-plus"></i>
-                            </a>
-
-                            <h5 class="card-title"><a href="#">Cap - Black</a></h5>
-                            <label class="badge badge-info p-2">Php 800</label>
-                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                        </div>
-                    </div>
-
-                    <div class="card" style="width: 20rem; margin: 15px">
-                        <img class="card-img-top" src="~/images/shoes/shoes-3.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <span class="btn btn-link float-right"><i class="fas fa-heart"></i></span>
-                            <a asp-area="" asp-controller="Cart" asp-action="AddToCart" class="btn btn-link float-right">
-                                <i class="fas fa-cart-plus"></i>
-                            </a>>
-
-                            <h5 class="card-title"><a href="#">Adidas Shoes - Gray</a></h5>
-                            <label class="badge badge-info p-2">Php 3,000</label>
-                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-                        </div>
+        @*Grid View*@
+        <div id="dvGrid" class="row" style="display: none;">
+            @*Grid*@
+            <div class="col-12 mt-3">
+                <div class="table-responsive-md">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                                    <td>
+                                        <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="@item.Name">
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>Php @Html.DisplayFor(modelItem => item.Price)</td>
+                                    <td><span class="status text-success">&bull;</span> In-stock</td>
+                                    <td>
+                                        <a href="#" data-toggle="tooltip"><i class="fas fa-cart-plus"></i></a>
+                                        <a asp-area="" asp-controller="Cart" asp-action="AddToCart" data-toggle="tooltip"><i class="fas fa-heart"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="clearfix">
+                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                        <ul class="pagination">
+                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                            <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div style="position: fixed; bottom: 10px; right: 10px">
+        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-info">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
 </div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction() };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    $(document).ready(function () {
+        $("#btnGrid").click(function () {
+            $("#dvThumbnail").hide();
+            $("#dvGrid").show();
+        });
+
+        $("#btnThumbnail").click(function () {
+            $("#dvGrid").hide();
+            $("#dvThumbnail").show();
+        });
+    });
+
+</script>

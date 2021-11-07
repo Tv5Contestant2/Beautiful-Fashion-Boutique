@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services;
+using ECommerce1.Data.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +11,16 @@ namespace ECommerce1.Controllers
 {
     public class StoreFrontController : Controller
     {
+        private readonly IProductsService _service;
+        private readonly IProductCategoriesService _productCategoriesService;
+
+        public StoreFrontController(IProductsService service, 
+            IProductCategoriesService productCategoriesService)
+        {
+            _service = service;
+            _productCategoriesService = productCategoriesService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -23,24 +36,44 @@ namespace ECommerce1.Controllers
             return View();
         }
 
-        public IActionResult Mens()
+        public async Task<IActionResult> Mens()
         {
-            return View();
+            var data = await _service.GetAllProductsByGender((int)GenderEnum.Men);
+
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+            ViewBag.ProductCategories = productCategories;
+
+            return View(data);
         }
 
-        public IActionResult Womens()
+        public async Task<IActionResult> Womens()
         {
-            return View();
+            var data = await _service.GetAllProductsByGender((int)GenderEnum.Women);
+
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+            ViewBag.ProductCategories = productCategories;
+
+            return View(data);
         }
 
-        public IActionResult Trending()
+        public async Task<IActionResult> Trending()
         {
-            return View();
+            var data = await _service.GetAllProducts();
+
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+            ViewBag.ProductCategories = productCategories;
+
+            return View(data);
         }
 
-        public IActionResult ShopAll()
+        public async Task<IActionResult> ShopAll()
         {
-            return View();
+            var data = await _service.GetAllProducts();
+
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+            ViewBag.ProductCategories = productCategories;
+
+            return View(data);
         }
     }
 }
