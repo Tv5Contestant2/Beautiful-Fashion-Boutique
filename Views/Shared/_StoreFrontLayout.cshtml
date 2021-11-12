@@ -6,83 +6,387 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Beautiful Time Fashion Boutique</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/css/grid.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/bar.css" />
-    <link rel="stylesheet" href="~/css/grid.css" />
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>-->
+    <!-- get the required files from 3rd party sources -->
+    <!--<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>-->
+    @*JavaScript files*@
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/swiper/swiper-bundle.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/nouislider/nouislider.min.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/choices.js/public/assets/scripts/choices.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/glightbox/js/glightbox.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/masonry-layout/masonry.pkgd.min.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/universal-parallax/universal-parallax.min.js"></script>
+    <script>new universalParallax().init({ speed: 3.0 });</script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/js/theme.f03cfc8d.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/js/js-cookie.55cdbe0d.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/hub/2-0/js/demo.9f3f24e8.js"></script>
+
+    @*Stylesheets*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- Price Slider Stylesheets -->
+    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/nouislider/nouislider.css">
+    <!-- Swiper Slider Stylesheets -->
+    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/swiper/swiper-bundle.css">
+    <!-- Choices.js-->
+    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/choices.js/public/assets/styles/choices.css">
+    <!-- Lightbox-->
+    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/glightbox/css/glightbox.css">
+    <!-- Nouislider-->
+    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/nouislider/nouislider.min.css">
+    <!-- Theme stylesheet-->
+    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/css/style.default.3a2bbeae.css" id="theme-stylesheet">
+    <link id="new-stylesheet" rel="stylesheet" href="~/css/site.css">
+    <!-- Custom stylesheet - for your changes-->
+    @*<link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/css/custom.0a822280.css">*@
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/favicon.e2ef10ef.ico">
+    <!-- Google fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&amp;display=swap">
+
+    <script>
+        // ------------------------------------------------------- //
+        //   Inject SVG Sprite -
+        //   see more here
+        //   https://css-tricks.com/ajaxing-svg-sprite/
+        // ------------------------------------------------------ //
+        function injectSvgSprite(path) {
+
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", path, true);
+            ajax.send();
+            ajax.onload = function (e) {
+                var div = document.createElement("div");
+                div.className = 'd-none';
+                div.innerHTML = ajax.responseText;
+                document.body.insertBefore(div, document.body.childNodes[0]);
+            }
+        }
+        // this is set to BootstrapTemple website as you cannot
+        // inject local SVG sprite (using only 'icons/orion-svg-sprite.c2a8f15b.svg' path)
+        // while using file:// protocol
+        // pls don't forget to change to your domain :)
+        injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
+
+    </script>
+    <script>
+        var btnTop = document.getElementById("btnTop");
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btnTop.style.display = "block";
+            } else {
+                btnTop.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
 </head>
 
 <body>
-    <!-- NAVBAR-->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <a asp-area="" asp-controller="StoreFront" asp-action="Index" class="navbar-brand">
-                <span><img src="~/images/store-logo.jpg" class="d-inline-block align-middle mr-2" width="250"></span>
-            </a>
+    @*Navigation Bar*@
 
-            <div class="collapse navbar-collapse py-3">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="StoreFront" asp-action="Index" class="nav-link">Home</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-4 px-lg-4">
+        <div class="container-fluid">
+            @*<a class="navbar-brand" href="index.html"><img src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/logo.013e0372.png" alt="..." width="180"></a>*@
+            <a asp-area="" asp-controller="StoreFront" asp-action="Index" class="navbar-brand">
+                <img src="~/images/store-logo.jpg" class="d-inline-block align-middle mr-2 img-fluid" width="250">
+            </a>
+            <button class="navbar-toggler rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Mens">Men's</a></li>
+                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Womens">Women's</a></li>
+                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Trending">Trending/New Arrivals</a></li>
+                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="ShopAll">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="AboutUs">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="ContactUs">Contact Us</a></li>
+
+                    <!--<li class="nav-item dropdown megamenu">
+    <a class="nav-link fw-normal text-dark dropdown-toggle text-uppercase" id="megamneu" href="" data-bs-toggle="dropdown" aria-expanded="false">Template</a>
+    <div class="dropdown-menu rounded-0 p-0 m-0 bg-white" aria-labelledby="megamneu">
+        <div class="container-fluid">
+            <div class="row p-4 p-lg-5">
+                <div class="col-lg-9">
+                    <div class="row">-->
+                    <!-- Col-->
+                    <!--<div class="col-lg-3 mb-4">
+        <h6 class="font-weight-bold text-uppercase mb-3">Home</h6>
+        <ul class="list-unstyled text-muted mb-4">
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="index.html">Classic homepage</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="index2.html">Parallax sections<span class="badge bg-success p-1 ms-2">New</span></a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="index3.html">Video background<span class="badge bg-success p-1 ms-2">New</span></a></li>
+        </ul>
+        <h6 class="font-weight-bold text-uppercase mb-3">Shop</h6>
+        <ul class="list-unstyled text-muted">
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="category.html">Category - left sidebar</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="category-right.html">Category - right sidebar</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="category-full.html">Category - full width</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="category-masonry.html">Category - Masonry layout<span class="badge bg-success p-1 ms-2">New</span></a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="detail.html">Product detail</a></li>
+        </ul>
+    </div>-->
+                    <!-- Col-->
+                    <!--<div class="col-lg-3 mb-4">
+        <h6 class="font-weight-bold text-uppercase mb-3">Order process</h6>
+        <ul class="list-unstyled text-muted mb-4">
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="cart.html">Shopping cart</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="checkout1.html">Checkout 1 - address</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="checkout2.html">Checkout 2 - Delivery</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="checkout3.html">Checkout 3 - payment</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="checkout4.html">Checkout 4 - review</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="checkout5.html">Checkout 5 - confirmation</a></li>
+        </ul>
+        <h6 class="font-weight-bold text-uppercase mb-3">Blog</h6>
+        <ul class="list-unstyled text-muted">
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="post.html">Post</a></li>
+        </ul>
+    </div>-->
+                    <!-- Col            -->
+                    <!--<div class="col-lg-3 mb-4">
+        <h6 class="font-weight-bold text-uppercase mb-3">Pages</h6>
+        <ul class="list-unstyled text-muted">
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="contact.html">Contact</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="about.html">About us</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="text.html">Text page</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="faq.html">Faq<span class="badge bg-success p-1 ms-2">New</span></a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="coming-soon.html">Coming soon<span class="badge bg-success p-1 ms-2">New</span></a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="404.html">Error 404</a></li>
+            <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="500.html">Error 500</a></li>
+        </ul>
+    </div>-->
+                    <!-- Col            -->
+                    <!--<div class="col-lg-3 mb-0 mb-lg-4">
+                <h6 class="font-weight-bold text-uppercase mb-3">Customer</h6>
+                <ul class="list-unstyled text-muted">
+                    <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="customer-login.html">Login/Sign up</a></li>
+                    <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="customer-orders.html">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="customer-order.html">Order detail</a></li>
+                    <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="customer-addresses.html">Addressess</a></li>
+                    <li class="nav-item"><a class="nav-link text-sm p-0 mb-2 fw-normal" href="customer-account.html">Profile</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-12 d-none d-lg-block">
+                <div class="row gx-1">
+                    <div class="col-lg-3">
+                        <div class="d-flex justify-content-center justify-content-lg-start">
+                            <svg class="svg-icon text-primary svg-icon-md">
+                                <use xlink:href="#delivery-time-1"> </use>
+                            </svg>
+                            <div class="ms-3">
+                                <h6 class="text-uppercase mb-0">Free shipping &amp; return</h6>
+                                <p class="text-muted small mb-0">Free Shipping over $300</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <svg class="svg-icon text-primary svg-icon-md">
+                                <use xlink:href="#dollar-sign-1"> </use>
+                            </svg>
+                            <div class="ms-3">
+                                <h6 class="text-uppercase mb-0">Money back guarantee</h6>
+                                <p class="text-muted small mb-0">30 Days Money Back</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <svg class="svg-icon text-primary svg-icon-md">
+                                <use xlink:href="#helpline-24h-1"> </use>
+                            </svg>
+                            <div class="ms-3">
+                                <h6 class="text-uppercase mb-0">020-800-456-747</h6>
+                                <p class="text-muted small mb-0">24/7 Available Support</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <svg class="svg-icon text-primary svg-icon-md">
+                                <use xlink:href="#shield-security-1"> </use>
+                            </svg>
+                            <div class="ms-3">
+                                <h6 class="text-uppercase mb-0">020-800-456-747</h6>
+                                <p class="text-muted small mb-0">24/7 Available Support</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+                    <!-- Product col-->
+                    <!--<div class="col-lg-3 text-center px-5 border-start border-light d-none d-lg-block">
+                        <a class="reset-anchor" href="detail.html"><img class="img-fluid mb-3" src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/shirt.0836aa05.jpg" alt="..."></a>
+                        <h6 class="text-uppercase"><a class="reset-anchor" href="detail.html">Lose Oversized Shirt</a></h6>
+                        <ul class="list-inline mb-2">
+                            <li class="list-inline-item m-0"><i class="far small fa-star text-primary"></i></li>
+                            <li class="list-inline-item m-0"><i class="far small fa-star text-primary"></i></li>
+                            <li class="list-inline-item m-0"><i class="far small fa-star text-primary"></i></li>
+                            <li class="list-inline-item m-0"><i class="far small fa-star text-primary"></i></li>
+                            <li class="list-inline-item m-0"><i class="far small fa-star text-primary"></i></li>
+                        </ul>
+                        <h6 class="text-sm text-primary mb-2">$65.00</h6><a class="btn btn-primary" href="#">Add to cart                    </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>-->
+                </ul>
+                <ul class="navbar-nav flex-row mb-2 mb-lg-0 ms-lg-5 actions-nav-menu">
+                    <li class="nav-item mx-2 mx-lg-0 px-lg-0">
+                        <a class="nav-link" asp-controller="Home" asp-action="SignIn">
+                            <svg class="svg-icon">
+                                <use xlink:href="#user-1"> </use>
+                            </svg>
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="StoreFront" asp-action="Mens" class="nav-link">Men's</a>
+                    <li class="nav-item dropdown mx-2 mx-lg-0 px-lg-0 d-block d-lg-none">
+                        <a class="nav-link position-relative" href="cart.html">
+                            <svg class="svg-icon">
+                                <use xlink:href="#cart-1"> </use>
+                            </svg><span class="cart-no">1</span>
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="StoreFront" asp-action="Womens" class="nav-link">Women's</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="StoreFront" asp-action="Trending" class="nav-link">Trending/New Arrivals</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="StoreFront" asp-action="ShopAll" class="nav-link">Shop All</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="StoreFront" asp-action="AboutUs" class="nav-link">About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="StoreFront" asp-action="ContactUs" class="nav-link">Contact Us</a>
+                    <li class="nav-item dropdown mx-2 mx-lg-0 px-3 px-lg-0 d-none d-lg-block">
+                        <a class="nav-link position-relative dropdown-toggle no-caret" id="cartDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg class="svg-icon">
+                                <use xlink:href="#cart-1"> </use>
+                            </svg><span class="cart-no">1</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end mt-lg-4 p-4" aria-labelledby="cartDropdown">
+                            <div class="dropdown-item no-hover d-flex justify-content-between px-0 pb-3">
+                                <div class="d-flex me-2">
+                                    <a class="d-block bg-light p-2" href="detail.html"><img src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/hoodie-man-1.3c6a080c.jpg" alt="" width="60"></a>
+                                    <div class="ms-2">
+                                        <h5 class="mb-1"><a class="reset-anchor" href="detail.html">Heather Gray Hoodie</a></h5>
+                                        <p class="small text-gray-6 mb-1">Quantity: 1</p>
+                                        <h6 class="mb-0">$75.00 </h6>
+                                    </div>
+                                </div><a class="reset-anchor ms-4" href="#"><i class="far fa-trash-alt"></i></a>
+                            </div>
+                            <div class="dropdown-item no-hover border-top border-bottom border-gray-3 px-0 py-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="text-gray-6 mb-0">Total</p>
+                                    <p class="fw-bold text-primary mb-0">$75.00</p>
+                                </div>
+                            </div>
+                            <div class="dropdown-item no-hover px-0 pt-3">
+                                <div class="row gx-2">
+                                    <div class="col-lg-6"><a class="btn btn-primary w-100" href="cart.html">View cart</a></div>
+                                    <div class="col-lg-6"><a class="btn btn-primary w-100" href="checkout1.html">Checkout</a></div>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
         </div>
-        <!-- Links -->
-        <div class="collapse navbar-collapse">
-         @*Right*@ 
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="Home" asp-action="UnderConstruction" class="nav-link navbar-link-2 waves-effect">
-                        @*<span class="badge badge-pill red">1</span>*@
-                        <i class="fas fa-shopping-cart"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-area="" asp-controller="Home" asp-action="UnderConstruction" class="nav-link waves-effect">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                </li>
-                <li class="nav-item pl-2 -mb-2 mb-md-0" style="width: 70px">
-                    <a asp-area="" asp-controller="Home" asp-action="SignIn" type="button"
-                       class="btn btn-outline-info btn-sm btn-rounded btn-navbar waves-effect waves-light">Sign In</a>
-                </li>
-                <li class="nav-item pl-2 -mb-2 mb-md-0" style="width: 80px">
-                    <a asp-area="" asp-controller="Home" asp-action="SignUp" type="button"
-                       class="btn btn-outline-info btn-sm btn-rounded btn-navbar waves-effect waves-light">Sign Up</a>
-                </li>
-            </ul>
-
-        </div>
     </nav>
+
+    @*Page Content*@
     <main class="page-content">
-        <div class="container-fluid">
+        <div>
             @RenderBody()
         </div>
     </main>
+    
+    @*Footer*@
+    <footer class="footer" style="background: #4a0d25">
+        <div class="py-5 text-white" style="background: #69083a">
+            <div class="container py-3">
+                <div class="row gy-4 justify-content-center">
+                    <div class="col-lg-4 border-lg-end border-dark">
+                        <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
+                            <svg class="svg-icon svg-icon-md mb-0">
+                                <use xlink:href="#delivery-time-1"> </use>
+                            </svg>
+                            <div class="ms-3">
+                                <h6 class="text-uppercase mb-0">Free shipping &amp; return</h6>
+                                <p class="text-muted text-sm mb-0">Free Shipping over Php 1,000</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <svg class="svg-icon svg-icon-md mb-0">
+                                <use xlink:href="#dollar-sign-1"> </use>
+                            </svg>
+                            <div class="ms-3">
+                                <h6 class="text-uppercase mb-0">Money back guarantee</h6>
+                                <p class="text-muted text-sm mb-0">30 Days Money Back Guarantee</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-5">
+            <!-- Main Block -->
+            <div class="container py-5">
+                <div class="row gx-5 gy-4">
+                    <div class="col-lg-2 col-md-6">
+                        <h5 class="text-white text-uppercase mb-4">Shop</h5>
+                        <ul class="list-unstyled text-sm fw-normal mb-0">
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">For Women</a></li>
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">For Men</a></li>
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">Stores</a></li>
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">Our Blog</a></li>
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">Shop</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <h5 class="text-white text-uppercase mb-4">Company</h5>
+                        <ul class="list-unstyled text-sm fw-normal mb-0">
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">Login</a></li>
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">Register</a></li>
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">Wishlist</a></li>
+                            <li class="mb-1 pb-1"> <a class="reset-anchor" href="#">Our Products</a></li>
+                            <li class="mb-1"> <a class="reset-anchor" href="#">Checkouts</a></li>
+                        </ul>
+                    </div>
+                    <div class="newsletter col-lg-4">
+                        <h5 class="text-white text-uppercase mb-4">Daily Offers &amp; Discounts</h5>
+                        <p class="text-sm fw-normal">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.</p>
+                        <form action="#" id="newsletter-form">
+                            <div class="input-group mb-3 border">
+                                <input class="form-control bg-none border-0 shadow-0 text-white" type="text" placeholder="Your email address" aria-describedby="button-addon2">
+                                <div class="input-group-append text-muted">
+                                    <button class="btn btn-link reset-anchor" type="submit"><i class="fas fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-4 float-right text-end">
+                        <p class="text-sm fw-normal">Connect with us through these <br> social media platforms.</p>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item me-3"><a class="reset-anchor" href="#" target="_blank" title="twitter"><i class="fab fa-twitter"></i></a></li>
+                            <li class="list-inline-item me-3"><a class="reset-anchor" href="#" target="_blank" title="facebook"><i class="fab fa-facebook-f"></i></a></li>
+                            <li class="list-inline-item me-3"><a class="reset-anchor" href="#" target="_blank" title="instagram"><i class="fab fa-instagram"></i></a></li>
+                            <li class="list-inline-item me-3"><a class="reset-anchor" href="#" target="_blank" title="pinterest"><i class="fab fa-pinterest"></i></a></li>
+                            <li class="list-inline-item"><a class="reset-anchor" href="#" target="_blank" title="vimeo"><i class="fab fa-vimeo-v"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
+
 </html>

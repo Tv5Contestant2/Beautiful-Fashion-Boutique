@@ -21,9 +21,14 @@ namespace ECommerce1.Controllers
             _productCategoriesService = productCategoriesService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var data = await _service.GetAllProducts();
+
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+            ViewBag.ProductCategories = productCategories;
+
+            return View(data);
         }
 
         public IActionResult AboutUs()

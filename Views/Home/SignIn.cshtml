@@ -4,9 +4,9 @@
     ViewData["Title"] = "Sign In";
 }
 
-<div class="container-fluid main-container">
+<!--<div class="container-fluid main-container">-->
     @*Content*@
-    <div class="content col-md-5 offset-md-3">
+    <!--<div class="content col-md-5 offset-md-3">
         <div class="row">
             <div class="col col-md-6 offset-md-2">
                 <h1 class="offset-md-5">Sign In</h1>
@@ -34,4 +34,61 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="row gy-5 gx-5">
+            <div class="col-lg-6">
+                <div class="bg-light rounded-pill px-4 py-3">
+                    <h5 class="mb-0">Login</h5>
+                </div>
+                <div class="p-4">
+                    <p class="lead">Already our customer?</p>
+                    <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+                    <hr class="border-bottom border-gray-6">
+                    <form asp-action="SignIn" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email</label>
+                            <input asp-for="Username" class="form-control" id="email" type="text">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Password</label>
+                            <input asp-for="EmployeePass" class="form-control" id="password" type="password">
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Sign In" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-light rounded-pill px-4 py-3">
+                    <h5 class="mb-0">New account</h5>
+                </div>
+                <div class="p-4">
+                    <p class="lead">Not our registered customer yet?</p>
+                    <p class="text-muted">With registration with us new world of fashion, fantastic discounts and much more opens to you! The whole process will not take you more than a minute!</p>
+                    <p class="text-muted">If you have any questions, please feel free to <a href="contact.html">contact us</a>, our customer service center is working for you 24/7.</p>
+                    <hr class="border-bottom border-gray-6">
+                    <form action="customer-orders.html" method="get">
+                        <div class="mb-3">
+                            <label class="form-label" for="name">Name</label>
+                            <input class="form-control" id="name" type="text">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="reg_email">Email</label>
+                            <input class="form-control" id="reg_email" type="text">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="reg_password">Password</label>
+                            <input class="form-control" id="reg_password" type="password">
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-user me-2"></i>Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
