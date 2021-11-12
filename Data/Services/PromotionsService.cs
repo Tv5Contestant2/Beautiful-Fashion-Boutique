@@ -22,26 +22,32 @@ namespace ECommerce1.Data.Services
             _context.SaveChanges();
         }
 
-        public Task<bool> DeletePromo(long Id)
+        public async Task<Promos> UpdatePromo(long id, Promos promos)
         {
-            throw new NotImplementedException();
+            _context.Update(id);
+            await _context.SaveChangesAsync();
+
+            return promos;
+        }
+
+        public async Task DeletePromo(long id)
+        {
+            var result = _context.Promos.FirstOrDefault(promos => promos.Id == id);
+            _context.Promos.Remove(result);
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Promos>> GetAllPromos()
         {
             var result = await _context.Promos.ToListAsync();
-
             return result;
         }
 
-        public Promos GetPromoById(long Id)
+        public async Task<Promos> GetPromoById(long id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Promos UpdatePromo(long Id, Promos promos)
-        {
-            throw new NotImplementedException();
+            var result = await _context.Promos.ToListAsync();
+            return result.Find(x => x.Id == id);
         }
 
     }

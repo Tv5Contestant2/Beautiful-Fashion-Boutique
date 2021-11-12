@@ -25,7 +25,8 @@ namespace ECommerce1.Data.Services
                 Genders = _context.Genders.ToList(),
                 ProductCategories =  _context.ProductCategories.ToList(),
                 Sizes = _context.Sizes.OrderBy(x => x.Id).ToList(),
-                Statuses =  _context.Statuses.OrderBy(x => x.Id).ToList()
+                Statuses =  _context.Statuses.OrderBy(x => x.Id).ToList(),
+                StockStatuses =  _context.StockStatuses.OrderBy(x => x.Id).ToList()
             };
 
             return _result;
@@ -37,17 +38,20 @@ namespace ECommerce1.Data.Services
             _context.SaveChanges();
         }
 
-        public Product UpdateProduct(long Id, Product product)
+        public async Task<Product> UpdateProduct(long id, Product product)
         {
-            throw new NotImplementedException();
+            _context.Update(id);
+            await _context.SaveChangesAsync();
+
+            return product;
         }
 
-        public void DeleteProduct(long id)
+        public async Task DeleteProduct(long id)
         {
-            var result = _context.Products.Find(id);
-            _context.Remove(result);
+            var result = _context.Products.FirstOrDefault(product => product.Id == id);
+            _context.Products.Remove(result);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Product>> GetAllProducts()

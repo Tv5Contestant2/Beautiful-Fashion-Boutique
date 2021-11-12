@@ -47,27 +47,47 @@ namespace ECommerce1.Controllers
                 }
             }
 
+            product.StockStatusId = 1;
+            product.StatusId = 1;
             product.DateCreated = DateTime.Now;
 
             _service.CreateProduct(product);
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> UpdateProduct([Bind("Name,Description,ImageId,Title,ImageFile,ProductCategoryId,StatusId,GenderId")] Product product)
+        public async Task<IActionResult> UpdateProduct(long id)
+        {
+            var productDetails = await _service.GetProductById(id);
+            if (productDetails == null) return View("NotFound");
+            return View(productDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProduct(long id, [Bind("Id,Name,Description")] Product product)
         {
             if (!ModelState.IsValid)
+            {
                 return View(product);
-
-            _service.CreateProduct(product);
+            }
+            await _service.UpdateProduct(id, product);
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteProduct(long id)
-        { 
-            if (id != 0) _service.DeleteProduct(id);
 
+        public async Task<IActionResult> DeleteProduct(long id)
+        {
+            var productDetails = await _service.GetProductById(id);
+            if (productDetails == null) return View("NotFound");
+            return View(productDetails);
+        }
+
+        [HttpPost, ActionName("DeleteProduct")]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            var productDetails = await _service.GetProductById(id);
+            if (productDetails == null) return View("NotFound");
+
+            await _service.DeleteProduct(id);
             return RedirectToAction(nameof(Index));
         }
     }

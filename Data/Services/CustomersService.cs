@@ -16,34 +16,6 @@ namespace ECommerce1.Data.Services
             _context = context;
         }
 
-        public void CreateCustomer(Customers customers)
-        {
-            _context.Customers.Add(customers);
-            _context.SaveChanges();
-        }
-
-        public Task<bool> DeleteCustomer(long Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Customers>> GetAllCustomers()
-        {
-            var result = await _context.Customers.ToListAsync();
-
-            return result;
-        }
-
-        public Customers GetCustomerById(long Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Customers UpdateCustomer(long Id, Customers customers)
-        {
-            throw new NotImplementedException();
-        }
-
         public Customers InitializeCustomer()
         {
             var _result = new Customers()
@@ -53,6 +25,46 @@ namespace ECommerce1.Data.Services
 
             return _result;
 
+        }
+
+        public void CreateCustomer(Customers customer)
+        {
+            _context.Customers.Add(customer);
+            _context.SaveChanges();
+        }
+
+        public async Task<Customers> UpdateCustomer(long id, Customers customer)
+        {
+            _context.Update(id);
+            await _context.SaveChangesAsync();
+
+            return customer;
+        }
+
+        public async Task DeleteCustomer(long id)
+        {
+            var result = _context.Customers.FirstOrDefault(customer => customer.CustomerID == id);
+            _context.Customers.Remove(result);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Customers>> GetAllCustomers()
+        {
+            var result = await _context.Customers.ToListAsync();
+            return result;
+        }
+
+        public async Task<Customers> GetCustomerById(long id)
+        {
+            var result = await _context.Customers.ToListAsync();
+            return result.Find(x => x.CustomerID == id);
+        }
+
+        public async Task<IEnumerable<Customers>> GetAllCustomersByGender(int genderId)
+        {
+            var result = await _context.Customers.ToListAsync();
+            return result.Where(x => x.GenderId == genderId).ToList();
         }
     }
 }

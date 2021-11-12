@@ -6,11 +6,18 @@ namespace ECommerce1.Data.Services.Interfaces
 {
     public interface ICustomersService
     {
-        public Task<IEnumerable<Customers>> GetAllCustomers();
-        public Customers GetCustomerById(long Id);
-        public void CreateCustomer(Customers customers);
-        public Customers UpdateCustomer(long Id, Customers customers);
-        public Task<bool> DeleteCustomer(long Id);
         Customers InitializeCustomer();
+
+        public void CreateCustomer(Customers customer);
+
+        public Task<Customers> UpdateCustomer(long id, Customers customer);
+
+        public Task DeleteCustomer(long id);
+
+        public Task<IEnumerable<Customers>> GetAllCustomers();
+
+        public Task<Customers> GetCustomerById(long id);
+
+        public Task<IEnumerable<Customers>> GetAllCustomersByGender(int genderId);
     }
 }

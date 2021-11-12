@@ -10,9 +10,9 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public void CreateProduct (Product product);
 
-        public Product UpdateProduct(long id, Product product);
+        public Task<Product> UpdateProduct(long id, Product product);
 
-        public void DeleteProduct(long id);
+        public Task DeleteProduct(long id);
 
         public Task<IEnumerable<Product>> GetAllProducts();
 

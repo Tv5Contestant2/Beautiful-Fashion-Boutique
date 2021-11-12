@@ -21,7 +21,7 @@ namespace ECommerce1.Controllers
             return View(data);
         }
 
-        public async Task<IActionResult> CreateCustomer()
+        public IActionResult CreateCustomer()
         {
             var viewModel = _service.InitializeCustomer();
 
@@ -51,5 +51,42 @@ namespace ECommerce1.Controllers
             _service.CreateCustomer(customers);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> UpdateCustomer(long id)
+        {
+            var customerDetails = await _service.GetCustomerById(id);
+            if (customerDetails == null) return View("NotFound");
+            return View(customerDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCustomer(long id, [Bind("Id,CustomerFirstName,CustomerLastName")] Customers customers)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(customers);
+            }
+            await _service.UpdateCustomer(id, customers);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> DeleteCustomer(long id)
+        {
+            var customerDetails = await _service.GetCustomerById(id);
+            if (customerDetails == null) return View("NotFound");
+            return View(customerDetails);
+        }
+
+        [HttpPost, ActionName("DeleteCustomer")]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            var customerDetails = await _service.GetCustomerById(id);
+            if (customerDetails == null) return View("NotFound");
+
+            await _service.DeleteCustomer(id);
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

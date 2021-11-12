@@ -15,7 +15,7 @@
             <form asp-action="CreateProduct" enctype="multipart/form-data" class="hidden">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
-                <input type="submit" value="Create" class="btn btn-success float-right" />
+                <input type="submit" value="Save" class="btn btn-success float-right" />
 
                 <div id="accordion">
                     <div class="card mt-2">
@@ -39,7 +39,7 @@
 
 
                                         <label asp-for="Description" class="control-label"></label>
-                                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                                        <input asp-for="Description" class="form-control" rows="4" />
                                         <span asp-validation-for="Description" class="text-danger"></span>
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
@@ -47,25 +47,34 @@
                                             @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "ProductCategoryId" })
                                             @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
                                         </div>
-                                    </div>
-
-                                    <div class="col col-md-4">
-
-                                        <label asp-for="StatusId" class="control-label"></label>
-                                        <div>
-                                            @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "StatusId" })
-                                            @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
-                                        </div>
 
                                         <label asp-for="GenderId" class="control-label"></label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "GenderId" })
                                             @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
                                         </div>
+                                    </div>
 
-                                        <label asp-for="StockQty" class="control-label"></label>
-                                        <input asp-for="StockQty" class="form-control" type="number" />
-                                        <span asp-validation-for="StockQty" class="text-danger"></span>
+                                    <div class="col col-md-4">
+
+                                        <label asp-for="StatusId" class="control-label"></label>
+                                        <div>
+                                            <select class="form-control" disabled>
+                                                @foreach (var item in Model.Statuses)
+                                                {
+                                                    <option value="1" selected>Active</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <label class="control-label">Stock Status</label>
+                                        <div>
+                                            <select class="form-control" disabled>
+                                                @foreach (var item in Model.StockStatuses)
+                                                {
+                                                    <option value="@item.Id" selected>@item.Title</option>
+                                                }
+                                            </select>
+                                        </div>
 
                                         <label asp-for="Price" class="control-label"></label>
                                         <input asp-for="Price" class="form-control" type="number" />
@@ -101,13 +110,21 @@
                                             <tr>
                                                 <td class="col-sm-4">
                                                     <label class="control-label">Size</label>
-                                                    @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Code"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
-                                                    @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })
+                                                    <select class="form-control">
+                                                        @foreach (var item in Model.Sizes)
+                                                        {
+                                                            <option value="@item.Id">@item.Title</option>
+                                                        }
+                                                    </select>
                                                 </td>
                                                 <td class="col-sm-4">
                                                     <label class="control-label">Color</label>
-                                                    @Html.DropDownListFor(x => Model.ColorId, new SelectList(Model.Colors, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "ColorId" })
-                                                    @Html.ValidationMessageFor(x => x.ColorId, "", new { @class = "text-danger" })
+                                                    <select class="form-control">
+                                                        @foreach (var item in Model.Colors)
+                                                        {
+                                                            <option value="@item.Id">@item.Title</option>
+                                                        }
+                                                    </select>
                                                 </td>
                                                 <td class="col-sm-4">
                                                     <label class="control-label">Quantity</label>
@@ -135,32 +152,50 @@
 
                                 @*Images*@
                                 <div class="row form-group">
-                                    <table class=" table order-list tblImages">
-                                        <thead>
-                                            <tr>
-                                                <td colspan="5" style="text-align: left;">
-                                                    <a id="addimage" class="btn btn-info text-white">
-                                                        <i class="fas fa-plus-circle"></i>&nbsp;Add Image
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="col-sm-4 text-center">
-                                                    <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
-                                                </td>
-                                                <td class="col-sm-4">
-                                                    <div class="custom-file">
-                                                        <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
-                                                    </div>
-                                                </td>
-                                                <td class="col-sm-2">
-                                                    <a class="deleteRow"></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="col col-3">
+                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
+                                        <div class="custom-file">
+                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                        </div>
+                                    </div>
+                                    <div class="col col-3">
+                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
+                                        <div class="custom-file">
+                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                        </div>
+                                    </div>
+                                    <div class="col col-3">
+                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
+                                        <div class="custom-file">
+                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                        </div>
+                                    </div>
+                                    @*<table class=" table order-list tblImages">
+            <thead>
+                <tr>
+                    <td colspan="5" style="text-align: left;">
+                        <a id="addimage" class="btn btn-info text-white">
+                            <i class="fas fa-plus-circle"></i>&nbsp;Add Image
+                        </a>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-sm-4 text-center">
+                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
+                    </td>
+                    <td class="col-sm-4">
+                        <div class="custom-file">
+                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                        </div>
+                    </td>
+                    <td class="col-sm-2">
+                        <a class="deleteRow"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>*@
                                 </div>
                             </div>
                         </div>
@@ -209,8 +244,8 @@
                 var newRow = $("<tr>");
                 var cols = "";
 
-                cols += '<td><label class="control-label">Size</label><input type="text" name="size" class="form-control"' + counter + '"/></td>';
-                cols += '<td><label class="control-label">Color</label><input type="text" name="color" class="form-control"' + counter + '"/></td>';
+                cols += '<td><label class="control-label">Size</label><select class="form-control"' + counter + '"> </select></td>';
+                cols += '<td><label class="control-label">Color</label><select class="form-control"' + counter + '"> </select></td>';
                 cols += '<td><label class="control-label">Quantity</label><input type="number" name="quantity" class="form-control"' + counter + '/></td>';
                 cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
                 newRow.append(cols);

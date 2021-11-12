@@ -52,5 +52,41 @@ namespace ECommerce1.Controllers
             _service.CreatePromo(promos);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> UpdatePromo(long id)
+        {
+            var PromoDetails = await _service.GetPromoById(id);
+            if (PromoDetails == null) return View("NotFound");
+            return View(PromoDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePromo(long id, [Bind("Id,Name,Description, SalePercentage")] Promos promos)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(promos);
+            }
+            await _service.UpdatePromo(id, promos);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> DeletePromo(long id)
+        {
+            var PromoDetails = await _service.GetPromoById(id);
+            if (PromoDetails == null) return View("NotFound");
+            return View(PromoDetails);
+        }
+
+        [HttpPost, ActionName("DeletePromo")]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            var PromoDetails = await _service.GetPromoById(id);
+            if (PromoDetails == null) return View("NotFound");
+
+            await _service.DeletePromo(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

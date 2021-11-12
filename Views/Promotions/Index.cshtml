@@ -45,29 +45,30 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>
-                                    @item.Name
-                                </td>
-                                <td>
-                                    @item.Description
-                                </td>
-                                <td>
-                                    @item.SalePercentage
-                                </td>
-                                <td>
-                                    @item.StartDate
-                                </td>
-                                <td>
-                                    @item.EndDate
-                                </td>
-                                <td><span class="status text-success">&bull;</span> On-Going</td>
-                                <td>
-                                    <a href="#" class="edit" title="Update" data-toggle="tooltip"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @item.Description
+                            </td>
+                            <td>
+                                @item.SalePercentage
+                            </td>
+                            <td>
+                                @item.StartDate
+                            </td>
+                            <td>
+                                @item.EndDate
+                            </td>
+                            <td><span class="status text-success">&bull;</span> On-Going</td>
+
+                            <td>
+                                <a asp-action="UpdatePromo" asp-route-id="@item.Id"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
+                                <a asp-action="DeletePromo" asp-route-id="@item.Id"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

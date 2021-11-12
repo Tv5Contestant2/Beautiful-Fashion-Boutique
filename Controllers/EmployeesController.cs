@@ -21,33 +21,65 @@ namespace ECommerce1.Controllers
             return View(data);
         }
 
-        public async Task<IActionResult> CreateEmployee()
-        {
-            return View();
-        }
-
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee([Bind("EmployeeFirstName,EmployeeLastName,ImageFile")] Employees employees)
+        public async Task<IActionResult> CreateEmployee([Bind("EmployeeFirstName,EmployeeLastName,ImageFile")] Employees Employees)
         {
             await Task.Delay(0);
 
             if (!ModelState.IsValid)
-                return View(employees);
+                return View(Employees);
 
-            if (employees.ImageFile != null)
+            if (Employees.ImageFile != null)
             {
                 using (var ms = new MemoryStream())
                 {
-                    employees.ImageFile.CopyTo(ms);
+                    Employees.ImageFile.CopyTo(ms);
                     var fileBytes = ms.ToArray();
-                    employees.Image = Convert.ToBase64String(fileBytes);
+                    Employees.Image = Convert.ToBase64String(fileBytes);
                 }
             }
 
-            employees.DateCreated = DateTime.Now;
+            Employees.DateCreated = DateTime.Now;
 
-            _service.CreateEmployee(employees);
+            _service.CreateEmployee(Employees);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> UpdateEmployee(long id)
+        {
+            var EmployeeDetails = await _service.GetEmployeeById(id);
+            if (EmployeeDetails == null) return View("NotFound");
+            return View(EmployeeDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateEmployee(long id, [Bind("Id,EmployeeFirstName,EmployeeLastName")] Employees Employees)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(Employees);
+            }
+            await _service.UpdateEmployee(id, Employees);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> DeleteEmployee(long id)
+        {
+            var EmployeeDetails = await _service.GetEmployeeById(id);
+            if (EmployeeDetails == null) return View("NotFound");
+            return View(EmployeeDetails);
+        }
+
+        [HttpPost, ActionName("DeleteEmployee")]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            var EmployeeDetails = await _service.GetEmployeeById(id);
+            if (EmployeeDetails == null) return View("NotFound");
+
+            await _service.DeleteEmployee(id);
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

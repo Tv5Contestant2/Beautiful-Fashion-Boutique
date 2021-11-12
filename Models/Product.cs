@@ -23,6 +23,7 @@ namespace ECommerce1.Models
         [Required]
         [Display(Name = "Status")]
         public int StatusId { get; set; }
+        public int StockStatusId { get; set; }
 
         [Required]
         [Display(Name = "Gender")]
@@ -53,6 +54,7 @@ namespace ECommerce1.Models
         public IEnumerable<ProductImage> ProductImages { get; set; }
         public IEnumerable<ProductVariant> ProductVariants { get; set; }
         public IEnumerable<Status> Statuses { get; set; }
+        public IEnumerable<StockStatus> StockStatuses { get; set; }
         public IEnumerable<Size> Sizes { get; set; }
         #endregion Enumerables
 

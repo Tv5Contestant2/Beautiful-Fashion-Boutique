@@ -2,65 +2,100 @@
     ViewData["Title"] = "Contact Us";
 }
 
-<div class="container-fluid main-container">
-    @*Breadcrumbs*@
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
-        </ol>
-    </nav>
-
-    @*Content*@
-    <div class="content col-md-12">
+<div class="search-panel d-none" id="searchPanel">
+    <div class="search-panel-inner p-4">
+        <div class="seach-panel-close">
+            <button class="btn btn-primary rounded-0 shadow-0 p-2" id="searchCloseBtn" type="button" onclick="closeSearch()">
+                <svg class="svg-icon text-white mt-1">
+                    <use xlink:href="#close-1"> </use>
+                </svg>
+            </button>
+        </div>
+        <form class="w-100" action="#">
+            <div class="row">
+                <div class="col-lg-7 mx-auto">
+                    <div class="d-flex align-items-center mb-3 border-bottom">
+                        <input class="form-control form-control-lg bg-none border-0 shadow-0 rounded-0 px-0" type="text" placeholder="What are you searching for" aria-describedby="button-addon2">
+                        <button class="btn btn-link text-dark shadow-0 px-0 text-decoration-none" id="button-addon2" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Hero Section-->
+<section class="py-5 bg-light">
+    <div class="container py-4">
         <div class="row">
+            <div class="col-lg-9 order-2 order-lg-1">
+                <h1>@ViewBag.Title</h1><p class="lead text-muted">Send us a message and we'll respond as soon as possible.</p>
+            </div>
+            <div class="col-lg-3 text-end order-1 order-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<main class="py-5">
+    <div class="container py-5">
+        <div class="row gx-lg-5">
             <div class="col">
-                <div class="row col-md-12">
+                <div class="row col-md-8">
                     <h5>STORE HOURS</h5>
                 </div>
-                <div class="row col-md-12">
+                <div class="row col-md-8">
                     <p>We're open 9:30 AM to 7:30 PM, Mondays to Sundays</p>
                 </div>
 
-                <div class="row col-md-12">
+                <div class="row col-md-8">
                     <h5>WHERE IS OUR PHYSICAL STORE?</h5>
                 </div>
-                <div class="row col-md-12">
+                <div class="row col-md-8">
                     <p>
                         We are located at Zone III (POB.), City of Dasmarinas, Cavite, Region IV-A (CALABARZON)
                     </p>
                 </div>
-
                 @*Google Maps*@
                 <div class="row col-md-12" id="map">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3227.782456969098!2d121.00735081962928!3d14.292993284129437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397d6167534ecdb%3A0xbe7642cdef028ecf!2s3%20Poblacion%2C%20Cavite%2C%20Philippines!5e0!3m2!1sen!2sae!4v1636310643644!5m2!1sen!2sae" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
 
-            <div class="col col-md-5">
-                <h1 class="text-center">Contact Us</h1>
-                <h6>Got a concern or questions about us? Send us a message and we'll respond as soon as possible.</h6>
+            <div class="col col-md-4">
+                <div class="row form-group">
+                    <label>Email Address</label>
+                    <input class="form-control" />
 
-                <div class="row col-12">
-                    <div class="row form-group">
-                        <label>Email Address</label>
-                        <input class="form-control" />
+                    <label>Name</label>
+                    <input class="form-control" />
 
-                        <label>Name</label>
-                        <input class="form-control" />
+                    <label>Contact Number</label>
+                    <input class="form-control" />
 
-                        <label>Contact Number</label>
-                        <input class="form-control" />
+                    <label>Message</label>
+                    <textarea class="form-control" rows="5"></textarea>
 
-                        <label>Message</label>
-                        <textarea class="form-control" rows="5"></textarea>
-
-                        <div class="float-right" style="margin-top: 15px">
-                            <input type="button" class="btn btn-info" value="Send Message" />
-                        </div>
+                    <div class="float-right" style="margin-top: 15px">
+                        <input type="button" class="btn btn-danger" value="Send" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</main>
+
+<div style="position: fixed; bottom: 10px; right: 10px;">
+    <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </button>
 </div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+</script>

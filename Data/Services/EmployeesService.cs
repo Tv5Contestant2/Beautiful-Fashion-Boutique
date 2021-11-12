@@ -3,6 +3,7 @@ using ECommerce1.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Data.Services
@@ -15,32 +16,38 @@ namespace ECommerce1.Data.Services
             _context = context;
         }
 
-        public void CreateEmployee(Employees employees)
+        public void CreateEmployee(Employees employee)
         {
-            _context.Employees.Add(employees);
+            _context.Employees.Add(employee);
             _context.SaveChanges();
         }
 
-        public Task<bool> DeleteEmployee(long Id)
+        public async Task<Employees> UpdateEmployee(long id, Employees employee)
         {
-            throw new NotImplementedException();
+            _context.Update(id);
+            await _context.SaveChangesAsync();
+
+            return employee;
+        }
+
+        public async Task DeleteEmployee(long id)
+        {
+            var result = _context.Employees.FirstOrDefault(employee => employee.EmployeeID == id);
+            _context.Employees.Remove(result);
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Employees>> GetAllEmployees()
         {
             var result = await _context.Employees.ToListAsync();
-
             return result;
         }
 
-        public Employees GetEmployeeById(long Id)
+        public async Task<Employees> GetEmployeeById(long id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Employees UpdateEmployee(long Id, Employees employees)
-        {
-            throw new NotImplementedException();
+            var result = await _context.Employees.ToListAsync();
+            return result.Find(x => x.EmployeeID == id);
         }
     }
 }

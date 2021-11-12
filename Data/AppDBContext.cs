@@ -46,6 +46,7 @@ namespace ECommerce1.Data
         public DbSet<Size> Sizes { get; set; }
         public DbSet<SocMed> Socials { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<StockStatus> StockStatuses { get; set; }
         public DbSet<Transactions> Transactions { get; set; }
     }
 }

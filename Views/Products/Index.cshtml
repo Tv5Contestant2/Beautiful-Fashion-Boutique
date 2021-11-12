@@ -53,28 +53,25 @@
                                 <td>Php @item.Price.ToString("#,##0.00")</td>
                                 <td>@item.StockQty</td>
                                 <td>
-                                    @{ if (item.StatusId == (int)ECommerce1.Data.Enums.StatusEnum.InStock)
+                                    @{ if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.InStock)
                                         {
                                             status = "In-Stock";
                                             <span class="status text-success">&bull;</span> @status
                                         }
-                                        else if (item.StatusId == (int)ECommerce1.Data.Enums.StatusEnum.OutOfStock)
+                                        else if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.OutOfStock)
                                         {
                                             status = "Out-Of-Stock";
-                                            <span class="status text-warning">&bull;</span> @status
+                                            <span class="status text-danger">&bull;</span> @status
                                         }
-                                        else if (item.StatusId == (int)ECommerce1.Data.Enums.StatusEnum.PhasedOut)
+                                        else if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.PhasedOut)
                                         {
                                             status = "Phased-Out";
                                             <span class="status text-danger">&bull;</span> @status
                                         }}
                                 </td>                                    
                                 <td>
-                                    <a href="#" class="edit" title="Update" data-toggle="tooltip"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
-                                    @*<a asp-controller="Products" asp-action="DeleteProduct" class="delete" title="Delete" data-toggle="tooltip">
-                                        <i class="fas fa-trash-alt">&#xE5C9;</i>
-                                    </a>*@
+                                    <a asp-action="UpdateProduct" asp-route-id="@item.Id"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
+                                    <a asp-action="DeleteProduct" asp-route-id="@item.Id"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
                                 </td>
                             </tr>
                         }
@@ -131,7 +128,7 @@
                             </div>
                         </div>
                         <div class="col col-auto mb-3">
-                            <h5 class="card-title text-uppercase text-muted mb-0">In-Stock</h5>
+                            <span class="card-title text-uppercase text-muted mb-0">In-Stock <br /></span>
                             <span class="h2 font-weight-bold mb-0">0</span>
                         </div>
                     </div>

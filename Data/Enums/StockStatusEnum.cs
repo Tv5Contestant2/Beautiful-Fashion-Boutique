@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace ECommerce1.Data.Enums
 {
-    public enum StatusEnum
+    public enum StockStatusEnum
     {
-        Active = 1,
-        Inactive = 2
+        InStock = 1,
+        OutOfStock = 2,
+        PhasedOut = 3
     }
 }
