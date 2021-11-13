@@ -12,7 +12,6 @@ namespace ECommerce1.Models
         public long Id { get; set; }
         public DateTime DateCreated { get; set; }
 
-        [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
         public string Image { get; set; }
 

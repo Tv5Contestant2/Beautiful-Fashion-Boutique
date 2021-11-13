@@ -1,41 +1,146 @@
 ﻿@model Employees
 
 @{
-    ViewData["Title"] = "Update Employee";
+    ViewData["Title"] = "Add New Employee";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 <div class="row text">
-    <div class="col-md-8 offset-2">
-        <div class="row">
-            <div class="col-md-8 offset-2 pt-4">
-                <h2>Update Employee</h2>
-                <div class="row">
-                    <div class="col pb-4">
-                        <form asp-action="UpdateEmployee">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-10 offset-md-1">
+        <p>
+            <h4>Add Employee</h4>
+        </p>
 
-                            <div class="form-group text-center">
-                                <img id="ProfilePicturePreview" class="border-info rounded-circle" style="max-width: 150px" />
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="EmployeeFirstName" class="control-label"></label>
-                                <input asp-for="EmployeeFirstName" class="form-control" />
-                                <span asp-validation-for="EmployeeFirstName" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="EmployeeLastName" class="control-label"></label>
-                                <input asp-for="EmployeeLastName" class="form-control" />
-                                <span asp-validation-for="EmployeeLastName" class="text-danger"></span>
-                            </div>
+        <div class="form-group">
+            <form asp-action="UpdateEmployee" enctype="multipart/form-data" class="hidden">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                <input type="submit" value="Save" class="btn btn-success float-right" />
 
-                            <div class="form-group pb-4 pt-4">
-                                <input type="submit" value="Update" class="btn btn-danger float-right" />
-                                <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                <div id="accordion">
+                    <div class="card mt-2">
+                        <div class="card-header" id="headingOne">
+                            <b>PRIMARY INFORMATION</b>
+                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="far fa-plus-square"></i>
+                            </a>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+
+                                @*Primary Info*@
+                                <div class="row form-group">
+
+                                    <div class="col col-md-8">
+                                        <label asp-for="EmployeeFirstName" class="control-label"></label>
+                                        <input asp-for="EmployeeFirstName" class="form-control" />
+                                        <span asp-validation-for="EmployeeFirstName" class="text-danger"></span>
+
+
+                                        <label asp-for="EmployeeLastName" class="control-label"></label>
+                                        <input asp-for="EmployeeLastName" class="form-control" />
+                                        <span asp-validation-for="EmployeeLastName" class="text-danger"></span>
+
+
+                                        <label asp-for="EmployeeBirthday" class="control-label"></label>
+                                        <input asp-for="EmployeeBirthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+
+                                    </div>
+
+                                    <div class="col col-md-4">
+                                        <div class="row form-group">
+
+                                            <div class="col col-md-4">
+                                                <img id="ImagePreview" src="~/images/default-avatar.jpg" style="width:15em; height:15em" />
+                                            </div>
+
+                                            <div class="col col-md-8">
+                                                <div class="custom-file">
+                                                    <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <b>CONTACT INFORMATION</b>
+                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="far fa-plus-square"></i>
+                            </a>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+
+                                @*Contact Information*@
+                                <div class="row">
+                                    <div class="row col-md-12">
+                                        <div class="col col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="EmployeeEmail" class="control-label"></label>
+                                                <input asp-for="EmployeeEmail" class="form-control" />
+                                                <span asp-validation-for="EmployeeEmail" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="EmployeePass" class="control-label"></label>
+                                                <input asp-for="EmployeePass" class="form-control" type="password" />
+                                                <span asp-validation-for="EmployeePass" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label asp-for="EmployeeBlock" class="control-label"></label>
+                                                <input asp-for="EmployeeBlock" class="form-control" />
+                                                <span asp-validation-for="EmployeeBlock" class="text-danger"></span>
+
+
+                                                <label asp-for="EmployeeLot" class="control-label"></label>
+                                                <input asp-for="EmployeeLot" class="form-control" />
+                                                <span asp-validation-for="EmployeeLot" class="text-danger"></span>
+
+
+                                                <label asp-for="EmployeeBaranggay" class="control-label"></label>
+                                                <input asp-for="EmployeeBaranggay" class="form-control" />
+                                                <span asp-validation-for="EmployeeBaranggay" class="text-danger"></span>
+
+
+                                                <label asp-for="EmployeeCity" class="control-label"></label>
+                                                <input asp-for="EmployeeCity" class="form-control" />
+                                                <span asp-validation-for="EmployeeCity" class="text-danger"></span>
+
+
+                                                <label asp-for="ContactNumber" class="control-label"></label>
+                                                <input asp-for="ContactNumber" class="form-control" />
+                                                <span asp-validation-for="ContactNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $("#ImageFile").on("change", function () {
+            var output = document.getElementById('ImagePreview');
+            output.src = $(this).val();
+        });
+
+    </script>
+}
+

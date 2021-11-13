@@ -44,14 +44,22 @@
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
-                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "ProductCategoryId" })
-                                            @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
+                                            <select class="form-control" id="selectionCategories" asp-for="ProductCategoryId" >
+                                                @foreach (var item in Model.ProductCategories)
+                                                {
+                                                    <option value="@item.Id">@item.Title</option>
+                                                }
+                                            </select>
                                         </div>
 
                                         <label asp-for="GenderId" class="control-label"></label>
                                         <div>
-                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "GenderId" })
-                                            @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                            <select class="form-control" asp-for="GenderId">
+                                                @foreach (var item in Model.Genders)
+                                                {
+                                                    <option value="@item.Id">@item.Title</option>
+                                                }
+                                            </select>
                                         </div>
                                     </div>
 
@@ -59,19 +67,19 @@
 
                                         <label asp-for="StatusId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" disabled>
+                                            <select class="form-control" asp-for="StatusId" disabled>
                                                 @foreach (var item in Model.Statuses)
                                                 {
-                                                    <option value="1" selected>Active</option>
+                                                    <option value="@item.Id">@item.Title</option>
                                                 }
                                             </select>
                                         </div>
                                         <label class="control-label">Stock Status</label>
                                         <div>
-                                            <select class="form-control" disabled>
+                                            <select class="form-control" asp-for="StockStatusId" disabled>
                                                 @foreach (var item in Model.StockStatuses)
                                                 {
-                                                    <option value="@item.Id" selected>@item.Title</option>
+                                                    <option value="@item.Id">@item.Title</option>
                                                 }
                                             </select>
                                         </div>
@@ -93,114 +101,76 @@
                         </div>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                             <div class="card-body">
-
-                                @*Variants*@
-                                <div class="row form-group">
-                                    <table class=" table order-list tblVariants">
-                                        <thead>
-                                            <tr>
-                                                <td colspan="5" style="text-align: left;">
-                                                    <a id="addvariant" class="btn btn-info text-white">
-                                                        <i class="fas fa-plus-circle"></i>&nbsp;Add Variant
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#myModal" onclick="OpenAddPopup();">Add Variant</button><br /><br />
+                                <table class="table order-list" id="dtVariant">
+                                    <thead>
+                                        <tr>
+                                            <th>Size</th>
+                                            <th>Color</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbody" id="bodyVariant">
+                                        @*@foreach (var itemVariant in Model.ProductVariants)
+                                        {
                                             <tr>
                                                 <td class="col-sm-4">
                                                     <label class="control-label">Size</label>
-                                                    <select class="form-control">
-                                                        @foreach (var item in Model.Sizes)
-                                                        {
-                                                            <option value="@item.Id">@item.Title</option>
-                                                        }
-                                                    </select>
+                                                    <span>@itemVariant.SizeId</span>
+                                                    
                                                 </td>
                                                 <td class="col-sm-4">
-                                                    <label class="control-label">Color</label>
-                                                    <select class="form-control">
-                                                        @foreach (var item in Model.Colors)
-                                                        {
-                                                            <option value="@item.Id">@item.Title</option>
-                                                        }
-                                                    </select>
+                                                    <span>@itemVariant.ColorId</span>
+                                                  
                                                 </td>
                                                 <td class="col-sm-4">
-                                                    <label class="control-label">Quantity</label>
-                                                    <input type="number" name="quantity" class="form-control" />
-                                                </td>
-                                                <td class="col-sm-2">
-                                                    <a class="deleteRow"></a>
+                                                    <span>@itemVariant.Quantity</span>
+                                                   
                                                 </td>
                                             </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header" id="headingThree">
-                            <b>IMAGES</b>
-                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="far fa-plus-square"></i>
-                            </a>
-                        </div>
-                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                            <div class="card-body">
+                                        }*@
+                                    </tbody>
+                                </table>
 
-                                @*Images*@
-                                <div class="row form-group">
-                                    <div class="col col-3">
-                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
-                                        <div class="custom-file">
-                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+
+                                @*Start - BootsTrap Model Popup for Adding and Updating the Variant Record *@
+                            <div class="modal fade" id="AddUpdateModelVariant" tabindex="-1" role="dialog" aria-labelledby="myModalLabelVariant" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">×</button>
+                                            @*<h4 class="modal-title" id="AddUpdateModelVariantLabel">Add Variant</h4>*@
+                                        </div> 
+                                        <div class="modal-body">
+                                            @* hidden filed for storing Id *@
+                                            <input id="hfproductvariantid" />
+                                            <div class="form-group">
+                                                <label class="control-label">Size</label>
+                                                @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
+                                                @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Color</label>
+                                                @Html.DropDownListFor(x => Model.ColorId, new SelectList(Model.Colors, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "ColorId" })
+                                                @Html.ValidationMessageFor(x => x.ColorId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Quantity</label>
+                                                <input type="number" min="1" id="Quantity" name="Quantity" class="form-control" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col col-3">
-                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
-                                        <div class="custom-file">
-                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="btnAddVariant" onclick="return AddVariant();">Add Variant</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         </div>
-                                    </div>
-                                    <div class="col col-3">
-                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
-                                        <div class="custom-file">
-                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
-                                        </div>
-                                    </div>
-                                    @*<table class=" table order-list tblImages">
-            <thead>
-                <tr>
-                    <td colspan="5" style="text-align: left;">
-                        <a id="addimage" class="btn btn-info text-white">
-                            <i class="fas fa-plus-circle"></i>&nbsp;Add Image
-                        </a>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col-sm-4 text-center">
-                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
-                    </td>
-                    <td class="col-sm-4">
-                        <div class="custom-file">
-                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
-                        </div>
-                    </td>
-                    <td class="col-sm-2">
-                        <a class="deleteRow"></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>*@
+
+</div>
                                 </div>
                             </div>
-                        </div>
+                            @*End *@
+                            </div>
+                            </div>
                     </div>
-                </div>
             </form>
         </div>
     </div>
@@ -236,29 +206,72 @@
             });
         });
 
-        //add variant
-        $(document).ready(function () {
-            var counter = 0;
+        //start - variant
+        function OpenAddPopup() {
+            //title text
+            $("#AddUpdateModelVariantLabel").text("Add Variant")
+            //clear all input
+            ClearAllInput();
+            //open popup
+            $('#AddUpdateModelVariant').modal('show');
+        }
 
-            $("#addvariant").on("click", function () {
-                var newRow = $("<tr>");
-                var cols = "";
+        function ClearAllInput() {
+            $('#hfproductvariantid').val("");
+            $('#SizeId').val("");
+            $('#ColorId').val("");
+            $('#Quantity').val("");
+        }
 
-                cols += '<td><label class="control-label">Size</label><select class="form-control"' + counter + '"> </select></td>';
-                cols += '<td><label class="control-label">Color</label><select class="form-control"' + counter + '"> </select></td>';
-                cols += '<td><label class="control-label">Quantity</label><input type="number" name="quantity" class="form-control"' + counter + '/></td>';
-                cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
-                newRow.append(cols);
+        function ValidateUserInput() {
+            var isValid = true;
+            if ($('#SizeId').val() == null) {
+                $('#SizeId').css('border-color', 'Red');
+                isValid = false;
+            } else {
+                $('#SizeId').css('border-color', 'lightgrey');
+            }
 
-                $("table.order-list.tblVariants").append(newRow);
-                counter++;
-            });
+            if ($('#ColorId').val() == null) {
+                $('#ColorId').css('border-color', 'Red');
+                isValid = false;
+            } else {
+                $('#ColorId').css('border-color', 'lightgrey');
+            }
 
-            $("table.order-list.tblVariants").on("click", ".ibtnDelVariant", function (event) {
-                $(this).closest("tr").remove();
-                counter -= 1
-            });
-        });
+            if ($('#Quantity').val() == "") {
+                $('#Quantity').css('border-color', 'Red');
+                isValid = false;
+            } else {
+                if ($('#Quantity').val() == "0") {
+                    $('#Quantity').css('border-color', 'Red');
+                    isValid = false;
+                } else {
+                    $('#Quantity').css('border-color', 'lightgrey');
+                }
+               
+            }
+            
+            return isValid
+        }
+
+        function AddVariant() {
+            var res = ValidateUserInput();
+            if (res == false) {
+                return false;
+            }
+
+            var variantObj = {
+                Id: $('#hfproductvariantid').val(),
+                PatientName: $('#SizeId').val(),
+                ColorId: $('#ColorId').val(),
+                Quantity: $('#Quantity').val(),
+            }
+
+            alert(variantObj.PatientName);
+            
+        }
+        //End - variant
     </script>
 }
 

@@ -52,6 +52,7 @@ namespace ECommerce1.Controllers
             product.DateCreated = DateTime.Now;
 
             _service.CreateProduct(product);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -59,17 +60,21 @@ namespace ECommerce1.Controllers
         {
             var productDetails = await _service.GetProductById(id);
             if (productDetails == null) return View("NotFound");
+
+            ViewBag.ProductRepos = _service.InitializeProduct();
+
             return View(productDetails);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProduct(long id, [Bind("Id,Name,Description")] Product product)
+        public async Task<IActionResult> UpdateProduct(long id, Product product)
         {
             if (!ModelState.IsValid)
             {
                 return View(product);
             }
             await _service.UpdateProduct(id, product);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -78,6 +83,7 @@ namespace ECommerce1.Controllers
         {
             var productDetails = await _service.GetProductById(id);
             if (productDetails == null) return View("NotFound");
+
             return View(productDetails);
         }
 
@@ -88,6 +94,7 @@ namespace ECommerce1.Controllers
             if (productDetails == null) return View("NotFound");
 
             await _service.DeleteProduct(id);
+
             return RedirectToAction(nameof(Index));
         }
     }

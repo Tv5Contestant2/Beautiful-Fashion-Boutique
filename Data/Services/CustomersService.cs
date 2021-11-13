@@ -35,7 +35,7 @@ namespace ECommerce1.Data.Services
 
         public async Task<Customers> UpdateCustomer(long id, Customers customer)
         {
-            _context.Update(id);
+            _context.Customers.Update(customer);
             await _context.SaveChangesAsync();
 
             return customer;

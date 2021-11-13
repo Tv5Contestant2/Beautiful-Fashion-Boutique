@@ -40,7 +40,7 @@ namespace ECommerce1.Data.Services
 
         public async Task<Product> UpdateProduct(long id, Product product)
         {
-            _context.Update(id);
+            _context.Products.Update(product);
             await _context.SaveChangesAsync();
 
             return product;

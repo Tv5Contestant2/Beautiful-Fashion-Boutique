@@ -4,38 +4,243 @@
     ViewData["Title"] = "Update Product";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 <div class="row text">
-    <div class="col-md-8 offset-2">
-        <div class="row">
-            <div class="col-md-8 offset-2 pt-4">
-                <h2>Update Product</h2>
-                <div class="row">
-                    <div class="col pb-4">
-                        <form asp-action="UpdateProduct">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-10 offset-md-1">
+        <p>
+            <h4>Update Product</h4>
+        </p>
 
-                            <div class="form-group text-center">
-                                <img id="ProfilePicturePreview" class="border-info rounded-circle" style="max-width: 150px" />
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Name" class="control-label"></label>
-                                <input asp-for="Name" class="form-control" />
-                                <span asp-validation-for="Name" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Description" class="control-label"></label>
-                                <input asp-for="Description" class="form-control" />
-                                <span asp-validation-for="Description" class="text-danger"></span>
-                            </div>
+        <div class="form-group">
+            <form asp-action="UpdateProduct" enctype="multipart/form-data" class="hidden">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                <input type="submit" value="Save" class="btn btn-success float-right" />
 
-                            <div class="form-group pb-4 pt-4">
-                                <input type="submit" value="Update" class="btn btn-danger float-right" />
-                                <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                <div id="accordion">
+                    <div class="card mt-2">
+                        <div class="card-header" id="headingOne">
+                            <b>PRIMARY INFORMATION</b>
+                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="far fa-plus-square"></i>
+                            </a>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+
+                                @*Primary Info*@
+                                <div class="row form-group">
+
+                                    <div class="col col-md-8">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" class="form-control" readonly />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+
+
+                                        <label asp-for="Description" class="control-label"></label>
+                                        <input asp-for="Description" class="form-control" rows="4" readonly />
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+
+                                        <label asp-for="ProductCategoryId" class="control-label"></label>
+                                        <div>
+                                            <select class="form-control" asp-for="ProductCategoryId">
+                                                @foreach (var item in ViewBag.ProductRepos.ProductCategories)
+                                                {
+                                                    <option value="@item.Id">@item.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <label asp-for="GenderId" class="control-label"></label>
+                                        <div>
+                                            <select class="form-control" asp-for="GenderId">
+                                                @foreach (var item in ViewBag.ProductRepos.Genders)
+                                                {
+                                                    <option value="@item.Id">@item.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-md-4">
+
+                                        <label asp-for="StatusId" class="control-label"></label>
+                                        <div>
+                                            <select class="form-control" asp-for="StatusId">
+                                                @foreach (var item in ViewBag.ProductRepos.Statuses)
+                                                {
+                                                    <option value="@item.Id">@item.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <label class="control-label">Stock Status</label>
+                                        <div>
+                                            <select class="form-control" disabled >
+                                                @foreach (var item in ViewBag.ProductRepos.StockStatuses)
+                                                {
+                                                    <option value="@item.Id" selected>@item.Title</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <label asp-for="Price" class="control-label"></label>
+                                        <input asp-for="Price" class="form-control" type="number" />
+                                        <span asp-validation-for="Price" class="text-danger"></span>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <b>VARIANTS</b>
+                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="far fa-plus-square"></i>
+                            </a>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+
+                                @*Variants*@
+                                <div class="row form-group">
+                                    <table class=" table order-list tblVariants">
+                                        <thead>
+                                            <tr>
+                                                <td colspan="5" style="text-align: left;">
+                                                    <a id="addvariant" class="btn btn-info text-white">
+                                                        <i class="fas fa-plus-circle"></i>&nbsp;Add Variant
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="col-sm-4">
+                                                    <label class="control-label">Size</label>
+                                                    <select class="form-control" asp-for="SizeId">
+                                                        @foreach (var item in ViewBag.ProductRepos.Sizes)
+                                                        {
+                                                            <option value="@item.Id">@item.Title</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td class="col-sm-4">
+                                                    <label class="control-label">Color</label>
+                                                    <select class="form-control" asp-for="ColorId">
+                                                        @foreach (var item in ViewBag.ProductRepos.Colors)
+                                                        {
+                                                            <option value="@item.Id">@item.Title</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td class="col-sm-4">
+                                                    <label class="control-label">Quantity</label>
+                                                    <input type="number" name="quantity" class="form-control" />
+                                                </td>
+                                                <td class="col-sm-2">
+                                                    <a class="deleteRow"></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <b>IMAGES</b>
+                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="far fa-plus-square"></i>
+                            </a>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                            <div class="card-body">
+
+                                @*Images*@
+                                <div class="row form-group">
+                                    <div class="col col-3">
+                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
+                                        <div class="custom-file">
+                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                        </div>
+                                    </div>
+                                    <div class="col col-3">
+                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
+                                        <div class="custom-file">
+                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                        </div>
+                                    </div>
+                                    <div class="col col-3">
+                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
+                                        <div class="custom-file">
+                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $("#ImageFile").on("change", function () {
+            var output = document.getElementById('ImagePreview');
+            output.src = $(this).val();
+        });
+
+        //add image
+        $(document).ready(function () {
+            var counter = 0;
+
+            $("#addimage").on("click", function () {
+                var newRow = $("<tr>");
+                var cols = "";
+
+                cols += '<td class="text-center"><img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em"' + counter + '"/></td>';
+                cols += '<td><input asp-for="ImageFile" accept="image/*" class="form-control-file"' + counter + '/></td>';
+                cols += '<td><input type="button" class="ibtnDelImage btn btn-md btn-danger" value="Delete"></td>';
+                newRow.append(cols);
+
+                $("table.order-list.tblImages").append(newRow);
+                counter++;
+            });
+
+            $("table.order-list.tblImages").on("click", ".ibtnDelImage", function (event) {
+                $(this).closest("tr").remove();
+                counter -= 1
+            });
+        });
+
+        //add variant
+        $(document).ready(function () {
+            var counter = 0;
+
+            $("#addvariant").on("click", function () {
+                var newRow = $("<tr>");
+                var cols = "";
+
+                cols += '<td><label class="control-label">Size</label><select class="form-control"' + counter + '"> </select></td>';
+                cols += '<td><label class="control-label">Color</label><select class="form-control"' + counter + '"> </select></td>';
+                cols += '<td><label class="control-label">Quantity</label><input type="number" name="quantity" class="form-control"' + counter + '/></td>';
+                cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
+                newRow.append(cols);
+
+                $("table.order-list.tblVariants").append(newRow);
+                counter++;
+            });
+
+            $("table.order-list.tblVariants").on("click", ".ibtnDelVariant", function (event) {
+                $(this).closest("tr").remove();
+                counter -= 1
+            });
+        });
+    </script>
+}
+

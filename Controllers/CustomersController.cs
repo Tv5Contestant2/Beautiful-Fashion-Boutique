@@ -56,17 +56,21 @@ namespace ECommerce1.Controllers
         {
             var customerDetails = await _service.GetCustomerById(id);
             if (customerDetails == null) return View("NotFound");
+
+            ViewBag.CustomerRepo = _service.InitializeCustomer();
+            
             return View(customerDetails);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateCustomer(long id, [Bind("Id,CustomerFirstName,CustomerLastName")] Customers customers)
+        public async Task<IActionResult> UpdateCustomer(long id, Customers customers)
         {
             if (!ModelState.IsValid)
             {
                 return View(customers);
             }
             await _service.UpdateCustomer(id, customers);
+
             return RedirectToAction(nameof(Index));
         }
 
