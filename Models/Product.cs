@@ -57,5 +57,9 @@ namespace ECommerce1.Models
         public IEnumerable<Size> Sizes { get; set; }
         #endregion Enumerables
 
+        //Added temp
+        [NotMapped]
+        public string ProductVariantJSON { get; set; }
+
     }
 }

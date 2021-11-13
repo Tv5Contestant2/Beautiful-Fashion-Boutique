@@ -44,7 +44,7 @@
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" id="selectionCategories" asp-for="ProductCategoryId" >
+                                            <select class="form-control" id="selectionCategories" asp-for="ProductCategoryId">
                                                 @foreach (var item in Model.ProductCategories)
                                                 {
                                                     <option value="@item.Id">@item.Title</option>
@@ -61,7 +61,12 @@
                                                 }
                                             </select>
                                         </div>
+                                        <div style="display: none"> 
+                                            <input id="ProductVariantJSON" asp-for="ProductVariantJSON" class="form-control" />
+                                        </div>
                                     </div>
+
+                                  
 
                                     <div class="col col-md-4">
 
@@ -102,33 +107,16 @@
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                             <div class="card-body">
                                 <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#myModal" onclick="OpenAddPopup();">Add Variant</button><br /><br />
-                                <table class="table order-list" id="dtVariant">
+                                <table class="table order-list tblVariants" id="dtVariant">
                                     <thead>
                                         <tr>
-                                            <th>Size</th>
-                                            <th>Color</th>
-                                            <th>Quantity</th>
+                                            <th style="width: 35%">Size</th>
+                                            <th style="width: 35%">Color</th>
+                                            <th style="width: 20%">Quantity</th>
+                                            <th style="width: 10%">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="tbody" id="bodyVariant">
-                                        @*@foreach (var itemVariant in Model.ProductVariants)
-                                        {
-                                            <tr>
-                                                <td class="col-sm-4">
-                                                    <label class="control-label">Size</label>
-                                                    <span>@itemVariant.SizeId</span>
-                                                    
-                                                </td>
-                                                <td class="col-sm-4">
-                                                    <span>@itemVariant.ColorId</span>
-                                                  
-                                                </td>
-                                                <td class="col-sm-4">
-                                                    <span>@itemVariant.Quantity</span>
-                                                   
-                                                </td>
-                                            </tr>
-                                        }*@
                                     </tbody>
                                 </table>
 
@@ -142,8 +130,6 @@
                                             @*<h4 class="modal-title" id="AddUpdateModelVariantLabel">Add Variant</h4>*@
                                         </div> 
                                         <div class="modal-body">
-                                            @* hidden filed for storing Id *@
-                                            <input id="hfproductvariantid" />
                                             <div class="form-group">
                                                 <label class="control-label">Size</label>
                                                 @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
@@ -170,6 +156,7 @@
                             @*End *@
                             </div>
                             </div>
+                    </div>
                     </div>
             </form>
         </div>
@@ -207,6 +194,11 @@
         });
 
         //start - variant
+        $("table.order-list.tblVariants").on("click", ".ibtnDelVariant", function (event) {
+            $(this).closest("tr").remove();
+            ConvertDTVarianToJson();
+        });
+
         function OpenAddPopup() {
             //title text
             $("#AddUpdateModelVariantLabel").text("Add Variant")
@@ -249,11 +241,13 @@
                 } else {
                     $('#Quantity').css('border-color', 'lightgrey');
                 }
-               
+
             }
-            
+
             return isValid
         }
+
+        var variantObj = new Object();
 
         function AddVariant() {
             var res = ValidateUserInput();
@@ -261,16 +255,71 @@
                 return false;
             }
 
-            var variantObj = {
-                Id: $('#hfproductvariantid').val(),
-                PatientName: $('#SizeId').val(),
-                ColorId: $('#ColorId').val(),
-                Quantity: $('#Quantity').val(),
-            }
+            variantObj.SizeId = $('#SizeId').val();
+            variantObj.Size = $('#SizeId option:selected').text();
 
-            alert(variantObj.PatientName);
-            
+            variantObj.ColorId = $('#ColorId').val();
+            variantObj.Color = $('#ColorId option:selected').text();
+
+            variantObj.Quantity = $('#Quantity').val();
+
+            AppendRow(variantObj);
+            ConvertDTVarianToJson();
+            $('#AddUpdateModelVariant').modal('hide');
         }
+
+        function AppendRow(variantObj) {
+
+            var newRow = $("<tr>");
+            var cols = "";
+
+            cols += '<td><span>' + variantObj.Size + '</span><input id="inptSize" name="inptSize" type="text" value="' + variantObj.SizeId + '" style="display:none"/></td>';
+            cols += '<td><span>' + variantObj.Color + '</span><input id="inptColor" name="inptColor" type="text" value="' + variantObj.ColorId + '" style="display:none"/></td>';
+            cols += '<td><span>' + variantObj.Quantity + '</span><input id="inptQuantity" name="inptQuantity" type="text" value="' + variantObj.Quantity + '" style="display:none"/></td>';
+            cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
+
+            newRow.append(cols);
+
+            $("#dtVariant").append(newRow);
+        }
+
+        function ConvertDTVarianToJson() {
+            var _trs = $('#dtVariant tbody tr');
+            if (_trs.length > 0) {
+                var ProductVariantJSON = [];
+                _trs.each(function (i, tr) {
+                    var obj = {};
+                    var tds = $(tr).find('td');
+
+                    var inputs = $(tds).find('input');
+                    obj["Id"] = 0; //always new
+                    inputs.each(function (index, element) {
+                        switch (element.name) {
+                            case "inptSize":
+                                obj["SizeId"] = parseInt(element.value);
+                                break;
+                            case "inptColor":
+                                obj["ColorId"] = parseInt(element.value);
+                                break;
+                            case "inptQuantity":
+                                obj["Quantity"] = parseInt(element.value);
+                                break;
+                        }
+
+                    });
+                    ProductVariantJSON.push(obj);
+                    document.getElementById("ProductVariantJSON").value = JSON.stringify(ProductVariantJSON);
+                });
+            } else {
+                document.getElementById("ProductVariantJSON").value = "";
+            }
+            
+
+
+        }
+
+     
+
         //End - variant
     </script>
 }

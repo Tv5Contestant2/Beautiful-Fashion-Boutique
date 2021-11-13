@@ -2,7 +2,9 @@
 using ECommerce1.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -35,8 +37,13 @@ namespace ECommerce1.Controllers
         {
             await Task.Delay(0);
 
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return View(product);
+
+            if (!string.IsNullOrEmpty(product.ProductVariantJSON))
+            {
+                product.ProductVariants = JsonSerializer.Deserialize<List<ProductVariant>>(product.ProductVariantJSON);
+            }
 
             if (product.ImageFile != null) {
                 using (var ms = new MemoryStream())
