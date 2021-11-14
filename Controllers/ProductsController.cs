@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -46,7 +47,24 @@ namespace ECommerce1.Controllers
                 product.ProductVariants = JsonSerializer.Deserialize<List<ProductVariant>>(product.ProductVariantJSON);
             }
 
-            if (product.ImageFile != null) {
+            if (!string.IsNullOrEmpty(product.ProductImageJSON))
+            {
+                List<ProductImage> productImages = new List<ProductImage>();
+                productImages = JsonSerializer.Deserialize<List<ProductImage>>(product.ProductImageJSON);
+                if (productImages.Any()) {
+                    foreach (var item in productImages) {
+                        var _split = item.ImageBase64String.Split(",");
+                        if (_split.Any()) {
+                            item.Image = _split[1]; //Get Base64String only.
+                        }
+                    }
+
+                }
+
+                product.ProductImages = productImages;
+            }
+
+                if (product.ImageFile != null) {
                 using (var ms = new MemoryStream())
                 {
                     product.ImageFile.CopyTo(ms);

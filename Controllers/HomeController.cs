@@ -33,6 +33,7 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn([Bind("Username,EmployeePass")] Employees employees)
         {
+            await Task.Delay(0);
             try
             {
                 if (employees.Username.ToLower() == "administrator")

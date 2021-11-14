@@ -44,7 +44,7 @@
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" id="selectionCategories" asp-for="ProductCategoryId">
+                                            <select class="form-control" id="selectionCategories" asp-for="ProductCategoryId" onchange="handleCategories()">
                                                 @foreach (var item in Model.ProductCategories)
                                                 {
                                                     <option value="@item.Id">@item.Title</option>
@@ -63,6 +63,9 @@
                                         </div>
                                         <div style="display: none">
                                             <input id="ProductVariantJSON" asp-for="ProductVariantJSON" class="form-control" />
+                                        </div>
+                                        <div style="display: block">
+                                            <input id="ProductImageJSON" asp-for="ProductImageJSON" class="form-control" />
                                         </div>
                                     </div>
 
@@ -110,7 +113,7 @@
                                 <table class="table order-list tblVariants" id="dtVariant">
                                     <thead>
                                         <tr>
-                                            <th style="width: 35%">Size</th>
+                                            <th id="thVariantSize" style="width: 35%">Size</th>
                                             <th style="width: 35%">Color</th>
                                             <th style="width: 20%">Quantity</th>
                                             <th style="width: 10%">Action</th>
@@ -129,7 +132,7 @@
                                                 @*<h4 class="modal-title" id="AddUpdateModelVariantLabel">Add Variant</h4>*@
                                             </div>
                                             <div class="modal-body">
-                                                <div class="form-group">
+                                                <div id="divSizeField" class="form-group">
                                                     <label class="control-label">Size</label>
                                                     @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
                                                     @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })
@@ -216,63 +219,26 @@
 @section Scripts {
     <script>
 
-        //---------------------------------------------------------------------------------------
-        //<div>
-        //    <img id="output" width="200" />
-        //    <input id="myImageUpload" type="file" accept="image/*" name="image" />
-        //</div>
+        //Start - Categories
+        function handleCategories(e) {
+            var _categoryId = $('#selectionCategories').val();
+            $("#dtVariant tr td").remove();
+            switch (_categoryId) {
+                case "1":
+                case "2":
+                    document.getElementById('thVariantSize').setAttribute('style', 'width: 35%;');
+                    document.getElementById('divSizeField').setAttribute('style', 'display:block;');
+                    break;
+                case "3":
+                    document.getElementById('thVariantSize').setAttribute('style', 'display:none;');
+                    document.getElementById('divSizeField').setAttribute('style', 'display:none;');
+                    document.getElementById('SizeId').value = null;
+                    break;
+            };
+            
+        }
 
-        //var fileInput = document.querySelector("#myImageUpload");
-        //var image = document.getElementById('output');
-
-        //// listen for the change event so we can capture the file
-        //fileInput.addEventListener("change", (e) => {
-        //    // get a reference to the file
-        //    const file = e.target.files[0];
-
-        //    // encode the file using the FileReader API
-        //    const reader = new FileReader();
-        //    reader.onloadend = () => {
-        //        const base64String = reader.result
-        //            .replace("data:", "")
-        //            .replace(/^.+,/, "");
-        //        console.log(base64String);
-
-        //        document.getElementById('output').setAttribute('src', reader.result);
-
-        //    };
-        //    reader.readAsDataURL(file);
-        //});
-        //---------------------------------------------------------------------------------------
-
-
-        //$("#ImageFile").on("change", function () {
-        //    var output = document.getElementById('ImagePreview');
-        //    output.src = $(this).val();
-        //});
-
-        ////add image
-        //$(document).ready(function () {
-        //    var counter = 0;
-
-        //    $("#addimage").on("click", function () {
-        //        var newRow = $("<tr>");
-        //        var cols = "";
-
-        //        cols += '<td class="text-center"><img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em"' + counter + '"/></td>';
-        //        cols += '<td><input asp-for="ImageFile" accept="image/*" class="form-control-file"' + counter + '/></td>';
-        //        cols += '<td><input type="button" class="ibtnDelImage btn btn-md btn-danger" value="Delete"></td>';
-        //        newRow.append(cols);
-
-        //        $("table.order-list.tblImages").append(newRow);
-        //        counter++;
-        //    });
-
-        //    $("table.order-list.tblImages").on("click", ".ibtnDelImage", function (event) {
-        //        $(this).closest("tr").remove();
-        //        counter -= 1
-        //    });
-        //});
+        //End - Categories
 
         //Start - variant
         $("table.order-list.tblVariants").on("click", ".ibtnDelVariant", function (event) {
@@ -296,6 +262,9 @@
 
         function ClearAllVariantInput() {
             $('#hfproductvariantid').val("");
+            $('#SizeId').css('border-color', 'lightgrey');
+            $('#ColorId').css('border-color', 'lightgrey');
+            $('#Quantity').css('border-color', 'lightgrey');
             $('#SizeId').val("");
             $('#ColorId').val("");
             $('#Quantity').val("");
@@ -303,13 +272,17 @@
 
         function ValidateUserInput() {
             var isValid = true;
-            if ($('#SizeId').val() == null) {
-                $('#SizeId').css('border-color', 'Red');
-                isValid = false;
-            } else {
-                $('#SizeId').css('border-color', 'lightgrey');
-            }
 
+            var _categoryId = $('#selectionCategories').val();
+            if (_categoryId !== "3") {
+                if ($('#SizeId').val() == null) {
+                    $('#SizeId').css('border-color', 'Red');
+                    isValid = false;
+                } else {
+                    $('#SizeId').css('border-color', 'lightgrey');
+                }
+            }
+           
             if ($('#ColorId').val() == null) {
                 $('#ColorId').css('border-color', 'Red');
                 isValid = false;
@@ -359,7 +332,10 @@
             var newRow = $("<tr>");
             var cols = "";
 
-            cols += '<td><span>' + variantObj.Size + '</span><input id="inptSize" name="inptSize" type="text" value="' + variantObj.SizeId + '" style="display:none"/></td>';
+            var _categoryId = $('#selectionCategories').val();
+            if (_categoryId !== "3") {
+                cols += '<td><span>' + variantObj.Size + '</span><input id="inptSize" name="inptSize" type="text" value="' + variantObj.SizeId + '" style="display:none"/></td>';
+            }
             cols += '<td><span>' + variantObj.Color + '</span><input id="inptColor" name="inptColor" type="text" value="' + variantObj.ColorId + '" style="display:none"/></td>';
             cols += '<td><span>' + variantObj.Quantity + '</span><input id="inptQuantity" name="inptQuantity" type="text" value="' + variantObj.Quantity + '" style="display:none"/></td>';
             cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
@@ -480,12 +456,11 @@
 
                     var spans = $(tds).find('span');
                     spans.each(function (index, element) {
-                        obj["ImageFileName"] = element.innerText;
+                        obj["FileName"] = element.innerText;
                     });
 
-                    console.log(obj);
-            
-
+                    ProductImageJSON.push(obj);
+                    document.getElementById("ProductImageJSON").value = JSON.stringify(ProductImageJSON);
                 });
             } else {
             }

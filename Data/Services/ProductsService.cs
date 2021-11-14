@@ -56,7 +56,15 @@ namespace ECommerce1.Data.Services
 
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            var result = await _context.Products.ToListAsync();
+            var result = await _context.Products.Include(x => x.ProductImages).ToListAsync();
+
+            foreach (var item in result) {
+                if (item.ProductImages.Any()) {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+            }
+
             return result;
         }
 

@@ -9,8 +9,16 @@ namespace ECommerce1.Models
         [Key]
         public int Id { get; set; }
 
+        public string Image { get; set; }
+        public string FileName { get; set; }
+
+        [NotMapped]
+        public string ImageBase64String { get; set; }
+
         [NotMapped]
         [Display(Name = "Upload Image File")]
         public IFormFile ImageFile { get; set; }
+
+       
     }
 }

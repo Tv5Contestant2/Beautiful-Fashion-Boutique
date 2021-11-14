@@ -60,6 +60,8 @@ namespace ECommerce1.Models
         //Added temp
         [NotMapped]
         public string ProductVariantJSON { get; set; }
+        [NotMapped]
+        public string ProductImageJSON { get; set; }
 
     }
 }
