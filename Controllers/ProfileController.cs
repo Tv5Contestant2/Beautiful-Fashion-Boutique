@@ -10,13 +10,13 @@ namespace ECommerce1.Controllers
     public class ProfileController : Controller
     {
         private readonly ICartService _service;
-        private readonly IProductCategoriesService _productCategoriesService;
+        private readonly IOrderService _orderService;
 
         public ProfileController(ICartService service,
-            IProductCategoriesService productCategoriesService)
+            IOrderService orderService)
         {
             _service = service;
-            _productCategoriesService = productCategoriesService;
+            _orderService = orderService;
         }
 
         public async Task<IActionResult> Index()
@@ -32,7 +32,9 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            var result = await _orderService.GetAllOrdersByUser(); //temporary
+
+            return View(result);
         }
 
         public async Task<IActionResult> Profile()

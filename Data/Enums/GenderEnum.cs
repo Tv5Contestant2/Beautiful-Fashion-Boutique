@@ -7,7 +7,7 @@ namespace ECommerce1.Data.Enums
 {
     public enum GenderEnum
     {
-        Women = 1,
-        Men = 2,
+        Women = 2,
+        Men = 1,
     }
 }

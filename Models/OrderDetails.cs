@@ -8,9 +8,15 @@ namespace ECommerce1.Models
     public class OrderDetails
     {
         [Key]
-        public int TransactionID { get; set; }
-        public int ProductID { get; set; }
-        public float ItemQuantity { get; set; }
-        public float ItemSubTotal { get; set; } 
+        public int Id { get; set; }
+        public Guid TransactionId { get; set; }
+        public long ProductId { get; set; }
+        public int ItemQuantity { get; set; }
+        public decimal ItemSubTotal { get; set; } 
+        public string ModeOfPayment { get; set; }
+        public string CustomerName { get; set; }
+        public DateTime OrderDate { get; set; }
+
+        public Product Product { get; set; }
     }
 }

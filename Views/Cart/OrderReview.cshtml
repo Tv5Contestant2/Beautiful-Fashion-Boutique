@@ -11,7 +11,7 @@
                 @if (Model != null)
                 {
                     <p class="lead text-muted">
-                        You currently have @ViewBag.Cart.Count() item(s) in your basket
+                        You currently have @ViewBag.Cart.Count item(s) in your basket
                     </p>
                 }
                 else
@@ -32,104 +32,112 @@
         </div>
     </div>
 </section>
-@if (Model == null)
+@if (Model != null)
 {
-<section class="py-5">
-    <div class="container py-5">
-        <div class="row gy-5 gx-5">
-            <div class="col-lg-8">
-                <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
-                    <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" asp-controller="Cart" asp-action="Checkout">Address</a></li>
-                    <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" asp-controller="Cart" asp-action="DeliveryMethod">Delivery Method </a></li>
-                    <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" asp-controller="Cart" asp-action="PaymentMethod">Payment Method </a></li>
-                    <li class="nav-item my-1 my-lg-0 active"><a class="nav-link py-3 small text-uppercase active" asp-controller="Cart" asp-action="OrderReview">Order Review</a></li>
-                </ul>
-                <div id="order-review">
-                    <div class="cart-outer mb-5">
-                        <div class="cart-inner">
-                            <div class="border-top border-bottom py-2">
-                                <div class="row text-uppercase">
-                                    <div class="col-6"><strong class="small">Product</strong></div>
-                                    <div class="col-2"> <strong class="small">Price</strong></div>
-                                    <div class="col-2"> <strong class="small">Quantity</strong></div>
-                                    <div class="col-2 text-end"><strong class="small">Unit price</strong></div>
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="row gy-5 gx-5">
+                <div class="col-lg-8">
+                    <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
+                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" asp-controller="Cart" asp-action="Checkout">Address</a></li>
+                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" asp-controller="Cart" asp-action="DeliveryMethod">Delivery Method </a></li>
+                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" asp-controller="Cart" asp-action="PaymentMethod">Payment Method </a></li>
+                        <li class="nav-item my-1 my-lg-0 active"><a class="nav-link py-3 small text-uppercase active" asp-controller="Cart" asp-action="OrderReview">Order Review</a></li>
+                    </ul>
+                    <div id="order-review">
+                        <div class="cart-outer mb-5">
+                            <div class="cart-inner">
+                                <div class="border-top border-bottom py-2">
+                                    <div class="row text-uppercase">
+                                        <div class="col-6"><strong class="small">Product</strong></div>
+                                        <div class="col-2"> <strong class="small">Price</strong></div>
+                                        <div class="col-2"> <strong class="small">Quantity</strong></div>
+                                        <div class="col-2 text-end"><strong class="small">Unit price</strong></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Product-->
-                            <div class="py-4 border-bottom">
-                                <div class="row d-flex align-items-center bord">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center">
-                                            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/shirt.0836aa05.jpg" alt="..." width="70">
-                                            <div class="ms-3">
-                                                <a href="detail.html">
-                                                    <h6 class="mb-0 text-dark fw-normal">Loose Oversised Shirt</h6><span class="text-muted text-sm">Size: Large</span>
-                                                </a>
+                                <!-- Product-->
+                                @foreach (var item in Model)
+                                {
+                                    <div class="py-4 border-bottom">
+                                        <div class="row d-flex align-items-center bord">
+                                            <div class="col-6">
+                                                <div class="d-flex align-items-center">
+                                                    <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
+                                                    <div class="ms-3">
+                                                        <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
+                                                            <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6><span class="text-muted text-sm">Size: Large</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-2"><span>Php @item.Product.Price</span></div>
+                                            <div class="col-2"><span>@item.Quantity</span></div>
+                                            <div class="col-2 text-end">
+                                                @{
+                                                    var total = item.Product.Price * item.Quantity;
+                                                    <span>Php @total</span>
+                                                }
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-2"><span>$65.00</span></div>
-                                    <div class="col-2"><span>4</span></div>
-                                    <div class="col-2 text-end"><span>$325.00</span></div>
-                                </div>
-                            </div>
-                            <!-- Product-->
-                            <div class="py-4 border-bottom">
-                                <div class="row d-flex align-items-center bord">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center">
-                                            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/shirt-black.cbbb65a4.jpg" alt="..." width="70">
-                                            <div class="ms-3">
-                                                <a href="detail.html">
-                                                    <h6 class="mb-0 text-dark fw-normal">Loose Oversised Shirt</h6><span class="text-muted text-sm">Size: Medium</span>
-                                                </a>
-                                            </div>
+                                }
+
+                                @foreach (var item in Model)
+                                {
+                                    <div class="row pt-4 pb-3">
+                                        <div class="col-6">
+                                            <p class="h5 fw-normal mb-0">Total</p>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <h5 class="text-primary mb-0">
+                                                @{
+                                                    var total = item.Product.Price * item.Quantity;
+                                                    <span>Php @total</span>
+                                                }
+                                            </h5>
                                         </div>
                                     </div>
-                                    <div class="col-2"><span>$55.00</span></div>
-                                    <div class="col-2"><span>4</span></div>
-                                    <div class="col-2 text-end"><span>$165.00</span></div>
-                                </div>
-                            </div>
-                            <div class="row pt-4 pb-3">
-                                <div class="col-6">
-                                    <p class="h5 fw-normal mb-0">Total</p>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <h5 class="text-primary mb-0">$400.00</h5>
-                                </div>
+                                }
                             </div>
                         </div>
+                        <div class="d-flex justify-content-between flex-column flex-lg-row">
+                            <a class="btn btn-outline-secondary px-sm-5 my-1" asp-controller="Cart" asp-action="PaymentMethod"> <i class="fas fa-angle-left me-2"></i>Back to payment method</a>
+                            <a class="btn btn-primary px-sm-5 my-1" asp-controller="Cart" asp-action="OrderConfirmed">Place an order<i class="fas fa-angle-right ms-2"></i></a>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-between flex-column flex-lg-row">
-                        <a class="btn btn-outline-secondary px-sm-5 my-1" asp-controller="Cart" asp-action="PaymentMethod"> <i class="fas fa-angle-left me-2"></i>Back to payment method</a>
-                        <a class="btn btn-primary px-sm-5 my-1" asp-controller="Cart" asp-action="OrderConfirmed">Place an order<i class="fas fa-angle-right ms-2"></i></a></div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card rounded-0">
-                    <div class="card-body px-4 py-5">
-                        <h6 class="text-uppercase">Order Summary</h6>
-                        <p class="fw-normal text-muted">Shipping and additional costs are calculated based on values you have entered</p>
-                        <ul class="list-unstyled mb-0">
-                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">$390.00</strong></li>
-                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">$10.00</strong></li>
-                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Tax</span><strong class="fw-normal">$0.00</strong></li>
-                            <li class="d-flex justify-content-between py-3"><span>Total</span><strong class="text-primary h5 mb-0">$400.00</strong></li>
-                        </ul>
+                <div class="col-lg-4">
+                    <div class="card rounded-0">
+                        <div class="card-body px-4 py-5">
+                            <h6 class="text-uppercase">Order Summary</h6>
+                            <p class="fw-normal text-muted">Shipping and additional costs are calculated based on values you have entered</p>
+                            <ul class="list-unstyled">
+                                @foreach (var item in Model)
+                                {
+                                    var total = item.Product.Price * item.Quantity;
+                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php 0.00</strong></li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Tax</span><strong class="fw-normal">Php 0.00</strong></li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Total</span><strong class="text-primary h5 mb-0">Php @total</strong></li>
+                                }
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 }
 else
 {
-    <div class="item col-xl-12">
-        <h2 class="mb-1">Oh no! Your basket is empty.</h2>
-        <p class="text-gray-6 mb-1">Don't miss your chance! Start shopping now.</p>
-    </div>
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="item col-xl-12">
+                <h2 class="mb-1">Oh no! Your cart is empty.</h2>
+                <p class="text-gray-6 mb-1">Don't miss your chance! Start shopping now.</p>
+            </div>
+        </div>
+    </section>
 }
 
 <div style="position: fixed; bottom: 10px; right: 10px;">
