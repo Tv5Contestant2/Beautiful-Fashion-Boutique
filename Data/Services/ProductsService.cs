@@ -79,7 +79,7 @@ namespace ECommerce1.Data.Services
                     await _context.SaveChangesAsync();
                 }
             }
-
+          
             if (string.IsNullOrEmpty(product.ProductVariantJSON))
             {
                 var _variants = _context.ProductVariants.Where(x => x.ProductId == product.Id);
@@ -100,6 +100,18 @@ namespace ECommerce1.Data.Services
                     _context.ProductImages.RemoveRange(_resultImagesToDelete);
                     await _context.SaveChangesAsync();
                 }
+
+                var _newImages = product.ProductImages.Where(x => x.Id == 0);
+                if (_newImages.Any()) {
+                    foreach (var item in _newImages) {
+                        item.ProductId = product.Id;
+                    }
+                    product.ProductImages = _newImages;
+                    await _context.ProductImages.AddRangeAsync(product.ProductImages);
+                    await _context.SaveChangesAsync();
+                }
+
+                product.ProductImages = null; //untracked
             }
 
             //End 
@@ -114,6 +126,19 @@ namespace ECommerce1.Data.Services
                     _context.ProductVariants.RemoveRange(_resultVariantsToDelete);
                     await _context.SaveChangesAsync();
                 }
+
+                var _newVariants = product.ProductVariants.Where(x => x.Id == 0);
+                if (_newVariants.Any())
+                {
+                    foreach (var item in _newVariants) {
+                        item.ProductId = product.Id;
+                    }
+                    product.ProductVariants = _newVariants;
+                    await _context.ProductVariants.AddRangeAsync(product.ProductVariants);
+                    await _context.SaveChangesAsync();
+                }
+
+                product.ProductVariants = null; //untracked
             }
             //End
 

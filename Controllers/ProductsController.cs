@@ -107,10 +107,16 @@ namespace ECommerce1.Controllers
                         var _split = item.ImageBase64String.Split(",");
                         if (_split.Any())
                         {
-                            item.Image = _split[1]; //Get Base64String only.
+                            if (_split.Length > 1)
+                            {
+                                item.Image = _split[1]; //Get Base64String only.
+                            }
+                            else
+                            {
+                                item.Image = _split[0]; //Get Base64String only.
+                            }
                         }
                     }
-
                 }
 
                 product.ProductImages = productImages;
