@@ -1,36 +1,15 @@
-﻿@model IEnumerable<Product>
+﻿@model Cart
 
 @{
     ViewData["Title"] = "Trending/New Arrivals";
 }
 
-<div class="search-panel d-none" id="searchPanel">
-    <div class="search-panel-inner p-4">
-        <div class="seach-panel-close">
-            <button class="btn btn-primary rounded-0 shadow-0 p-2" id="searchCloseBtn" type="button" onclick="closeSearch()">
-                <svg class="svg-icon text-white mt-1">
-                    <use xlink:href="#close-1"> </use>
-                </svg>
-            </button>
-        </div>
-        <form class="w-100" action="#">
-            <div class="row">
-                <div class="col-lg-7 mx-auto">
-                    <div class="d-flex align-items-center mb-3 border-bottom">
-                        <input class="form-control form-control-lg bg-none border-0 shadow-0 rounded-0 px-0" type="text" placeholder="What are you searching for" aria-describedby="button-addon2">
-                        <button class="btn btn-link text-dark shadow-0 px-0 text-decoration-none" id="button-addon2" type="submit"><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!-- Hero Section-->
+@*Hero Section*@
 <section class="py-5 bg-light">
     <div class="container py-4">
         <div class="row">
             <div class="col-lg-9 order-2 order-lg-1">
-                <h1>@ViewBag.Title</h1><p class="lead text-muted">Hottest and latest items on our stash.</p>
+                <h1>@ViewBag.Title</h1><p class="lead text-muted">Prepare to mesmerize. Check this collection meant just for you.</p>
             </div>
             <div class="col-lg-3 text-end order-1 order-lg-2">
                 <nav aria-label="breadcrumb">
@@ -139,21 +118,33 @@
                     </div>
                 </header>
                 <div class="row gy-5 mb-5">
-                    <span class="visible-items">Showing <strong>1-15 </strong>of <strong>@Model.Count() </strong>results</span>
+                    <span class="visible-items">Showing <strong>1-15 </strong>of <strong>@ViewBag.Products.Count </strong>results</span>
+
                     <!-- item-->
-                    @foreach (var item in Model)
+                    @foreach (var item in ViewBag.Products)
                     {
                         <div class="item col-xl-4 col-md-6">
                             <div class="product">
                                 <div class="image d-flex align-items-center justify-content-center bg-light">
                                     @*<div class="ribbon ribbon-primary text-uppercase">Sale</div>*@
                                     <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
-                                    <div class="hover-overlay d-flex align-items-center justify-content-center">
-                                        <div class="CTA d-flex align-items-center justify-content-center"><a href="#"><i class="fas fa-shopping-cart"></i></a><a class="active" asp-controller="Home" asp-action="UnderConstruction"><i class="fas fa-search"></i> View</a><a href="#" data-bs-toggle="modal" data-bs-target="#productView"><i class="fas fa-expand"></i></a></div>
-                                    </div>
+                                    <form asp-controller="Cart" asp-action="AddToCart">
+                                        <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                            <div class="CTA d-flex align-items-center justify-content-center">
+                                                <input type="hidden" asp-for="ProductId" value="@item.Id" />
+                                                <input type="hidden" asp-for="Quantity" value="1" />
+                                                <button type="submit" class="btn btn-link">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </button>
+                                                <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="pt-3">
-                                    <small class="text-muted">Clothing</small><a class="reset-anchor" href="detail.html">
+                                    <small class="text-muted">Clothing</small><a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
                                         <h3 class="h6 mb-0 text-uppercase">@item.Name</h3>
                                     </a><span class="text-muted">Php @item.Price</span>
                                 </div>
@@ -179,59 +170,6 @@
     </div>
 </main>
 
-@*Modal*@
-<div class="modal fade" id="productView" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content rounded-0 border-0">
-            <div class="modal-body p-5 shadow position-relative">
-                @*<div class="ribbon ribbon-primary text-uppercase mt-4">Sale</div>*@
-                <div class="row align-items-center gx-5">
-                    <div class="col-lg-6"><img class="img-fluid d-block" src="~/images/default-image.png" alt=""></div>
-                    <div class="col-lg-6">
-                        <button class="close modal-close p-4 border-0" type="button" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">
-                                <svg class="svg-icon text-white mt-1">
-                                    <use xlink:href="#close-1"> </use>
-                                </svg>
-                            </span>
-                        </button>
-                        <div class="my-lg-5 my-md-4">
-                            <h2>Test Product</h2>
-                            <ul class="list-inline mb-4">
-                                <li class="list-inline-item">
-                                    <p class="h5 text-primary mb-0">Php 1200.00</p>
-                                </li>
-                                @*<li class="list-inline-item">
-                                    <p class="h5 fw-normal text-muted text-decoration-line-through mb-0">$90.00</p>
-                                </li>*@
-                            </ul>
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
-                            <ul class="list-inline d-flex align-items-center my-4">
-                                <li class="list-inline-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="quantity d-flex align-items-center me-4">
-                                            <div class="dec-btn" onclick="decrease(this)">-</div>
-                                            <input class="quantity-no" type="text" value="1">
-                                            <div class="inc-btn" onclick="increase(this)">+</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-inline-item">
-                                    <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-control js-modalsize choices__input" name="modalsize" hidden="" tabindex="-1" data-choice="active"><option value="small">Small</option></select><div class="choices__list choices__list--single"><div class="choices__item choices__item--selectable" data-item="" data-id="1" data-value="small" data-custom-properties="null" aria-selected="true">Small</div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" role="listbox"><div id="choices--modalsize-ln-item-choice-1" class="choices__item choices__item--choice choices__item--selectable is-highlighted" role="option" data-choice="" data-id="1" data-value="large" data-select-text="" data-choice-selectable="" aria-selected="true">Large</div><div id="choices--modalsize-ln-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="medium" data-select-text="" data-choice-selectable="">Medium</div><div id="choices--modalsize-ln-item-choice-3" class="choices__item choices__item--choice is-selected choices__item--selectable" role="option" data-choice="" data-id="3" data-value="small" data-select-text="" data-choice-selectable="">Small</div><div id="choices--modalsize-ln-item-choice-4" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="4" data-value="x-large" data-select-text="" data-choice-selectable="">X-Large</div></div></div></div>
-                                </li>
-                            </ul>
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><a class="btn btn-primary px-5" href="#"> <i class="fas fa-shopping-cart me-2"></i>Add to cart</a></li>
-                                <li class="list-inline-item"><a class="btn btn-outline-secondary px-5" href="#"> <i class="far fa-heart me-2"></i>Add to wishlist</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div style="position: fixed; bottom: 10px; right: 10px;">
     <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
         <i class="fa fa-arrow-up" aria-hidden="true"></i>
@@ -241,4 +179,8 @@
 <script>
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }
+
+    function setProductId(productId) {
+        document.getElementById('hidden_product_id').value = document.getElementById(productId).getAttribute('data-subcat');
+    }
 </script>

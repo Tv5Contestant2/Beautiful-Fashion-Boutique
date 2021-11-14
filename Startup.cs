@@ -43,7 +43,7 @@ namespace ECommerce1
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Administrator}/{action=Index}/{id?}");
+                    pattern: "{controller=StoreFront}/{action=Index}/{id?}");
             });
 
             // Seed Database
@@ -58,6 +58,7 @@ namespace ECommerce1
                 context.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
             // Services Configuration
+            services.AddScoped<ICartService, CartService>();
             services.AddScoped<ICustomersService, CustomersService>();
             services.AddScoped<IEmployeesService, EmployeesService>();
             services.AddScoped<IProductsService, ProductsService>();

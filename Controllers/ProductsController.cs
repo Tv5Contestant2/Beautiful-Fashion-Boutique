@@ -15,10 +15,12 @@ namespace ECommerce1.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductsService _service;
+        private readonly ICartService _cartService;
        
-        public ProductsController(IProductsService service)
+        public ProductsController(IProductsService service, ICartService cartService)
         {
             _service = service;
+            _cartService = cartService;
         }
 
         public async Task<IActionResult> Index()

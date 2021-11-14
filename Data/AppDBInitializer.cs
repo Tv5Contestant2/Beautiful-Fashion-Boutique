@@ -84,13 +84,13 @@ namespace ECommerce1.Data
                     {
                         new Gender()
                         {
-                            Title = "Men",
-                            AlternateTitle = "Male"
+                            Title = "Women",
+                            AlternateTitle = "Female"
                         },
                         new Gender()
                         {
-                            Title = "Women",
-                            AlternateTitle = "Female"
+                            Title = "Men",
+                            AlternateTitle = "Male"
                         },
                     });
 
