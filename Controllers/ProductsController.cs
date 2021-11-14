@@ -1,5 +1,6 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,13 @@ namespace ECommerce1.Controllers
             _service.CreateProduct(product);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public ActionResult fileupload(FormCollection form)
+        {
+            var _object = form;
+            return View();
         }
 
         public async Task<IActionResult> UpdateProduct(long id)
