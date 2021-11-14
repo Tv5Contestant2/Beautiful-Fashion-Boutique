@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,10 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Index()
         {
             var data = await _service.GetAllProducts();
+
+            ViewBag.InStock = data.Where(x => x.StatusId == (int)StockStatusEnum.InStock).ToList().Count();
+            ViewBag.OutOfStock = data.Where(x => x.StatusId == (int)StockStatusEnum.OutOfStock).ToList().Count();
+            ViewBag.Critical = 0;
 
             return View(data);
         }
