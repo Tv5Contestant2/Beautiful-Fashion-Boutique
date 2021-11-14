@@ -27,6 +27,12 @@ namespace ECommerce1.Controllers
         {
             var data = await _service.GetAllProducts();
 
+            foreach (var item in data) {
+                if (item.ProductVariants != null && item.ProductVariants.Any()) {
+                    item.StockQty = item.ProductVariants.Sum(x => x.Quantity);
+                }
+            }
+
             ViewBag.InStock = data.Where(x => x.StatusId == (int)StockStatusEnum.InStock).ToList().Count();
             ViewBag.OutOfStock = data.Where(x => x.StatusId == (int)StockStatusEnum.OutOfStock).ToList().Count();
             ViewBag.Critical = 0;
@@ -46,8 +52,11 @@ namespace ECommerce1.Controllers
         {
             await Task.Delay(0);
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) {
+                _service.InitializeProductListForResponse(product);
                 return View(product);
+            }
+                
 
             if (!string.IsNullOrEmpty(product.ProductVariantJSON))
             {
@@ -95,6 +104,7 @@ namespace ECommerce1.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _service.InitializeProductListForResponse(product);
                 return View(product);
             }
 

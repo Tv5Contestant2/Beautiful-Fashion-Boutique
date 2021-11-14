@@ -28,12 +28,18 @@ namespace ECommerce1.Data.Services
                 Sizes = _context.Sizes.OrderBy(x => x.Id).ToList(),
                 Statuses =  _context.Statuses.OrderBy(x => x.Id).ToList(),
                 StockStatuses =  _context.StockStatuses.OrderBy(x => x.Id).ToList(),
-
-                StatusId = (int)StatusEnum.Active,
-                StockStatusId = (int)StockStatusEnum.OutOfStock
             };
 
             return _result;
+        }
+
+        public void InitializeProductListForResponse(Product product) {
+            if(product.Colors == null) product.Colors = _context.Colors.OrderBy(x => x.Id).ToList();
+            if(product.Genders == null) product.Genders = _context.Genders.ToList();
+            if(product.ProductCategories == null) product.ProductCategories = _context.ProductCategories.ToList();
+            if(product.Sizes == null) product.Sizes = _context.Sizes.OrderBy(x => x.Id).ToList();
+            if(product.Statuses == null) product.Statuses = _context.Statuses.OrderBy(x => x.Id).ToList();
+            if(product.StockStatuses == null) product.StockStatuses = _context.StockStatuses.OrderBy(x => x.Id).ToList();
         }
 
         public Product InitializeProductOnUpdate(Product product)
@@ -158,7 +164,10 @@ namespace ECommerce1.Data.Services
 
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            var result = await _context.Products.Include(x => x.ProductImages).ToListAsync();
+            var result = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductVariants)
+                .ToListAsync();
 
             foreach (var item in result) {
                 if (item.ProductImages.Any())

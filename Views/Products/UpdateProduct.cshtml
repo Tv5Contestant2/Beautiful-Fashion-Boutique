@@ -35,13 +35,17 @@
                                 <div class="row form-group">
 
                                     <div class="col col-md-8">
-                                        <label asp-for="Name" class="control-label"></label>
-                                        <input asp-for="Name" class="form-control" />
-                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                        <div>
+                                            <label asp-for="Name" class="control-label"></label>
+                                            <input asp-for="Name" class="form-control" />
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
 
-                                        <label asp-for="Description" class="control-label"></label>
-                                        <input asp-for="Description" class="form-control" rows="4" />
-                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                        <div>
+                                            <label asp-for="Description" class="control-label"></label>
+                                            <input asp-for="Description" class="form-control" rows="4" />
+                                            <span asp-validation-for="Description" class="text-danger"></span>
+                                        </div>
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
@@ -117,24 +121,25 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tbody" id="bodyVariant">
-                                       
-                                        @if (Model.ProductVariants.Any())
-                                        {
-                                      
-                                            @foreach (var item in Model.ProductVariants)
+                                        @if (Model.ProductVariants != null) {
+                                            @if (Model.ProductVariants.Any())
                                             {
-                                                <tr>
-                                                @if(Model.ProductCategoryId != (int)ProductCategoryEnum.Shoes)
+
+                                                @foreach (var item in Model.ProductVariants)
                                                 {
-                                                    <td><span>@item.Size.Title</span><input id="inptSize" name="inptSize" type="text" value="@item.SizeId" style="display:none" /></td>
+                                                    <tr>
+                                                        @if (Model.ProductCategoryId != (int)ProductCategoryEnum.Shoes)
+                                                        {
+                                                            <td><span>@item.Size.Title</span><input id="inptSize" name="inptSize" type="text" value="@item.SizeId" style="display:none" /></td>
+                                                        }
+                                                        <td><span>@item.Color.Title</span><input id="inptColor" name="inptColor" type="text" value="@item.ColorId" style="display:none" /></td>
+                                                        <td><span>@item.Quantity</span><input id="inptQuantity" name="inptQuantity" type="text" value="@item.Quantity" style="display:none" /></td>
+                                                        <td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>
+                                                    </tr>
                                                 }
-                                                <td><span>@item.Color.Title</span><input id="inptColor" name="inptColor" type="text" value="@item.ColorId" style="display:none" /></td>
-                                                <td><span>@item.Quantity</span><input id="inptQuantity" name="inptQuantity" type="text" value="@item.Quantity" style="display:none" /></td>
-                                                <td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>
-                                                </tr>
                                             }
                                         }
-                                       
+
                                     </tbody>
                                 </table>
 
@@ -193,18 +198,20 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tbody" id="bodyImage">
-                                        @if (Model.ProductImages.Any())
-                                        { 
-                                            @foreach (var item in Model.ProductImages)
-                                            { 
-                                        <tr>
-                                            <td><img width="200" src="@string.Format("data:image/jpeg;base64,{0}", item.Image)" /></td>
-                                            <td><span>@item.FileName</span></td>
-                                            <td><input type="button" class="ibtnDelImage btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>
-                                        </tr>
+                                        @if (Model.ProductImages != null) { 
+                                            @if (Model.ProductImages.Any())
+                                            {
+                                                @foreach (var item in Model.ProductImages)
+                                                {
+                                                    <tr>
+                                                        <td><img width="200" src="@string.Format("data:image/jpeg;base64,{0}", item.Image)" /></td>
+                                                        <td><span>@item.FileName</span></td>
+                                                        <td><input type="button" class="ibtnDelImage btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>
+                                                    </tr>
+                                                }
                                             }
                                         }
-                                    </tbody>
+                                        </tbody>
                                 </table>
 
                                 @*Start - BootsTrap Model Popup for Adding and Updating the Image Record *@

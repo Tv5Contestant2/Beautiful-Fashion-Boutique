@@ -1,4 +1,6 @@
 ﻿@model Product
+@using ECommerce1.Data.Enums
+@using System
 
 @{
     ViewData["Title"] = "Add New Product";
@@ -28,22 +30,23 @@
 
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
-                                <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
                                 @*Primary Info*@
                                 <div class="row form-group">
 
                                     <div class="col col-md-8">
-                                        <label asp-for="Name" class="control-label"></label>
-                                        <input asp-for="Name" class="form-control" />
-                                        <span asp-validation-for="Name" class="text-danger"></span>
-
-                                        <label asp-for="Description" class="control-label"></label>
-                                        <input asp-for="Description" class="form-control" rows="4" />
-                                        <span asp-validation-for="Description" class="text-danger"></span>
-
+                                        <div>
+                                            <label asp-for="Name" class="control-label"></label>
+                                            <input asp-for="Name" class="form-control" />
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                                        <div>
+                                            <label asp-for="Description" class="control-label"></label>
+                                            <input asp-for="Description" class="form-control" rows="4" />
+                                            <span asp-validation-for="Description" class="text-danger"></span>
+                                        </div>
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
-                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"), 
+                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
                                                                    htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()" })
                                             @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
                                         </div>
@@ -51,7 +54,7 @@
                                         <label asp-for="GenderId" class="control-label"></label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
-                                                                  htmlAttributes: new { @class = "form-control", id = "GenderId"})
+                                                                  htmlAttributes: new { @class = "form-control", id = "GenderId" })
                                             @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
                                         </div>
                                         <div style="display: none;">
@@ -68,13 +71,13 @@
 
                                         <label asp-for="StatusId" class="control-label"></label>
                                         <div>
-                                            @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"),
+                                            @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title", (int)StatusEnum.Active),
                                                                 htmlAttributes: new { @class = "form-control", id = "StatusId", @disabled = "disabled" })
                                             @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
                                         </div>
                                         <label class="control-label">Stock Status</label>
                                         <div>
-                                            @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title"),
+                                            @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title", (int)StockStatusEnum.InStock),
                                                             htmlAttributes: new { @class = "form-control", id = "StockStatusId", @disabled = "disabled" })
                                             @Html.ValidationMessageFor(x => x.StockStatusId, "", new { @class = "text-danger" })
                                         </div>
@@ -222,7 +225,7 @@
                     document.getElementById('SizeId').value = null;
                     break;
             };
-            
+
         }
 
         //End - Categories
@@ -269,7 +272,7 @@
                     $('#SizeId').css('border-color', 'lightgrey');
                 }
             }
-           
+
             if ($('#ColorId').val() == null) {
                 $('#ColorId').css('border-color', 'Red');
                 isValid = false;
@@ -383,9 +386,9 @@
                 const base64String = reader.result
                     .replace("data:", "")
                     .replace(/^.+,/, "");
- 
+
                 document.getElementById('imgOutput').setAttribute('src', reader.result);
-               
+
             };
             reader.readAsDataURL(file);
             document.getElementById('inptImageFileName').value = file.name;
@@ -453,7 +456,7 @@
                 document.getElementById("ProductImageJSON").value = "";
             }
         }
-        //End - image
+            //End - image
 
     </script>
 }

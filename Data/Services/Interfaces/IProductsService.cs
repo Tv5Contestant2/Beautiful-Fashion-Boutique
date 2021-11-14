@@ -21,5 +21,7 @@ namespace ECommerce1.Data.Services.Interfaces
         public Task<Product> GetProductById(long id);
 
         public Task<IEnumerable<Product>> GetAllProductsByGender(int genderId);
+
+        public void InitializeProductListForResponse(Product product);
     }
 }
