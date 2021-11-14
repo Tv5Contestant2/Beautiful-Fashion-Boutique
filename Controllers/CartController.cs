@@ -4,6 +4,7 @@ using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -25,6 +26,9 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
+            ViewBag.TotalQty = cart.Sum(x => x.Quantity);
+            ViewBag.SubTotal = cart.Sum(x => x.Product.Price * x.Quantity);
+
             return View(cart);
         }
 
@@ -32,6 +36,9 @@ namespace ECommerce1.Controllers
         {
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
+
+            ViewBag.TotalQty = cart.Sum(x => x.Quantity);
+            ViewBag.SubTotal = cart.Sum(x => x.Product.Price * x.Quantity);
 
             return View(cart);
         }
@@ -41,6 +48,9 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
+            ViewBag.TotalQty = cart.Sum(x => x.Quantity);
+            ViewBag.SubTotal = cart.Sum(x => x.Product.Price * x.Quantity);
+
             return View(cart);
         }
 
@@ -49,6 +59,9 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
+            ViewBag.TotalQty = cart.Sum(x => x.Quantity);
+            ViewBag.SubTotal = cart.Sum(x => x.Product.Price * x.Quantity);
+
             return View(cart);
         }
 
@@ -56,6 +69,9 @@ namespace ECommerce1.Controllers
         {
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
+
+            ViewBag.TotalQty = cart.Sum(x => x.Quantity);
+            ViewBag.SubTotal = cart.Sum(x => x.Product.Price * x.Quantity);
 
             return View(cart);
         }

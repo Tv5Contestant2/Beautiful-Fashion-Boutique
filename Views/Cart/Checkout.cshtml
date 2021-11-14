@@ -161,14 +161,14 @@
                             <h6 class="text-uppercase">Order Summary</h6>
                             <p class="fw-normal text-muted">Shipping and additional costs are calculated based on values you have entered</p>
                             <ul class="list-unstyled">
-                                @foreach (var item in Model)
-                                {
-                                    var total = item.Product.Price * item.Quantity;
-                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
-                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php 0.00</strong></li>
-                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Tax</span><strong class="fw-normal">Php 0.00</strong></li>
-                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Total</span><strong class="text-primary h5 mb-0">Php @total</strong></li>
-                                }
+                                @*@foreach (var item in Model)
+        {*@
+                                @*var total = item.Product.Price * item.Quantity;*@
+                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @ViewBag.SubTotal</strong></li>
+                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php 0.00</strong></li>
+                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Tax</span><strong class="fw-normal">Php 0.00</strong></li>
+                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Total</span><strong class="text-primary h5 mb-0">Php @ViewBag.SubTotal</strong></li>
+                                @* }*@
                             </ul>
                         </div>
                     </div>
