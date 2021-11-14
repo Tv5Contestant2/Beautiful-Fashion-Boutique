@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerce1.Data.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,17 @@ namespace ECommerce1.Controllers
 {
     public class OrdersController : Controller
     {
-        public IActionResult Index()
+        private readonly IOrderService _service;
+
+        public OrdersController(IOrderService service)
         {
-            return View();
+            _service = service;
         }
+
+        public async Task<IActionResult> Index()
+        {
+            var result = await _service.GetAllOrders();
+            return View(result);
+        }   
     }
 }

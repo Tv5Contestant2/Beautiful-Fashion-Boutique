@@ -1,27 +1,13 @@
 ﻿@model IEnumerable<OrderDetails>
 
 @{
-    ViewData["Title"] = "Order Management";
+    ViewData["Title"] = "Manage Order";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="container-fluid main-container">
     <div class="row">
         <h2>Order Management</h2>
-    </div>
-
-    @*Search*@
-    <div class="row">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" style="width:350px">
-            <div class="col">
-                @*<a asp-controller="Orders" asp-action="UpdateOrder" class="btn btn-info float-right" type="button">
-                    <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Manage Order
-                </a>*@
-                <button id="btnGrid" class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
-                <button id="btnThumbnail" class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
-            </div>
-        </div>
     </div>
 
     <div class="row mt-3" style="margin-left: -30px" width="auto">

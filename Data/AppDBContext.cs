@@ -8,23 +8,7 @@ namespace ECommerce1.Data
         public AppDBContext(DbContextOptions<AppDBContext> context) : base(context) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder
-                .Entity<About>(
-                ab =>
-                {
-                    ab.HasNoKey();
-                    ab.ToView("View_About");
-                });
-            modelBuilder
-                .Entity<SocMed>(
-                sm =>
-                {
-                    sm.HasNoKey();
-                    sm.ToView("View_SocMed");
-                });
-        }
+        { }
 
         public DbSet<About> AboutUs { get; set; }
         public DbSet<Announcements> Announcements { get; set; }

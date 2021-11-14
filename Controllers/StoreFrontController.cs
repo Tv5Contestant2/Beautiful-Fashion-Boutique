@@ -6,21 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
     public class StoreFrontController : Controller
     {
+        private readonly IAdministratorService _administratorService;
         private readonly IProductsService _service;
         private readonly IProductCategoriesService _productCategoriesService;
         private readonly ICartService _cartService;
 
         public StoreFrontController(IProductsService service, 
             IProductCategoriesService productCategoriesService,
+            IAdministratorService administratorService,
             ICartService cartService)
         {
             _service = service;
+            _administratorService = administratorService;
             _productCategoriesService = productCategoriesService;
             _cartService = cartService;
         }
@@ -44,7 +48,8 @@ namespace ECommerce1.Controllers
             var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            var result = _administratorService.GetAboutUs();
+            return View(result);
         }
 
         public async Task<IActionResult> ContactUs()
@@ -52,7 +57,8 @@ namespace ECommerce1.Controllers
             var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            var result = _administratorService.GetContactUs();
+            return View(result);
         }
 
         public async Task<IActionResult> Mens()

@@ -1,14 +1,14 @@
 ﻿@model Product
 
 @{
-    ViewData["Title"] = "Add New Product";
+    ViewData["Title"] = "Add Product";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="row text">
     <div class="col-md-10 offset-md-1">
         <p>
-            <h4>Add Product</h4>
+            <h4>@ViewBag.Title</h4>
         </p>
 
         <div class="form-group">
@@ -28,7 +28,6 @@
 
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
-                                <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
                                 @*Primary Info*@
                                 <div class="row form-group">
 

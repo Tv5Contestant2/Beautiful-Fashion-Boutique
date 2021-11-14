@@ -181,13 +181,43 @@ namespace ECommerce1.Data.Services
                 .Include(x => x.ProductVariants).ThenInclude(x => x.Size)
                 .Include(x => x.ProductVariants).ThenInclude(x => x.Color)
                 .Include(x => x.ProductImages)
-                .FirstOrDefaultAsync(x => x.Id == id);
-            return result;
+                .ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Image = _noImage;
+                }
+            }
+
+            return result.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsByGender(int genderId)
         {
-            var result = await _context.Products.ToListAsync();
+            var result = await _context.Products.Include(x => x.ProductImages).ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Image = _noImage;
+                }
+            }
+
             return result.Where(x => x.GenderId == genderId).ToList();
         }
 

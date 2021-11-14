@@ -11,13 +11,13 @@ namespace ECommerce1.Controllers
     public class CartController : Controller
     {
         private readonly ICartService _service;
-        private readonly IProductCategoriesService _productCategoriesService;
+        private readonly IOrderService _orderService;
 
         public CartController(ICartService service,
-            IProductCategoriesService productCategoriesService)
+            IOrderService orderService)
         {
             _service = service;
-            _productCategoriesService = productCategoriesService;
+            _orderService = orderService;
         }
 
         public async Task<IActionResult> Index()
@@ -33,7 +33,7 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            return View(cart);
         }
 
         public async Task<IActionResult> DeliveryMethod()
@@ -41,7 +41,7 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            return View(cart);
         }
 
         public async Task<IActionResult> PaymentMethod()
@@ -49,7 +49,7 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            return View(cart);
         }
 
         public async Task<IActionResult> OrderReview()
@@ -57,7 +57,7 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            return View(cart);
         }
 
         public async Task<IActionResult> OrderConfirmed()
@@ -65,7 +65,28 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            var result = false;
+            Guid transactionId = Guid.NewGuid();
+            foreach (var item in cart) {
+
+                var order = new OrderDetails()
+                {
+                    TransactionId = transactionId,
+                    ProductId = item.ProductId,
+                    ItemQuantity = item.Quantity,
+                    ItemSubTotal = (item.Quantity * item.Product.Price),
+                    CustomerName = "Test Customer",
+                    ModeOfPayment = "Cash",
+                    OrderDate = DateTime.Now
+                };
+
+               result = _orderService.AddToOrder(order);
+            }
+
+            if (result)
+                await _service.EmptyCart(); //temporary only
+
+            return View(cart);
         }
 
         public IActionResult AddToCart(Cart cart)

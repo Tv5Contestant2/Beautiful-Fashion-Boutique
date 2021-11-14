@@ -16,5 +16,7 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<Cart> GetCartItemsByProductId(long productId);
 
+        public Task EmptyCart();
+
     }
 }
