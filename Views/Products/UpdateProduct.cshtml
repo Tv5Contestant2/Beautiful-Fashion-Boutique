@@ -1,4 +1,6 @@
 ﻿@model Product
+@using ECommerce1.Data.Enums
+@using System
 
 @{
     ViewData["Title"] = "Update Product";
@@ -34,54 +36,49 @@
 
                                     <div class="col col-md-8">
                                         <label asp-for="Name" class="control-label"></label>
-                                        <input asp-for="Name" class="form-control" readonly />
+                                        <input asp-for="Name" class="form-control" />
                                         <span asp-validation-for="Name" class="text-danger"></span>
 
-
                                         <label asp-for="Description" class="control-label"></label>
-                                        <input asp-for="Description" class="form-control" rows="4" readonly />
+                                        <input asp-for="Description" class="form-control" rows="4" />
                                         <span asp-validation-for="Description" class="text-danger"></span>
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" asp-for="ProductCategoryId">
-                                                @foreach (var item in ViewBag.ProductRepos.ProductCategories)
-                                                {
-                                                    <option value="@item.Id">@item.Title</option>
-                                                }
-                                            </select>
+                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
+                                                                   htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()" })
+                                            @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
                                         </div>
 
                                         <label asp-for="GenderId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" asp-for="GenderId">
-                                                @foreach (var item in ViewBag.ProductRepos.Genders)
-                                                {
-                                                    <option value="@item.Id">@item.Title</option>
-                                                }
-                                            </select>
+                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
+                                                                  htmlAttributes: new { @class = "form-control", id = "GenderId" })
+                                            @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div style="display: none;">
+                                            <input id="ProductVariantJSON" asp-for="ProductVariantJSON" class="form-control" />
+                                        </div>
+                                        <div style="display: none;">
+                                            <input id="ProductImageJSON" asp-for="ProductImageJSON" class="form-control" />
                                         </div>
                                     </div>
+
+
 
                                     <div class="col col-md-4">
 
                                         <label asp-for="StatusId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" asp-for="StatusId">
-                                                @foreach (var item in ViewBag.ProductRepos.Statuses)
-                                                {
-                                                    <option value="@item.Id">@item.Title</option>
-                                                }
-                                            </select>
+                                            @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"),
+                                                                htmlAttributes: new { @class = "form-control", id = "StatusId", @readonly= "readonly", @style= "pointer-events: none;" })
+                                            @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
                                         </div>
                                         <label class="control-label">Stock Status</label>
                                         <div>
-                                            <select class="form-control" disabled >
-                                                @foreach (var item in ViewBag.ProductRepos.StockStatuses)
-                                                {
-                                                    <option value="@item.Id" selected>@item.Title</option>
-                                                }
-                                            </select>
+                                            @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title"),
+                                                            htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly = "readonly", @style = "pointer-events: none;" })
+                                            @Html.ValidationMessageFor(x => x.StockStatusId, "", new { @class = "text-danger" })
                                         </div>
 
                                         <label asp-for="Price" class="control-label"></label>
@@ -101,50 +98,79 @@
                         </div>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                             <div class="card-body">
+                                <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#myModal" onclick="OpenAddVariantPopup();">Add Variant</button><br /><br />
+                                <table class="table order-list tblVariants" id="dtVariant">
+                                    <thead>
+                                        <tr>
+                                            @switch (Model.ProductCategoryId)
+                                            {
+                                                case (int)ProductCategoryEnum.Shoes:
+                                                    <th id="thVariantSize" style="display:none;">Size</th>
+                                                    break;
+                                                default:
+                                                    <th id="thVariantSize" style="width: 35%">Size</th>
+                                                    break;
+                                            }
+                                            <th style="width: 35%">Color</th>
+                                            <th style="width: 20%">Quantity</th>
+                                            <th style="width: 10%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbody" id="bodyVariant">
+                                       
+                                        @if (Model.ProductVariants.Any())
+                                        {
+                                      
+                                            @foreach (var item in Model.ProductVariants)
+                                            {
+                                                <tr>
+                                                @if(Model.ProductCategoryId != (int)ProductCategoryEnum.Shoes)
+                                                {
+                                                    <td><span>@item.Size.Title</span><input id="inptSize" name="inptSize" type="text" value="@item.SizeId" style="display:none" /></td>
+                                                }
+                                                <td><span>@item.Color.Title</span><input id="inptColor" name="inptColor" type="text" value="@item.ColorId" style="display:none" /></td>
+                                                <td><span>@item.Quantity</span><input id="inptQuantity" name="inptQuantity" type="text" value="@item.Quantity" style="display:none" /></td>
+                                                <td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>
+                                                </tr>
+                                            }
+                                        }
+                                       
+                                    </tbody>
+                                </table>
 
-                                @*Variants*@
-                                <div class="row form-group">
-                                    <table class=" table order-list tblVariants">
-                                        <thead>
-                                            <tr>
-                                                <td colspan="5" style="text-align: left;">
-                                                    <a id="addvariant" class="btn btn-info text-white">
-                                                        <i class="fas fa-plus-circle"></i>&nbsp;Add Variant
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="col-sm-4">
+                                @*Start - BootsTrap Model Popup for Adding and Updating the Variant Record *@
+                                <div class="modal fade" id="AddUpdateModelVariant" tabindex="-1" role="dialog" aria-labelledby="myModalLabelVariant" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                                @*<h4 class="modal-title" id="AddUpdateModelVariantLabel">Add Variant</h4>*@
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="divSizeField" class="form-group">
                                                     <label class="control-label">Size</label>
-                                                    <select class="form-control" asp-for="SizeId">
-                                                        @foreach (var item in ViewBag.ProductRepos.Sizes)
-                                                        {
-                                                            <option value="@item.Id">@item.Title</option>
-                                                        }
-                                                    </select>
-                                                </td>
-                                                <td class="col-sm-4">
+                                                    @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
+                                                    @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="form-group">
                                                     <label class="control-label">Color</label>
-                                                    <select class="form-control" asp-for="ColorId">
-                                                        @foreach (var item in ViewBag.ProductRepos.Colors)
-                                                        {
-                                                            <option value="@item.Id">@item.Title</option>
-                                                        }
-                                                    </select>
-                                                </td>
-                                                <td class="col-sm-4">
+                                                    @Html.DropDownListFor(x => Model.ColorId, new SelectList(Model.Colors, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "ColorId" })
+                                                    @Html.ValidationMessageFor(x => x.ColorId, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="form-group">
                                                     <label class="control-label">Quantity</label>
-                                                    <input type="number" name="quantity" class="form-control" />
-                                                </td>
-                                                <td class="col-sm-2">
-                                                    <a class="deleteRow"></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                    <input type="number" min="1" id="Quantity" name="Quantity" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" id="btnAddVariant" onclick="return AddVariant();">Add Variant</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
+                                @*End *@
                             </div>
                         </div>
                     </div>
@@ -157,28 +183,55 @@
                         </div>
                         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                             <div class="card-body">
+                                <button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#myModalImage" onclick="OpenAddImagePopup();">Add Image</button><br /><br />
+                                <table class="table order-list tblImages" id="dtImage">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 40%">Image</th>
+                                            <th style="width: 40%">File Name</th>
+                                            <th style="width: 20%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbody" id="bodyImage">
+                                        @if (Model.ProductImages.Any())
+                                        { 
+                                            @foreach (var item in Model.ProductImages)
+                                            { 
+                                        <tr>
+                                            <td><img width="200" src="@string.Format("data:image/jpeg;base64,{0}", item.Image)" /></td>
+                                            <td><span>@item.FileName</span></td>
+                                            <td><input type="button" class="ibtnDelImage btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>
+                                        </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
 
-                                @*Images*@
-                                <div class="row form-group">
-                                    <div class="col col-3">
-                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
-                                        <div class="custom-file">
-                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
-                                        </div>
-                                    </div>
-                                    <div class="col col-3">
-                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
-                                        <div class="custom-file">
-                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
-                                        </div>
-                                    </div>
-                                    <div class="col col-3">
-                                        <img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em" />
-                                        <div class="custom-file">
-                                            <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                @*Start - BootsTrap Model Popup for Adding and Updating the Image Record *@
+                                <div class="modal fade" id="AddUpdateModelImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabelImage" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                                @*<h4 class="modal-title" id="AddUpdateModelImageLabel">Add Image</h4>*@
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <input id="inptImageUpload" type="file" accept="image/*" name="image" />
+                                                    <input id="inptImageFileName" type="text" style="display:none;" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <img id="imgOutput" width="200" />
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" id="btnAddImage" onclick="return AddImage();">Add Image</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                @*End *@
                             </div>
                         </div>
                     </div>
@@ -190,57 +243,257 @@
 
 @section Scripts {
     <script>
-        $("#ImageFile").on("change", function () {
-            var output = document.getElementById('ImagePreview');
-            output.src = $(this).val();
+
+        //Start - Categories
+        function handleCategories() {
+            var _categoryId = $('#selectionCategories').val();
+            $("#dtVariant tr td").remove();
+            switch (_categoryId) {
+                case "1":
+                case "2":
+                    document.getElementById('thVariantSize').setAttribute('style', 'width: 35%;');
+                    document.getElementById('divSizeField').setAttribute('style', 'display:block;');
+                    break;
+                case "3":
+                    document.getElementById('thVariantSize').setAttribute('style', 'display:none;');
+                    document.getElementById('divSizeField').setAttribute('style', 'display:none;');
+                    document.getElementById('SizeId').value = null;
+                    break;
+            };
+
+        }
+
+        //End - Categories
+
+        //Start - variant
+        $("table.order-list.tblVariants").on("click", ".ibtnDelVariant", function (event) {
+            $(this).closest("tr").remove();
+            ConvertDTVariantToJson();
         });
 
-        //add image
-        $(document).ready(function () {
-            var counter = 0;
-
-            $("#addimage").on("click", function () {
-                var newRow = $("<tr>");
-                var cols = "";
-
-                cols += '<td class="text-center"><img id="ImagePreview" src="~/images/default-image.png" style="width:15em; height:15em"' + counter + '"/></td>';
-                cols += '<td><input asp-for="ImageFile" accept="image/*" class="form-control-file"' + counter + '/></td>';
-                cols += '<td><input type="button" class="ibtnDelImage btn btn-md btn-danger" value="Delete"></td>';
-                newRow.append(cols);
-
-                $("table.order-list.tblImages").append(newRow);
-                counter++;
-            });
-
-            $("table.order-list.tblImages").on("click", ".ibtnDelImage", function (event) {
-                $(this).closest("tr").remove();
-                counter -= 1
-            });
+        $("table.order-list.tblImages").on("click", ".ibtnDelImage", function (event) {
+            $(this).closest("tr").remove();
+            ConvertDTImageToJson();
         });
 
-        //add variant
-        $(document).ready(function () {
-            var counter = 0;
+        function OpenAddVariantPopup() {
+            //title text
+            $("#AddUpdateModelVariantLabel").text("Add Variant")
+            //clear all input
+            ClearAllVariantInput();
+            //open popup
+            $('#AddUpdateModelVariant').modal('show');
+        }
 
-            $("#addvariant").on("click", function () {
-                var newRow = $("<tr>");
-                var cols = "";
+        function ClearAllVariantInput() {
+            $('#hfproductvariantid').val("");
+            $('#SizeId').css('border-color', 'lightgrey');
+            $('#ColorId').css('border-color', 'lightgrey');
+            $('#Quantity').css('border-color', 'lightgrey');
+            $('#SizeId').val("");
+            $('#ColorId').val("");
+            $('#Quantity').val("");
+        }
 
-                cols += '<td><label class="control-label">Size</label><select class="form-control"' + counter + '"> </select></td>';
-                cols += '<td><label class="control-label">Color</label><select class="form-control"' + counter + '"> </select></td>';
-                cols += '<td><label class="control-label">Quantity</label><input type="number" name="quantity" class="form-control"' + counter + '/></td>';
-                cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
-                newRow.append(cols);
+        function ValidateUserInput() {
+            var isValid = true;
 
-                $("table.order-list.tblVariants").append(newRow);
-                counter++;
-            });
+            var _categoryId = $('#selectionCategories').val();
+            if (_categoryId !== "3") {
+                if ($('#SizeId').val() == null) {
+                    $('#SizeId').css('border-color', 'Red');
+                    isValid = false;
+                } else {
+                    $('#SizeId').css('border-color', 'lightgrey');
+                }
+            }
 
-            $("table.order-list.tblVariants").on("click", ".ibtnDelVariant", function (event) {
-                $(this).closest("tr").remove();
-                counter -= 1
-            });
+            if ($('#ColorId').val() == null) {
+                $('#ColorId').css('border-color', 'Red');
+                isValid = false;
+            } else {
+                $('#ColorId').css('border-color', 'lightgrey');
+            }
+
+            if ($('#Quantity').val() == "") {
+                $('#Quantity').css('border-color', 'Red');
+                isValid = false;
+            } else {
+                if ($('#Quantity').val() == "0") {
+                    $('#Quantity').css('border-color', 'Red');
+                    isValid = false;
+                } else {
+                    $('#Quantity').css('border-color', 'lightgrey');
+                }
+
+            }
+
+            return isValid
+        }
+
+        var variantObj = new Object();
+
+        function AddVariant() {
+            var res = ValidateUserInput();
+            if (res == false) {
+                return false;
+            }
+
+            variantObj.SizeId = $('#SizeId').val();
+            variantObj.Size = $('#SizeId option:selected').text();
+
+            variantObj.ColorId = $('#ColorId').val();
+            variantObj.Color = $('#ColorId option:selected').text();
+
+            variantObj.Quantity = $('#Quantity').val();
+
+            AppendVariantRow(variantObj);
+            ConvertDTVariantToJson();
+            $('#AddUpdateModelVariant').modal('hide');
+        }
+
+        function AppendVariantRow(variantObj) {
+
+            var newRow = $("<tr>");
+            var cols = "";
+
+            var _categoryId = $('#selectionCategories').val();
+            if (_categoryId !== "3") {
+                cols += '<td><span>' + variantObj.Size + '</span><input id="inptSize" name="inptSize" type="text" value="' + variantObj.SizeId + '" style="display:none"/></td>';
+            }
+            cols += '<td><span>' + variantObj.Color + '</span><input id="inptColor" name="inptColor" type="text" value="' + variantObj.ColorId + '" style="display:none"/></td>';
+            cols += '<td><span>' + variantObj.Quantity + '</span><input id="inptQuantity" name="inptQuantity" type="text" value="' + variantObj.Quantity + '" style="display:none"/></td>';
+            cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
+
+            newRow.append(cols);
+
+            $("#dtVariant").append(newRow);
+        }
+
+        function ConvertDTVariantToJson() {
+            var _trs = $('#dtVariant tbody tr');
+            if (_trs.length > 0) {
+                var ProductVariantJSON = [];
+                _trs.each(function (i, tr) {
+                    var obj = {};
+                    var tds = $(tr).find('td');
+
+                    var inputs = $(tds).find('input');
+                    obj["Id"] = 0; //always new
+                    inputs.each(function (index, element) {
+                        switch (element.name) {
+                            case "inptSize":
+                                obj["SizeId"] = parseInt(element.value);
+                                break;
+                            case "inptColor":
+                                obj["ColorId"] = parseInt(element.value);
+                                break;
+                            case "inptQuantity":
+                                obj["Quantity"] = parseInt(element.value);
+                                break;
+                        }
+
+                    });
+                    ProductVariantJSON.push(obj);
+                    document.getElementById("ProductVariantJSON").value = JSON.stringify(ProductVariantJSON);
+                });
+            } else {
+                document.getElementById("ProductVariantJSON").value = "";
+                document.getElementById("ProductVariantJSON").text = "";
+            }
+
+
+
+        }
+        //End - variant
+
+        //Start - image
+
+        var inptImageUpload = document.querySelector("#inptImageUpload");
+
+        // listen for the change event so we can capture the file
+        inptImageUpload.addEventListener("change", (e) => {
+            // get a reference to the file
+            const file = e.target.files[0];
+
+            // encode the file using the FileReader API
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result
+                    .replace("data:", "")
+                    .replace(/^.+,/, "");
+
+                document.getElementById('imgOutput').setAttribute('src', reader.result);
+
+            };
+            reader.readAsDataURL(file);
+            document.getElementById('inptImageFileName').value = file.name;
         });
+
+        function OpenAddImagePopup() {
+            //title text
+            $("#AddUpdateModelImageLabel").text("Add Image")
+            //clear all input
+            ClearAllImageInput();
+            //open popup
+            $('#AddUpdateModelImage').modal('show');
+        }
+
+        function ClearAllImageInput() {
+            document.getElementById('imgOutput').setAttribute('src', '');
+            document.getElementById('inptImageUpload').value = null;
+            document.getElementById('inptImageFileName').value = null;
+        }
+
+        var imageObj = new Object();
+        function AddImage() {
+            imageObj.ImageBase64String = document.getElementById('imgOutput').getAttribute('src');
+            imageObj.ImageFileName = $('#inptImageFileName').val();
+            AppendImageRow(imageObj);
+            ConvertDTImageToJson();
+            $('#AddUpdateModelImage').modal('hide');
+        }
+
+        function AppendImageRow(imageObj) {
+            var newRow = $("<tr>");
+            var cols = "";
+
+            cols += '<td><img width="200" src="' + imageObj.ImageBase64String + '" /></td>';
+            cols += '<td><span>' + imageObj.ImageFileName + '</span></td>';
+            cols += '<td><input type="button" class="ibtnDelImage btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
+            newRow.append(cols);
+
+            $("#dtImage").append(newRow);
+        }
+
+        function ConvertDTImageToJson() {
+            var _trs = $('#dtImage tbody tr');
+            if (_trs.length > 0) {
+                var ProductImageJSON = [];
+                _trs.each(function (i, tr) {
+                    var obj = {};
+                    var tds = $(tr).find('td');
+
+                    var images = $(tds).find('img');
+                    obj["Id"] = 0; //always new
+                    images.each(function (index, element) {
+                        obj["ImageBase64String"] = element.getAttribute('src');
+                    });
+
+                    var spans = $(tds).find('span');
+                    spans.each(function (index, element) {
+                        obj["FileName"] = element.innerText;
+                    });
+
+                    ProductImageJSON.push(obj);
+                    document.getElementById("ProductImageJSON").value = JSON.stringify(ProductImageJSON);
+                });
+            } else {
+                document.getElementById("ProductImageJSON").value = "";
+            }
+        }
+            //End - image
+
     </script>
 }
 

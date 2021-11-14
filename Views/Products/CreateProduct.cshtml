@@ -37,34 +37,27 @@
                                         <input asp-for="Name" class="form-control" />
                                         <span asp-validation-for="Name" class="text-danger"></span>
 
-
                                         <label asp-for="Description" class="control-label"></label>
                                         <input asp-for="Description" class="form-control" rows="4" />
                                         <span asp-validation-for="Description" class="text-danger"></span>
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" id="selectionCategories" asp-for="ProductCategoryId" onchange="handleCategories()">
-                                                @foreach (var item in Model.ProductCategories)
-                                                {
-                                                    <option value="@item.Id">@item.Title</option>
-                                                }
-                                            </select>
+                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"), 
+                                                                   htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()" })
+                                            @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
                                         </div>
 
                                         <label asp-for="GenderId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" asp-for="GenderId">
-                                                @foreach (var item in Model.Genders)
-                                                {
-                                                    <option value="@item.Id">@item.Title</option>
-                                                }
-                                            </select>
+                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
+                                                                  htmlAttributes: new { @class = "form-control", id = "GenderId"})
+                                            @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
                                         </div>
-                                        <div style="display: none">
+                                        <div style="display: none;">
                                             <input id="ProductVariantJSON" asp-for="ProductVariantJSON" class="form-control" />
                                         </div>
-                                        <div style="display: none">
+                                        <div style="display: none; ">
                                             <input id="ProductImageJSON" asp-for="ProductImageJSON" class="form-control" />
                                         </div>
                                     </div>
@@ -75,21 +68,15 @@
 
                                         <label asp-for="StatusId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" asp-for="StatusId" disabled>
-                                                @foreach (var item in Model.Statuses)
-                                                {
-                                                    <option value="@item.Id">@item.Title</option>
-                                                }
-                                            </select>
+                                            @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"),
+                                                                htmlAttributes: new { @class = "form-control", id = "StatusId", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
                                         </div>
                                         <label class="control-label">Stock Status</label>
                                         <div>
-                                            <select class="form-control" asp-for="StockStatusId" disabled>
-                                                @foreach (var item in Model.StockStatuses)
-                                                {
-                                                    <option value="@item.Id">@item.Title</option>
-                                                }
-                                            </select>
+                                            @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title"),
+                                                            htmlAttributes: new { @class = "form-control", id = "StockStatusId", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.StockStatusId, "", new { @class = "text-danger" })
                                         </div>
 
                                         <label asp-for="Price" class="control-label"></label>
@@ -220,7 +207,7 @@
     <script>
 
         //Start - Categories
-        function handleCategories(e) {
+        function handleCategories() {
             var _categoryId = $('#selectionCategories').val();
             $("#dtVariant tr td").remove();
             switch (_categoryId) {
@@ -463,6 +450,7 @@
                     document.getElementById("ProductImageJSON").value = JSON.stringify(ProductImageJSON);
                 });
             } else {
+                document.getElementById("ProductImageJSON").value = "";
             }
         }
         //End - image

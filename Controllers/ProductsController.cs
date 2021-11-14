@@ -64,15 +64,6 @@ namespace ECommerce1.Controllers
                 product.ProductImages = productImages;
             }
 
-                if (product.ImageFile != null) {
-                using (var ms = new MemoryStream())
-                {
-                    product.ImageFile.CopyTo(ms);
-                    var fileBytes = ms.ToArray();
-                    product.Image = Convert.ToBase64String(fileBytes);
-                }
-            }
-
             product.StockStatusId = 1;
             product.StatusId = 1;
             product.DateCreated = DateTime.Now;
@@ -82,21 +73,14 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        public ActionResult fileupload(FormCollection form)
-        {
-            var _object = form;
-            return View();
-        }
-
         public async Task<IActionResult> UpdateProduct(long id)
         {
-            var productDetails = await _service.GetProductById(id);
-            if (productDetails == null) return View("NotFound");
+            var _product = await _service.GetProductById(id);
+            if (_product == null) return View("NotFound");
 
-            ViewBag.ProductRepos = _service.InitializeProduct();
+            _service.InitializeProductOnUpdate(_product);
 
-            return View(productDetails);
+            return View(_product);
         }
 
         [HttpPost]
@@ -106,6 +90,32 @@ namespace ECommerce1.Controllers
             {
                 return View(product);
             }
+
+            if (!string.IsNullOrEmpty(product.ProductVariantJSON))
+            {
+                product.ProductVariants = JsonSerializer.Deserialize<List<ProductVariant>>(product.ProductVariantJSON);
+            }
+
+            if (!string.IsNullOrEmpty(product.ProductImageJSON))
+            {
+                List<ProductImage> productImages = new List<ProductImage>();
+                productImages = JsonSerializer.Deserialize<List<ProductImage>>(product.ProductImageJSON);
+                if (productImages.Any())
+                {
+                    foreach (var item in productImages)
+                    {
+                        var _split = item.ImageBase64String.Split(",");
+                        if (_split.Any())
+                        {
+                            item.Image = _split[1]; //Get Base64String only.
+                        }
+                    }
+
+                }
+
+                product.ProductImages = productImages;
+            }
+
             await _service.UpdateProduct(id, product);
 
             return RedirectToAction(nameof(Index));

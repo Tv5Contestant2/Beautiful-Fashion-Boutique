@@ -8,6 +8,8 @@ namespace ECommerce1.Data.Services.Interfaces
     {
         Product InitializeProduct();
 
+        Product InitializeProductOnUpdate(Product product);
+
         public void CreateProduct (Product product);
 
         public Task<Product> UpdateProduct(long id, Product product);

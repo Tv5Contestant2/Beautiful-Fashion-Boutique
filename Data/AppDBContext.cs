@@ -38,6 +38,8 @@ namespace ECommerce1.Data
         public DbSet<Payment> Payment { get; set; }
         public DbSet<PaymentMethod> PaymentMethod { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductVariant> ProductVariants { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Promos> Promos { get; set; }
         public DbSet<RoleAccessibility> RoleAccessability { get; set; }

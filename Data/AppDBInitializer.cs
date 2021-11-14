@@ -184,11 +184,11 @@ namespace ECommerce1.Data
                     {
                         new Status()
                         {
-                            Title = "Active"
+                            Title = "Inactive"
                         },
                         new Status()
                         {
-                            Title = "Inactive"
+                            Title = "Active"
                         }
                     });
 
@@ -201,9 +201,9 @@ namespace ECommerce1.Data
                 {
                     context.StockStatuses.AddRange(new List<StockStatus>()
                     {
-                        new StockStatus()
+                       new StockStatus()
                         {
-                            Title = "In-Stock"
+                            Title = "Phased-out"
                         },
                         new StockStatus()
                         {
@@ -211,7 +211,7 @@ namespace ECommerce1.Data
                         },
                         new StockStatus()
                         {
-                            Title = "Phased-out"
+                            Title = "In-Stock"
                         },
                     });
 

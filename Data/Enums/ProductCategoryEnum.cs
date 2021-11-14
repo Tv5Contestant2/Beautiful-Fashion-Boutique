@@ -7,8 +7,8 @@ namespace ECommerce1.Data.Enums
 {
     public enum ProductCategoryEnum
     {
-        Shoes = 1,
+        Accessories = 1,
         Clothing = 2,
-        Accessories = 3
+        Shoes = 3,
     }
 }
