@@ -103,7 +103,7 @@
                                 <table class="table order-list tblVariants" id="dtVariant">
                                     <thead>
                                         <tr>
-                                            <th id="thVariantSize" style="width: 35%">Size</th>
+                                            <th id="thVariantSize" style="display: none;">Size</th>
                                             <th style="width: 35%">Color</th>
                                             <th style="width: 20%">Quantity</th>
                                             <th style="width: 10%">Action</th>
@@ -215,15 +215,16 @@
             $("#dtVariant tr td").remove();
             switch (_categoryId) {
                 case "1":
-                case "2":
-                    document.getElementById('thVariantSize').setAttribute('style', 'width: 35%;');
-                    document.getElementById('divSizeField').setAttribute('style', 'display:block;');
-                    break;
-                case "3":
                     document.getElementById('thVariantSize').setAttribute('style', 'display:none;');
                     document.getElementById('divSizeField').setAttribute('style', 'display:none;');
                     document.getElementById('SizeId').value = null;
                     break;
+                case "2":
+                case "3":
+                    document.getElementById('thVariantSize').setAttribute('style', 'width: 35%;');
+                    document.getElementById('divSizeField').setAttribute('style', 'display:block;');
+                    break;
+            
             };
 
         }
@@ -264,8 +265,8 @@
             var isValid = true;
 
             var _categoryId = $('#selectionCategories').val();
-            if (_categoryId !== "3") {
-                if ($('#SizeId').val() == null) {
+            if (_categoryId !== "1") {
+                if ($('#SizeId').val() == null) {   
                     $('#SizeId').css('border-color', 'Red');
                     isValid = false;
                 } else {
@@ -323,7 +324,7 @@
             var cols = "";
 
             var _categoryId = $('#selectionCategories').val();
-            if (_categoryId !== "3") {
+            if (_categoryId !== "1") {
                 cols += '<td><span>' + variantObj.Size + '</span><input id="inptSize" name="inptSize" type="text" value="' + variantObj.SizeId + '" style="display:none"/></td>';
             }
             cols += '<td><span>' + variantObj.Color + '</span><input id="inptColor" name="inptColor" type="text" value="' + variantObj.ColorId + '" style="display:none"/></td>';
