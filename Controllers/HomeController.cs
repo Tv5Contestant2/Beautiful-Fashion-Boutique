@@ -1,4 +1,5 @@
-﻿using ECommerce1.Models;
+﻿using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -8,11 +9,11 @@ namespace ECommerce1.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ICartService _cartService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ICartService cartService)
         {
-            _logger = logger;
+            _cartService = cartService;
         }
 
         public IActionResult Index()
@@ -20,13 +21,19 @@ namespace ECommerce1.Controllers
             return RedirectToAction("Index","StoreFront");
         }
 
-        public IActionResult SignIn()
+        public async Task<IActionResult> SignIn()
         {
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
+
             return View();
         }
 
-        public IActionResult UnderConstruction()
+        public async Task<IActionResult> UnderConstruction()
         {
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
+
             return View();
         }
 

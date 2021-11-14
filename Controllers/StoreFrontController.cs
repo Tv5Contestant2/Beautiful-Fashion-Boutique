@@ -13,31 +13,43 @@ namespace ECommerce1.Controllers
     {
         private readonly IProductsService _service;
         private readonly IProductCategoriesService _productCategoriesService;
+        private readonly ICartService _cartService;
 
         public StoreFrontController(IProductsService service, 
-            IProductCategoriesService productCategoriesService)
+            IProductCategoriesService productCategoriesService,
+            ICartService cartService)
         {
             _service = service;
             _productCategoriesService = productCategoriesService;
+            _cartService = cartService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var data = await _service.GetAllProducts();
+            var result = await _service.GetAllProducts();
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
 
-            return View(data);
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
+
+            return View(result);
         }
 
-        public IActionResult AboutUs()
+        public async Task<IActionResult> AboutUs()
         {
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
+
             return View();
         }
 
-        public IActionResult ContactUs()
+        public async Task<IActionResult> ContactUs()
         {
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
+
             return View();
         }
 
@@ -47,6 +59,9 @@ namespace ECommerce1.Controllers
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
+
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
 
             return View(data);
         }
@@ -58,6 +73,9 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
 
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
+
             return View(data);
         }
 
@@ -67,6 +85,9 @@ namespace ECommerce1.Controllers
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
+            
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
 
             return View(data);
         }
@@ -77,6 +98,9 @@ namespace ECommerce1.Controllers
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
+
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
 
             return View(data);
         }
