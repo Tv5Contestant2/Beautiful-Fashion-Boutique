@@ -10,10 +10,12 @@ namespace ECommerce1.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductsService _service;
+        private readonly ICartService _cartService;
        
-        public ProductsController(IProductsService service)
+        public ProductsController(IProductsService service, ICartService cartService)
         {
             _service = service;
+            _cartService = cartService;
         }
 
         public async Task<IActionResult> Index()
@@ -21,6 +23,17 @@ namespace ECommerce1.Controllers
             var data = await _service.GetAllProducts();
 
             return View(data);
+        }
+
+        public async Task<IActionResult> ViewProduct(long id)
+        {
+            var productDetails = await _service.GetProductById(id);
+            if (productDetails == null) return View("NotFound");
+
+            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
+
+            return View(productDetails);
         }
 
         public IActionResult CreateProduct()

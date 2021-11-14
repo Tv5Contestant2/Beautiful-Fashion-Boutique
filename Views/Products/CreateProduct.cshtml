@@ -28,7 +28,7 @@
 
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
-
+                                <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
                                 @*Primary Info*@
                                 <div class="row form-group">
 
@@ -44,7 +44,7 @@
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
-                                            <select class="form-control" id="selectionCategories" asp-for="ProductCategoryId" >
+                                            <select class="form-control" id="selectionCategories" asp-for="ProductCategoryId">
                                                 @foreach (var item in Model.ProductCategories)
                                                 {
                                                     <option value="@item.Id">@item.Title</option>
