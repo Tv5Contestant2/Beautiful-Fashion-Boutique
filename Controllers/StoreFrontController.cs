@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -26,15 +27,16 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await _service.GetAllProducts();
+            var products = await _service.GetAllProducts();
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
 
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
-            ViewBag.Cart = cart;
+            var cart = new Cart();
+            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            ViewBag.Products = products;
 
-            return View(result);
+            return View(cart);
         }
 
         public async Task<IActionResult> AboutUs()
@@ -55,54 +57,58 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Mens()
         {
-            var data = await _service.GetAllProductsByGender((int)GenderEnum.Men);
+            var products = await _service.GetAllProductsByGender((int)GenderEnum.Men);
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
 
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
-            ViewBag.Cart = cart;
+            var cart = new Cart();
+            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            ViewBag.Products = products;
 
-            return View(data);
+            return View(cart);
         }
 
         public async Task<IActionResult> Womens()
         {
-            var data = await _service.GetAllProductsByGender((int)GenderEnum.Women);
+            var products = await _service.GetAllProductsByGender((int)GenderEnum.Women);
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
 
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
-            ViewBag.Cart = cart;
+            var cart = new Cart();
+            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            ViewBag.Products = products;
 
-            return View(data);
+            return View(cart);
         }
 
         public async Task<IActionResult> Trending()
         {
-            var data = await _service.GetAllProducts();
+            var products = await _service.GetAllProducts();
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
-            
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
-            ViewBag.Cart = cart;
 
-            return View(data);
+            var cart = new Cart();
+            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            ViewBag.Products = products;
+
+            return View(cart);
         }
 
         public async Task<IActionResult> ShopAll()
         {
-            var data = await _service.GetAllProducts();
+            var products = await _service.GetAllProducts();
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             ViewBag.ProductCategories = productCategories;
 
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
-            ViewBag.Cart = cart;
+            var cart = new Cart();
+            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            ViewBag.Products = products;
 
-            return View(data);
+            return View(cart);
         }
 
         public async Task<IActionResult> ViewProduct(long id)
@@ -110,10 +116,11 @@ namespace ECommerce1.Controllers
             var productDetails = await _service.GetProductById(id);
             if (productDetails == null) return View("NotFound");
 
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
-            ViewBag.Cart = cart;
+            var cart = new Cart();
+            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            ViewBag.Product = productDetails;
 
-            return View(productDetails);
+            return View(cart);
         }
 
     }

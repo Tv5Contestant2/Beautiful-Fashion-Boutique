@@ -1,4 +1,4 @@
-﻿@model Product
+﻿@model Cart
 
 @{
     ViewData["Title"] = "View Products";
@@ -8,14 +8,14 @@
     <div class="container py-4">
         <div class="row">
             <div class="col-lg-9 order-2 order-lg-1">
-                <h1>@Model.Name</h1>
+                <h1>@ViewBag.Product.Name</h1>
             </div>
             <div class="col-lg-3 text-end order-1 order-lg-2">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
                         <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
                         <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="ShopAll">Shop</a></li>
-                        <li class="breadcrumb-item active">@Model.Name</li>
+                        <li class="breadcrumb-item active">@ViewBag.Product.Name</li>
                     </ol>
                 </nav>
             </div>
@@ -32,8 +32,8 @@
                     <!-- Item slider-->
                     <div class="swiper-container swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" id="detailSlider">
                         <div class="swiper-wrapper" id="swiper-wrapper-69b74c51397fa6ed" aria-live="polite" style="transform: translate3d(-642px, 0px, 0px); transition-duration: 0ms;">
-                            <div class="swiper-slide swiper-slide-prev" role="group" aria-label="1 / 4" style="width: 632px; margin-right: 10px;"><a class="glightbox" href="@String.Format("data:image/jpg;base64,{0}", Model.Image)"><img class="img-fluid d-block mx-auto w-75" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name"></a></div>
-                            <div class="swiper-slide swiper-slide-active" role="group" aria-label="2 / 4" style="width: 632px; margin-right: 10px;"><a class="glightbox" href="@String.Format("data:image/jpg;base64,{0}", Model.Image)"><img class="img-fluid d-block mx-auto w-75" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name"></a></div>
+                            <div class="swiper-slide swiper-slide-prev" role="group" aria-label="1 / 4" style="width: 632px; margin-right: 10px;"><a class="glightbox" href="@String.Format("data:image/jpg;base64,{0}", ViewBag.Product.Image)"><img class="img-fluid d-block mx-auto w-75" src="@String.Format("data:image/jpg;base64,{0}", ViewBag.Product.Image)" alt="@ViewBag.Product.Name"></a></div>
+                            <div class="swiper-slide swiper-slide-active" role="group" aria-label="2 / 4" style="width: 632px; margin-right: 10px;"><a class="glightbox" href="@String.Format("data:image/jpg;base64,{0}", ViewBag.Product.Image)"><img class="img-fluid d-block mx-auto w-75" src="@String.Format("data:image/jpg;base64,{0}", ViewBag.Product.Image)" alt="@ViewBag.Product.Name"></a></div>
                         </div>
                         <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
                     </div>
@@ -41,8 +41,8 @@
                 <!-- Slider thumbnails-->
                 <div class="swiper-container swiper-thumbnails swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events swiper-container-thumbs" id="detailSliderThumb">
                     <div class="swiper-wrapper" id="swiper-wrapper-86378c8146433263" aria-live="polite" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
-                        <div class="swiper-slide swiper-slide-visible swiper-slide-active" role="group" aria-label="1 / 4" style="width: 70.25px; margin-right: 10px;"><img class="img-fluid d-block mx-auto" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name"></div>
-                        <div class="swiper-slide swiper-slide-visible swiper-slide-next swiper-slide-thumb-active" role="group" aria-label="2 / 4" style="width: 70.25px; margin-right: 10px;"><img class="img-fluid d-block mx-auto" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name"></div>
+                        <div class="swiper-slide swiper-slide-visible swiper-slide-active" role="group" aria-label="1 / 4" style="width: 70.25px; margin-right: 10px;"><img class="img-fluid d-block mx-auto" src="@String.Format("data:image/jpg;base64,{0}", ViewBag.Product.Image)" alt="@ViewBag.Product.Name"></div>
+                        <div class="swiper-slide swiper-slide-visible swiper-slide-next swiper-slide-thumb-active" role="group" aria-label="2 / 4" style="width: 70.25px; margin-right: 10px;"><img class="img-fluid d-block mx-auto" src="@String.Format("data:image/jpg;base64,{0}", ViewBag.Product.Image)" alt="@ViewBag.Product.Name"></div>
                     </div>
                     <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
                 </div>
@@ -53,7 +53,7 @@
                     <div class="col-sm-6">
                         <ul class="list-inline mb-0">
                             <li class="list-inline-item">
-                                <p class="h5 text-primary mb-0">Php @Model.Price</p>
+                                <p class="h5 text-primary mb-0">Php @ViewBag.Product.Price</p>
                             </li>
                             @*<li class="list-inline-item">
                                 <p class="h5 fw-normal text-gray-5 text-decoration-line-through mb-0">$90.00</p>
@@ -73,25 +73,28 @@
                         </div>
                     </div>
                 </div>
-                <p class="text-small text-muted mb-4">@Model.Description</p>
-                <div class="d-flex align-items-center justify-content-start mb-4">
-                    <div class="quantity d-flex align-items-center me-4">
-                        <div class="dec-btn" onclick="decrease(this)">-</div>
-                        <input class="quantity-no" type="text" value="1">
-                        <div class="inc-btn" onclick="increase(this)">+</div>
+                <p class="text-small text-muted mb-4">@ViewBag.Product.Description</p>
+                <form asp-controller="Cart" asp-action="AddToCart">
+                    <div class="d-flex align-items-center justify-content-start mb-4">
+                        <div class="quantity d-flex align-items-center me-4">
+                            <div class="dec-btn" onclick="decrease(this)">-</div>
+                            <input class="quantity-no" type="text" value="1" asp-for="Quantity" />
+                            <div class="inc-btn" onclick="increase(this)">+</div>
+                        </div>
+                        <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-control js-detailsize choices__input" name="detailsize" hidden="" tabindex="-1" data-choice="active"><option value="">Select size</option></select><div class="choices__list choices__list--single"><div class="choices__item choices__placeholder choices__item--selectable" data-item="" data-id="1" data-value="" data-custom-properties="null" aria-selected="true">Select size</div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" role="listbox"><div id="choices--detailsize-cz-item-choice-3" class="choices__item choices__item--choice is-selected choices__placeholder choices__item--selectable is-highlighted" role="option" data-choice="" data-id="3" data-value="" data-select-text="" data-choice-selectable="" aria-selected="true">Select size</div><div id="choices--detailsize-cz-item-choice-1" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="1" data-value="Large" data-select-text="" data-choice-selectable="">Large</div><div id="choices--detailsize-cz-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="Medium" data-select-text="" data-choice-selectable="">Medium</div><div id="choices--detailsize-cz-item-choice-4" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="4" data-value="Small" data-select-text="" data-choice-selectable="">Small</div><div id="choices--detailsize-cz-item-choice-5" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="5" data-value="X-Large" data-select-text="" data-choice-selectable="">X-Large</div></div></div></div>
                     </div>
-                    <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-control js-detailsize choices__input" name="detailsize" hidden="" tabindex="-1" data-choice="active"><option value="">Select size</option></select><div class="choices__list choices__list--single"><div class="choices__item choices__placeholder choices__item--selectable" data-item="" data-id="1" data-value="" data-custom-properties="null" aria-selected="true">Select size</div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" role="listbox"><div id="choices--detailsize-cz-item-choice-3" class="choices__item choices__item--choice is-selected choices__placeholder choices__item--selectable is-highlighted" role="option" data-choice="" data-id="3" data-value="" data-select-text="" data-choice-selectable="" aria-selected="true">Select size</div><div id="choices--detailsize-cz-item-choice-1" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="1" data-value="Large" data-select-text="" data-choice-selectable="">Large</div><div id="choices--detailsize-cz-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="Medium" data-select-text="" data-choice-selectable="">Medium</div><div id="choices--detailsize-cz-item-choice-4" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="4" data-value="Small" data-select-text="" data-choice-selectable="">Small</div><div id="choices--detailsize-cz-item-choice-5" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="5" data-value="X-Large" data-select-text="" data-choice-selectable="">X-Large</div></div></div></div>
-                </div>
-                <ul class="list-inline">
-                    <li class="list-inline-item">
-                        <a class="btn btn-primary px-5" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id">
-                            <svg class="svg-icon svg-icon-sm svg-icon-heavy me-2">
-                                <use xlink:href="#cart-1"> </use>
-                            </svg>Add to cart
-                        </a>
-                    </li>
-                    <li class="list-inline-item"><a class="btn btn-outline-secondary px-5" href="#"> <i class="far fa-heart me-2"></i>Add to wishlist</a></li>
-                </ul>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <input type="hidden" asp-for="ProductId" value="@ViewBag.Product.Id" />
+                            <button type="submit" class="btn btn-primary px-5">
+                                <svg class="svg-icon svg-icon-sm svg-icon-heavy me-2">
+                                    <use xlink:href="#cart-1"> </use>
+                                </svg>Add to cart
+                            </button>
+                        </li>
+                        <li class="list-inline-item"><a class="btn btn-outline-secondary px-5" href="#"> <i class="far fa-heart me-2"></i>Add to wishlist</a></li>
+                    </ul>
+                </form>
             </div>
         </div>
     </div>
@@ -112,7 +115,7 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                 <div class="pt-4">
-                    <p class="text-muted mb-3">@Model.Description</p>
+                    <p class="text-muted mb-3">@ViewBag.Product.Description</p>
                 </div>
             </div>
             <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
@@ -195,18 +198,18 @@
         <div class="row gx-lg-5 border-bottom my-5">-->
             @*Images*@
             <!--<div class="col-xl-7 col-lg-7">
-                <img class="w-75" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name">
+                <img class="w-75" src="@String.Format("data:image/jpg;base64,{0}", ViewBag.Product.Image)" alt="@ViewBag.Product.Name">
             </div>-->
             @*Details*@
             <!--<div class="col-xl-5 col-lg-5">
                 <div class="my-lg-5 my-md-4">
-                    <h2>@Model.Name</h2>
+                    <h2>@ViewBag.Product.Name</h2>
                     <ul class="list-inline mb-4">
                         <li class="list-inline-item">
-                            <p class="h5 text-primary mb-0">Php @Model.Price</p>
+                            <p class="h5 text-primary mb-0">Php @ViewBag.Product.Price</p>
                         </li>
                     </ul>
-                    <p class="text-muted">@Model.Description</p>
+                    <p class="text-muted">@ViewBag.Product.Description</p>
                     <ul class="list-inline d-flex align-items-center my-4">
                         <li class="list-inline-item">
                             <div class="d-flex align-items-center">

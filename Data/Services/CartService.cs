@@ -19,9 +19,22 @@ namespace ECommerce1.Data.Services
 
         public async Task<IEnumerable<Cart>> GetCacheCartItems()
         {
-            var result = await _context.Carts.ToListAsync();
-           
-            return result;
+            var result = await _context.Carts
+                .Include(x => x.Product)
+                .ToListAsync();
+
+            var cart = result.GroupBy(x => x.ProductId);
+
+            List<Cart> _cart = result
+            .GroupBy(l => l.ProductId)
+            .Select(cl => new Cart
+            {
+                ProductId = cl.First().ProductId,
+                Quantity = cl.Sum(x => x.Quantity),
+                Product = cl.First().Product
+            }).ToList();
+
+            return _cart;
         }
 
         public void AddToCart(Cart cart)
@@ -30,34 +43,30 @@ namespace ECommerce1.Data.Services
             _context.SaveChanges();
         }
 
-        Task ICartService.DeleteCart(long id)
+        public async Task RemoveFromCart(long productId)
         {
-            throw new NotImplementedException();
+            var result = _context.Carts.FirstOrDefault(cart => cart.ProductId == productId);
+            _context.Carts.Remove(result);
+
+            await _context.SaveChangesAsync();
         }
 
-        Task<IEnumerable<Cart>> ICartService.GetAllCarts()
+        public async Task RemoveAllFromCart(long productId)
         {
-            throw new NotImplementedException();
+            var result = _context.Carts.Where(x => x.ProductId == productId).ToList();
+
+            foreach (var item in result)
+            { 
+                _context.Carts.Remove(item);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
-        Task<IEnumerable<Cart>> ICartService.GetAllCartsByGender(int genderId)
+        public async Task<Cart> GetCartItemsByProductId(long productId)
         {
-            throw new NotImplementedException();
-        }
-
-        Task<Cart> ICartService.GetCartById(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Cart ICartService.InitializeCart()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Cart> ICartService.UpdateCart(long id, Cart cart)
-        {
-            throw new NotImplementedException();
+            var result = await _context.Carts.ToListAsync();
+            return result.Find(x => x.ProductId == productId);
         }
     }
 }

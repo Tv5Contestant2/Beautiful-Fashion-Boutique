@@ -6,20 +6,15 @@ namespace ECommerce1.Data.Services.Interfaces
 {
     public interface ICartService
     {
-        Cart InitializeCart();
-
         public Task<IEnumerable<Cart>> GetCacheCartItems();
 
         public void AddToCart(Cart cart);
 
-        public Task<Cart> UpdateCart(long id, Cart cart);
+        public Task RemoveFromCart(long productId);
 
-        public Task DeleteCart(long id);
+        public Task RemoveAllFromCart(long productId);
 
-        public Task<IEnumerable<Cart>> GetAllCarts();
+        public Task<Cart> GetCartItemsByProductId(long productId);
 
-        public Task<Cart> GetCartById(long id);
-
-        public Task<IEnumerable<Cart>> GetAllCartsByGender(int genderId);
     }
 }

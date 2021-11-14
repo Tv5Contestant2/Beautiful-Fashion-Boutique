@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            return View(cart);
         }
 
         public async Task<IActionResult> Checkout()
@@ -66,26 +67,65 @@ namespace ECommerce1.Controllers
 
             return View();
         }
-        public IActionResult AddToCart(long productId)
+
+        public IActionResult AddToCart(Cart cart)
         {
-            return View();
+            //temporary only; will optimize later
+            for (int ctr = 0; ctr < cart.Quantity; ctr++)
+            {
+                var _cart = new Cart()
+                {
+                    ProductId = cart.ProductId, //change to variant
+                    Quantity = 1
+                };
+
+                _service.AddToCart(_cart);
+            };
+
+            return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddToCart(long productId, int quantity)
+        public IActionResult AddToCartByQty(long productId)
         {
-            await Task.Delay(0);
-
-            if (productId == 0)
-                return View();
-
             var _cart = new Cart()
             {
-                ProductId = 1,
-                Quantity = 2
+                ProductId = productId, //change to variant
+                Quantity = 1
             };
-            
+
             _service.AddToCart(_cart);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> RemoveFromCartByQty(long id)
+        {
+            var cartDetails = await _service.GetCartItemsByProductId(id);
+            if (cartDetails == null) return View("NotFound");
+
+            await _service.RemoveFromCart(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> RemoveFromCart(long id)
+        {
+            var cartDetails = await _service.GetCartItemsByProductId(id);
+            if (cartDetails == null) return View("NotFound");
+
+            var cart = await _service.GetCacheCartItems(); //include cache id or user id
+            ViewBag.Cart = cart;
+
+            return View(cartDetails);
+        }
+
+        [HttpPost, ActionName("RemoveFromCart")]
+        public async Task<IActionResult> RemoveFromCartConfirmed(long id)
+        {
+            var cartDetails = await _service.GetCartItemsByProductId(id);
+            if (cartDetails == null) return View("NotFound");
+
+            await _service.RemoveAllFromCart(id);
 
             return RedirectToAction(nameof(Index));
         }
