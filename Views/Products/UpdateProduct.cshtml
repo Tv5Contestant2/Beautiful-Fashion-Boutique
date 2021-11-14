@@ -50,14 +50,14 @@
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
-                                                                   htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()" })
+htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()" })
                                             @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
                                         </div>
 
                                         <label asp-for="GenderId" class="control-label"></label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
-                                                                  htmlAttributes: new { @class = "form-control", id = "GenderId" })
+htmlAttributes: new { @class = "form-control", id = "GenderId" })
                                             @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
                                         </div>
                                         <div style="display: none;">
@@ -75,13 +75,13 @@
                                         <label asp-for="StatusId" class="control-label"></label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"),
-                                                                htmlAttributes: new { @class = "form-control", id = "StatusId", @readonly= "readonly", @style= "pointer-events: none;" })
+htmlAttributes: new { @class = "form-control", id = "StatusId", @readonly = "readonly", @style = "pointer-events: none;" })
                                             @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
                                         </div>
                                         <label class="control-label">Stock Status</label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title"),
-                                                            htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly = "readonly", @style = "pointer-events: none;" })
+htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly = "readonly", @style = "pointer-events: none;" })
                                             @Html.ValidationMessageFor(x => x.StockStatusId, "", new { @class = "text-danger" })
                                         </div>
 
@@ -152,7 +152,19 @@
                                                 @*<h4 class="modal-title" id="AddUpdateModelVariantLabel">Add Variant</h4>*@
                                             </div>
                                             <div class="modal-body">
-                                                <div id="divSizeField" class="form-group">
+                                                @{
+                                                    var divSizeStyle = "";
+                                                    switch (Model.ProductCategoryId)
+                                                    {
+                                                        case (int)ProductCategoryEnum.Accessories:
+                                                            divSizeStyle = "display:none;";
+                                                            break;
+                                                        default:
+                                                            divSizeStyle = "display:block;";
+                                                            break;
+                                                    }
+                                                }
+                                                <div id="divSizeField" style="@divSizeStyle" class="form-group">
                                                     <label class="control-label">Size</label>
                                                     @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
                                                     @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })

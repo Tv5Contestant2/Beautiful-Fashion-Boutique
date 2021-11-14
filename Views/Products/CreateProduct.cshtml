@@ -122,7 +122,7 @@
                                                 @*<h4 class="modal-title" id="AddUpdateModelVariantLabel">Add Variant</h4>*@
                                             </div>
                                             <div class="modal-body">
-                                                <div id="divSizeField" class="form-group">
+                                                <div id="divSizeField" style="display: none;" class="form-group">
                                                     <label class="control-label">Size</label>
                                                     @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
                                                     @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })
