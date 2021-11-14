@@ -28,17 +28,6 @@ namespace ECommerce1.Controllers
             return View(data);
         }
 
-        public async Task<IActionResult> ViewProduct(long id)
-        {
-            var productDetails = await _service.GetProductById(id);
-            if (productDetails == null) return View("NotFound");
-
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
-            ViewBag.Cart = cart;
-
-            return View(productDetails);
-        }
-
         public IActionResult CreateProduct()
         {
             var viewModel = _service.InitializeProduct();

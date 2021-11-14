@@ -1,0 +1,253 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "View Products";
+}
+
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-9 order-2 order-lg-1">
+                <h1>@Model.Name</h1>
+            </div>
+            <div class="col-lg-3 text-end order-1 order-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="ShopAll">Shop</a></li>
+                        <li class="breadcrumb-item active">@Model.Name</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="product position-relative mb-3">
+                    @*<div class="ribbon ribbon-info text-uppercase">Fresh</div>*@
+                    @*<div class="ribbon ribbon-primary text-uppercase">Sale  </div>*@
+                    <!-- Item slider-->
+                    <div class="swiper-container swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" id="detailSlider">
+                        <div class="swiper-wrapper" id="swiper-wrapper-69b74c51397fa6ed" aria-live="polite" style="transform: translate3d(-642px, 0px, 0px); transition-duration: 0ms;">
+                            <div class="swiper-slide swiper-slide-prev" role="group" aria-label="1 / 4" style="width: 632px; margin-right: 10px;"><a class="glightbox" href="@String.Format("data:image/jpg;base64,{0}", Model.Image)"><img class="img-fluid d-block mx-auto w-75" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name"></a></div>
+                            <div class="swiper-slide swiper-slide-active" role="group" aria-label="2 / 4" style="width: 632px; margin-right: 10px;"><a class="glightbox" href="@String.Format("data:image/jpg;base64,{0}", Model.Image)"><img class="img-fluid d-block mx-auto w-75" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name"></a></div>
+                        </div>
+                        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                    </div>
+                </div>
+                <!-- Slider thumbnails-->
+                <div class="swiper-container swiper-thumbnails swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events swiper-container-thumbs" id="detailSliderThumb">
+                    <div class="swiper-wrapper" id="swiper-wrapper-86378c8146433263" aria-live="polite" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+                        <div class="swiper-slide swiper-slide-visible swiper-slide-active" role="group" aria-label="1 / 4" style="width: 70.25px; margin-right: 10px;"><img class="img-fluid d-block mx-auto" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name"></div>
+                        <div class="swiper-slide swiper-slide-visible swiper-slide-next swiper-slide-thumb-active" role="group" aria-label="2 / 4" style="width: 70.25px; margin-right: 10px;"><img class="img-fluid d-block mx-auto" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name"></div>
+                    </div>
+                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                </div>
+            </div>
+            <!-- Item info-->
+            <div class="col-lg-6">
+                <div class="row mb-4 gy-3">
+                    <div class="col-sm-6">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <p class="h5 text-primary mb-0">Php @Model.Price</p>
+                            </li>
+                            @*<li class="list-inline-item">
+                                <p class="h5 fw-normal text-gray-5 text-decoration-line-through mb-0">$90.00</p>
+                            </li>*@
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center justify-content-sm-end">
+                            <ul class="list-inline mb-0 me-3 small">
+                                <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i></li>
+                                <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i></li>
+                                <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i></li>
+                                <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i></li>
+                                <li class="list-inline-item m-0"><i class="far fa-star small text-primary"></i></li>
+                            </ul>
+                            <p class="small text-muted text-uppercase fw-bold mb-0">5 reviews</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-small text-muted mb-4">@Model.Description</p>
+                <div class="d-flex align-items-center justify-content-start mb-4">
+                    <div class="quantity d-flex align-items-center me-4">
+                        <div class="dec-btn" onclick="decrease(this)">-</div>
+                        <input class="quantity-no" type="text" value="1">
+                        <div class="inc-btn" onclick="increase(this)">+</div>
+                    </div>
+                    <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-control js-detailsize choices__input" name="detailsize" hidden="" tabindex="-1" data-choice="active"><option value="">Select size</option></select><div class="choices__list choices__list--single"><div class="choices__item choices__placeholder choices__item--selectable" data-item="" data-id="1" data-value="" data-custom-properties="null" aria-selected="true">Select size</div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" role="listbox"><div id="choices--detailsize-cz-item-choice-3" class="choices__item choices__item--choice is-selected choices__placeholder choices__item--selectable is-highlighted" role="option" data-choice="" data-id="3" data-value="" data-select-text="" data-choice-selectable="" aria-selected="true">Select size</div><div id="choices--detailsize-cz-item-choice-1" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="1" data-value="Large" data-select-text="" data-choice-selectable="">Large</div><div id="choices--detailsize-cz-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="Medium" data-select-text="" data-choice-selectable="">Medium</div><div id="choices--detailsize-cz-item-choice-4" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="4" data-value="Small" data-select-text="" data-choice-selectable="">Small</div><div id="choices--detailsize-cz-item-choice-5" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="5" data-value="X-Large" data-select-text="" data-choice-selectable="">X-Large</div></div></div></div>
+                </div>
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a class="btn btn-primary px-5" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id">
+                            <svg class="svg-icon svg-icon-sm svg-icon-heavy me-2">
+                                <use xlink:href="#cart-1"> </use>
+                            </svg>Add to cart
+                        </a>
+                    </li>
+                    <li class="list-inline-item"><a class="btn btn-outline-secondary px-5" href="#"> <i class="far fa-heart me-2"></i>Add to wishlist</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container pb-5">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link text-uppercase text-sm active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">Description</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link text-uppercase text-sm" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="false">Additional info</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link text-uppercase text-sm" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                <div class="pt-4">
+                    <p class="text-muted mb-3">@Model.Description</p>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
+                <div class="pt-4">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th class="p-2" scope="row">Material</th>
+                                <td class="p-2">Cotton</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2" scope="row">Styles:</th>
+                                <td class="p-2">Casual</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2" scope="row">Properties:</th>
+                                <td class="p-2">	Short Sleeve</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2 border-0" scope="row">Brand:</th>
+                                <td class="p-2 border-0">Calvin Klein</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                <div class="pt-4">
+                    <div class="row">
+                        <div class="col-xl-9">
+                            <div class="row mb-4">
+                                <div class="col-3 text-center"><img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/person-1.378c2035.jpg" alt="Han Solo" width="120"><span class="text-uppercase text-muted small fw-normal">Dec 2018</span></div>
+                                <div class="col-9 review-text">
+                                    <h6>Han Solo</h6>
+                                    <div class="mb-2">
+                                        <i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i>
+                                    </div>
+                                    <p class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-3 text-center"><img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/person-2.cc2fa49a.jpg" alt="Luke Skywalker" width="120"><span class="text-uppercase text-muted small fw-normal">Dec 2018</span></div>
+                                <div class="col-9 review-text">
+                                    <h6>Luke Skywalker</h6>
+                                    <div class="mb-2">
+                                        <i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small far fa-star text-primary"></i>
+                                    </div>
+                                    <p class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-3 text-center"><img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/person-3.28271a04.jpg" alt="Princess Leia" width="120"><span class="text-uppercase text-muted small fw-normal">Dec 2018</span></div>
+                                <div class="col-9 review-text">
+                                    <h6>Princess Leia</h6>
+                                    <div class="mb-2">
+                                        <i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small far fa-star text-primary"></i><i class="small far fa-star text-primary"></i>
+                                    </div>
+                                    <p class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-3 text-center"><img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/person-4.0a8b43db.jpg" alt="Jabba Hut" width="120"><span class="text-uppercase text-muted small fw-normal">Dec 2018</span></div>
+                                <div class="col-9 review-text">
+                                    <h6>Jabba Hut</h6>
+                                    <div class="mb-2">
+                                        <i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i>
+                                    </div>
+                                    <p class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--<main class="py-5">
+    <div class="container py-5">
+        <div class="row gx-lg-5 border-bottom my-5">-->
+            @*Images*@
+            <!--<div class="col-xl-7 col-lg-7">
+                <img class="w-75" src="@String.Format("data:image/jpg;base64,{0}", Model.Image)" alt="@Model.Name">
+            </div>-->
+            @*Details*@
+            <!--<div class="col-xl-5 col-lg-5">
+                <div class="my-lg-5 my-md-4">
+                    <h2>@Model.Name</h2>
+                    <ul class="list-inline mb-4">
+                        <li class="list-inline-item">
+                            <p class="h5 text-primary mb-0">Php @Model.Price</p>
+                        </li>
+                    </ul>
+                    <p class="text-muted">@Model.Description</p>
+                    <ul class="list-inline d-flex align-items-center my-4">
+                        <li class="list-inline-item">
+                            <div class="d-flex align-items-center">
+                                <div class="quantity d-flex align-items-center me-4">
+                                    <div class="dec-btn" onclick="decrease(this)">-</div>
+                                    <input class="quantity-no" type="text" value="1">
+                                    <div class="inc-btn" onclick="increase(this)">+</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-inline-item">
+                            <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-control js-modalsize choices__input" name="modalsize" hidden="" tabindex="-1" data-choice="active"><option value="small">Small</option></select><div class="choices__list choices__list--single"><div class="choices__item choices__item--selectable" data-item="" data-id="1" data-value="small" data-custom-properties="null" aria-selected="true">Small</div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" role="listbox"><div id="choices--modalsize-ln-item-choice-1" class="choices__item choices__item--choice choices__item--selectable is-highlighted" role="option" data-choice="" data-id="1" data-value="large" data-select-text="" data-choice-selectable="" aria-selected="true">Large</div><div id="choices--modalsize-ln-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="medium" data-select-text="" data-choice-selectable="">Medium</div><div id="choices--modalsize-ln-item-choice-3" class="choices__item choices__item--choice is-selected choices__item--selectable" role="option" data-choice="" data-id="3" data-value="small" data-select-text="" data-choice-selectable="">Small</div><div id="choices--modalsize-ln-item-choice-4" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="4" data-value="x-large" data-select-text="" data-choice-selectable="">X-Large</div></div></div></div>
+                        </li>
+                    </ul>
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a class="btn btn-primary px-5" href="#"> <i class="fas fa-shopping-cart me-2"></i>Add to cart</a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-secondary px-5" href="#"> <i class="far fa-heart me-2"></i>Add to wishlist</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>-->
+
+        @*Reviews*@
+        <!--<div class="row gx-lg-5">
+            <div class="d-flex me-2">
+                <div class="ms-2">
+                    <h4 class="mb-1">No reviews yet.</h4>
+                    <p class="small text-gray-6 mb-1">How do you find this product? Be the first to share your thoughts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>-->
+
+<div style="position: fixed; bottom: 10px; right: 10px;">
+    <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </button>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+</script>

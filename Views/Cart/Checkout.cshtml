@@ -1,0 +1,193 @@
+﻿@model IEnumerable<Cart>
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-9 order-2 order-lg-1">
+                <h1>@ViewBag.Title</h1>
+                @if (Model != null)
+                {
+                    <p class="lead text-muted">
+                        You currently have @ViewBag.Cart.Count() item(s) in your basket
+                    </p>
+                }
+                else
+                {
+                    <p class="lead text-muted">
+                        You currently have 0 item(s) in your basket
+                    </p>
+                }
+            </div>
+            <div class="col-lg-3 text-end order-1 order-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+@if (Model == null)
+{
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row gy-5 gx-5">
+            <div class="col-lg-8">
+                <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
+                    <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase active" asp-controller="Cart" asp-action="Checkout">Address</a></li>
+                    <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Delivery Method </a></li>
+                    <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Payment Method </a></li>
+                    <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Order Review</a></li>
+                </ul>
+                <div id="address">
+                    <form action="#">
+                        <!-- Invoice Address-->
+                        <div class="bg-light rounded-pill px-4 py-3">
+                            <h6 class="mb-0">Invoice address                    </h6>
+                        </div>
+                        <div class="row gy-3 py-5">
+                            <div class="col-md-6">
+                                <label class="form-label" for="firstname">First Name</label>
+                                <input class="form-control" id="firstname" type="text" name="first-name" placeholder="Enter you first name">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="lastname">Last Name</label>
+                                <input class="form-control" id="lastname" type="text" name="last-name" placeholder="Enter your last name">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="email">Email Address</label>
+                                <input class="form-control" id="email" type="email" name="email" placeholder="enter your email address">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="street">Street</label>
+                                <input class="form-control" id="street" type="text" name="address" placeholder="Your street name">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="city">City</label>
+                                <input class="form-control" id="city" type="text" name="city" placeholder="Your city">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="zip">ZIP</label>
+                                <input class="form-control" id="zip" type="text" name="zip" placeholder="ZIP code">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="state">State</label>
+                                <input class="form-control" id="state" type="text" name="state" placeholder="Your state">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="country">Country</label>
+                                <input class="form-control" id="country" type="text" name="country" placeholder="Your country">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="phone-number">Phone Number</label>
+                                <input class="form-control" id="phone-number" type="tel" name="phone-number" placeholder="Your phone number">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="company">Company</label>
+                                <input class="form-control" id="company" type="text" name="company" placeholder="Your company name">
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" id="another-address" type="checkbox" onclick="toggleAddress()">
+                                    <label class="form-check-label" for="another-address" data-bs-toggle="collapse" href="#shippingAddress" role="button" aria-expanded="false" aria-controls="shippingAddress">Use different shipping address</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Invoice Address-->
+                        <!-- Shippping Address-->
+                        <div class="collapse" id="shippingAddress">
+                            <div class="bg-light rounded-pill px-4 py-3">
+                                <h6 class="mb-0">Shipping address</h6>
+                            </div>
+                            <div class="row gy-3 py-5">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="shipping_firstname">First Name</label>
+                                    <input class="form-control" id="shipping_firstname" type="text" name="shipping_first-name" placeholder="Enter you first name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="shipping_lastname">Last Name</label>
+                                    <input class="form-control" id="shipping_lastname" type="text" name="shipping_last-name" placeholder="Enter your last name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="shipping_email">Email Address</label>
+                                    <input class="form-control" id="shipping_email" type="email" name="shipping_email" placeholder="enter your email address">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="shipping_street">Street</label>
+                                    <input class="form-control" id="shipping_street" type="text" name="shipping_address" placeholder="Your street name">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" for="shipping_city">City</label>
+                                    <input class="form-control" id="shipping_city" type="text" name="shipping_city" placeholder="Your city">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" for="shipping_zip">ZIP</label>
+                                    <input class="form-control" id="shipping_zip" type="text" name="shipping_zip" placeholder="ZIP code">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" for="shipping_state">State</label>
+                                    <input class="form-control" id="shipping_state" type="text" name="shipping_state" placeholder="Your state">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" for="shipping_country">Country</label>
+                                    <input class="form-control" id="shipping_country" type="text" name="shipping_country" placeholder="Your country">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="shipping_phone-number">Phone Number</label>
+                                    <input class="form-control" id="shipping_phone-number" type="tel" name="shipping_phone-number" placeholder="Your phone number">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="shipping_company">Company</label>
+                                    <input class="form-control" id="shipping_company" type="text" name="shipping_company" placeholder="Your company name">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Shipping Address-->
+                        <div class="d-flex justify-content-between flex-column flex-lg-row">
+                            <a class="btn btn-outline-secondary px-sm-5 my-1" asp-controller="Cart" asp-action="Index"> <i class="fas fa-angle-left me-2"></i>Back to basket</a>
+                            <a class="btn btn-primary px-sm-5 my-1"  asp-controller="Cart" asp-action="DeliveryMethod">Choose delivery method<i class="fas fa-angle-right ms-2"></i></a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card rounded-0">
+                    <div class="card-body px-4 py-5">
+                        <h6 class="text-uppercase">Order Summary</h6>
+                        <p class="fw-normal text-muted">Shipping and additional costs are calculated based on values you have entered</p>
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">$390.00</strong></li>
+                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">$10.00</strong></li>
+                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Tax</span><strong class="fw-normal">$0.00</strong></li>
+                            <li class="d-flex justify-content-between py-3"><span>Total</span><strong class="text-primary h5 mb-0">$400.00</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+}
+else
+{
+    <div class="item col-xl-12">
+        <h2 class="mb-1">Oh no! Your basket is empty.</h2>
+        <p class="text-gray-6 mb-1">Don't miss your chance! Start shopping now.</p>
+    </div>
+}
+
+<div style="position: fixed; bottom: 10px; right: 10px;">
+    <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </button>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+</script>
