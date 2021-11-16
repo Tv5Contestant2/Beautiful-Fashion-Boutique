@@ -51,7 +51,13 @@ namespace ECommerce1.Data.Services
 
         public async Task<IEnumerable<Customers>> GetAllCustomers()
         {
-            var result = await _context.Customers.ToListAsync();
+            var result = await _context.Customers.Where(x => !x.IsBlock).ToListAsync();
+            return result;
+        }
+
+        public async Task<IEnumerable<Customers>> GetAllBlockCustomers()
+        {
+            var result = await _context.Customers.Where(x => x.IsBlock).ToListAsync();
             return result;
         }
 

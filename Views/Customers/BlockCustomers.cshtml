@@ -21,14 +21,10 @@
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search" style="width:350px">
             <div class="col">
-                <a asp-controller="Customers" asp-action="CreateCustomer" class="btn btn-info float-right" type="button">
-                    <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Customer
+                <a asp-controller="Customers" asp-action="ShowCustomers" class="btn btn-info float-right" type="button">
+                    <i class="fas fa-user"></i>&nbsp;&nbsp;Show Customers
                 </a>
             </div>
-            <a asp-controller="Customers" asp-action="BlockCustomers" class="btn btn-warning float-right" type="button">
-                <i class="fas fa-user-slash"></i>&nbsp;&nbsp;Show Block Customers
-            </a>
-
         </div>
     </div>
 
@@ -52,22 +48,20 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
-                            </td>
-                            <td>@Html.DisplayFor(modelItem => item.CustomerFirstName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.CustomerLastName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.CustomerEmail)</td>
-                            <td><span class="status text-success">&bull;</span> Active</td>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.CustomerFirstName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.CustomerLastName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.CustomerEmail)</td>
+                                <td><span class="status text-success">&bull;</span> Active</td>
 
-                            <td width="10%">
-                                <a asp-action="UpdateCustomer" asp-route-id="@item.CustomerID"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
-                                <a asp-action="DeleteCustomer" asp-route-id="@item.CustomerID"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
-                                <a asp-action="BlockCustomer" asp-route-id="@item.CustomerID"><i class="fas fa-user-slash">&#xE5C9;</i></a>
-                            </td>
-                        </tr>
+                                <td width="10%">
+                                    <a asp-action="UnBlockCustomer" asp-route-id="@item.CustomerID"><i class="fas fa-user">&#xE5C9;</i></a>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

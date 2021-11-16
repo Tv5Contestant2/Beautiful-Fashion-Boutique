@@ -55,6 +55,9 @@ namespace ECommerce1.Models
         public int MessageID { get; set; }
         public int UserID { get; set; }
 
+        [Display(Name = "Blocked")]
+        public bool IsBlock { get; set; }
+
         #region Enumerables
         public IEnumerable<Gender> Genders { get; set; }
         #endregion Enumerables

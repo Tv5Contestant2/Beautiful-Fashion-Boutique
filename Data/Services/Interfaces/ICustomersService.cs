@@ -19,5 +19,7 @@ namespace ECommerce1.Data.Services.Interfaces
         public Task<Customers> GetCustomerById(long id);
 
         public Task<IEnumerable<Customers>> GetAllCustomersByGender(int genderId);
+
+        public Task<IEnumerable<Customers>> GetAllBlockCustomers();
     }
 }

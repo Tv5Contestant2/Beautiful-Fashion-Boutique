@@ -33,24 +33,29 @@
                                 <div class="row form-group">
 
                                     <div class="col col-md-8">
-                                        <label asp-for="CustomerFirstName" class="control-label"></label>
-                                        <input asp-for="CustomerFirstName" class="form-control" />
-                                        <span asp-validation-for="CustomerFirstName" class="text-danger"></span>
-
-
-                                        <label asp-for="CustomerLastName" class="control-label"></label>
-                                        <input asp-for="CustomerLastName" class="form-control" />
-                                        <span asp-validation-for="CustomerLastName" class="text-danger"></span>
-
-
-                                        <label asp-for="CustomerBirthday" class="control-label"></label>
-                                        <input asp-for="CustomerBirthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
-
-
-                                        <label asp-for="GenderId" class="control-label"></label>
                                         <div>
-                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "AlternateTitle"), htmlAttributes: new { @class = "form-control", id = "GenderId" })
-                                            @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                            <label asp-for="CustomerFirstName" class="control-label"></label>
+                                            <input asp-for="CustomerFirstName" class="form-control" />
+                                            <span asp-validation-for="CustomerFirstName" class="text-danger"></span>
+                                        </div>
+
+                                        <div>
+                                            <label asp-for="CustomerLastName" class="control-label"></label>
+                                            <input asp-for="CustomerLastName" class="form-control" />
+                                            <span asp-validation-for="CustomerLastName" class="text-danger"></span>
+                                        </div>
+
+                                        <div>
+                                            <label asp-for="CustomerBirthday" class="control-label"></label>
+                                            <input asp-for="CustomerBirthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+                                        </div>
+
+                                        <div>
+                                            <label asp-for="GenderId" class="control-label"></label>
+                                            <div>
+                                                @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "AlternateTitle"), htmlAttributes: new { @class = "form-control", id = "GenderId" })
+                                                @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
                                     </div>
 
