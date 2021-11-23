@@ -1,4 +1,5 @@
 ﻿using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,14 +7,14 @@ namespace ECommerce1.Data.Services.Interfaces
 {
     public interface IEmployeesService
     {
-        public void CreateEmployee(Employees employee);
+        public Task CreateEmployee(EmployeeViewModel model);
 
-        public Task<Employees> UpdateEmployee(long id, Employees employee);
+        public Task UpdateEmployee(EmployeeViewModel model);
 
-        public Task DeleteEmployee(long id);
+        public Task DeleteEmployee(string id);
 
-        public Task<IEnumerable<Employees>> GetAllEmployees();
+        public Task<IEnumerable<User>> GetAllEmployees();
 
-        public Task<Employees> GetEmployeeById(long id);
+        public Task<User> GetEmployeeById(string id);
     }
 }
