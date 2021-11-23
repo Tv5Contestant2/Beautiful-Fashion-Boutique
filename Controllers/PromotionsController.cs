@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
+    [AllowAnonymous]
     public class PromotionsController : Controller
     {
         private readonly IPromotionsService _service;

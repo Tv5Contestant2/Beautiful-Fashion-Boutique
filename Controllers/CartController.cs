@@ -2,6 +2,7 @@
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
+    [AllowAnonymous]
     public class CartController : Controller
     {
         private readonly ICartService _service;

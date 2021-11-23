@@ -1,12 +1,14 @@
 ﻿using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
+    [AllowAnonymous]
     public class ProfileController : Controller
     {
         private readonly ICartService _service;
@@ -24,7 +26,9 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            var result = await _orderService.GetAllOrdersByUser(); //temporary
+
+            return View(result);
         }
 
         public async Task<IActionResult> Orders()
@@ -42,7 +46,9 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            var result = await _orderService.GetAllOrdersByUser(); //temporary
+
+            return View(result);
         }
 
         public async Task<IActionResult> Addresses()
@@ -50,7 +56,9 @@ namespace ECommerce1.Controllers
             var cart = await _service.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            var result = await _orderService.GetAllOrdersByUser(); //temporary
+
+            return View(result);
         }
     }
 }

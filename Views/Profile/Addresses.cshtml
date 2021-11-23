@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<OrderDetails>
+@{
     ViewData["Title"] = "Your Addresses";
     ViewData["User"] = "Test Customer";
 }
@@ -35,7 +36,7 @@
                             <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
                                 <use xlink:href="#shopping-bag-1"> </use>
                             </svg>Orders
-                        </span><small class="badge rounded-pill bg-primary">5</small>
+                        </span><small class="badge rounded-pill bg-light text-dark">@Model.Count()</small>
                     </a><a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Index">
                         <span class="fw-normal text-sm text-dark py-1">
                             <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">

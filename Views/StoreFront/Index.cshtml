@@ -28,9 +28,9 @@
                         <img src="~/images/banners/banner-4.jpg" class="img-fluid d-block w-100" />
                     </div>*@
                 </div>
-                <div style="position: absolute; top: 3%; left: 93%">
+                @*<div style="position: absolute; top: 3%; left: 93%">
                     <a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>
-                </div>
+                </div>*@
                 @*<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
@@ -46,7 +46,7 @@
                 <header class="text-center pb-4 pt-4">
                     <p class="lead text-uppercase text-muted mb-0">Top for this month</p>
                     <h2 class="text-uppercase">Our Featured Picks</h2>
-                    <a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>
+                    @*<a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>*@
                 </header>
                 <div class="row justify-content-center pb-2">
                     <div style="width: 20rem; margin: 15px">
@@ -84,7 +84,7 @@
                     <header class="text-center pb-4 pt-4">
                         <p class="lead text-uppercase text-muted mb-0">Money Saver</p>
                         <h2 class="text-uppercase">Our Top Steals</h2>
-                        <a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>
+                        @*<a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>*@
                     </header>
                     <div class="row justify-content-center pb-2">
                         @foreach (var item in ViewBag.Products)

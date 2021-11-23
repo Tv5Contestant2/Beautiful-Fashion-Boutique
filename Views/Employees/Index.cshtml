@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Employees>
+﻿@model IEnumerable<User>
 
 @{
     ViewData["Title"] = "Employee Management";
@@ -55,20 +55,20 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@Html.DisplayFor(modelItem => item.EmployeeID)</td>
+                                        <td>@item.Id</td>
                                         <td>
                                             <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.EmployeeFirstName)
+                                            @Html.DisplayFor(modelItem => item.FirstName)
                                         </td>
-                                        <td>@Html.DisplayFor(modelItem => item.EmployeeLastName)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.EmployeeEmail)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
                                         <td><span class="status text-success">&bull;</span> Active</td>
 
-                                        <td class="col-sm-2">
-                                            <a asp-action="UpdateEmployee" asp-route-id="@item.EmployeeID" data-toggle="tooltip" data-placement="bottom" title="Update"><i class="fas fa-pencil-alt">&#xE5C9;</i></a>
-                                            <a asp-action="DeleteEmployee" asp-route-id="@item.EmployeeID" data-toggle="tooltip" data-placement="bottom" title="Delete"><small><i class="fas fa-trash-alt">&#xE8B8;</i></small></a>
+                                        <td>
+                                            <a asp-action="UpdateEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
+                                            <a asp-action="DeleteEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
                                         </td>
                                     </tr>
                                 }

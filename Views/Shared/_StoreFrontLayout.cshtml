@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -48,33 +52,75 @@
                     <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="ContactUs">Contact Us</a></li>
                 </ul>
                 <ul class="navbar-nav flex-row mb-2 mb-lg-0 ms-lg-5 actions-nav-menu">
-                    <li class="nav-item mx-2 mx-lg-0 px-lg-0">
-                        <a class="nav-link" asp-controller="Home" asp-action="SignIn">
-                            <svg class="svg-icon">
-                                <use xlink:href="#user-1"> </use>
-                            </svg>
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown mx-2 mx-lg-0 px-3 px-lg-0 d-none d-lg-block">
-                        <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
-                            <svg class="svg-icon">
-                                <use xlink:href="#cart-1"> </use>
-                            </svg>
-                            @{
-                                var cart = ViewBag.Cart;
-                                var count = 0;
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-item mx-2 mx-lg-0 px-lg-0">
+                            <a class="nav-link" asp-controller="Home" asp-action="SignOut">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item mx-2 mx-lg-0 px-lg-0">
+                            <a class="nav-link" asp-controller="Home" asp-action="SignIn">
+                                <svg class="svg-icon">
+                                    <use xlink:href="#user-1"> </use>
+                                </svg>
+                            </a>
+                        </li>
+                    }
 
-                                foreach (var item in ((IEnumerable<Cart>)cart).Select(x => x.Quantity))
-                                {
-                                    count += Convert.ToInt32(item);
-                                }
-                                <span class="cart-no">@count</span>
+                    @{
+                        var _IsAdmin = false;
+                        if (UserManager.GetUserAsync(User).Result != null)
+                        {
+                            if (UserManager.GetUserAsync(User).Result.IsAdmin != null)
+                            {
+                                if ((bool)UserManager.GetUserAsync(User).Result.IsAdmin) _IsAdmin = true;
                             }
-                        </a>
-                    </li>
-                    <li class="nav-item mx-2 mx-lg-0 px-lg-0">
-                        <a class="btn btn-danger mx-lg-2" asp-controller="Administrator" asp-action="Index">Dashboard &nbsp;<i class="fas fa-arrow-right"></i></a>
-                    </li>
+
+                            if (_IsAdmin == true)
+                            {
+                                <li class="nav-item mx-2 mx-lg-0 px-lg-0">
+                                    <a class="nav-link" asp-controller="Administrator" asp-action="Index">
+                                        <i class="fas fa-tools"></i>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item mx-2 mx-lg-0 px-lg-0">
+                                    <a class="nav-link" asp-controller="Profile" asp-action="Index">
+                                        <svg class="svg-icon">
+                                            <use xlink:href="#user-1"> </use>
+                                        </svg>
+                                    </a>
+                                </li>
+                            }
+                        }
+
+                        if (_IsAdmin == false)
+                        {
+                            <li class="nav-item dropdown mx-2 mx-lg-0 px-3 px-lg-0 d-none d-lg-block">
+                                <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
+                                    <svg class="svg-icon">
+                                        <use xlink:href="#cart-1"> </use>
+                                    </svg>
+                                    @{
+                                        var cart = ViewBag.Cart;
+                                        var count = 0;
+
+                                        foreach (var item in ((IEnumerable<Cart>)cart).Select(x => x.Quantity))
+                                        {
+                                            count += Convert.ToInt32(item);
+                                        }
+                                        <span class="cart-no">@count</span>
+                                    }
+                                </a>
+                            </li>
+                        }
+                    }
                 </ul>
             </div>
         </div>
@@ -183,7 +229,6 @@
             placeholder: false,
             itemSelectText: ''
         });
-
     </script>
 
     <script>
@@ -196,7 +241,6 @@
             placeholder: false,
             itemSelectText: ''
         });
-
     </script>
 
     <script>
@@ -222,7 +266,6 @@
         // while using file:// protocol
         // pls don't forget to change to your domain :)
         injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
-
     </script>
 
     <script>

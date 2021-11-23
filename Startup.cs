@@ -1,8 +1,12 @@
 using ECommerce1.Data;
 using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +42,7 @@ namespace ECommerce1
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
@@ -56,6 +61,15 @@ namespace ECommerce1
             // DBContext configuration
             services.AddDbContext<AppDBContext>(context =>
                 context.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
+
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             // Services Configuration
             services.AddScoped<IAdministratorService, AdministratorService>();
