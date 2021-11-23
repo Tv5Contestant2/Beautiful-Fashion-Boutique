@@ -1,40 +1,8 @@
-﻿@model Employees
+﻿@model ECommerce1.ViewModel.HomeUserViewModel
 
 @{
     ViewData["Title"] = "Sign In";
 }
-
-<!--<div class="container-fluid main-container">-->
-    @*Content*@
-    <!--<div class="content col-md-5 offset-md-3">
-        <div class="row">
-            <div class="col col-md-6 offset-md-2">
-                <h1 class="offset-md-5">Sign In</h1>
-                <form asp-action="SignIn" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                    <div class="form-group">
-                        <label> Username</label>
-                        <input asp-for="Username" class="form-control" />
-
-                        <label> Password</label>
-                        <input asp-for="EmployeePass" class="form-control" type="password" />
-
-                        <div style="margin-top: 15px">
-                            <a asp-area="" asp-controller="Home" asp-action="UnderConstruction">Forgot your password?</a>
-
-                            <span class="float-right">
-                                <input type="submit" class="btn btn-info" value="Sign In" />
-                            </span>
-                        </div>
-
-                        <div class="text-center">Not yet registered? <a asp-area="" asp-controller="Home" asp-action="SignUp">Click here</a></div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>-->
 <section class="py-5">
     <div class="container py-4">
         <div class="row gy-5 gx-5">
@@ -48,12 +16,22 @@
                     <hr class="border-bottom border-gray-6">
                     <form asp-action="SignIn" enctype="multipart/form-data">
                         <div class="mb-3">
-                            <label class="form-label" for="email">Email</label>
-                            <input asp-for="Username" class="form-control" id="email" type="text">
+                            <label class="form-label" for="Email">Email</label>
+                            <input asp-for="SignInEmail" class="form-control" id="SignInEmail" type="text">
+                            <span asp-validation-for="SignInEmail" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="password">Password</label>
-                            <input asp-for="EmployeePass" class="form-control" id="password" type="password">
+                            <label class="form-label" for="SignInPassword">Password</label>
+                            <input asp-for="SignInPassword" class="form-control" id="SignInPassword" type="password">
+                            <span asp-validation-for="SignInPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label asp-for="RememberMe">
+                                    <input asp-for="RememberMe" />
+                                    @Html.DisplayNameFor(m => m.RememberMe)
+                                </label>
+                            </div>
                         </div>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Sign In" />
@@ -69,21 +47,39 @@
                     <p class="lead">Not our registered customer yet?</p>
                     <p class="text-muted">Register and discover a new world of fashion, fantastic discounts and much more!</p>
                     <hr class="border-bottom border-gray-6">
-                    <form action="customer-orders.html" method="get">
+                    <form asp-action="SignUp" enctype="multipart/form-data" method="post">
                         <div class="mb-3">
-                            <label class="form-label" for="name">Name</label>
-                            <input class="form-control" id="name" type="text">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="reg_email">Email</label>
-                            <input class="form-control" id="reg_email" type="text">
+                            <label class="form-label" for="name">First Name</label>
+                            <input asp-for="FirstName" class="form-control" id="email" type="text">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="reg_password">Password</label>
-                            <input class="form-control" id="reg_password" type="password">
+                            <label class="form-label" for="name">Last Name</label>
+                            <input asp-for="LastName" class="form-control" id="email" type="text">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="Email">Email</label>
+                            <input asp-for="Email" class="form-control" id="email" type="text">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Password</label>
+                            <input asp-for="Password" class="form-control" id="password" type="password">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Confirm Password</label>
+                            <input asp-for="ConfirmPassword" class="form-control" id="password" type="password">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary" type="submit"><i class="fas fa-user me-2"></i>Register</button>
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-user me-2"></i>Register
+                            </button>
                         </div>
                     </form>
                 </div>

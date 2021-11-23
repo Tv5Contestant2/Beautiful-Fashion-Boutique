@@ -1,5 +1,6 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
@@ -7,18 +8,35 @@ using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
+    [AllowAnonymous]
     public class CustomersController : Controller
     {
         private readonly ICustomersService _service;
+
         public CustomersController(ICustomersService service)
         {
             _service = service;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpPost, ActionName("BlockCustomer")]
+        public async Task<IActionResult> BlockConfirmed(long id)
         {
-            var data = await _service.GetAllCustomers();
-            return View(data);
+            var customer = await _service.GetCustomerById(id);
+            if (customer == null) return View("NotFound");
+
+            customer.IsBlock = true;
+
+            await _service.UpdateCustomer(id, customer);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> BlockCustomer(long id)
+        {
+            var customerDetails = await _service.GetCustomerById(id);
+            if (customerDetails == null) return View("NotFound");
+
+            return View(customerDetails);
         }
 
         public async Task<IActionResult> BlockCustomers()
@@ -26,13 +44,6 @@ namespace ECommerce1.Controllers
             var data = await _service.GetAllBlockCustomers();
             return View(data);
         }
-
-        public async Task<IActionResult> ShowCustomers()
-        {
-            await Task.Delay(0);
-            return RedirectToAction(nameof(Index));
-        }
-
 
         public IActionResult CreateCustomer()
         {
@@ -46,12 +57,12 @@ namespace ECommerce1.Controllers
         {
             await Task.Delay(0);
 
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 var _result = _service.InitializeCustomer();
                 if (customers.Genders == null) customers.Genders = _result.Genders;
                 return View(customers);
             }
-                
 
             if (customers.ImageFile != null)
             {
@@ -69,38 +80,6 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> UpdateCustomer(long id)
-        {
-            var customerDetails = await _service.GetCustomerById(id);
-            if (customerDetails == null) return View("NotFound");
-
-            ViewBag.CustomerRepo = _service.InitializeCustomer();
-            
-            return View(customerDetails);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateCustomer(long id, Customers customers)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(customers);
-            }
-            await _service.UpdateCustomer(id, customers);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-       
-
-
-        public async Task<IActionResult> DeleteCustomer(long id)
-        {
-            var customerDetails = await _service.GetCustomerById(id);
-            if (customerDetails == null) return View("NotFound");
-            return View(customerDetails);
-        }
-
         [HttpPost, ActionName("DeleteCustomer")]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
@@ -111,33 +90,23 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> BlockCustomer(long id)
+        public async Task<IActionResult> DeleteCustomer(long id)
         {
             var customerDetails = await _service.GetCustomerById(id);
             if (customerDetails == null) return View("NotFound");
-
             return View(customerDetails);
         }
 
-        [HttpPost, ActionName("BlockCustomer")]
-        public async Task<IActionResult> BlockConfirmed(long id)
+        public async Task<IActionResult> Index()
         {
-            var customer = await _service.GetCustomerById(id);
-            if (customer == null) return View("NotFound");
+            var data = await _service.GetAllCustomers();
+            return View(data);
+        }
 
-            customer.IsBlock = true;
-
-            await _service.UpdateCustomer(id, customer);
-
+        public async Task<IActionResult> ShowCustomers()
+        {
+            await Task.Delay(0);
             return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> UnBlockCustomer(long id)
-        {
-            var customerDetails = await _service.GetCustomerById(id);
-            if (customerDetails == null) return View("NotFound");
-
-            return View(customerDetails);
         }
 
         [HttpPost, ActionName("UnBlockCustomer")]
@@ -153,6 +122,34 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> UnBlockCustomer(long id)
+        {
+            var customerDetails = await _service.GetCustomerById(id);
+            if (customerDetails == null) return View("NotFound");
 
+            return View(customerDetails);
+        }
+
+        public async Task<IActionResult> UpdateCustomer(long id)
+        {
+            var customerDetails = await _service.GetCustomerById(id);
+            if (customerDetails == null) return View("NotFound");
+
+            ViewBag.CustomerRepo = _service.InitializeCustomer();
+
+            return View(customerDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCustomer(long id, Customers customers)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(customers);
+            }
+            await _service.UpdateCustomer(id, customers);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

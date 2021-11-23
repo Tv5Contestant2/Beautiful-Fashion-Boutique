@@ -1,5 +1,6 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
@@ -7,18 +8,14 @@ using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
+    [AllowAnonymous]
     public class EmployeesController : Controller
     {
         private readonly IEmployeesService _service;
+
         public EmployeesController(IEmployeesService service)
         {
             _service = service;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var data = await _service.GetAllEmployees();
-            return View(data);
         }
 
         [HttpPost]
@@ -45,6 +42,29 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost, ActionName("DeleteEmployee")]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            var EmployeeDetails = await _service.GetEmployeeById(id);
+            if (EmployeeDetails == null) return View("NotFound");
+
+            await _service.DeleteEmployee(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteEmployee(long id)
+        {
+            var EmployeeDetails = await _service.GetEmployeeById(id);
+            if (EmployeeDetails == null) return View("NotFound");
+            return View(EmployeeDetails);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var data = await _service.GetAllEmployees();
+            return View(data);
+        }
+
         public async Task<IActionResult> UpdateEmployee(long id)
         {
             var EmployeeDetails = await _service.GetEmployeeById(id);
@@ -62,24 +82,5 @@ namespace ECommerce1.Controllers
             await _service.UpdateEmployee(id, Employees);
             return RedirectToAction(nameof(Index));
         }
-
-
-        public async Task<IActionResult> DeleteEmployee(long id)
-        {
-            var EmployeeDetails = await _service.GetEmployeeById(id);
-            if (EmployeeDetails == null) return View("NotFound");
-            return View(EmployeeDetails);
-        }
-
-        [HttpPost, ActionName("DeleteEmployee")]
-        public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            var EmployeeDetails = await _service.GetEmployeeById(id);
-            if (EmployeeDetails == null) return View("NotFound");
-
-            await _service.DeleteEmployee(id);
-            return RedirectToAction(nameof(Index));
-        }
-
     }
 }

@@ -1,39 +1,68 @@
 ﻿using ECommerce1.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce1.Data
 {
-    public class AppDBContext : DbContext
+    public class AppDBContext : IdentityDbContext<User>
     {
-        public AppDBContext(DbContextOptions<AppDBContext> context) : base(context) { }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder) 
-        { }
+        public AppDBContext(DbContextOptions<AppDBContext> context) : base(context)
+        {
+        }
 
         public DbSet<About> AboutUs { get; set; }
+
         public DbSet<Announcements> Announcements { get; set; }
+
         public DbSet<Cart> Carts { get; set; }
+
         public DbSet<Color> Colors { get; set; }
+
         public DbSet<Customers> Customers { get; set; }
+
         public DbSet<Employees> Employees { get; set; }
+
         public DbSet<Gender> Genders { get; set; }
+
         public DbSet<Messages> Messages { get; set; }
+
         public DbSet<Notification> Notifications { get; set; }
+
         public DbSet<OrderDetails> OrdersDetails { get; set; }
+
         public DbSet<Payment> Payment { get; set; }
+
         public DbSet<PaymentMethod> PaymentMethod { get; set; }
+
         public DbSet<ProductCategory> ProductCategories { get; set; }
-        public DbSet<ProductVariant> ProductVariants { get; set; }
+
         public DbSet<ProductImage> ProductImages { get; set; }
+
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<ProductVariant> ProductVariants { get; set; }
+
         public DbSet<Promos> Promos { get; set; }
+
         public DbSet<RoleAccessibility> RoleAccessability { get; set; }
-        public DbSet<Roles> Roles { get; set; }
+
+        //public DbSet<Roles> Roles { get; set; }
+
         public DbSet<Security> Security { get; set; }
+
         public DbSet<Size> Sizes { get; set; }
+
         public DbSet<SocMed> Socials { get; set; }
+
         public DbSet<Status> Statuses { get; set; }
+
         public DbSet<StockStatus> StockStatuses { get; set; }
+
         public DbSet<Transactions> Transactions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

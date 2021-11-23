@@ -1,43 +1,26 @@
 ﻿using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
+    [AllowAnonymous]
     public class ProductsController : Controller
     {
-        private readonly IProductsService _service;
         private readonly ICartService _cartService;
-       
+        private readonly IProductsService _service;
+
         public ProductsController(IProductsService service, ICartService cartService)
         {
             _service = service;
             _cartService = cartService;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var data = await _service.GetAllProducts();
-
-            foreach (var item in data) {
-                if (item.ProductVariants != null && item.ProductVariants.Any()) {
-                    item.StockQty = item.ProductVariants.Sum(x => x.Quantity);
-                }
-            }
-
-            ViewBag.InStock = data.Where(x => x.StatusId == (int)StockStatusEnum.InStock).ToList().Count();
-            ViewBag.OutOfStock = data.Where(x => x.StatusId == (int)StockStatusEnum.OutOfStock).ToList().Count();
-            ViewBag.Critical = 0;
-
-            return View(data);
         }
 
         public IActionResult CreateProduct()
@@ -52,11 +35,11 @@ namespace ECommerce1.Controllers
         {
             await Task.Delay(0);
 
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 _service.InitializeProductListForResponse(product);
                 return View(product);
             }
-                
 
             if (!string.IsNullOrEmpty(product.ProductVariantJSON))
             {
@@ -67,14 +50,16 @@ namespace ECommerce1.Controllers
             {
                 List<ProductImage> productImages = new List<ProductImage>();
                 productImages = JsonSerializer.Deserialize<List<ProductImage>>(product.ProductImageJSON);
-                if (productImages.Any()) {
-                    foreach (var item in productImages) {
+                if (productImages.Any())
+                {
+                    foreach (var item in productImages)
+                    {
                         var _split = item.ImageBase64String.Split(",");
-                        if (_split.Any()) {
+                        if (_split.Any())
+                        {
                             item.Image = _split[1]; //Get Base64String only.
                         }
                     }
-
                 }
 
                 product.ProductImages = productImages;
@@ -87,6 +72,44 @@ namespace ECommerce1.Controllers
             _service.CreateProduct(product);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost, ActionName("DeleteProduct")]
+        public async Task<IActionResult> DeleteConfirmed(long id)
+        {
+            var productDetails = await _service.GetProductById(id);
+            if (productDetails == null) return View("NotFound");
+
+            await _service.DeleteProduct(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteProduct(long id)
+        {
+            var productDetails = await _service.GetProductById(id);
+            if (productDetails == null) return View("NotFound");
+
+            return View(productDetails);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var data = await _service.GetAllProducts();
+
+            foreach (var item in data)
+            {
+                if (item.ProductVariants != null && item.ProductVariants.Any())
+                {
+                    item.StockQty = item.ProductVariants.Sum(x => x.Quantity);
+                }
+            }
+
+            ViewBag.InStock = data.Where(x => x.StatusId == (int)StockStatusEnum.InStock).ToList().Count();
+            ViewBag.OutOfStock = data.Where(x => x.StatusId == (int)StockStatusEnum.OutOfStock).ToList().Count();
+            ViewBag.Critical = 0;
+
+            return View(data);
         }
 
         public async Task<IActionResult> UpdateProduct(long id)
@@ -140,26 +163,6 @@ namespace ECommerce1.Controllers
             }
 
             await _service.UpdateProduct(id, product);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        public async Task<IActionResult> DeleteProduct(long id)
-        {
-            var productDetails = await _service.GetProductById(id);
-            if (productDetails == null) return View("NotFound");
-
-            return View(productDetails);
-        }
-
-        [HttpPost, ActionName("DeleteProduct")]
-        public async Task<IActionResult> DeleteConfirmed(long id)
-        {
-            var productDetails = await _service.GetProductById(id);
-            if (productDetails == null) return View("NotFound");
-
-            await _service.DeleteProduct(id);
 
             return RedirectToAction(nameof(Index));
         }
