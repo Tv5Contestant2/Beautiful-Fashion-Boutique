@@ -163,5 +163,14 @@ namespace ECommerce1.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> ViewProduct(long id)
+        {
+            var _product = await _service.GetProductById(id);
+            if (_product == null) return View("NotFound");
+
+            _service.InitializeProductOnUpdate(_product);
+
+            return View(_product);
+        }
     }
 }

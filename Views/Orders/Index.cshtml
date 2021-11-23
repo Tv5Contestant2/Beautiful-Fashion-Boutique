@@ -1,137 +1,157 @@
-﻿@model IEnumerable<OrderDetails>
+﻿
+@model IEnumerable<OrderDetails>
 
 @{
     ViewData["Title"] = "Order Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container-fluid main-container">
-    <div class="row">
-        <h2>Order Management</h2>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h4 class="m-0">Order Management</h4>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right px-3 py-2">
+                        <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
-
-    @*Search*@
-    <div class="row">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" style="width:350px">
-            <div class="col">
-                @*<a asp-controller="Orders" asp-action="UpdateOrder" class="btn btn-info float-right" type="button">
-                    <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Manage Order
-                </a>*@
-                <button id="btnGrid" class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
-                <button id="btnThumbnail" class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-3" style="margin-left: -30px" width="auto">
-        <div class="col-9">
-            @*Grid View*@
-            <div id="dvGrid" class="table-responsive-md">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Order Id</th>
-                            <th>Customer Name</th>
-                            <th>Mode of Payment</th>
-                            <th>Status</th>
-                            <th>Delivery Status</th>
-                            <th>Order Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                        <tr>
-                            <td>@item.TransactionId</td>
-                            <td>@item.CustomerName</td>
-                            <td>@item.ModeOfPayment</td>
-                            <td>
-                                <span class="status text-success">&bull;</span> Confirmed
-                            </td>
-                            <td><span class="status text-success">&bull;</span> Confirmed</td>
-                            <td>@item.OrderDate</td>
-                            <td>
-                                <a asp-action="UpdateOrder" asp-route-id="@item.Id"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
-                                @*<a asp-action="DeleteProduct" asp-route-id="@item.Id"><i class="fas fa-trash-alt">&#xE5C9;</i></a>*@
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-                <div class="clearfix">
-                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                    <ul class="pagination">
-                        <li class="page-item disabled"><a href="#">Previous</a></li>
-                        <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                    </ul>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <input id="inptSearch" class="form-control w-50" placeholder="Search" />
+                <div class="col">
+                    <button id="btnGrid" class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
                 </div>
             </div>
-        </div>
 
-
-        @*Statistics*@
-        <div class="col-md-3">
-            <div class="card card-stats">
-                <div class="card-title m-auto">
-                    <span class="h2 font-weight-bold">Stock Count</span>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        @*Delivered*@
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                <i class="fas fa-thumbs-up"></i>
-                            </div>
-                        </div>
-                        <div class="col col-auto mb-3">
-                            <span class="card-title text-uppercase text-muted mb-0">Delivered <br /></span>
-                            <span class="h2 font-weight-bold mb-0">0</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        @*In-Transit*@
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                <i class="fas fa-sync-alt"></i>
-                            </div>
-                        </div>
-                        <div class="col col-auto mb-3">
-                            <h5 class="card-title text-uppercase text-muted mb-0">In-Transit</h5>
-                            <span class="h2 font-weight-bold mb-0">0</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        @*Out For Delivery*@
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                        </div>
-                        <div class="col col-auto mb-3">
-                            <h5 class="card-title text-uppercase text-muted mb-0">Out For Delivery</h5>
-                            <span class="h2 font-weight-bold mb-0">0</span>
+            <div class="row mt-3" style="margin-left: -30px" width="auto">
+                <div class="col-9">
+                    @*Grid View*@
+                    <div id="dvGrid" class="table-responsive-md">
+                        <table id="dtOrderList" name="dtOrderList" class="table table-hover table-fixed">
+                            <thead>
+                                <tr>
+                                    <th>Order Id</th>
+                                    <th>Customer Name</th>
+                                    <th>Mode of Payment</th>
+                                    <th>Status</th>
+                                    <th>Delivery Status</th>
+                                    <th>Order Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.TransactionId</td>
+                                        <td>@item.CustomerName</td>
+                                        <td>@item.ModeOfPayment</td>
+                                        <td>
+                                            <span class="status text-success">&bull;</span> Confirmed
+                                        </td>
+                                        <td><span class="status text-success">&bull;</span> Confirmed</td>
+                                        <td>@item.OrderDate</td>
+                                        <td class="col-sm-2">
+                                            <a asp-action="ViewOrder" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="View"><i class="fas fa-eye">&#xE5C9;</i></a>
+                                            <a asp-action="UpdateOrder" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edit"><small><i class="fas fa-pencil-alt">&#xE8B8;</i></small></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="clearfix">
+                            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a href="#">Previous</a></li>
+                                <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                                <li class="page-item"><a href="#" class="page-link">2</a></li>
+                                <li class="page-item"><a href="#" class="page-link">3</a></li>
+                                <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+
+                @*Statistics*@
+                <div class="col-md-3">
+                    <div class="card card-stats">
+                        <div class="card-title m-auto py-2">
+                            <span class="h5 font-weight-bold">Delivery Status</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                @*Delivered*@
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                        <i class="fas fa-thumbs-up"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-auto mb-3">
+                                    <h6 class="card-title text-uppercase text-muted mb-0">Delivered</h6>
+                                    <span class="h2 font-weight-bold mb-0">0</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @*In-Transit*@
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-auto mb-3">
+                                    <h6 class="card-title text-uppercase text-muted mb-0">In-Transit</h6>
+                                    <span class="h2 font-weight-bold mb-0">0</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @*Out For Delivery*@
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-auto mb-3">
+                                    <h6 class="card-title text-uppercase text-muted mb-0">Out For Delivery</h6>
+                                    <span class="h2 font-weight-bold mb-0">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="position: fixed; bottom: 10px; right: 10px">
+                <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
-    </div>
-    <div style="position: fixed; bottom: 10px; right: 10px">
-        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
-            <i class="fa fa-arrow-up" aria-hidden="true"></i>
-        </button>
-    </div>
+    </section>
 </div>
 
 <script>
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }
     window.onscroll = function () { scrollFunction(); };
+
+    $(document).ready(function () {
+        $("#inptSearch").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#dtOrderList tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
 
     function scrollFunction() {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
