@@ -33,5 +33,8 @@ namespace ECommerce1.ViewModel
         [Required(ErrorMessage = "The Password is required")]
         [DataType(DataType.Password)]
         public string SignInPassword { get; set; }
+
+        public bool isLogInError { get; set; }
+        public bool isSignUpError { get; set; }
     }
 }

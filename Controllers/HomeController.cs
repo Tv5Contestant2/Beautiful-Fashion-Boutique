@@ -46,12 +46,15 @@ namespace ECommerce1.Controllers
             var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
             ViewBag.Cart = cart;
 
-            return View();
+            var _model = new HomeUserViewModel();
+            return View(_model);
         }
 
         [HttpPost]
         public async Task<IActionResult> SignIn([Bind("SignInEmail,SignInPassword")] HomeUserViewModel model)
         {
+            model.isLogInError = false;
+            model.isSignUpError = false;
             var _removeValidation = "FirstName,LastName,Password,Email".Split(",");
             foreach (var _item in _removeValidation)
             {
@@ -74,10 +77,12 @@ namespace ECommerce1.Controllers
                     ViewBag.Cart = cart;
                 }
 
+                model.isLogInError = true;
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
             else
             {
+                model.isLogInError = true;
                 var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
                 ViewBag.Cart = cart;
             }
@@ -101,6 +106,8 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp([Bind("FirstName,LastName,Email,Password,ConfirmPassword")] HomeUserViewModel model)
         {
+            model.isLogInError = false;
+            model.isSignUpError = false;
             var _removeValidation = "SignInEmail,SignInPassword".Split(",");
             foreach (var _item in _removeValidation)
             {
@@ -142,6 +149,7 @@ namespace ECommerce1.Controllers
                 {
                     var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
                     ViewBag.Cart = cart;
+                    model.isSignUpError = true;
                     return View("SignIn", model);
                 }
             }
@@ -149,6 +157,7 @@ namespace ECommerce1.Controllers
             {
                 var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
                 ViewBag.Cart = cart;
+                model.isSignUpError = true;
             }
 
             return View("SignIn", model);

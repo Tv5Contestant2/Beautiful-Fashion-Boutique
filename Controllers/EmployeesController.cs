@@ -44,8 +44,29 @@ namespace ECommerce1.Controllers
 
             model.DateCreated = DateTime.Now;
 
-            await _service.CreateEmployee(model);
-            return RedirectToAction(nameof(Index));
+            var _result = await _service.CreateEmployee(model);
+            if (!_result.Item1)
+            {
+                // If there are any errors, add them to the ModelState object
+                // which will be displayed by the validation summary tag helper
+                foreach (var error in _result.Item2)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View("CreateEmployee", model);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public async Task<IActionResult> Index()

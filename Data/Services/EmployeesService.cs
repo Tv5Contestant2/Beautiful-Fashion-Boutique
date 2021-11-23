@@ -21,7 +21,7 @@ namespace ECommerce1.Data.Services
             _userManager = userManager;
         }
 
-        public async Task CreateEmployee(EmployeeViewModel model)
+        public async Task<(bool, IEnumerable<IdentityError>)> CreateEmployee(EmployeeViewModel model)
         {
             // Copy data from RegisterViewModel to IdentityUser
             var user = new User
@@ -43,6 +43,8 @@ namespace ECommerce1.Data.Services
 
             // Store user data in AspNetUsers database table
             var result = await _userManager.CreateAsync(user, model.Password);
+
+            return (result.Succeeded, result.Errors);
         }
 
         public async Task UpdateEmployee(EmployeeViewModel model)
