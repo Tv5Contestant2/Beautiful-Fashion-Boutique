@@ -1,4 +1,4 @@
-﻿@model Customers
+﻿@model ECommerce1.ViewModel.CustomerViewModel
 
 @{
     ViewData["Title"] = "Add New Customer";
@@ -34,20 +34,20 @@
 
                                     <div class="col col-md-8">
                                         <div>
-                                            <label asp-for="CustomerFirstName" class="control-label"></label>
-                                            <input asp-for="CustomerFirstName" class="form-control" />
-                                            <span asp-validation-for="CustomerFirstName" class="text-danger"></span>
+                                            <label asp-for="FirstName" class="control-label"></label>
+                                            <input asp-for="FirstName" class="form-control" />
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
 
                                         <div>
-                                            <label asp-for="CustomerLastName" class="control-label"></label>
-                                            <input asp-for="CustomerLastName" class="form-control" />
-                                            <span asp-validation-for="CustomerLastName" class="text-danger"></span>
+                                            <label asp-for="LastName" class="control-label"></label>
+                                            <input asp-for="LastName" class="form-control" />
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
                                         </div>
 
                                         <div>
-                                            <label asp-for="CustomerBirthday" class="control-label"></label>
-                                            <input asp-for="CustomerBirthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+                                            <label asp-for="Birthday" class="control-label"></label>
+                                            <input asp-for="Birthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
                                         </div>
 
                                         <div>
@@ -61,17 +61,15 @@
 
                                     <div class="col col-md-4">
                                         <div class="row form-group">
-
-                                            <div class="col col-md-4">
-                                                <img id="ImagePreview" src="~/images/default-avatar.jpg" style="width:15em; height:15em" />
+                                            <div class="form-group">
+                                                <input id="inptImageUpload" type="file" accept="image/*" name="image" />
+                                                <input id="inptImageFileName" type="text" style="display:none;" />
                                             </div>
-
-                                            <div class="col col-md-8">
-                                                <div class="custom-file">
-                                                    <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                            <div class="form-group">
+                                                <img id="imgOutput" src="@string.Format("data:image/jpeg;base64,{0}", Model.Image)" width="200" />
+                                                <div style="display: none;">
+                                                    <input id="Image" asp-for="Image" class="form-control" />
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -94,42 +92,48 @@
                                     <div class="row col-md-12">
                                         <div class="col col-md-6">
                                             <div class="form-group">
-                                                <label asp-for="CustomerEmail" class="control-label"></label>
-                                                <input asp-for="CustomerEmail" class="form-control" />
-                                                <span asp-validation-for="CustomerEmail" class="text-danger"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="col col-md-6">
-                                            <div class="form-group">
-                                                <label asp-for="CustomerPass" class="control-label"></label>
-                                                <input asp-for="CustomerPass" class="form-control" type="password" />
-                                                <span asp-validation-for="CustomerPass" class="text-danger"></span>
+                                                <label asp-for="Email" class="control-label"></label>
+                                                <input asp-for="Email" class="form-control" />
+                                                <span asp-validation-for="Email" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row col-md-12">
+                                        <div class="col col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="Password" class="control-label"></label>
+                                                <input asp-for="Password" class="form-control" type="password" />
+                                                <span asp-validation-for="Password" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="ConfirmPassword" class="control-label"></label>
+                                                <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="row col-md-12">
                                         <div class="col">
                                             <div class="form-group">
-                                                <label asp-for="CustomerBlock" class="control-label"></label>
-                                                <input asp-for="CustomerBlock" class="form-control" />
-                                                <span asp-validation-for="CustomerBlock" class="text-danger"></span>
+                                                <label asp-for="AddressBlock" class="control-label"></label>
+                                                <input asp-for="AddressBlock" class="form-control" />
+                                                <span asp-validation-for="AddressBlock" class="text-danger"></span>
 
+                                                <label asp-for="AddressLot" class="control-label"></label>
+                                                <input asp-for="AddressLot" class="form-control" />
+                                                <span asp-validation-for="AddressLot" class="text-danger"></span>
 
-                                                <label asp-for="CustomerLot" class="control-label"></label>
-                                                <input asp-for="CustomerLot" class="form-control" />
-                                                <span asp-validation-for="CustomerLot" class="text-danger"></span>
+                                                <label asp-for="AddressBaranggay" class="control-label"></label>
+                                                <input asp-for="AddressBaranggay" class="form-control" />
+                                                <span asp-validation-for="AddressBaranggay" class="text-danger"></span>
 
-
-                                                <label asp-for="CustomerBaranggay" class="control-label"></label>
-                                                <input asp-for="CustomerBaranggay" class="form-control" />
-                                                <span asp-validation-for="CustomerBaranggay" class="text-danger"></span>
-
-
-                                                <label asp-for="CustomerCity" class="control-label"></label>
-                                                <input asp-for="CustomerCity" class="form-control" />
-                                                <span asp-validation-for="CustomerCity" class="text-danger"></span>
-
+                                                <label asp-for="AddressCity" class="control-label"></label>
+                                                <input asp-for="AddressCity" class="form-control" />
+                                                <span asp-validation-for="AddressCity" class="text-danger"></span>
 
                                                 <label asp-for="ContactNumber" class="control-label"></label>
                                                 <input asp-for="ContactNumber" class="form-control" />
@@ -154,6 +158,26 @@
             output.src = $(this).val();
         });
 
+        var inptImageUpload = document.querySelector("#inptImageUpload");
+
+        // listen for the change event so we can capture the file
+        inptImageUpload.addEventListener("change", (e) => {
+            // get a reference to the file
+            const file = e.target.files[0];
+
+            // encode the file using the FileReader API
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result
+                    .replace("data:", "")
+                    .replace(/^.+,/, "");
+
+                document.getElementById('imgOutput').setAttribute('src', reader.result);
+                document.getElementById("Image").value = reader.result;
+
+            };
+            reader.readAsDataURL(file);
+            document.getElementById('inptImageFileName').value = file.name;
+        });
     </script>
 }
-

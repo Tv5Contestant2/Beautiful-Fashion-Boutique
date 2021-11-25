@@ -80,6 +80,7 @@ namespace ECommerce1
             services.AddScoped<IProductCategoriesService, ProductCategoriesService>();
             services.AddScoped<IPromotionsService, PromotionsService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICommonServices, CommonServices>();
 
             services.AddControllersWithViews();
         }
