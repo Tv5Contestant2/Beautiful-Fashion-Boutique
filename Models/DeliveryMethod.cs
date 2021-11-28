@@ -2,7 +2,7 @@
 
 namespace ECommerce1.Models
 {
-    public class PaymentMethod
+    public class DeliveryMethod
     {
         [Key]
         public int Id { get; set; }

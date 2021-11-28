@@ -15,44 +15,46 @@ namespace ECommerce1.Data.Services
         {
             _context = context;
         }
-        public bool AddToOrder(OrderDetails order)
+        public bool AddToOrder(Orders order)
         {
-            _context.OrdersDetails.Add(order);
+            _context.Orders.Add(order);
             _context.SaveChanges();
 
             return true;
         }
 
-        public async Task<IEnumerable<OrderDetails>> GetAllOrders()
+        public async Task<IEnumerable<Orders>> GetAllOrders()
         {
-            var result = await _context.OrdersDetails.ToListAsync();
+            var result = await _context.Orders.ToListAsync();
 
-            List<OrderDetails> orders = result.GroupBy(x => x.TransactionId)
-                .Select(x => new OrderDetails
-                {
-                    TransactionId = x.First().TransactionId,
-                    ItemSubTotal = x.Sum(x => x.ItemSubTotal),
-                    OrderDate = x.First().OrderDate,
-                    CustomerName = "Test Customer",
-                    ModeOfPayment = "Pay On Delivery"
-                }).ToList();
+            //List<Orders> orders = result.GroupBy(x => x.TransactionId)
+            //    .Select(x => new Orders
+            //    {
+            //        TransactionId = x.First().TransactionId,
+            //        Total = x.Sum(x => x.OrderDetails.ItemSubTotal),
+            //        OrderDate = x.First().OrderDate,
+            //        CustomerName = "Test Customer",
+            //        ModeOfPayment = "Pay On Delivery"
+            //    }).ToList();
 
-            return orders;
+            //return orders;
+            return result;
         }
 
-        public async Task<IEnumerable<OrderDetails>> GetAllOrdersByUser()
+        public async Task<IEnumerable<Orders>> GetAllOrdersByUser()
         {
-            var result = await _context.OrdersDetails.ToListAsync();
+            var result = await _context.Orders.ToListAsync();
 
-            List<OrderDetails> orders = result.GroupBy(x => x.TransactionId)
-                .Select(x => new OrderDetails
-                {
-                    TransactionId = x.First().TransactionId,
-                    ItemSubTotal = x.Sum(x => x.ItemSubTotal),
-                    OrderDate = x.First().OrderDate
-                }).ToList();
+            //List<Orders> orders = result.GroupBy(x => x.TransactionId)
+            //    .Select(x => new Orders
+            //    {
+            //        TransactionId = x.First().TransactionId,
+            //        ItemSubTotal = x.Sum(x => x.ItemSubTotal),
+            //        OrderDate = x.First().OrderDate
+            //    }).ToList();
 
-            return orders;
+            //return orders;
+            return result;
         }
     }
 }

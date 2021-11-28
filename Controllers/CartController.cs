@@ -5,6 +5,7 @@ using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -85,22 +86,32 @@ namespace ECommerce1.Controllers
 
             var result = false;
             Guid transactionId = Guid.NewGuid();
+            List<OrderDetails> orderDetails = new List<OrderDetails>();
+
             foreach (var item in cart) {
 
-                var order = new OrderDetails()
+                var _orderDetails = new OrderDetails
                 {
                     TransactionId = transactionId,
                     ProductId = item.ProductId,
-                    ItemQuantity = item.Quantity,
-                    ItemSubTotal = (item.Quantity * item.Product.Price),
-                    CustomerName = "Test Customer",
-                    ModeOfPayment = "Cash",
-                    OrderDate = DateTime.Now
+                    Quantity = item.Quantity,
+                    SubTotal = (item.Quantity * item.Product.Price),
                 };
 
-               result = _orderService.AddToOrder(order);
+                orderDetails.Add(_orderDetails);
             }
 
+            var order = new Orders()
+            {
+                TransactionId = transactionId,
+                CustomerUserId = "1111111111111111",
+                ModeOfPayment = 1,
+                OrderDate = DateTime.Now,
+                OrderDetails = orderDetails
+            };
+
+            result = _orderService.AddToOrder(order);
+            
             if (result)
                 await _service.EmptyCart(); //temporary only
 

@@ -60,6 +60,48 @@ namespace ECommerce1.Data
                 }
                 #endregion Customers
 
+                #region Delivery Method
+                if (!context.DeliveryMethods.Any())
+                {
+                    context.DeliveryMethods.AddRange(new List<DeliveryMethod>()
+                    {
+                        new DeliveryMethod()
+                        {
+                            Title = "Delivery"
+                        },
+                        new DeliveryMethod()
+                        {
+                            Title = "Store Pick-up"
+                        },
+                    });
+
+                    context.SaveChanges();
+                }
+                #endregion Delivery Method
+
+                #region Delivery Status
+                if (!context.DeliveryStatuses.Any())
+                {
+                    context.DeliveryStatuses.AddRange(new List<DeliveryStatus>()
+                    {
+                        new DeliveryStatus()
+                        {
+                            Title = "Out For Delivery"
+                        },
+                        new DeliveryStatus()
+                        {
+                            Title = "In-transit"
+                        },
+                        new DeliveryStatus()
+                        {
+                            Title = "Delivered"
+                        },
+                    });
+
+                    context.SaveChanges();
+                }
+                #endregion Delivery Status
+
                 #region Employees
                 if (!context.Employees.Any())
                 {
@@ -97,6 +139,52 @@ namespace ECommerce1.Data
                     context.SaveChanges();
                 }
                 #endregion Gender
+
+                #region Order Status
+                if (!context.OrderStatuses.Any())
+                {
+                    context.OrderStatuses.AddRange(new List<OrderStatus>()
+                    {
+                       new OrderStatus()
+                        {
+                            Title = "Created"
+                        },
+                        new OrderStatus()
+                        {
+                            Title = "Received"
+                        },
+                        new OrderStatus()
+                        {
+                            Title = "Cancelled"
+                        },
+                    });
+
+                    context.SaveChanges();
+                }
+                #endregion Order Status
+
+                #region Payment Method
+                if (!context.PaymentMethods.Any())
+                {
+                    context.PaymentMethods.AddRange(new List<PaymentMethod>()
+                    {
+                        new PaymentMethod()
+                        {
+                            Title = "Cash On Delivery"
+                        },
+                        new PaymentMethod()
+                        {
+                            Title = "Pay Maya"
+                        },
+                        new PaymentMethod()
+                        {
+                            Title = "GCash"
+                        },
+                    });
+
+                    context.SaveChanges();
+                }
+                #endregion Payment Method
 
                 #region Product Category
                 if (!context.ProductCategories.Any())
@@ -175,7 +263,7 @@ namespace ECommerce1.Data
 
                     context.SaveChanges();
                 }
-                #endregion Status
+                #endregion Sizes
 
                 #region Status
                 if (!context.Statuses.Any())

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ECommerce1.Migrations
 {
-    public partial class initmig : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -118,6 +118,71 @@ namespace ECommerce1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CustomersBillingAddress",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Block = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lot = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Barangay = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomersBillingAddress", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomersShippingAddress",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Block = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lot = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Barangay = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomersShippingAddress", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeliveryMethods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryMethods", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeliveryStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
@@ -180,32 +245,46 @@ namespace ECommerce1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payment",
+                name: "OrderStatuses",
                 columns: table => new
                 {
-                    PaymentID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeID = table.Column<int>(type: "int", nullable: false),
-                    CustomerID = table.Column<int>(type: "int", nullable: false),
-                    MethodID = table.Column<int>(type: "int", nullable: false),
-                    TransactionID = table.Column<int>(type: "int", nullable: false)
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Payment", x => x.PaymentID);
+                    table.PrimaryKey("PK_OrderStatuses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PaymentMethod",
+                name: "Payment",
                 columns: table => new
                 {
-                    MethodID = table.Column<int>(type: "int", nullable: false)
+                    PaymentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PayMethod = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    PaymentMethodId = table.Column<int>(type: "int", nullable: false),
+                    TransactionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PaymentMethod", x => x.MethodID);
+                    table.PrimaryKey("PK_Payment", x => x.PaymentId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentMethods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethods", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -447,6 +526,33 @@ namespace ECommerce1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TaxAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ShippingFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ModeOfPayment = table.Column<int>(type: "int", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderStatusId = table.Column<int>(type: "int", nullable: false),
+                    CustomersId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_CustomersId",
+                        column: x => x.CustomersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Carts",
                 columns: table => new
                 {
@@ -516,31 +622,6 @@ namespace ECommerce1.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrdersDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    ItemQuantity = table.Column<int>(type: "int", nullable: false),
-                    ItemSubTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ModeOfPayment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrdersDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrdersDetails_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -646,6 +727,60 @@ namespace ECommerce1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrdersDetails",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    SubTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OrdersId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrdersDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrdersDetails_Orders_OrdersId",
+                        column: x => x.OrdersId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrdersDetails_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderShippingInfo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerBillingAddressId = table.Column<int>(type: "int", nullable: false),
+                    CustomerShippingAddressId = table.Column<int>(type: "int", nullable: false),
+                    DeliveryMethodId = table.Column<int>(type: "int", nullable: false),
+                    IsCashOnDelivery = table.Column<bool>(type: "bit", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrdersId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderShippingInfo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderShippingInfo_Orders_OrdersId",
+                        column: x => x.OrdersId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductVariants",
                 columns: table => new
                 {
@@ -739,9 +874,24 @@ namespace ECommerce1.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_CustomersId",
+                table: "Orders",
+                column: "CustomersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdersDetails_OrdersId",
+                table: "OrdersDetails",
+                column: "OrdersId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrdersDetails_ProductId",
                 table: "OrdersDetails",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderShippingInfo_OrdersId",
+                table: "OrderShippingInfo",
+                column: "OrdersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductCategories_ProductId",
@@ -811,6 +961,18 @@ namespace ECommerce1.Migrations
                 name: "Carts");
 
             migrationBuilder.DropTable(
+                name: "CustomersBillingAddress");
+
+            migrationBuilder.DropTable(
+                name: "CustomersShippingAddress");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryMethods");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryStatuses");
+
+            migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
@@ -826,10 +988,16 @@ namespace ECommerce1.Migrations
                 name: "OrdersDetails");
 
             migrationBuilder.DropTable(
+                name: "OrderShippingInfo");
+
+            migrationBuilder.DropTable(
+                name: "OrderStatuses");
+
+            migrationBuilder.DropTable(
                 name: "Payment");
 
             migrationBuilder.DropTable(
-                name: "PaymentMethod");
+                name: "PaymentMethods");
 
             migrationBuilder.DropTable(
                 name: "ProductCategories");
@@ -865,16 +1033,19 @@ namespace ECommerce1.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Colors");
 
             migrationBuilder.DropTable(
                 name: "Sizes");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Products");

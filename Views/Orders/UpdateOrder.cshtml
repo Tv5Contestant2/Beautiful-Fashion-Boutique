@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OrderDetails>
+﻿@model IEnumerable<Orders>
 
 @{
     ViewData["Title"] = "Manage Order";
@@ -31,7 +31,7 @@
                         {
                         <tr>
                             <td>@item.TransactionId</td>
-                            <td>@item.CustomerName</td>
+                            <td>@item.Customers.FirstName</td>
                             <td>@item.ModeOfPayment</td>
                             <td>
                                 <span class="status text-success">&bull;</span> Confirmed

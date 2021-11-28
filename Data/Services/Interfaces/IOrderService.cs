@@ -6,11 +6,11 @@ namespace ECommerce1.Data.Services.Interfaces
 {
     public interface IOrderService
     {
-        public bool AddToOrder(OrderDetails orders);
+        public bool AddToOrder(Orders orders);
 
-        public Task<IEnumerable<OrderDetails>> GetAllOrders();
+        public Task<IEnumerable<Orders>> GetAllOrders();
 
-        public Task<IEnumerable<OrderDetails>> GetAllOrdersByUser(); //temporary parameterless
+        public Task<IEnumerable<Orders>> GetAllOrdersByUser(); //temporary parameterless
 
     }
 }

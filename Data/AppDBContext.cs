@@ -20,6 +20,14 @@ namespace ECommerce1.Data
 
         public DbSet<Customers> Customers { get; set; }
 
+        public DbSet<CustomersBillingAddress> CustomersBillingAddress { get; set; }
+
+        public DbSet<CustomersShippingAddress> CustomersShippingAddress { get; set; }
+
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+
+        public DbSet<DeliveryStatus> DeliveryStatuses { get; set; }
+
         public DbSet<Employees> Employees { get; set; }
 
         public DbSet<Gender> Genders { get; set; }
@@ -28,11 +36,15 @@ namespace ECommerce1.Data
 
         public DbSet<Notification> Notifications { get; set; }
 
+        public DbSet<Orders> Orders { get; set; }
+
         public DbSet<OrderDetails> OrdersDetails { get; set; }
+
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
 
         public DbSet<Payment> Payment { get; set; }
 
-        public DbSet<PaymentMethod> PaymentMethod { get; set; }
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
 
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
