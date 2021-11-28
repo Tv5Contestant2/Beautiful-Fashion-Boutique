@@ -1,4 +1,6 @@
 ﻿using ECommerce1.Models;
+using ECommerce1.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,20 +8,24 @@ namespace ECommerce1.Data.Services.Interfaces
 {
     public interface ICustomersService
     {
-        Customers InitializeCustomer();
+        CustomerViewModel InitializeCustomer();
 
-        public void CreateCustomer(Customers customer);
+        Task<(bool, IEnumerable<IdentityError>)> CreateCustomer(CustomerViewModel model);
 
-        public Task<Customers> UpdateCustomer(long id, Customers customer);
+        Task UpdateCustomer(CustomerViewModel model);
 
-        public Task DeleteCustomer(long id);
+        Task<User> GetCustomerById(string id);
 
-        public Task<IEnumerable<Customers>> GetAllCustomers();
+        Task DeleteCustomer(string id);
 
-        public Task<Customers> GetCustomerById(long id);
+        Task<IEnumerable<Gender>> GetGenders();
 
-        public Task<IEnumerable<Customers>> GetAllCustomersByGender(int genderId);
+        Task UpdateCustomer(User model);
 
-        public Task<IEnumerable<Customers>> GetAllBlockCustomers();
+        Task<IEnumerable<User>> GetAllCustomers();
+
+        Task<IEnumerable<User>> GetAllCustomersByGender(int genderId);
+
+        Task<IEnumerable<User>> GetAllBlockCustomers();
     }
 }

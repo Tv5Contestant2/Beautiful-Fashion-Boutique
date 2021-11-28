@@ -1,9 +1,8 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
-using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -12,26 +11,28 @@ namespace ECommerce1.Controllers
     public class CustomersController : Controller
     {
         private readonly ICustomersService _service;
+        public readonly ICommonServices _commonServices;
 
-        public CustomersController(ICustomersService service)
+        public CustomersController(ICustomersService service, ICommonServices commonServices)
         {
             _service = service;
+            _commonServices = commonServices;
         }
 
         [HttpPost, ActionName("BlockCustomer")]
-        public async Task<IActionResult> BlockConfirmed(long id)
+        public async Task<IActionResult> BlockConfirmed(string id)
         {
             var customer = await _service.GetCustomerById(id);
             if (customer == null) return View("NotFound");
 
             customer.IsBlock = true;
 
-            await _service.UpdateCustomer(id, customer);
+            await _service.UpdateCustomer(customer);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> BlockCustomer(long id)
+        public async Task<IActionResult> BlockCustomer(string id)
         {
             var customerDetails = await _service.GetCustomerById(id);
             if (customerDetails == null) return View("NotFound");
@@ -48,53 +49,66 @@ namespace ECommerce1.Controllers
         public IActionResult CreateCustomer()
         {
             var viewModel = _service.InitializeCustomer();
+            if (string.IsNullOrEmpty(viewModel.Image)) viewModel.Image = _commonServices.NoImage;
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCustomer([Bind("CustomerFirstName,CustomerLastName,ImageFile")] Customers customers)
+        public async Task<IActionResult> CreateCustomer([Bind] CustomerViewModel model)
         {
-            await Task.Delay(0);
+            if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
             if (!ModelState.IsValid)
             {
-                var _result = _service.InitializeCustomer();
-                if (customers.Genders == null) customers.Genders = _result.Genders;
-                return View(customers);
+                model.Genders = await _service.GetGenders();
+                return View(model);
             }
 
-            if (customers.ImageFile != null)
+            model.DateCreated = DateTime.Now;
+
+            var _result = await _service.CreateCustomer(model);
+            if (!_result.Item1)
             {
-                using (var ms = new MemoryStream())
+                // If there are any errors, add them to the ModelState object
+                // which will be displayed by the validation summary tag helper
+                foreach (var error in _result.Item2)
                 {
-                    customers.ImageFile.CopyTo(ms);
-                    var fileBytes = ms.ToArray();
-                    customers.Image = Convert.ToBase64String(fileBytes);
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View("CreateCustomer", model);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index));
                 }
             }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
 
-            customers.DateCreated = DateTime.Now;
+        public async Task<IActionResult> DeleteCustomer(string id)
+        {
+            var _customer = await _service.GetCustomerById(id);
+            if (_customer == null) return View("NotFound");
 
-            _service.CreateCustomer(customers);
-            return RedirectToAction(nameof(Index));
+            return View(_customer);
         }
 
         [HttpPost, ActionName("DeleteCustomer")]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+        public async Task<IActionResult> DeleteCustomerConfirmed(string id)
         {
-            var customerDetails = await _service.GetCustomerById(id);
-            if (customerDetails == null) return View("NotFound");
+            var _employee = await _service.GetCustomerById(id);
+            if (_employee == null) return View("NotFound");
 
             await _service.DeleteCustomer(id);
-            return RedirectToAction(nameof(Index));
-        }
 
-        public async Task<IActionResult> DeleteCustomer(long id)
-        {
-            var customerDetails = await _service.GetCustomerById(id);
-            if (customerDetails == null) return View("NotFound");
-            return View(customerDetails);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Index()
@@ -110,19 +124,19 @@ namespace ECommerce1.Controllers
         }
 
         [HttpPost, ActionName("UnBlockCustomer")]
-        public async Task<IActionResult> UnBlockConfirmed(long id)
+        public async Task<IActionResult> UnBlockConfirmed(string id)
         {
             var customer = await _service.GetCustomerById(id);
             if (customer == null) return View("NotFound");
 
             customer.IsBlock = false;
 
-            await _service.UpdateCustomer(id, customer);
+            await _service.UpdateCustomer(customer);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> UnBlockCustomer(long id)
+        public async Task<IActionResult> UnBlockCustomer(string id)
         {
             var customerDetails = await _service.GetCustomerById(id);
             if (customerDetails == null) return View("NotFound");
@@ -130,25 +144,45 @@ namespace ECommerce1.Controllers
             return View(customerDetails);
         }
 
-        public async Task<IActionResult> UpdateCustomer(long id)
+        [HttpGet]
+        public async Task<IActionResult> UpdateCustomer(string id)
         {
-            var customerDetails = await _service.GetCustomerById(id);
-            if (customerDetails == null) return View("NotFound");
+            var _customer = await _service.GetCustomerById(id);
+            var _customerViewModel = new CustomerViewModel
+            {
+                AddressBaranggay = _customer.AddressBaranggay,
+                AddressBlock = _customer.AddressBlock,
+                AddressCity = _customer.AddressCity,
+                AddressLot = _customer.AddressLot,
+                Birthday = (DateTime)_customer.Birthday,
+                ContactNumber = _customer.ContactNumber,
+                DateCreated = (DateTime)_customer.DateCreated,
+                Email = _customer.Email,
+                FirstName = _customer.FirstName,
+                GenderId = _customer.GenderId,
+                Genders = await _service.GetGenders(),
+                Id = _customer.Id,
+                Image = _customer.Image,
+                LastName = _customer.LastName,
+            };
 
-            ViewBag.CustomerRepo = _service.InitializeCustomer();
-
-            return View(customerDetails);
+            return View(_customerViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateCustomer(long id, Customers customers)
+        public async Task<IActionResult> UpdateCustomer([Bind] CustomerViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (string.IsNullOrEmpty(model.Password)) //Do not update password if empty
             {
-                return View(customers);
+                ModelState.Remove("Password");
+                ModelState.Remove("ConfirmPassword");
             }
-            await _service.UpdateCustomer(id, customers);
 
+            if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
+
+            if (!ModelState.IsValid) return View(model);
+
+            await _service.UpdateCustomer(model);
             return RedirectToAction(nameof(Index));
         }
     }

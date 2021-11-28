@@ -26,19 +26,19 @@ namespace ECommerce1.Data.Services
             // Copy data from RegisterViewModel to IdentityUser
             var user = new User
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                UserName = model.Email,
-                Email = model.Email,
-                IsEmployee = true,
-                Birthday = model.Birthday,
-                AddressBlock = model.AddressBlock,
-                AddressLot = model.AddressLot,
-                AddressCity = model.AddressCity,
                 AddressBaranggay = model.AddressBaranggay,
+                AddressBlock = model.AddressBlock,
+                AddressCity = model.AddressCity,
+                AddressLot = model.AddressLot,
+                Birthday = model.Birthday,
                 ContactNumber = model.ContactNumber,
                 DateCreated = model.DateCreated,
+                Email = model.Email,
+                FirstName = model.FirstName,
                 Image = model.Image,
+                IsEmployee = true,
+                LastName = model.LastName,
+                UserName = model.Email,
             };
 
             // Store user data in AspNetUsers database table

@@ -39,8 +39,14 @@ namespace ECommerce1.Models
 
         public string Image { get; set; }
 
+        [Display(Name = "Gender")]
+        public int? GenderId { get; set; }
+
         [NotMapped]
         [Display(Name = "Upload Image")]
         public IFormFile ImageFile { get; set; }
+
+        [Display(Name = "Blocked")]
+        public bool? IsBlock { get; set; }
     }
 }
