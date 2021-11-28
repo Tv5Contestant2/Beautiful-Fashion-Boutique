@@ -3,6 +3,7 @@ using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -15,21 +16,25 @@ namespace ECommerce1.Controllers
         private readonly ICartService _cartService;
         private readonly IProductCategoriesService _productCategoriesService;
         private readonly IProductsService _service;
+        private readonly UserManager<User> _userManager;
 
         public StoreFrontController(IProductsService service,
             IProductCategoriesService productCategoriesService,
             IAdministratorService administratorService,
+            UserManager<User> userManager,
             ICartService cartService)
         {
             _service = service;
             _administratorService = administratorService;
             _productCategoriesService = productCategoriesService;
             _cartService = cartService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> AboutUs()
         {
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _cartService.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             var result = _administratorService.GetAboutUs();
@@ -38,7 +43,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ContactUs()
         {
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _cartService.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             var result = _administratorService.GetContactUs();
@@ -53,7 +59,8 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
 
             var cart = new Cart();
-            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.Cart = await _cartService.GetCartItems(userId);
             ViewBag.Products = products;
 
             return View(cart);
@@ -67,7 +74,8 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
 
             var cart = new Cart();
-            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.Cart = await _cartService.GetCartItems(userId);
             ViewBag.Products = products;
 
             return View(cart);
@@ -81,7 +89,8 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
 
             var cart = new Cart();
-            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.Cart = await _cartService.GetCartItems(userId);
             ViewBag.Products = products;
 
             return View(cart);
@@ -95,7 +104,8 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
 
             var cart = new Cart();
-            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.Cart = await _cartService.GetCartItems(userId);
             ViewBag.Products = products;
 
             return View(cart);
@@ -107,7 +117,8 @@ namespace ECommerce1.Controllers
             if (productDetails == null) return View("NotFound");
 
             var cart = new Cart();
-            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.Cart = await _cartService.GetCartItems(userId);
             ViewBag.Product = productDetails;
 
             return View(cart);
@@ -121,7 +132,8 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
 
             var cart = new Cart();
-            ViewBag.Cart = await _cartService.GetCacheCartItems(); //include cache id or user id;
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.Cart = await _cartService.GetCartItems(userId);
             ViewBag.Products = products;
 
             return View(cart);

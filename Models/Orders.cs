@@ -9,7 +9,7 @@ namespace ECommerce1.Models
         [Key]
         public long Id { get; set; }
         public Guid TransactionId { get; set; }
-        public string CustomerUserId { get; set; }
+        public string CustomersId { get; set; }
         public decimal Total { get; set; }
         public decimal TaxAmount { get; set; }
         public decimal ShippingFee { get; set; }

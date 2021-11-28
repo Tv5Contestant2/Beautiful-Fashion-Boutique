@@ -43,7 +43,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> SignIn()
         {
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _cartService.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             var _model = new HomeUserViewModel();
@@ -56,6 +57,7 @@ namespace ECommerce1.Controllers
             model.isLogInError = false;
             model.isSignUpError = false;
             var _removeValidation = "FirstName,LastName,Password,Email".Split(",");
+            var userId = _userManager.GetUserId(HttpContext.User);
             foreach (var _item in _removeValidation)
             {
                 ModelState[_item].Errors.Clear();
@@ -73,7 +75,7 @@ namespace ECommerce1.Controllers
                 }
                 else
                 {
-                    var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+                    var cart = await _cartService.GetCartItems(userId);
                     ViewBag.Cart = cart;
                 }
 
@@ -83,7 +85,7 @@ namespace ECommerce1.Controllers
             else
             {
                 model.isLogInError = true;
-                var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+                var cart = await _cartService.GetCartItems(userId);
                 ViewBag.Cart = cart;
             }
 
@@ -98,7 +100,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> SignUp()
         {
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _cartService.GetCartItems(userId);
             ViewBag.Cart = cart;
             return View();
         }
@@ -109,6 +112,7 @@ namespace ECommerce1.Controllers
             model.isLogInError = false;
             model.isSignUpError = false;
             var _removeValidation = "SignInEmail,SignInPassword".Split(",");
+            var userId = _userManager.GetUserId(HttpContext.User);
             foreach (var _item in _removeValidation)
             {
                 ModelState[_item].Errors.Clear();
@@ -147,7 +151,7 @@ namespace ECommerce1.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+                    var cart = await _cartService.GetCartItems(userId);
                     ViewBag.Cart = cart;
                     model.isSignUpError = true;
                     return View("SignIn", model);
@@ -155,7 +159,7 @@ namespace ECommerce1.Controllers
             }
             else
             {
-                var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+                var cart = await _cartService.GetCartItems(userId);
                 ViewBag.Cart = cart;
                 model.isSignUpError = true;
             }
@@ -165,7 +169,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> UnderConstruction()
         {
-            var cart = await _cartService.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _cartService.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             return View();

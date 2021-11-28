@@ -18,10 +18,11 @@ namespace ECommerce1.Data.Services
             _commonServices = commonServices;
         }
 
-        public async Task<IEnumerable<Cart>> GetCacheCartItems()
+        public async Task<IEnumerable<Cart>> GetCartItems(string userId)
         {
             var result = await _context.Carts
                 .Include(x => x.Product).ThenInclude(x => x.ProductImages)
+                .Where(x => x.CustomersId == userId)
                 .ToListAsync();
 
             List<Cart> _cart = result
@@ -56,17 +57,17 @@ namespace ECommerce1.Data.Services
             _context.SaveChanges();
         }
 
-        public async Task RemoveFromCart(long productId)
+        public async Task RemoveFromCart(long productId, string userId)
         {
-            var result = _context.Carts.FirstOrDefault(cart => cart.ProductId == productId);
+            var result = _context.Carts.FirstOrDefault(x => x.ProductId == productId && x.CustomersId == userId);
             _context.Carts.Remove(result);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveAllFromCart(long productId)
+        public async Task RemoveAllFromCart(long productId, string userId)
         {
-            var result = _context.Carts.Where(x => x.ProductId == productId).ToList();
+            var result = _context.Carts.Where(x => x.ProductId == productId && x.CustomersId == userId).ToList();
 
             foreach (var item in result)
             {
@@ -76,9 +77,9 @@ namespace ECommerce1.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task EmptyCart()
+        public async Task EmptyCart(string userId)
         {
-            var result = _context.Carts.ToList();
+            var result = _context.Carts.Where(x => x.CustomersId == userId).ToList();
 
             foreach (var item in result)
             {
@@ -88,10 +89,10 @@ namespace ECommerce1.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Cart> GetCartItemsByProductId(long productId)
+        public async Task<Cart> GetCartItemsByProductId(long productId, string userId)
         {
             var result = await _context.Carts.ToListAsync();
-            return result.Find(x => x.ProductId == productId);
+            return result.Find(x => x.ProductId == productId && x.CustomersId == userId);
         }
     }
 }

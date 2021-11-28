@@ -1,5 +1,7 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,8 +14,10 @@ namespace ECommerce1.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrderService _service;
+        private readonly UserManager<User> _userManager;
 
-        public OrdersController(IOrderService service)
+        public OrdersController(IOrderService service,
+            UserManager<User> userManager)
         {
             _service = service;
         }
@@ -22,6 +26,6 @@ namespace ECommerce1.Controllers
         {
             var result = await _service.GetAllOrders();
             return View(result);
-        }   
+        }
     }
 }

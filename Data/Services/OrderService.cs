@@ -25,35 +25,20 @@ namespace ECommerce1.Data.Services
 
         public async Task<IEnumerable<Orders>> GetAllOrders()
         {
-            var result = await _context.Orders.ToListAsync();
+            var result = await _context.Orders
+                .Include(x => x.Customers)
+                .ToListAsync();
 
-            //List<Orders> orders = result.GroupBy(x => x.TransactionId)
-            //    .Select(x => new Orders
-            //    {
-            //        TransactionId = x.First().TransactionId,
-            //        Total = x.Sum(x => x.OrderDetails.ItemSubTotal),
-            //        OrderDate = x.First().OrderDate,
-            //        CustomerName = "Test Customer",
-            //        ModeOfPayment = "Pay On Delivery"
-            //    }).ToList();
-
-            //return orders;
             return result;
         }
 
-        public async Task<IEnumerable<Orders>> GetAllOrdersByUser()
+        public async Task<IEnumerable<Orders>> GetAllOrdersByUser(string userId)
         {
-            var result = await _context.Orders.ToListAsync();
+            var result = await _context.Orders
+                .Include(x => x.Customers)
+                .Where(x => x.CustomersId == userId)
+                .ToListAsync();
 
-            //List<Orders> orders = result.GroupBy(x => x.TransactionId)
-            //    .Select(x => new Orders
-            //    {
-            //        TransactionId = x.First().TransactionId,
-            //        ItemSubTotal = x.Sum(x => x.ItemSubTotal),
-            //        OrderDate = x.First().OrderDate
-            //    }).ToList();
-
-            //return orders;
             return result;
         }
     }

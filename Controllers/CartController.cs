@@ -1,8 +1,7 @@
-﻿using ECommerce1.Data.Services;
-using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
-using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,17 +15,22 @@ namespace ECommerce1.Controllers
     {
         private readonly ICartService _service;
         private readonly IOrderService _orderService;
+        private readonly UserManager<User> _userManager;
 
-        public CartController(ICartService service,
+        public CartController(
+            UserManager<User> userManager,
+            ICartService service,
             IOrderService orderService)
         {
             _service = service;
-            _orderService = orderService;
+            _orderService = orderService;            
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var cart = await _service.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _service.GetCartItems(userId); 
             ViewBag.Cart = cart;
 
             ViewBag.TotalQty = cart.Sum(x => x.Quantity);
@@ -37,7 +41,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Checkout()
         {
-            var cart = await _service.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _service.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             ViewBag.TotalQty = cart.Sum(x => x.Quantity);
@@ -48,7 +53,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> DeliveryMethod()
         {
-            var cart = await _service.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _service.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             ViewBag.TotalQty = cart.Sum(x => x.Quantity);
@@ -59,7 +65,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> PaymentMethod()
         {
-            var cart = await _service.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _service.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             ViewBag.TotalQty = cart.Sum(x => x.Quantity);
@@ -70,7 +77,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> OrderReview()
         {
-            var cart = await _service.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _service.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             ViewBag.TotalQty = cart.Sum(x => x.Quantity);
@@ -81,7 +89,8 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> OrderConfirmed()
         {
-            var cart = await _service.GetCacheCartItems(); //include cache id or user id
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cart = await _service.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             var result = false;
@@ -104,7 +113,7 @@ namespace ECommerce1.Controllers
             var order = new Orders()
             {
                 TransactionId = transactionId,
-                CustomerUserId = "1111111111111111",
+                CustomersId = userId,
                 ModeOfPayment = 1,
                 OrderDate = DateTime.Now,
                 OrderDetails = orderDetails
@@ -113,19 +122,21 @@ namespace ECommerce1.Controllers
             result = _orderService.AddToOrder(order);
             
             if (result)
-                await _service.EmptyCart(); //temporary only
+                await _service.EmptyCart(userId); //temporary only
 
             return View(cart);
         }
 
         public IActionResult AddToCart(Cart cart)
         {
+            var userId = _userManager.GetUserId(HttpContext.User);
             //temporary only; will optimize later
             for (int ctr = 0; ctr < cart.Quantity; ctr++)
             {
                 var _cart = new Cart()
                 {
                     ProductId = cart.ProductId, //change to variant
+                    CustomersId = userId,
                     Quantity = 1
                 };
 
@@ -137,9 +148,11 @@ namespace ECommerce1.Controllers
 
         public IActionResult AddToCartByQty(long productId)
         {
+            var userId = _userManager.GetUserId(HttpContext.User);
             var _cart = new Cart()
             {
                 ProductId = productId, //change to variant
+                CustomersId = userId,
                 Quantity = 1
             };
 
@@ -150,20 +163,22 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> RemoveFromCartByQty(long id)
         {
-            var cartDetails = await _service.GetCartItemsByProductId(id);
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cartDetails = await _service.GetCartItemsByProductId(id, userId);
             if (cartDetails == null) return View("NotFound");
 
-            await _service.RemoveFromCart(id);
+            await _service.RemoveFromCart(id, userId);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> RemoveFromCart(long id)
         {
-            var cartDetails = await _service.GetCartItemsByProductId(id);
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cartDetails = await _service.GetCartItemsByProductId(id, userId);
             if (cartDetails == null) return View("NotFound");
 
-            var cart = await _service.GetCacheCartItems(); //include cache id or user id
+            var cart = await _service.GetCartItems(userId);
             ViewBag.Cart = cart;
 
             return View(cartDetails);
@@ -172,10 +187,11 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("RemoveFromCart")]
         public async Task<IActionResult> RemoveFromCartConfirmed(long id)
         {
-            var cartDetails = await _service.GetCartItemsByProductId(id);
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var cartDetails = await _service.GetCartItemsByProductId(id, userId);
             if (cartDetails == null) return View("NotFound");
 
-            await _service.RemoveAllFromCart(id);
+            await _service.RemoveAllFromCart(id, userId);
 
             return RedirectToAction(nameof(Index));
         }

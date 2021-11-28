@@ -10,7 +10,7 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<IEnumerable<Orders>> GetAllOrders();
 
-        public Task<IEnumerable<Orders>> GetAllOrdersByUser(); //temporary parameterless
+        public Task<IEnumerable<Orders>> GetAllOrdersByUser(string userId);
 
     }
 }

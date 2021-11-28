@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce1.Models
 {
@@ -15,6 +11,7 @@ namespace ECommerce1.Models
         public int SizeId { get; set; }
         public int GenderId { get; set; }
         public int Quantity { get; set; }
+        public string CustomersId { get; set; }
 
         public Product Product { get; set; }
     }

@@ -6,7 +6,7 @@ namespace ECommerce1.Models
     {
         [Key]
         public int Id { get; set; }
-        public string CustomerUserId { get; set; }
+        public string CustomersId { get; set; }
         public string EmailAddress { get; set; }
         public string Block { get; set; }
         public string Lot { get; set; }
