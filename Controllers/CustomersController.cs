@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,13 @@ namespace ECommerce1.Controllers
     {
         private readonly ICustomersService _service;
         public readonly ICommonServices _commonServices;
+        private readonly IUserService _userService;
 
-        public CustomersController(ICustomersService service, ICommonServices commonServices)
+        public CustomersController(ICustomersService service, ICommonServices commonServices, IUserService userService)
         {
             _service = service;
             _commonServices = commonServices;
+            _userService = userService;
         }
 
         [HttpPost, ActionName("BlockCustomer")]
@@ -38,6 +41,12 @@ namespace ECommerce1.Controllers
             if (customerDetails == null) return View("NotFound");
 
             return View(customerDetails);
+        }
+
+        public async Task<IActionResult> ArchivedCustomers()
+        {
+            var data = await _service.GetAllArchivedCustomers();
+            return View(data);
         }
 
         public async Task<IActionResult> BlockCustomers()
@@ -113,7 +122,10 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await _userService.ArchiveUsers();
+
             var data = await _service.GetAllCustomers();
+
             return View(data);
         }
 
@@ -156,7 +168,7 @@ namespace ECommerce1.Controllers
                 AddressLot = _customer.AddressLot,
                 Birthday = (DateTime)_customer.Birthday,
                 ContactNumber = _customer.ContactNumber,
-                DateCreated = (DateTime)_customer.DateCreated,
+                //DateCreated = (DateTime)_customer.DateCreated,
                 Email = _customer.Email,
                 FirstName = _customer.FirstName,
                 GenderId = _customer.GenderId,

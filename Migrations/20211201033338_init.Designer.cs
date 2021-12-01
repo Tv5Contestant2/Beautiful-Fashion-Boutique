@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce1.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20211128175856_initialMigration")]
-    partial class initialMigration
+    [Migration("20211201033338_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1025,6 +1025,9 @@ namespace ECommerce1.Migrations
                     b.Property<bool?>("IsAdmin")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsBlock")
                         .HasColumnType("bit");
 
@@ -1033,6 +1036,9 @@ namespace ECommerce1.Migrations
 
                     b.Property<bool?>("IsEmployee")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastLoggedIn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");

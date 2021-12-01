@@ -48,5 +48,11 @@ namespace ECommerce1.Models
 
         [Display(Name = "Blocked")]
         public bool? IsBlock { get; set; }
+
+        [Display(Name = "Archived")]
+        public bool? IsArchived { get; set; }
+
+        [Display(Name = "Last Logged In")]
+        public DateTime LastLoggedIn { get; set; }
     }
 }

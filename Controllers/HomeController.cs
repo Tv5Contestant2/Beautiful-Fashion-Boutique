@@ -1,9 +1,11 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -31,7 +33,7 @@ namespace ECommerce1.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return RedirectToAction("Index", "StoreFront");
         }
@@ -128,7 +130,10 @@ namespace ECommerce1.Controllers
                     LastName = model.LastName,
                     UserName = model.Email,
                     Email = model.Email,
-                    IsCustomer = true
+                    IsCustomer = true,
+                    GenderId = (int)GenderEnum.Men,
+                    LastLoggedIn = DateTime.Now,
+                    Birthday = DateTime.Parse("01/01/2000")
                 };
 
                 // Store user data in AspNetUsers database table

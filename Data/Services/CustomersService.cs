@@ -114,7 +114,13 @@ namespace ECommerce1.Data.Services
 
         public async Task<IEnumerable<User>> GetAllCustomers()
         {
-            var _customers = (await _userManager.Users.Where(x => x.IsCustomer == true && (x.IsBlock == false || x.IsBlock == null)).ToListAsync());
+            var _customers = (await _userManager.Users.Where(x => x.IsCustomer == true && (x.IsBlock == false || x.IsBlock == null) && (x.IsArchived == false || x.IsArchived == null)).ToListAsync());
+            return _customers;
+        }
+
+        public async Task<IEnumerable<User>> GetAllArchivedCustomers()
+        {
+            var _customers = (await _userManager.Users.Where(x => x.IsCustomer == true && x.IsArchived == true).ToListAsync());
             return _customers;
         }
 

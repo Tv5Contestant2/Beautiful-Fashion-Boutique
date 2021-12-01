@@ -16,18 +16,22 @@ namespace ECommerce1.Controllers
         private readonly ICartService _cartService;
         private readonly IProductCategoriesService _productCategoriesService;
         private readonly IProductsService _service;
+        private readonly IUserService _userService;
+
         private readonly UserManager<User> _userManager;
 
-        public StoreFrontController(IProductsService service,
-            IProductCategoriesService productCategoriesService,
-            IAdministratorService administratorService,
-            UserManager<User> userManager,
-            ICartService cartService)
+        public StoreFrontController(IAdministratorService administratorService
+            , ICartService cartService
+            , IProductsService service
+            , IProductCategoriesService productCategoriesService
+            , IUserService userService
+            , UserManager<User> userManager)
         {
             _service = service;
             _administratorService = administratorService;
             _productCategoriesService = productCategoriesService;
             _cartService = cartService;
+            _userService = userService;
             _userManager = userManager;
         }
 
@@ -60,6 +64,12 @@ namespace ECommerce1.Controllers
 
             var cart = new Cart();
             var userId = _userManager.GetUserId(HttpContext.User);
+
+            await _userService.ArchiveUsers();
+
+            if (!string.IsNullOrEmpty(userId))
+                await _userService.UpdateLastLoggedIn(userId);
+
             ViewBag.Cart = await _cartService.GetCartItems(userId);
             ViewBag.Products = products;
 

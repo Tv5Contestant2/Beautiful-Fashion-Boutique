@@ -29,12 +29,23 @@
             <div class="row">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
-                    <a asp-controller="Customers" asp-action="BlockCustomers" class="btn btn-warning float-right" type="button">
-                        <i class="fas fa-user-slash"></i>&nbsp;&nbsp;Show Blocked Customers
-                    </a>
-                    <a asp-controller="Customers" asp-action="CreateCustomer" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Customer
-                    </a>
+                    <ul class="nav justify-content-end">
+                        <li class="nav-item pr-2">
+                            <a asp-controller="Customers" asp-action="BlockCustomers" class="btn btn-warning float-right" type="button">
+                                <i class="fas fa-user-slash"></i>&nbsp;&nbsp;Blocked
+                            </a>
+                        </li>
+                        <li class="nav-item pr-2">
+                            <a asp-controller="Customers" asp-action="ArchivedCustomers" class="btn btn-warning float-right" type="button">
+                                <i class="fas fa-user-clock"></i>&nbsp;&nbsp;Archived
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Customers" asp-action="CreateCustomer" class="btn btn-info float-right" type="button">
+                                <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Customer
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -46,7 +57,6 @@
                     <table id="dtEmployeeList" name="dtEmployeeList" class="table table-hover table-fixed">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Image</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
@@ -58,22 +68,37 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
-                                    </td>
-                                    <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                                    <td><span class="status text-success">&bull;</span> Active</td>
+                            <tr>
+                                <td>
+                                    <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                @{
+                                    TimeSpan span = new TimeSpan();
+                                    span = DateTime.Now.Subtract(item.LastLoggedIn);
 
-                                    <td width="10%">
-                                        <a asp-action="UpdateCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
-                                        <a asp-action="DeleteCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
-                                        <a asp-action="BlockCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Block"><i class="fas fa-user-slash">&#xE5C9;</i></a>
-                                    </td>
-                                </tr>
+                                    if (span.Days > 0)
+                                    {
+                                        <td>
+                                            <span class="status text-warning">&bull;</span> Active @span.Days day(s) ago
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="status text-success">&bull;</span> Active 0 day(s) ago
+                                        </td>
+}
+                                }
+
+                                <td width="10%">
+                                    <a asp-action="UpdateCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
+                                    <a asp-action="DeleteCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
+                                    <a asp-action="BlockCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Block"><i class="fas fa-user-slash">&#xE5C9;</i></a>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>

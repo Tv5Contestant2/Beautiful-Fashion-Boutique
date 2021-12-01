@@ -1023,6 +1023,9 @@ namespace ECommerce1.Migrations
                     b.Property<bool?>("IsAdmin")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsBlock")
                         .HasColumnType("bit");
 
@@ -1031,6 +1034,9 @@ namespace ECommerce1.Migrations
 
                     b.Property<bool?>("IsEmployee")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastLoggedIn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");

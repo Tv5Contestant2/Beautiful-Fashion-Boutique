@@ -74,13 +74,14 @@ namespace ECommerce1
             // Services Configuration
             services.AddScoped<IAdministratorService, AdministratorService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICommonServices, CommonServices>();
             services.AddScoped<ICustomersService, CustomersService>();
             services.AddScoped<IEmployeesService, EmployeesService>();
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProductCategoriesService, ProductCategoriesService>();
             services.AddScoped<IPromotionsService, PromotionsService>();
             services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<ICommonServices, CommonServices>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddControllersWithViews();
         }

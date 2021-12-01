@@ -26,6 +26,8 @@ namespace ECommerce1.Data.Services.Interfaces
 
         Task<IEnumerable<User>> GetAllCustomersByGender(int genderId);
 
+        Task<IEnumerable<User>> GetAllArchivedCustomers();
+
         Task<IEnumerable<User>> GetAllBlockCustomers();
     }
 }

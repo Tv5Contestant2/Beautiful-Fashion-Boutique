@@ -17,7 +17,6 @@
     <!-- Choices.js-->
     <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/choices.js/public/assets/styles/choices.css">
      <!-- Theme stylesheet-->
-    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/css/style.default.3a2bbeae.css" id="theme-stylesheet">
     <link id="new-stylesheet" rel="stylesheet" href="~/css/storefront.css">
 
     @*Stylesheets*@
@@ -52,15 +51,7 @@
                     <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="ContactUs">Contact Us</a></li>
                 </ul>
                 <ul class="navbar-nav flex-row mb-2 mb-lg-0 ms-lg-5 actions-nav-menu">
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        <li class="nav-item mx-2 mx-lg-0 px-lg-0">
-                            <a class="nav-link" asp-controller="Home" asp-action="SignOut">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </a>
-                        </li>
-                    }
-                    else
+                    @if (!SignInManager.IsSignedIn(User))
                     {
                         <li class="nav-item mx-2 mx-lg-0 px-lg-0">
                             <a class="nav-link" asp-controller="Home" asp-action="SignIn">
@@ -83,19 +74,24 @@
                             if (_IsAdmin == true)
                             {
                                 <li class="nav-item mx-2 mx-lg-0 px-lg-0">
-                                    <a class="nav-link" asp-controller="Administrator" asp-action="Index">
+                                    <a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">
+                                        Dashboard
                                         <i class="fas fa-tools"></i>
                                     </a>
                                 </li>
                             }
                             else
                             {
-                                <li class="nav-item mx-2 mx-lg-0 px-lg-0">
-                                    <a class="nav-link" asp-controller="Profile" asp-action="Index">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link fw-normal dropdown-toggle text-uppercase text-dark" id="profileDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg class="svg-icon">
                                             <use xlink:href="#user-1"> </use>
                                         </svg>
                                     </a>
+                                    <ul class="dropdown-menu mt-lg-4" aria-labelledby="profileDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index">My Profile</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="SignOut">Sign Out</a></li>
+                                    </ul>
                                 </li>
                             }
                         }

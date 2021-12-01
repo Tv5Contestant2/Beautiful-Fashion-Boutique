@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce1.ViewModel
 {
     public class HomeUserViewModel
     {
+        public string Id { get; set; }
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
@@ -36,5 +38,6 @@ namespace ECommerce1.ViewModel
 
         public bool isLogInError { get; set; }
         public bool isSignUpError { get; set; }
+        public DateTime? LastLoggedIn { get; set; }
     }
 }

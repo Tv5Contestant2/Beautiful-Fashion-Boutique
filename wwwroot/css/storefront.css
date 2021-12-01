@@ -17915,7 +17915,7 @@ a.text-hover-dark {
     }
 }
 
-.bg-video {
+.hero {
     position: absolute;
     background: #fff;
     top: 0;
@@ -17924,13 +17924,6 @@ a.text-hover-dark {
     height: 100%;
     -o-object-fit: cover;
     object-fit: cover
-}
-
-.parallax-holder {
-    padding-top: 15rem;
-    padding-bottom: 15rem;
-    overflow: hidden;
-    position: relative
 }
 
 .icon-rounded {
