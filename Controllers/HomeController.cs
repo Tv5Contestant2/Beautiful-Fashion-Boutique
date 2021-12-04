@@ -35,6 +35,7 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await Task.Delay(0);
             return RedirectToAction("Index", "StoreFront");
         }
 

@@ -14,7 +14,7 @@ namespace ECommerce1.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrderService _service;
-        private readonly UserManager<User> _userManager;
+        //private readonly UserManager<User> _userManager;
 
         public OrdersController(IOrderService service,
             UserManager<User> userManager)

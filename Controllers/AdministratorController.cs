@@ -5,13 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce1.Controllers
 {
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     public class AdministratorController : Controller
     {
         private readonly IAdministratorService _service;
 
         public AdministratorController(IAdministratorService service)
         {
+            //[AllowAnonymous]
+            //[Authorize(Roles = "Admin,Payroll,Employee")]
             _service = service;
         }
 
