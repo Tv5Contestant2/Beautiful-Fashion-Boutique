@@ -61,7 +61,13 @@ namespace ECommerce1
             // DBContext configuration
             services.AddDbContext<AppDBContext>(context =>
                 context.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
+
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+            })
+                .AddEntityFrameworkStores<AppDBContext>()
+                .AddDefaultTokenProviders();
 
             services.AddMvc(config =>
             {
@@ -71,11 +77,15 @@ namespace ECommerce1
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            // Email Settings Configuration
+            services.AddOptions<EmailSettings>().Bind(Configuration.GetSection("EmailSettings")).ValidateDataAnnotations();
+
             // Services Configuration
             services.AddScoped<IAdministratorService, AdministratorService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ICommonServices, CommonServices>();
             services.AddScoped<ICustomersService, CustomersService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IEmployeesService, EmployeesService>();
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProductCategoriesService, ProductCategoriesService>();

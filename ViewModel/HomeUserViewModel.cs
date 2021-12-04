@@ -39,5 +39,6 @@ namespace ECommerce1.ViewModel
         public bool isLogInError { get; set; }
         public bool isSignUpError { get; set; }
         public DateTime? LastLoggedIn { get; set; }
+        public string Token { get; set; }
     }
 }
