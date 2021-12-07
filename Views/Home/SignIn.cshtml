@@ -31,18 +31,12 @@
                             <input asp-for="SignInPassword" class="form-control" id="SignInPassword" type="password">
                             <span asp-validation-for="SignInPassword" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label asp-for="RememberMe">
-                                    <input asp-for="RememberMe" />
-                                    @Html.DisplayNameFor(m => m.RememberMe)
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <a asp-controller="Home" asp-action="ForgotPassword">Forgot Password?</a>
-                            </div>
+                        <div class="form-group d-flex justify-content-between">
+                            <label asp-for="RememberMe">
+                                <input asp-for="RememberMe" />
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                            <a asp-controller="Home" asp-action="ForgotPassword">Forgot Password?</a>
                         </div>
                         <div class="text-center">
                             <input type="submit" class="btn btn-primary" value="Sign In" />

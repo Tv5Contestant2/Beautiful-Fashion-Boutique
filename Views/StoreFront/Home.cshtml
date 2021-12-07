@@ -1,4 +1,6 @@
-﻿@model CartDetails
+﻿@using Microsoft.AspNetCore.Identity
+@model CartDetails
+@inject UserManager<User> UserManager
 
 @{
     ViewData["Title"] = "Home";
@@ -69,46 +71,72 @@
                 </div>
             </section>
 
-            <section class="py-2">
-                <div class="row justify-content-center pb-2">
-                    <header class="text-center pb-4 pt-4">
-                        <p class="lead text-uppercase text-muted mb-0">Money Saver</p>
-                        <h2 class="text-uppercase">Our Top Steals</h2>
-                        @*<a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>*@
-                    </header>
-                    <div class="row justify-content-center pb-2">
-                        @foreach (var item in ViewBag.Products)
-                        {
-                            <div class="swiper-slide swiper-slide-prev" role="group" aria-label="1 / 6" style="width: 241.6px; margin-right: 20px;">
-                                <div class="product mb-5">
-                                    <div class="image bg-light d-flex align-items-center justify-content-center">
-                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
-                                        <form asp-controller="Cart" asp-action="AddToCart">
-                                            <div class="hover-overlay d-flex align-items-center justify-content-center">
-                                                <div class="CTA d-flex align-items-center justify-content-center">
-                                                    <input type="hidden" asp-for="ProductId" value="@item.Id" />
-                                                    <input type="hidden" asp-for="Quantity" value="1" />
-                                                    <button type="submit" class="btn btn-link">
-                                                        <i class="fas fa-shopping-cart"></i>
-                                                    </button>
-                                                    <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
-                                                        <i class="fas fa-search"></i>
-                                                    </button>
-                                                </div>
+            @{
+                if (ViewBag.Products.Count > 0)
+                {
+                    <section class="py-2">
+                        <div class="row justify-content-center pb-2">
+                            <header class="text-center pb-4 pt-4">
+                                <p class="lead text-uppercase text-muted mb-0">Money Saver</p>
+                                <h2 class="text-uppercase">Our Top Steals</h2>
+                                @*<a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>*@
+                            </header>
+                            <div class="row justify-content-center pb-2">
+                                @foreach (var item in ViewBag.Products)
+                                {
+                                    <div class="swiper-slide swiper-slide-prev" role="group" aria-label="1 / 6" style="width: 241.6px; margin-right: 20px;">
+                                        <div class="product mb-5">
+                                            <div class="image bg-light d-flex align-items-center justify-content-center">
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                                                <form asp-controller="Cart" asp-action="AddToCart">
+                                                    <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                                        <div class="CTA d-flex align-items-center justify-content-center">
+                                                            <input type="hidden" asp-for="ProductId" value="@item.Id" />
+                                                            <input type="hidden" asp-for="Quantity" value="1" />
+                                                            @{
+                                                                var _IsAdmin = false;
+                                                                if (UserManager.GetUserAsync(User).Result != null)
+                                                                {
+                                                                    if (UserManager.GetUserAsync(User).Result.IsAdmin != null)
+                                                                    {
+                                                                        if ((bool)UserManager.GetUserAsync(User).Result.IsAdmin) _IsAdmin = true;
+                                                                    }
+
+                                                                    if (_IsAdmin == true)
+                                                                    {
+                                                                        <a asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none">
+                                                                            <i class="fas fa-pencil-alt"></i>
+                                                                        </a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button type="submit" class="btn btn-link">
+                                                                            <i class="fas fa-shopping-cart"></i>
+                                                                        </button>
+                                                                    }
+                                                                }
+                                                            }
+                                                            <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                                <i class="fas fa-search"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
-                                        </form>
+                                            <div class="pt-3">
+                                                <a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                    <h3 class="h6 text-uppercase mb-0">@item.Name</h3>
+                                                </a>
+                                                <span class="text-muted"><del>Php @item.Price</del></span> <span class="text-danger h6">Php @item.PriceOnSale</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="pt-3">
-                                        <a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
-                                            <h3 class="h6 text-uppercase mb-0">@item.Name</h3>
-                                        </a><span class="price text-muted">Php @item.Price</span>
-                                    </div>
-                                </div>
+                                }
                             </div>
-                        }
-                    </div>
-                </div>
-            </section>
+                        </div>
+                    </section>
+                }
+            }
         </div>
     </div>
 

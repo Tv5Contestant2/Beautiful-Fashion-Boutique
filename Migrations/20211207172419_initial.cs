@@ -309,7 +309,9 @@ namespace ECommerce1.Migrations
                     StockQty = table.Column<long>(type: "bigint", nullable: false),
                     ProductCategoryId = table.Column<int>(type: "int", nullable: false),
                     SizeId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsSale = table.Column<bool>(type: "bit", nullable: false),
+                    PriceOnSale = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -561,6 +563,49 @@ namespace ECommerce1.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomersId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Instructions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingFirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingLastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingBlock = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingLot = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingBarangay = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingCity = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsBillingSame = table.Column<bool>(type: "bit", nullable: false),
+                    BillingFirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BillingLastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BillingBlock = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BillingLot = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BillingBarangay = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BillingCity = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BillingContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BillingEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDelivery = table.Column<bool>(type: "bit", nullable: false),
+                    IsPickup = table.Column<bool>(type: "bit", nullable: false),
+                    IsPayMaya = table.Column<bool>(type: "bit", nullable: false),
+                    IsCashOnDelivery = table.Column<bool>(type: "bit", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CustomersCustomerID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Carts_Customers_CustomersCustomerID",
+                        column: x => x.CustomersCustomerID,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     ColorId = table.Column<int>(type: "int", nullable: false),
                     SizeId = table.Column<int>(type: "int", nullable: false),
@@ -570,9 +615,9 @@ namespace ECommerce1.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Carts", x => x.Id);
+                    table.PrimaryKey("PK_CartDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Carts_Products_ProductId",
+                        name: "FK_CartDetails_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -858,9 +903,14 @@ namespace ECommerce1.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Carts_ProductId",
-                table: "Carts",
+                name: "IX_CartDetails_ProductId",
+                table: "CartDetails",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_CustomersCustomerID",
+                table: "Carts",
+                column: "CustomersCustomerID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Colors_ProductId",
@@ -960,6 +1010,9 @@ namespace ECommerce1.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CartDetails");
 
             migrationBuilder.DropTable(
                 name: "Carts");

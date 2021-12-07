@@ -18,6 +18,8 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<IEnumerable<Product>> GetAllProducts();
 
+        public Task<IEnumerable<Product>> GetFeaturedProductsOnSale();
+
         public Task<Product> GetProductById(long id);
 
         public Task<IEnumerable<Product>> GetAllProductsByGender(int genderId);

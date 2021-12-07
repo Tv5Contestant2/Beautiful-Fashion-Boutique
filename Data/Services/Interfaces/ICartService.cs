@@ -15,7 +15,7 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task CreateCart(Cart cart);
 
-        public Task UpdateCart(Cart cart);
+        public Task UpdateCart(string userId, Cart cart);
 
         public void AddToCartItems(CartDetails cartDetails);
 

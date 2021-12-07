@@ -44,7 +44,7 @@ namespace ECommerce1.Controllers
         {
             var userId = _userManager.GetUserId(HttpContext.User);
 
-            var products = await _service.GetAllProducts();
+            var products = await _service.GetFeaturedProductsOnSale();
             var productCategories = await _productCategoriesService.GetAllProductCategories();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);

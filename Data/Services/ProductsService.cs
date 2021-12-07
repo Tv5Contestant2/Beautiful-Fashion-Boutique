@@ -192,6 +192,30 @@ namespace ECommerce1.Data.Services
 
             return result;
         }
+        public async Task<IEnumerable<Product>> GetFeaturedProductsOnSale()
+        {
+            var result = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductVariants)
+                .Where(x => x.IsFeaturedProduct == true && x.IsSale == true)
+                .ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Image = _commonServices.NoImage;
+                }
+            }
+
+            return result;
+        }
 
         public async Task<Product> GetProductById(long id)
         {

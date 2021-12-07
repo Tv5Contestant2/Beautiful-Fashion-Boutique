@@ -79,13 +79,45 @@ namespace ECommerce1.Data.Services
         public async Task CreateCart(Cart cart)
         {
             _context.Carts.Add(cart);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCart(Cart cart)
+        public async Task UpdateCart(string userId, Cart cart)
         {
-            _context.Carts.Update(cart);
-            _context.SaveChanges();
+            var result = _context.Carts.Where(x => x.CustomersId == userId).FirstOrDefault();
+
+            if (result != null)
+            {
+                result.Instructions = cart.Instructions;
+                result.ShippingFirstName = cart.ShippingFirstName;
+                result.ShippingLastName = cart.ShippingLastName;
+                result.ShippingBlock = cart.ShippingBlock;
+                result.ShippingLot = cart.ShippingLot;
+                result.ShippingBarangay = cart.ShippingBarangay;
+                result.ShippingCity = cart.ShippingCity;
+                result.ShippingContactNumber = cart.ShippingContactNumber;
+                result.ShippingEmail = cart.ShippingEmail;
+                result.IsBillingSame = cart.IsBillingSame;
+                result.BillingFirstName = cart.IsBillingSame ? cart.ShippingFirstName : cart.BillingFirstName;
+                result.BillingLastName = cart.IsBillingSame ? cart.ShippingLastName : cart.BillingLastName;
+                result.BillingBlock = cart.IsBillingSame ? cart.ShippingBlock : cart.BillingBlock;
+                result.BillingLot = cart.IsBillingSame ? cart.ShippingLot : cart.BillingLot;
+                result.BillingBarangay = cart.IsBillingSame ? cart.ShippingBarangay : cart.BillingBarangay;
+                result.BillingCity = cart.IsBillingSame ? cart.ShippingCity : cart.BillingCity;
+                result.BillingContactNumber = cart.IsBillingSame ? cart.ShippingContactNumber : cart.BillingContactNumber;
+                result.BillingEmail = cart.IsBillingSame ? cart.ShippingEmail : cart.BillingEmail;
+
+                result.IsCashOnDelivery = cart.IsCashOnDelivery;
+                result.IsPayMaya = cart.IsPayMaya;
+
+                result.IsPickup = cart.IsPickup;
+                result.IsDelivery = cart.IsDelivery;
+
+                result.Total = cart.Total;
+
+                _context.Carts.Update(result);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public void AddToCartItems(CartDetails cartDetails)
@@ -106,17 +138,26 @@ namespace ECommerce1.Data.Services
             _context.CartDetails.Remove(result);
 
             await _context.SaveChangesAsync();
+
+            if (!_context.CartDetails.Any(x => x.CustomersId == userId))
+            {
+                var cart = _context.Carts.FirstOrDefault(x => x.CustomersId == userId);
+                _context.Carts.Remove(cart);
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task EmptyCart(string userId)
         {
-            var result = _context.CartDetails.Where(x => x.CustomersId == userId).ToList();
-
-            foreach (var item in result)
+            var cartDetails = _context.CartDetails.Where(x => x.CustomersId == userId).ToList();
+            var cart = _context.Carts.FirstOrDefault(x => x.CustomersId == userId); 
+            foreach (var item in cartDetails)
             {
                 _context.CartDetails.Remove(item);
             }
 
+            _context.Carts.Remove(cart);
             await _context.SaveChangesAsync();
         }
 
