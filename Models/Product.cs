@@ -46,6 +46,12 @@ namespace ECommerce1.Models
 
         public decimal Price { get; set; }
 
+        [Display(Name = "Is on sale?")]
+        public bool IsSale { get; set; }
+
+        [Display(Name = "Price on sale")]
+        public decimal? PriceOnSale { get; set; }
+
         #region Enumerables
         public IEnumerable<Color> Colors { get; set; }
         public IEnumerable<Gender> Genders { get; set; }

@@ -28,7 +28,7 @@ namespace ECommerce1.Data.Services
                 ProductCategories = _context.ProductCategories.ToList(),
                 Sizes = _context.Sizes.OrderBy(x => x.Id).ToList(),
                 Statuses = _context.Statuses.OrderBy(x => x.Id).ToList(),
-                StockStatuses = _context.StockStatuses.OrderBy(x => x.Id).ToList(),
+                StockStatuses = _context.StockStatuses.OrderBy(x => x.Id).ToList()
             };
 
             return _result;

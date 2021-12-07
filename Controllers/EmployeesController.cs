@@ -73,7 +73,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> DeleteEmployee(string id)
         {
             var _employee = await _service.GetEmployeeById(id);
-            if (_employee == null) return View("NotFound");
+            if (_employee == null) return RedirectToAction("Error", "Home");
 
             return View(_employee);
         }
@@ -82,7 +82,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> DeleteEmployeeConfirmed(string id)
         {
             var _employee = await _service.GetEmployeeById(id);
-            if (_employee == null) return View("NotFound");
+            if (_employee == null) return RedirectToAction("Error", "Home");
 
             await _service.DeleteEmployee(id);
 

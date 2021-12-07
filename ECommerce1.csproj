@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Repositories\**" />
     <Compile Remove="Views\Promos\**" />
+    <Content Remove="Data\Repositories\**" />
     <Content Remove="Views\Promos\**" />
+    <EmbeddedResource Remove="Data\Repositories\**" />
     <EmbeddedResource Remove="Views\Promos\**" />
+    <None Remove="Data\Repositories\**" />
     <None Remove="Views\Promos\**" />
   </ItemGroup>
 
@@ -23,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Repositories\" />
     <Folder Include="wwwroot\images\users\" />
     <Folder Include="wwwroot\lib\bootstrap\dist\css\" />
   </ItemGroup>

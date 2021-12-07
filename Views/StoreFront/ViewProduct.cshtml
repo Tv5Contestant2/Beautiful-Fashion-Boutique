@@ -1,4 +1,4 @@
-﻿@model Cart
+﻿@model CartDetails
 
 @{
     ViewData["Title"] = "View Products";
@@ -13,7 +13,7 @@
             <div class="col-lg-3 text-end order-1 order-lg-2">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
-                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Home">Home</a></li>
                         <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="ShopAll">Shop</a></li>
                         <li class="breadcrumb-item active">@ViewBag.Product.Name</li>
                     </ol>
@@ -85,6 +85,7 @@
                     </div>
                     <ul class="list-inline">
                         <li class="list-inline-item">
+                            <input type="hidden" asp-for="CustomersId" value="@ViewBag.CustomersId" />
                             <input type="hidden" asp-for="ProductId" value="@ViewBag.Product.Id" />
                             <button type="submit" class="btn btn-primary px-5">
                                 <svg class="svg-icon svg-icon-sm svg-icon-heavy me-2">

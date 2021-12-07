@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Cart>
+﻿@model ECommerce1.ViewModel.CartViewModel
 
 @{
     ViewData["Title"] = "Checkout";
@@ -11,7 +11,7 @@
                 @if (Model != null)
                 {
                     <p class="lead text-muted">
-                        You currently have @ViewBag.Cart.Count item(s) in your basket
+                        You currently have @ViewBag.CartCount item(s) in your basket
                     </p>
                 }
                 else
@@ -24,7 +24,7 @@
             <div class="col-lg-3 text-end order-1 order-lg-2">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
-                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Home">Home</a></li>
                         <li class="breadcrumb-item active">@ViewBag.Title</li>
                     </ol>
                 </nav>

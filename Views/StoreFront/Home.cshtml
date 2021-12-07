@@ -1,0 +1,125 @@
+﻿@model CartDetails
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="content mx-auto">
+            @*Hero Section*@
+            <section class="position-relative">
+                <video class="hero" autoplay="" muted="" loop="">
+                    <source src="~/hero/hero.webm" type="video/webm">
+                    <source src="~/hero/hero.mp4" type="video/mp4">
+                </video>
+                <div class="py-5 video-content">
+                    <div class="container py-xl-4 position-relative">
+                        <div class="row py-5">
+                            <div class="col-lg-7 mx-auto text-dark text-center">
+                                <h1 class="text-uppercase text-shadow mt-3">It's fashion time!</h1>
+                                <hr class="bg-dark">
+                                <p class="lead mb-5">Our newest and freshest collections have just arrived.</p><a class="btn btn-outline-dark px-4 shop-now" asp-controller="StoreFront" asp-action="ShopAll">
+                                    Shop Now
+                                    <svg class="svg-icon ms-2 svg-icon-heavy svg-icon-sm">
+                                        <use xlink:href="#shopping-bag-1"> </use>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            @*Section*@
+            <section class="py-2">
+                <header class="text-center pb-4 pt-4">
+                    <p class="lead text-uppercase text-muted mb-0">Top for this month</p>
+                    <h2 class="text-uppercase">Our Featured Picks</h2>
+                    @*<a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>*@
+                </header>
+                <div class="row justify-content-center pb-2">
+                    <div style="width: 20rem; margin: 15px">
+                        <a asp-controller="StoreFront" asp-action="Mens">
+                            <img class="card-img-top" src="~/images/categories/category_apparel_accessories.jpg" alt="Card image cap">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">Men's Apparel</h5>
+                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        </div>
+                    </div>
+                    <div style="width: 20rem; margin: 15px">
+                        <a asp-controller="StoreFront" asp-action="Womens">
+                            <img class="card-img-top" src="~/images/categories/category_apparel.jpeg" alt="Card image cap">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">Women's Apparel</h5>
+                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        </div>
+                    </div>
+                    <div style="width: 20rem; margin: 15px">
+                        <a asp-controller="StoreFront" asp-action="ShopAll">
+                            <img class="card-img-top" src="~/images/categories/category_jewelry.jpeg" alt="Card image cap">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">Accessories</h5>
+                            <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-2">
+                <div class="row justify-content-center pb-2">
+                    <header class="text-center pb-4 pt-4">
+                        <p class="lead text-uppercase text-muted mb-0">Money Saver</p>
+                        <h2 class="text-uppercase">Our Top Steals</h2>
+                        @*<a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>*@
+                    </header>
+                    <div class="row justify-content-center pb-2">
+                        @foreach (var item in ViewBag.Products)
+                        {
+                            <div class="swiper-slide swiper-slide-prev" role="group" aria-label="1 / 6" style="width: 241.6px; margin-right: 20px;">
+                                <div class="product mb-5">
+                                    <div class="image bg-light d-flex align-items-center justify-content-center">
+                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                                        <form asp-controller="Cart" asp-action="AddToCart">
+                                            <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                                <div class="CTA d-flex align-items-center justify-content-center">
+                                                    <input type="hidden" asp-for="ProductId" value="@item.Id" />
+                                                    <input type="hidden" asp-for="Quantity" value="1" />
+                                                    <button type="submit" class="btn btn-link">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                    </button>
+                                                    <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="pt-3">
+                                        <a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                            <h3 class="h6 text-uppercase mb-0">@item.Name</h3>
+                                        </a><span class="price text-muted">Php @item.Price</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div style="position: fixed; bottom: 10px; right: 10px;">
+        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+</script>

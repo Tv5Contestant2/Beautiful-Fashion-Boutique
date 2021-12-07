@@ -6,13 +6,9 @@ namespace ECommerce1.Models
     {
         [Key]
         public int Id { get; set; }
-        public long ProductId { get; set; }
-        public int ColorId { get; set; }
-        public int SizeId { get; set; }
-        public int GenderId { get; set; }
-        public int Quantity { get; set; }
         public string CustomersId { get; set; }
+        public string Instructions { get; set; }
 
-        public Product Product { get; set; }
+        public Customers Customers { get; set; }
     }
 }

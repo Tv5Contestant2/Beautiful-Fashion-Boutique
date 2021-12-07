@@ -48,7 +48,7 @@ namespace ECommerce1
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=StoreFront}/{action=Index}/{id?}");
+                    pattern: "{controller=StoreFront}/{action=Home}/{id?}");
             });
 
             // Seed Database

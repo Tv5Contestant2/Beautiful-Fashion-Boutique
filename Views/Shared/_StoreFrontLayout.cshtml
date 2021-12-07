@@ -36,13 +36,13 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-4 px-lg-4">
         <div class="container-fluid">
             @*<a class="navbar-brand" href="index.html"><img src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/logo.013e0372.png" alt="..." width="180"></a>*@
-            <a asp-area="" asp-controller="StoreFront" asp-action="Index" class="navbar-brand">
+            <a asp-controller="StoreFront" asp-action="Home" class="navbar-brand">
                 <img src="~/images/store-logo.jpg" class="d-inline-block align-middle mr-2 img-fluid" width="250">
             </a>
             <button class="navbar-toggler rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Home">Home</a></li>
                     <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Mens">Men's</a></li>
                     <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Womens">Women's</a></li>
                     <li class="nav-item"><a class="nav-link fw-normal text-uppercase" asp-controller="StoreFront" asp-action="Trending">Trending/New Arrivals</a></li>
@@ -103,16 +103,7 @@
                                     <svg class="svg-icon">
                                         <use xlink:href="#cart-1"> </use>
                                     </svg>
-                                    @{
-                                        var cart = ViewBag.Cart;
-                                        var count = 0;
-
-                                        foreach (var item in ((IEnumerable<Cart>)cart).Select(x => x.Quantity))
-                                        {
-                                            count += Convert.ToInt32(item);
-                                        }
-                                        <span class="cart-no">@count</span>
-                                    }
+                                    <span class="cart-no">@ViewBag.CartCount</span>
                                 </a>
                             </li>
                         }

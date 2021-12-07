@@ -35,11 +35,103 @@ namespace ECommerce1.Controllers
             _userManager = userManager;
         }
 
+        public IActionResult Index()
+        {
+            return View(new CartDetails());
+        }
+
+        public async Task<IActionResult> Home()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var products = await _service.GetAllProducts();
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.ProductCategories = productCategories;
+            ViewBag.Products = products;
+
+            await _userService.ArchiveUsers();
+
+            if (!string.IsNullOrEmpty(userId))
+                await _userService.UpdateLastLoggedIn(userId);
+
+            return View();
+        }
+
+        public async Task<IActionResult> Mens()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var products = await _service.GetAllProductsByGender((int)GenderEnum.Men);
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CustomersId = userId;
+            ViewBag.Products = products;
+            ViewBag.ProductCategories = productCategories;
+            ViewBag.PageTitle = "Men's Collection";
+            ViewBag.PageDescription = "Prepare to mesmerize. Check this collection meant just for you.";
+
+            return View("Index");
+        }
+
+        public async Task<IActionResult> Womens()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var products = await _service.GetAllProductsByGender((int)GenderEnum.Women);
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CustomersId = userId;
+            ViewBag.Products = products;
+            ViewBag.ProductCategories = productCategories;
+            ViewBag.PageTitle = "Women's Collection";
+            ViewBag.PageDescription = "Ladies, be a trendsetter with these items.";
+
+            return View("Index");
+        }
+
+        public async Task<IActionResult> Trending()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var products = await _service.GetAllProducts();
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CustomersId = userId;
+            ViewBag.Products = products;
+            ViewBag.ProductCategories = productCategories;
+            ViewBag.PageTitle = "Trending / New Arrivals";
+            ViewBag.PageDescription = "Hottest and latest items on our stash.";
+
+            return View("Index");
+        }
+
+        public async Task<IActionResult> ShopAll()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var products = await _service.GetAllProducts();
+            var productCategories = await _productCategoriesService.GetAllProductCategories();
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CustomersId = userId;
+            ViewBag.Products = products;
+            ViewBag.ProductCategories = productCategories;
+            ViewBag.PageTitle = "Shop All";
+            ViewBag.PageDescription = "Everything and anything under the sun.";
+
+            return View("Index");
+        }
+
         public async Task<IActionResult> AboutUs()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
 
             var result = _administratorService.GetAboutUs();
             return View(result);
@@ -48,105 +140,27 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> ContactUs()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
 
             var result = _administratorService.GetContactUs();
             return View(result);
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var products = await _service.GetAllProducts();
-
-            var productCategories = await _productCategoriesService.GetAllProductCategories();
-            ViewBag.ProductCategories = productCategories;
-
-            var cart = new Cart();
-            var userId = _userManager.GetUserId(HttpContext.User);
-
-            await _userService.ArchiveUsers();
-
-            if (!string.IsNullOrEmpty(userId))
-                await _userService.UpdateLastLoggedIn(userId);
-
-            ViewBag.Cart = await _cartService.GetCartItems(userId);
-            ViewBag.Products = products;
-
-            return View(cart);
-        }
-
-        public async Task<IActionResult> Mens()
-        {
-            var products = await _service.GetAllProductsByGender((int)GenderEnum.Men);
-
-            var productCategories = await _productCategoriesService.GetAllProductCategories();
-            ViewBag.ProductCategories = productCategories;
-
-            var cart = new Cart();
-            var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.Cart = await _cartService.GetCartItems(userId);
-            ViewBag.Products = products;
-
-            return View(cart);
-        }
-
-        public async Task<IActionResult> ShopAll()
-        {
-            var products = await _service.GetAllProducts();
-
-            var productCategories = await _productCategoriesService.GetAllProductCategories();
-            ViewBag.ProductCategories = productCategories;
-
-            var cart = new Cart();
-            var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.Cart = await _cartService.GetCartItems(userId);
-            ViewBag.Products = products;
-
-            return View(cart);
-        }
-
-        public async Task<IActionResult> Trending()
-        {
-            var products = await _service.GetAllProducts();
-
-            var productCategories = await _productCategoriesService.GetAllProductCategories();
-            ViewBag.ProductCategories = productCategories;
-
-            var cart = new Cart();
-            var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.Cart = await _cartService.GetCartItems(userId);
-            ViewBag.Products = products;
-
-            return View(cart);
-        }
-
         public async Task<IActionResult> ViewProduct(long id)
         {
-            var productDetails = await _service.GetProductById(id);
-            if (productDetails == null) return View("NotFound");
-
-            var cart = new Cart();
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.Cart = await _cartService.GetCartItems(userId);
+            if (userId == null) return RedirectToAction("SignIn", "Home");
+
+            var productDetails = await _service.GetProductById(id);
+            if (productDetails == null) return RedirectToAction("Error", "Home");
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CustomersId = userId;
             ViewBag.Product = productDetails;
 
-            return View(cart);
+            return View(new CartDetails());
         }
 
-        public async Task<IActionResult> Womens()
-        {
-            var products = await _service.GetAllProductsByGender((int)GenderEnum.Women);
-
-            var productCategories = await _productCategoriesService.GetAllProductCategories();
-            ViewBag.ProductCategories = productCategories;
-
-            var cart = new Cart();
-            var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.Cart = await _cartService.GetCartItems(userId);
-            ViewBag.Products = products;
-
-            return View(cart);
-        }
     }
 }

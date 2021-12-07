@@ -33,7 +33,7 @@
         <nav id="sidebar" class="sidebar-wrapper">
             <div class="sidebar-content">
                 <div class="sidebar-brand">
-                    <a asp-controller="StoreFront" asp-action="Index">BEAUTIFUL TIME FASHION BOUTIQUE</a>
+                    <a asp-controller="StoreFront" asp-action="Home">BEAUTIFUL TIME FASHION BOUTIQUE</a>
                     <div id="close-sidebar">
                         <i class="fas fa-times"></i>
                     </div>
@@ -59,7 +59,7 @@
                 <div class="sidebar-menu">
                     <ul>
                         <li>
-                            <a asp-area="" asp-controller="Administrator" asp-action="Index">
+                            <a asp-controller="Administrator" asp-action="Index">
                                 <i class="fas fa-tachometer-alt"></i>
                                 Dashboard
                             </a>
@@ -72,28 +72,28 @@
                             <div class="sidebar-submenu">
                                 <ul>
                                     <li>
-                                        <a asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
+                                        <a asp-controller="Customers" asp-action="Index">Customers</a>
                                     </li>
                                     <li>
-                                        <a asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
+                                        <a asp-controller="Employees" asp-action="Index">Employees</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
                         <li>
-                            <a asp-area="" asp-controller="Orders" asp-action="Index">
+                            <a asp-controller="Orders" asp-action="Index">
                                 <i class="fa fa-inbox"></i>
                                 <span>Order Management</span>
                             </a>
                         </li>
                         <li>
-                            <a asp-area="" asp-controller="Products" asp-action="Index">
+                            <a asp-controller="Products" asp-action="Index">
                                 <i class="fa fa-cubes"></i>
                                 Product Management
                             </a>
                         </li>
                         <li>
-                            <a asp-area="" asp-controller="Promotions" asp-action="Index">
+                            <a asp-controller="Promotions" asp-action="Index">
                                 <i class="fa fa-tag"></i>
                                 Promos and Discounts
                             </a>
@@ -106,10 +106,10 @@
                             <div class="sidebar-submenu">
                                 <ul>
                                     <li>
-                                        <a asp-area="" asp-controller="Administrator" asp-action="AboutUs">About Us</a>
+                                        <a asp-controller="Administrator" asp-action="AboutUs">About Us</a>
                                     </li>
                                     <li>
-                                        <a asp-area="" asp-controller="Administrator" asp-action="ContactUs">Contact Us</a>
+                                        <a asp-controller="Administrator" asp-action="ContactUs">Contact Us</a>
                                     </li>
                                 </ul>
                             </div>
@@ -128,7 +128,7 @@
                     <i class="fa fa-envelope"></i>
                     <span class="badge badge-pill badge-success notification">7</span>
                 </a>
-                <a asp-area="" asp-controller="Administrator" asp-action="UnderConstruction">
+                <a asp-controller="Administrator" asp-action="UnderConstruction">
                     <i class="fa fa-cog"></i>
                     <span class="badge-sonar"></span>
                 </a>

@@ -26,7 +26,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> BlockConfirmed(string id)
         {
             var customer = await _service.GetCustomerById(id);
-            if (customer == null) return View("NotFound");
+            if (customer == null) return RedirectToAction("Error", "Home");
 
             customer.IsBlock = true;
 
@@ -38,7 +38,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> BlockCustomer(string id)
         {
             var customerDetails = await _service.GetCustomerById(id);
-            if (customerDetails == null) return View("NotFound");
+            if (customerDetails == null) return RedirectToAction("Error", "Home");
 
             return View(customerDetails);
         }
@@ -104,7 +104,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> DeleteCustomer(string id)
         {
             var _customer = await _service.GetCustomerById(id);
-            if (_customer == null) return View("NotFound");
+            if (_customer == null) return RedirectToAction("Error", "Home");
 
             return View(_customer);
         }
@@ -113,7 +113,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> DeleteCustomerConfirmed(string id)
         {
             var _employee = await _service.GetCustomerById(id);
-            if (_employee == null) return View("NotFound");
+            if (_employee == null) return RedirectToAction("Error", "Home");
 
             await _service.DeleteCustomer(id);
 
@@ -139,7 +139,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> UnBlockConfirmed(string id)
         {
             var customer = await _service.GetCustomerById(id);
-            if (customer == null) return View("NotFound");
+            if (customer == null) return RedirectToAction("Error", "Home");
 
             customer.IsBlock = false;
 
@@ -151,7 +151,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> UnBlockCustomer(string id)
         {
             var customerDetails = await _service.GetCustomerById(id);
-            if (customerDetails == null) return View("NotFound");
+            if (customerDetails == null) return RedirectToAction("Error", "Home");
 
             return View(customerDetails);
         }

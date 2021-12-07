@@ -58,7 +58,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> UpdatePromo(long id)
         {
             var PromoDetails = await _service.GetPromoById(id);
-            if (PromoDetails == null) return View("NotFound");
+            if (PromoDetails == null) return RedirectToAction("Error", "Home");
             return View(PromoDetails);
         }
 
@@ -77,7 +77,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> DeletePromo(long id)
         {
             var PromoDetails = await _service.GetPromoById(id);
-            if (PromoDetails == null) return View("NotFound");
+            if (PromoDetails == null) return RedirectToAction("Error", "Home");
             return View(PromoDetails);
         }
 
@@ -85,7 +85,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var PromoDetails = await _service.GetPromoById(id);
-            if (PromoDetails == null) return View("NotFound");
+            if (PromoDetails == null) return RedirectToAction("Error", "Home");
 
             await _service.DeletePromo(id);
             return RedirectToAction(nameof(Index));

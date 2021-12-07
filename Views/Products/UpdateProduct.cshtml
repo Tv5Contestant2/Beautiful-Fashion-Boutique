@@ -87,6 +87,12 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
                                         <label asp-for="Price" class="control-label"></label>
                                         <input asp-for="Price" class="form-control" type="number" />
                                         <span asp-validation-for="Price" class="text-danger"></span>
+
+                                        <input asp-for="IsSale" class="form-check-input" type="checkbox" />
+
+                                        <label asp-for="PriceOnSale" class="control-label"></label>
+                                        <input asp-for="PriceOnSale" class="form-control" type="number" />
+                                        <span asp-validation-for="PriceOnSale" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>

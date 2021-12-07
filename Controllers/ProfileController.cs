@@ -28,8 +28,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _service.GetCartItems(userId);
-            ViewBag.Cart = cart;
+            ViewBag.CartCount = await _service.GetCartTotalQty(userId);
 
             var result = await _orderService.GetAllOrdersByUser(userId);
 
@@ -39,8 +38,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Orders()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _service.GetCartItems(userId);
-            ViewBag.Cart = cart;
+            ViewBag.CartCount = await _service.GetCartTotalQty(userId);
 
             var result = await _orderService.GetAllOrdersByUser(userId);
 
@@ -50,8 +48,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Profile()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _service.GetCartItems(userId);
-            ViewBag.Cart = cart;
+            ViewBag.CartCount = await _service.GetCartTotalQty(userId);
 
             var result = await _orderService.GetAllOrdersByUser(userId);
 
@@ -61,8 +58,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Addresses()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _service.GetCartItems(userId);
-            ViewBag.Cart = cart;
+            ViewBag.CartCount = await _service.GetCartTotalQty(userId);
 
             var result = await _orderService.GetAllOrdersByUser(userId);
 

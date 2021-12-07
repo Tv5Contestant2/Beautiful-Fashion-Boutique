@@ -37,60 +37,53 @@ namespace ECommerce1.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return RedirectToAction("Index", "StoreFront");
+            return RedirectToAction("Home", "StoreFront");
         }
 
         public IActionResult Privacy()
         {
             return View();
         }
-
-        public async Task<IActionResult> RegistrationSuccess()
+        public IActionResult Error()
         {
-            var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
+            return View();
+        }
 
-            var _model = new HomeUserViewModel();
-            return View(_model);
+        public IActionResult RegistrationSuccess()
+        {
+            ViewBag.CartCount = 0;
+
+            return View(new HomeUserViewModel());
         }
         
-        public async Task<IActionResult> ResetLinkSent()
+        public IActionResult ResetLinkSent()
         {
-            var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
+            ViewBag.CartCount = 0;
 
-            var _model = new HomeUserViewModel();
-            return View(_model);
+            return View(new HomeUserViewModel());
         }
 
-        public async Task<IActionResult> ResetPassword(string email, string token)
+        public IActionResult ResetPassword(string email, string token)
         {
-            var cart = await _cartService.GetCartItems("");
-            ViewBag.Cart = cart;
+            ViewBag.CartCount = 0;
             ViewBag.Email = email;
             ViewBag.Token = token;
 
-            var _model = new ResetPasswordViewModel();
-            return View(_model);
+            return View(new ResetPasswordViewModel());
         }
 
-        public async Task<IActionResult> SignIn()
+        public IActionResult SignIn()
         {
-            var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
+            ViewBag.CartCount = 0;
 
-            var _model = new HomeUserViewModel();
-            return View(_model);
+            return View(new HomeUserViewModel());
         }
 
         [HttpPost]
@@ -100,6 +93,7 @@ namespace ECommerce1.Controllers
             model.isSignUpError = false;
             var _removeValidation = "FirstName,LastName,Password,Email".Split(",");
             var userId = _userManager.GetUserId(HttpContext.User);
+
             foreach (var _item in _removeValidation)
             {
                 ModelState[_item].Errors.Clear();
@@ -113,8 +107,7 @@ namespace ECommerce1.Controllers
                 if (user != null && !user.EmailConfirmed &&
                             (await _userManager.CheckPasswordAsync(user, model.SignInPassword)))
                 {
-                    var cart = await _cartService.GetCartItems(userId);
-                    ViewBag.Cart = cart;
+                    ViewBag.CartCount = 0;
 
                     model.isLogInError = true;
                     ModelState.AddModelError(string.Empty, "Email not confirmed yet");
@@ -126,22 +119,14 @@ namespace ECommerce1.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "StoreFront");
+                    ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+                    return RedirectToAction("Home", "StoreFront");
                 }
-                else
-                {
-                    var cart = await _cartService.GetCartItems(userId);
-                    ViewBag.Cart = cart;
-                }
-
-                model.isLogInError = true;
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
             else
             {
+                ViewBag.CartCount = 0;
                 model.isLogInError = true;
-                var cart = await _cartService.GetCartItems(userId);
-                ViewBag.Cart = cart;
             }
 
             return View(model);
@@ -150,15 +135,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> SignOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "StoreFront");
-        }
-
-        public async Task<IActionResult> SignUp()
-        {
-            var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
-            return View();
+            return RedirectToAction("Home", "StoreFront");
         }
 
         [HttpPost]
@@ -214,37 +191,30 @@ namespace ECommerce1.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    var cart = await _cartService.GetCartItems(userId);
-                    ViewBag.Cart = cart;
+                    ViewBag.CartCount = 0;
+
                     model.isSignUpError = true;
                     return View("SignIn", model);
                 }
             }
             else
             {
-                var cart = await _cartService.GetCartItems(userId);
-                ViewBag.Cart = cart;
+                ViewBag.CartCount = 0;
                 model.isSignUpError = true;
             }
 
             return View("SignIn", model);
         }
 
-        public async Task<IActionResult> ForgotPassword()
+        public IActionResult ForgotPassword()
         {
-            var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
-
-            var _model = new ForgotPasswordViewModel();
-            return View(_model);
+            ViewBag.CartCount = 0;
+            
+            return View(new ForgotPasswordViewModel());
         }
 
         public async Task<IActionResult> SubmitForgotPassword(ForgotPasswordViewModel model)
         {
-            var cart = await _cartService.GetCartItems("");
-            ViewBag.Cart = cart;
-
             if (ModelState.IsValid)
             {
                 // Find the user by email
@@ -266,10 +236,14 @@ namespace ECommerce1.Controllers
 
                 // To avoid account enumeration and brute force attacks, don't
                 // reveal that the user does not exist or is not confirmed
+                ViewBag.CartCount = 0;
+
                 model.isLogInError = true;
                 ModelState.AddModelError(string.Empty, "Email does not exist.");
                 return View("ForgotPassword", model);
             }
+
+            ViewBag.CartCount = 0;
 
             model.isLogInError = true;
             ModelState.AddModelError(string.Empty, "Email does not exist.");
@@ -278,9 +252,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> SubmitResetPassword(ResetPasswordViewModel model)
         {
-            var cart = await _cartService.GetCartItems("");
-            ViewBag.Cart = cart;
-
             if (ModelState.IsValid)
             {
                 // Find the user by email
@@ -314,18 +285,16 @@ namespace ECommerce1.Controllers
         {
             await _emailService.AccountVerified(userId);
 
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
-
-            var model = new HomeUserViewModel();
-            return View(model);
+            ViewBag.CartCount = 0;
+            
+            return View(new HomeUserViewModel());
         }
 
         public async Task<IActionResult> UnderConstruction()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cart = await _cartService.GetCartItems(userId);
-            ViewBag.Cart = cart;
+
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
 
             return View();
         }

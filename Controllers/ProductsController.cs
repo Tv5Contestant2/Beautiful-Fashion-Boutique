@@ -78,7 +78,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var productDetails = await _service.GetProductById(id);
-            if (productDetails == null) return View("NotFound");
+            if (productDetails == null) return RedirectToAction("Error", "Home");
 
             await _service.DeleteProduct(id);
 
@@ -88,7 +88,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> DeleteProduct(long id)
         {
             var productDetails = await _service.GetProductById(id);
-            if (productDetails == null) return View("NotFound");
+            if (productDetails == null) return RedirectToAction("Error", "Home");
 
             return View(productDetails);
         }
@@ -115,7 +115,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> UpdateProduct(long id)
         {
             var _product = await _service.GetProductById(id);
-            if (_product == null) return View("NotFound");
+            if (_product == null) return RedirectToAction("Error", "Home");
 
             _service.InitializeProductOnUpdate(_product);
 
@@ -170,7 +170,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> ViewProduct(long id)
         {
             var _product = await _service.GetProductById(id);
-            if (_product == null) return View("NotFound");
+            if (_product == null) return RedirectToAction("Error", "Home");
 
             _service.InitializeProductOnUpdate(_product);
 

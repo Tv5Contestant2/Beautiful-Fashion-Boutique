@@ -9,8 +9,7 @@ namespace ECommerce1.ViewModel
 {
     public class CartViewModel
     {
-        public int Id { get; set; }
-        public long ProductId { get; set; }
-        public int Quantity { get; set; }
+        public Cart Cart { get; set; }
+        public IEnumerable<CartDetails> CartDetails { get; set; }
     }
 }
