@@ -50,6 +50,7 @@ namespace ECommerce1.Controllers
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.ProductCategories = productCategories;
             ViewBag.Products = products;
+            ViewBag.CustomersId = userId;
 
             await _userService.ArchiveUsers();
 

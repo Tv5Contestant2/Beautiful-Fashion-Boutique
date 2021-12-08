@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -170,6 +171,11 @@ namespace ECommerce1.Controllers
                 var user = await _userManager.FindByIdAsync(userId);
                 ViewBag.Customer = user.FirstName;
 
+                //if (cart.IsPayMaya)
+                //{
+                //    return RedirectToAction("PaymentRedirect", cartViewModel);
+                //}
+
                 // Update Cart
                 await _service.UpdateCart(userId, cart);
             }
@@ -189,7 +195,7 @@ namespace ECommerce1.Controllers
                 };
 
                 orderDetails.Add(_orderDetails);
-                }
+            }
 
             var order = new Orders()
             {
@@ -199,13 +205,18 @@ namespace ECommerce1.Controllers
                 OrderDate = DateTime.Now,
                 OrderDetails = orderDetails
             };
-              
+
             var result = _orderService.AddToOrder(order);
 
             if (result)
                 await _service.EmptyCart(userId); //temporary only
 
             return View(cartViewModel);
+        }
+
+        public async Task<IActionResult> PaymentRedirect(CartViewModel cart)
+        {
+            return View(cart);
         }
     }
 }
