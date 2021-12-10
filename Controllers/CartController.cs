@@ -41,9 +41,23 @@ namespace ECommerce1.Controllers
             cartViewModel.Cart = cart;
             cartViewModel.CartDetails = cartDetails;
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
 
             return View(cartViewModel);
+        }
+
+        public async Task<IActionResult> Wishlist()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (userId == null) return RedirectToAction("SignIn", "Home");
+
+            var wishlists = await _service.GetWishlistItems(userId);
+            ViewBag.CartCount = await _service.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
+            ViewBag.CustomersId = userId;
+
+            return View(wishlists);
         }
 
         public async Task<IActionResult> AddToCart(CartDetails cartDetails)
@@ -71,7 +85,24 @@ namespace ECommerce1.Controllers
                 await _service.CreateCart(_cart);
             }
 
-            return RedirectToAction(nameof(Index));
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        public async Task<IActionResult> AddToWishlist(Wishlist wishlist)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (userId == null) return RedirectToAction("SignIn", "Home");
+
+            var wishlistItems = await _service.GetWishlistItemsByProductId(wishlist.ProductId, userId);
+
+            if (wishlistItems == null)
+                _service.AddToWishlist(wishlist);
+            else
+            {
+                await _service.RemoveFromWishlist(wishlist.ProductId, userId);
+            }
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         public async Task<IActionResult> AddToCartByQty(long id)
@@ -86,7 +117,56 @@ namespace ECommerce1.Controllers
             cartDetails.Quantity += 1;
             _service.UpdateCartItems(cartDetails);
 
-            return RedirectToAction(nameof(Index));
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        public async Task<IActionResult> AddToCartFromWishlist(long id)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (userId == null) return RedirectToAction("SignIn", "Home");
+
+            var _wishlistItems = await _service.GetWishlistItemsByProductId(id, userId);
+            if (_wishlistItems == null) return RedirectToAction("Error", "Home");
+
+            var cartDetails = new CartDetails();
+            cartDetails.CustomersId = _wishlistItems.CustomersId;
+            cartDetails.ProductId = _wishlistItems.ProductId;
+            cartDetails.Quantity = 1;
+
+            _service.AddToCartItems(cartDetails);
+
+            // Cart
+            var cart = await _service.GetCart(userId);
+            if (cart == null)
+            {
+                var _cart = new Cart();
+                _cart.CustomersId = userId;
+
+                await _service.CreateCart(_cart);
+            }
+
+            await _service.RemoveFromWishlist(id, userId);
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        public async Task<IActionResult> AddToWishlistFromCart(long id)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (userId == null) return RedirectToAction("SignIn", "Home");
+
+            var _cartDetails = await _service.GetCartItemsByProductId(id, userId);
+            if (_cartDetails == null) return RedirectToAction("Error", "Home");
+
+            var wishlist = new Wishlist();
+            wishlist.CustomersId = _cartDetails.CustomersId;
+            wishlist.ProductId = _cartDetails.ProductId;
+
+            _service.AddToWishlist(wishlist);
+
+            await _service.RemoveFromCart(id, userId);
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         public async Task<IActionResult> RemoveFromCartByQty(long id)
@@ -104,7 +184,7 @@ namespace ECommerce1.Controllers
             else
                 await _service.RemoveFromCart(id, userId);
 
-            return RedirectToAction(nameof(Index));
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         public async Task<IActionResult> RemoveFromCart(long id)
@@ -114,6 +194,7 @@ namespace ECommerce1.Controllers
             if (_cartDetails == null) return RedirectToAction("Error", "Home");
 
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
 
             return View();
         }
@@ -126,11 +207,24 @@ namespace ECommerce1.Controllers
             if (cartDetails == null) return RedirectToAction("Error", "Home");
 
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
 
             await _service.RemoveFromCart(id, userId);
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> RemoveFromWishlist(long id)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            ViewBag.CartCount = await _service.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
+
+            await _service.RemoveFromWishlist(id, userId);
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }   
 
         public async Task<IActionResult> Checkout(Cart cart)
         {
@@ -144,6 +238,7 @@ namespace ECommerce1.Controllers
                 cartViewModel.Cart = cart;
                 cartViewModel.CartDetails = cartDetails;
                 ViewBag.CartCount = await _service.GetCartTotalQty(userId);
+                ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
                 ViewBag.CustomersId = userId;
 
                 // Update Cart
@@ -167,7 +262,9 @@ namespace ECommerce1.Controllers
                 cartViewModel.Cart = cart;
                 cartViewModel.CartDetails = cartDetails;
                 ViewBag.CartCount = await _service.GetCartTotalQty(userId);
+                ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
                 ViewBag.CustomersId = userId;
+
                 var user = await _userManager.FindByIdAsync(userId);
                 ViewBag.Customer = user.FirstName;
 

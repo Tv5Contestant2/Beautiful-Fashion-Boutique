@@ -74,6 +74,9 @@ namespace ECommerce1.Data
 
         public DbSet<Transactions> Transactions { get; set; }
 
+        public DbSet<Wishlist> Wishlists { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

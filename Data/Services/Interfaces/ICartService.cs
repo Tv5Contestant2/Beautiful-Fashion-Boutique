@@ -11,7 +11,13 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<IEnumerable<CartDetails>> GetCartItems(string userId);
 
+        public Task<IEnumerable<Wishlist>> GetWishlistItems(string userId);
+
+        public bool CheckIfExistInWishlist(long productId, string userId);
+
         public Task<int> GetCartTotalQty(string userId);
+
+        public Task<int> GetWishlistCount(string userId);
 
         public Task CreateCart(Cart cart);
 
@@ -19,11 +25,17 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public void AddToCartItems(CartDetails cartDetails);
 
+        public void AddToWishlist(Wishlist wishlist);
+
         public void UpdateCartItems(CartDetails cartDetails);
 
         public Task RemoveFromCart(long productId, string userId);
 
+        public Task RemoveFromWishlist(long productId, string userId);
+
         public Task<CartDetails> GetCartItemsByProductId(long productId, string userId);
+
+        public Task<Wishlist> GetWishlistItemsByProductId(long productId, string userId);
 
         public Task EmptyCart(string userId);
 

@@ -1,0 +1,190 @@
+﻿@model IEnumerable<OrderDetails>
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-9 order-2 order-lg-1">
+                <h1>@ViewBag.Title</h1>
+            </div>
+            <div class="col-lg-3 text-end order-1 order-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Home">Home</a></li>
+                        <li class="breadcrumb-item active"><a asp-controller="Profile" asp-action="Orders">My Orders</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-5">
+    <div class="container py-4">
+        <div class="row gx-5 gy-5">
+            @*Sidebar*@
+            <div class="col-xl-3 col-lg-4">
+                <div class="bg-light text-center p-4 rounded-top-lg border border-bottom-0">
+                    <a class="d-inline-block" href="#"><img class="img-fluid rounded-circle img-thumbnail p-2 mb-3" src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/person-3.28271a04.jpg" width="150" alt="..."></a>
+                    <h5>@ViewBag.Customer</h5>
+                    <p class="text-muted text-small">@ViewBag.Address</p>
+                </div>
+                <nav class="list-group">
+                    <a class="active list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Orders">
+                        <span class="fw-normal text-sm text-dark py-1">
+                            <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
+                                <use xlink:href="#shopping-bag-1"> </use>
+                            </svg>Orders
+                        </span><small class="badge rounded-pill bg-light text-dark">@ViewBag.OrderCount</small>
+                    </a>
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Wishlist">
+                        <span class="fw-normal text-sm text-dark py-1">
+                            <i class="far fa-heart"></i>&nbsp;&nbsp;&nbsp;Wishlist
+                        </span>
+                        <small class="badge rounded-pill bg-light text-dark">@ViewBag.WishlistCount</small>
+                    </a>
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" asp-controller="Profile" asp-action="Index" aria-current="true">
+                        <span class="fw-normal text-sm py-1">
+                            <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
+                                <use xlink:href="#user-1"> </use>
+                            </svg>Profile
+                        </span>
+                    </a>
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Addresses">
+                        <span class="fw-normal text-sm text-dark py-1">
+                            <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
+                                <use xlink:href="#map-marker-1"> </use>
+                            </svg>Addresses
+                        </span>
+                    </a>
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Home" asp-action="SignOut">
+                        <span class="fw-normal text-sm text-dark py-1">
+                            <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
+                                <use xlink:href="#key-1"> </use>
+                            </svg>Log out
+                        </span>
+                    </a>
+                </nav>
+            </div>
+            @{
+                var total = Model.Sum(x => (x.Product.IsSale ? x.Product.PriceOnSale : x.Product.Price) * x.Quantity);
+                var shipping = 100.00;
+                var vat = 12;
+
+                var vatAmount = @total * @vat / 100;
+                var totalAmount = @total + @vatAmount + Convert.ToDecimal(@shipping);
+
+                <div class="col-lg-8 col-xl-9">
+                    <div class="row justify-content-between align-content-center pb-2">
+                        <div class="col-lg-7">
+                            <p class="text-small mb-0">Reference</p>
+                            <h5 class="fw-bold mb-0">@ViewBag.TransactionId</h5>
+                        </div>
+                        <div class="col-lg-4 text-end">
+                            <p class="text-small mb-0">Total</p>
+                            <h5 class="text-primary mb-0">Php @totalAmount</h5>
+                        </div>
+                    </div>
+                    <div class="cart-outer mb-5">
+                        <div class="cart-inner">
+                            <div class="border-top border-bottom py-2">
+                                <div class="row text-uppercase">
+                                    <div class="col-6"><strong class="small">Product</strong></div>
+                                    <div class="col-2"> <strong class="small">Price</strong></div>
+                                    <div class="col-2"> <strong class="small">Quantity</strong></div>
+                                    <div class="col-2 text-end"><strong class="small">Unit price</strong></div>
+                                </div>
+                            </div>
+                            @*Product*@
+                            @foreach (var item in Model)
+                            {
+                                <div class="py-4 border-bottom">
+                                    <div class="row d-flex align-items-center bord">
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center">
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
+                                                <div class="ms-3">
+                                                    <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
+                                                        <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6><span class="text-muted text-sm">Size: Large</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            @{
+                                                if (item.Product.IsSale)
+                                                { <span>Php @item.Product.PriceOnSale</span> }
+                                            else
+                                            { <span>Php @item.Product.Price</span> }
+                                            }
+                                        </div>
+                                        <div class="col-2"><span>@item.Quantity</span></div>
+                                        <div class="col-2 text-end">
+                                            @{
+                                                var gridTotalAmount = (item.Product.IsSale ? item.Product.PriceOnSale : item.Product.Price) * item.Quantity;
+                                                <span>Php @gridTotalAmount</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row d-flex">
+                        @*Order Summary*@
+                        <div class="col-lg-7 col-xl-7">
+                            <div class="card rounded-6 mb-4">
+                                <div class="card-body px-4 py-4">
+                                    <h5 class="text-uppercase">Order Summary</h5>
+                                    <ul class="list-unstyled">
+                                        @{
+                                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
+                                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
+                                            <li class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>VAT (@vat%)</span>
+                                                <strong class="fw-normal">Php @vatAmount</strong>
+                                            </li>
+                                            <li class="d-flex justify-content-between py-3">
+                                                <span>Total</span>
+                                                <strong class="fw-normal">Php <span>@totalAmount</span></strong>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*Shipping Summary*@
+                        <div class="col-lg-4 col-xl-5">
+                            <div class="card rounded-6 mb-4">
+                                <div class="card-body px-4 py-4">
+                                    <h5 class="text-uppercase">Shipping Summary</h5>
+                                    <ul class="list-unstyled">
+                                        <li id="dvPayment" style="display: none">
+                                            <div class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>Payment Method </span>
+                                                <strong class="fw-normal">
+                                                    <label id="paymentMethod" type="text" class="text-end"></label>
+                                                </strong>
+                                            </div>
+                                        </li>
+                                        <li id="dvDelivery" style="display: none">
+                                            <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>Delivery Method </span>
+                                                <strong class="fw-normal">
+                                                    <label id="deliveryMethod" type="text" class="text-end"></label>
+                                                </strong>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

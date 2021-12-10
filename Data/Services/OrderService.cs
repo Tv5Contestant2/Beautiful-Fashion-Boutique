@@ -41,5 +41,25 @@ namespace ECommerce1.Data.Services
 
             return result;
         }
+
+        public async Task<IEnumerable<OrderDetails>> GetOrderDetailsById(string transactionId)
+        {
+            var result = await _context.OrdersDetails
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductImages)
+                .Where(x => x.TransactionId.ToString() == transactionId)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<int> GetCustomerOrderCount(string userId)
+        {
+            var result = await _context.Orders
+                .Where(x => x.CustomersId == userId)
+                .ToListAsync();
+
+            return result.Count();
+        }
     }
 }

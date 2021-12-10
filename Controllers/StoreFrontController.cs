@@ -48,6 +48,7 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.ProductCategories = productCategories;
             ViewBag.Products = products;
             ViewBag.CustomersId = userId;
@@ -68,6 +69,7 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
             ViewBag.Products = products;
             ViewBag.ProductCategories = productCategories;
@@ -85,6 +87,7 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
             ViewBag.Products = products;
             ViewBag.ProductCategories = productCategories;
@@ -102,6 +105,7 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
             ViewBag.Products = products;
             ViewBag.ProductCategories = productCategories;
@@ -119,6 +123,7 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
             ViewBag.Products = products;
             ViewBag.ProductCategories = productCategories;
@@ -143,6 +148,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
             var result = _administratorService.GetContactUs();
             return View(result);
@@ -157,6 +163,9 @@ namespace ECommerce1.Controllers
             if (productDetails == null) return RedirectToAction("Error", "Home");
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.IsProductExist = _cartService.CheckIfExistInWishlist(id, userId);
+
             ViewBag.CustomersId = userId;
             ViewBag.Product = productDetails;
 

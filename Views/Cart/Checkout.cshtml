@@ -252,7 +252,7 @@
                                         <div class="col-2 text-end"><strong class="small">Unit price</strong></div>
                                     </div>
                                 </div>
-                                <!-- Product-->
+                                @*Product*@
                                 @foreach (var item in Model.CartDetails)
                                 {
                                     <div class="py-4 border-bottom">
@@ -330,7 +330,7 @@
                                             <strong class="fw-normal">Php @vatAmount</strong>
                                         }
                                     </li>
-                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                    <li class="d-flex justify-content-between py-3">
                                         <span>Total</span>
                                         @{
                                             var totalAmount = @total + @vatAmount + Convert.ToDecimal(@shipping);

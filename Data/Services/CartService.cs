@@ -43,6 +43,15 @@ namespace ECommerce1.Data.Services
             return count == 0 ? 0 : count;
         }
 
+        public async Task<int> GetWishlistCount(string userId)
+        {
+            var result = await _context.Wishlists
+                .Where(x => x.CustomersId == userId)
+                .ToListAsync();
+
+            return result.Count();
+        }
+
         public async Task<IEnumerable<CartDetails>> GetCartItems(string userId)
         {
             var result = await _context.CartDetails
@@ -74,6 +83,37 @@ namespace ECommerce1.Data.Services
             }
 
             return _cart;
+        }
+
+        public async Task<IEnumerable<Wishlist>> GetWishlistItems(string userId)
+        {
+            var result = await _context.Wishlists
+                .Include(x => x.Product).ThenInclude(x => x.ProductImages)
+                .Where(x => x.CustomersId == userId)
+                .ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.Product.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.Product.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Product.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Product.Image = _commonServices.NoImage;
+                }
+            }
+
+            return result;
+        }
+
+        public bool CheckIfExistInWishlist(long id, string userId)
+        {
+            var result = _context.Wishlists.Any(x => x.ProductId == id && x.CustomersId == userId);
+
+            return result;
         }
 
         public async Task CreateCart(Cart cart)
@@ -126,10 +166,18 @@ namespace ECommerce1.Data.Services
             _context.SaveChanges();
         }
 
+        public void AddToWishlist(Wishlist wishlist)
+        {
+            _context.Wishlists.Add(wishlist);
+            _context.SaveChanges();
+        }
+
         public void UpdateCartItems(CartDetails cartDetails)
         {
             _context.CartDetails.Update(cartDetails);
             _context.SaveChanges();
+
+
         }
         
         public async Task RemoveFromCart(long productId, string userId)
@@ -146,6 +194,14 @@ namespace ECommerce1.Data.Services
 
                 await _context.SaveChangesAsync();
             }
+        }
+        
+        public async Task RemoveFromWishlist(long productId, string userId)
+        {
+            var result = _context.Wishlists.FirstOrDefault(x => x.ProductId == productId && x.CustomersId == userId);
+            _context.Wishlists.Remove(result);
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task EmptyCart(string userId)
@@ -164,6 +220,12 @@ namespace ECommerce1.Data.Services
         public async Task<CartDetails> GetCartItemsByProductId(long productId, string userId)
         {
             var result = await _context.CartDetails.ToListAsync();
+            return result.Find(x => x.ProductId == productId && x.CustomersId == userId);
+        }
+
+        public async Task<Wishlist> GetWishlistItemsByProductId(long productId, string userId)
+        {
+            var result = await _context.Wishlists.ToListAsync();
             return result.Find(x => x.ProductId == productId && x.CustomersId == userId);
         }
     }
