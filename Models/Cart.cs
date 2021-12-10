@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECommerce1.Models
 {
@@ -6,6 +7,7 @@ namespace ECommerce1.Models
     {
         [Key]
         public int Id { get; set; }
+
         public string CustomersId { get; set; }
         public string Instructions { get; set; }
 
@@ -27,9 +29,12 @@ namespace ECommerce1.Models
         public string BillingContactNumber { get; set; }
         public string BillingEmail { get; set; }
         public bool IsDelivery { get; set; }
+        public bool IsGCash { get; set; }
         public bool IsPickup { get; set; }
         public bool IsPayMaya { get; set; }
         public bool IsCashOnDelivery { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Total { get; set; }
 
         public Customers Customers { get; set; }

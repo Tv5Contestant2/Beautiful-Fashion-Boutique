@@ -38,324 +38,324 @@
     var shipping = 100.00;
     var vat = 12;
 
-<section class="py-5">
-    <form asp-controller="Cart" asp-action="OrderConfirmed">
-        <div class="container py-5">
-            <div class="row gy-5 gx-5">
-                @*Delivery Address*@
-                <div class="col-lg-8" id="dvDeliveryAddress">
-                    <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase active" href="#">Address</a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Delivery Method </a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Payment Method </a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Order Review</a></li>
-                    </ul>
-                    <div id="address">
-                        <div class="bg-light rounded-pill px-4 py-3">
-                            <h6 class="mb-0">Delivery Address</h6>
-                        </div>
-                        <div class="row gx-2 gy-3 py-5">
-                            <div class="col-md-6">
-                                <label class="form-label" for="shipping_firstname">First Name</label>
-                                <input class="form-control" type="text" asp-for="Cart.ShippingFirstName">
+    <section class="py-5">
+        <form asp-controller="Cart" asp-action="OrderConfirmed">
+            <div class="container py-5">
+                <div class="row gy-5 gx-5">
+                    @*Delivery Address*@
+                    <div class="col-lg-8" id="dvDeliveryAddress">
+                        <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase active" href="#">Address</a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Delivery Method </a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Payment Method </a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Order Review</a></li>
+                        </ul>
+                        <div id="address">
+                            <div class="bg-light rounded-pill px-4 py-3">
+                                <h6 class="mb-0">Delivery Address</h6>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="shipping_lastname">Last Name</label>
-                                <input class="form-control" asp-for="Cart.ShippingLastName">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="shipping_block">Block</label>
-                                <input class="form-control" asp-for="Cart.ShippingBlock">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="shipping_lot">Lot</label>
-                                <input class="form-control" asp-for="Cart.ShippingLot">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="shipping_brgy">Barangay</label>
-                                <input class="form-control" asp-for="Cart.ShippingBarangay">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="shipping_city">City</label>
-                                <input class="form-control" asp-for="Cart.ShippingCity">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="shipping_email">Email Address</label>
-                                <input class="form-control" asp-for="Cart.ShippingEmail">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label" for="shipping_phone-number">Phone Number</label>
-                                <input class="form-control" asp-for="Cart.ShippingContactNumber">
-                            </div>
-                        </div>
-
-                        @*Billing Address*@
-                        <div id="billingaddress">
-                            <div class="bg-light rounded-pill px-4 py-3 d-flex justify-content-between mb-3">
-                                <h6 class="mb-0">Billing Address</h6>
-                                <span><input class="form-check-input" type="checkbox" id="chkBillingAddress" onchange="showBillingAddress()" checked asp-for="Cart.IsBillingSame" />&nbsp; Same as Shipping Address</span>
-                            </div>
-
-                            <div id="dvBillingAddress" class="row gx-2 gy-3 py-5" style="display: none">
+                            <div class="row gx-2 gy-3 py-5">
                                 <div class="col-md-6">
                                     <label class="form-label" for="shipping_firstname">First Name</label>
-                                    <input class="form-control" type="text" asp-for="Cart.BillingFirstName">
+                                    <input class="form-control" type="text" asp-for="Cart.ShippingFirstName">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="shipping_lastname">Last Name</label>
-                                    <input class="form-control" asp-for="Cart.BillingLastName">
+                                    <input class="form-control" asp-for="Cart.ShippingLastName">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="shipping_block">Block</label>
-                                    <input class="form-control" asp-for="Cart.BillingBlock">
+                                    <input class="form-control" asp-for="Cart.ShippingBlock">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="shipping_lot">Lot</label>
-                                    <input class="form-control" asp-for="Cart.BillingLot">
+                                    <input class="form-control" asp-for="Cart.ShippingLot">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="shipping_brgy">Barangay</label>
-                                    <input class="form-control" asp-for="Cart.BillingBarangay">
+                                    <input class="form-control" asp-for="Cart.ShippingBarangay">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="shipping_city">City</label>
-                                    <input class="form-control" asp-for="Cart.BillingCity">
+                                    <input class="form-control" asp-for="Cart.ShippingCity">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="shipping_email">Email Address</label>
-                                    <input class="form-control" asp-for="Cart.BillingEmail">
+                                    <input class="form-control" asp-for="Cart.ShippingEmail">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="shipping_phone-number">Phone Number</label>
-                                    <input class="form-control" asp-for="Cart.BillingContactNumber">
+                                    <input class="form-control" asp-for="Cart.ShippingContactNumber">
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="d-flex justify-content-between flex-column flex-lg-row">
-                            <a class="btn btn-outline-secondary px-sm-5 my-1" asp-controller="Cart" asp-action="Index"> <i class="fas fa-angle-left me-2"></i>Back to basket</a>
-                            <a class="btn btn-primary px-sm-5 my-1" onclick="showDeliveryMethod()">Choose delivery method<i class="fas fa-angle-right ms-2"></i></a>
+                            @*Billing Address*@
+                            <div id="billingaddress">
+                                <div class="bg-light rounded-pill px-4 py-3 d-flex justify-content-between mb-3">
+                                    <h6 class="mb-0">Billing Address</h6>
+                                    <span><input class="form-check-input" type="checkbox" id="chkBillingAddress" onchange="showBillingAddress()" checked asp-for="Cart.IsBillingSame" />&nbsp; Same as Shipping Address</span>
+                                </div>
+
+                                <div id="dvBillingAddress" class="row gx-2 gy-3 py-5" style="display: none">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="shipping_firstname">First Name</label>
+                                        <input class="form-control" type="text" asp-for="Cart.BillingFirstName">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="shipping_lastname">Last Name</label>
+                                        <input class="form-control" asp-for="Cart.BillingLastName">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="shipping_block">Block</label>
+                                        <input class="form-control" asp-for="Cart.BillingBlock">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="shipping_lot">Lot</label>
+                                        <input class="form-control" asp-for="Cart.BillingLot">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="shipping_brgy">Barangay</label>
+                                        <input class="form-control" asp-for="Cart.BillingBarangay">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="shipping_city">City</label>
+                                        <input class="form-control" asp-for="Cart.BillingCity">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="shipping_email">Email Address</label>
+                                        <input class="form-control" asp-for="Cart.BillingEmail">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="shipping_phone-number">Phone Number</label>
+                                        <input class="form-control" asp-for="Cart.BillingContactNumber">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between flex-column flex-lg-row">
+                                <a class="btn btn-outline-secondary px-sm-5 my-1" asp-controller="Cart" asp-action="Index"> <i class="fas fa-angle-left me-2"></i>Back to basket</a>
+                                <a class="btn btn-primary px-sm-5 my-1" onclick="showDeliveryMethod()">Choose delivery method<i class="fas fa-angle-right ms-2"></i></a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                @*Delivery Method*@
-                <div class="col-lg-8" id="dvDeliveryMethod" style="display: none">
-                    <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryAddress()" href="#">Address</a></li>
-                        <li class="nav-item my-1 my-lg-0 active"><a class="nav-link py-3 small text-uppercase active" onclick="showDeliveryMethod()" href="#">Delivery Method </a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Payment Method </a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Order Review</a></li>
-                    </ul>
-                    <div id="delivery-method">
-                        <div class="row">
-                            <div class="form-check col-md-6 mb-4">
-                                <input id="isDelivery" asp-for="Cart.IsDelivery" type="hidden"/>
-                                <input class="form-check-input" type="radio" name="delivery-method" value="true" onclick='document.getElementById("isDelivery").value = true; document.getElementById("isPickup").value = false; document.getElementById("deliveryMethod").innerHTML = "Delivery";'>
-                                <label class="form-check-label" for="option1"><strong>Delivery</strong><br><span class="text-sm text-muted">Delivered right at your doorstep - as early as possible.</span></label>
+                    @*Delivery Method*@
+                    <div class="col-lg-8" id="dvDeliveryMethod" style="display: none">
+                        <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryAddress()" href="#">Address</a></li>
+                            <li class="nav-item my-1 my-lg-0 active"><a class="nav-link py-3 small text-uppercase active" onclick="showDeliveryMethod()" href="#">Delivery Method </a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Payment Method </a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Order Review</a></li>
+                        </ul>
+                        <div id="delivery-method">
+                            <div class="row">
+                                <div class="form-check col-md-6 mb-4">
+                                    <input id="isDelivery" asp-for="Cart.IsDelivery" type="hidden" />
+                                    <input class="form-check-input" type="radio" name="delivery-method" value="true" onclick='document.getElementById("isDelivery").value = true; document.getElementById("isPickup").value = false; document.getElementById("deliveryMethod").innerHTML = "Delivery";'>
+                                    <label class="form-check-label" for="option1"><strong>Delivery</strong><br><span class="text-sm text-muted">Delivered right at your doorstep - as early as possible.</span></label>
+                                </div>
+                                <div class="form-check col-md-6 mb-4">
+                                    <input id="isPickup" asp-for="Cart.IsPickup" type="hidden" />
+                                    <input class="form-check-input" type="radio" name="delivery-method" value="true" onclick='document.getElementById("isDelivery").value = false; document.getElementById("isPickup").value = true; document.getElementById("deliveryMethod").innerHTML = "Store Pick-up";'>
+                                    <label class="form-check-label" for="option2"><strong>Store Pick-up</strong><br><span class="text-sm text-muted">Get it right on next day - fastest option possible.</span></label>
+                                </div>
                             </div>
-                            <div class="form-check col-md-6 mb-4">
-                                <input id="isPickup" asp-for="Cart.IsPickup" type="hidden"/>
-                                <input class="form-check-input" type="radio" name="delivery-method" value="true" onclick='document.getElementById("isDelivery").value = false; document.getElementById("isPickup").value = true; document.getElementById("deliveryMethod").innerHTML = "Store Pick-up";'>
-                                <label class="form-check-label" for="option2"><strong>Store Pick-up</strong><br><span class="text-sm text-muted">Get it right on next day - fastest option possible.</span></label>
+                            <div class="d-flex justify-content-between flex-column flex-lg-row">
+                                <a class="btn btn-outline-secondary px-sm-5 my-1" onclick="showDeliveryAddress()" href="#"><i class="fas fa-angle-left me-2"></i>Back to Address</a>
+                                <a class="btn btn-primary px-sm-5 my-1" onclick="showPaymentMethod()" href="#">Choose payment method<i class="fas fa-angle-right ms-2"></i></a>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-between flex-column flex-lg-row">
-                            <a class="btn btn-outline-secondary px-sm-5 my-1" onclick="showDeliveryAddress()" href="#"><i class="fas fa-angle-left me-2"></i>Back to Address</a>
-                            <a class="btn btn-primary px-sm-5 my-1" onclick="showPaymentMethod()" href="#">Choose payment method<i class="fas fa-angle-right ms-2"></i></a>
                         </div>
                     </div>
-                </div>
 
-                @*Payment Method*@
-                <div class="col-lg-8" id="dvPaymentMethod" style="display: none">
-                    <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryAddress()" href="#">Address</a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryMethod()" href="#">Delivery Method </a></li>
-                        <li class="nav-item my-1 my-lg-0 active"><a class="nav-link py-3 small text-uppercase active" onclick="showPaymentMethod()" href="#">Payment Method </a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Order Review</a></li>
-                    </ul>
-                    <div id="payment-method" class="form-group">
-                        <div class="accordion accordion-flush mb-5" id="paymentAccordion">
-                            <div class="accordion-item border-bottom-0 mb-3">
-                                <h5 class="accordion-header mb-0 px-3 rounded-pill bg-light" id="payment-headingTwo">
-                                    <button class="accordion-button border-0 shadow-0 bg-light text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payment-collapseOne" aria-expanded="false" aria-controls="payment-collapseOne"> <span class="fw-normal">GCash</span></button>
-                                </h5>
-                                <div class="accordion-collapse border-0 collapse" id="payment-collapseOne" aria-labelledby="payment-headingOne" data-bs-parent="#paymentAccordion">
-                                    <div class="accordion-body">
-                                        <div class="p-3">
-                                            @*<input id="isGCash" asp-for="Cart.IsGCash" type="hidden" />*@
-                                            <input class="form-check-input" type="radio" name="payment-method" value="true" onclick='document.getElementById("isGCash").value = true; document.getElementById("isCashOnDelivery").value = false; document.getElementById("isPayMaya").value = false; document.getElementById("paymentMethod").innerHTML = "GCash"';>
-                                            <label class="form-check-label ms-2" for="payment-method-1">
-                                                <strong>Continue with GCash</strong>
-                                            </label>
+                    @*Payment Method*@
+                    <div class="col-lg-8" id="dvPaymentMethod" style="display: none">
+                        <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryAddress()" href="#">Address</a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryMethod()" href="#">Delivery Method </a></li>
+                            <li class="nav-item my-1 my-lg-0 active"><a class="nav-link py-3 small text-uppercase active" onclick="showPaymentMethod()" href="#">Payment Method </a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase disabled" href="#">Order Review</a></li>
+                        </ul>
+                        <div id="payment-method" class="form-group">
+                            <div class="accordion accordion-flush mb-5" id="paymentAccordion">
+                                <div class="accordion-item border-bottom-0 mb-3">
+                                    <h5 class="accordion-header mb-0 px-3 rounded-pill bg-light" id="payment-headingTwo">
+                                        <button class="accordion-button border-0 shadow-0 bg-light text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payment-collapseOne" aria-expanded="false" aria-controls="payment-collapseOne"> <span class="fw-normal">GCash</span></button>
+                                    </h5>
+                                    <div class="accordion-collapse border-0 collapse" id="payment-collapseOne" aria-labelledby="payment-headingOne" data-bs-parent="#paymentAccordion">
+                                        <div class="accordion-body">
+                                            <div class="p-3">
+                                                <input id="isGCash" asp-for="Cart.IsGCash" type="hidden" />
+                                                <input class="form-check-input" type="radio" name="payment-method" value="true" onclick='document.getElementById("isGCash").value = true; document.getElementById("isCashOnDelivery").value = false; document.getElementById("isPayMaya").value = false; document.getElementById("paymentMethod").innerHTML = "GCash"' ;>
+                                                <label class="form-check-label ms-2" for="payment-method-1">
+                                                    <strong>Continue with GCash</strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border-bottom-0 mb-3">
+                                    <h5 class="accordion-header mb-0 px-3 rounded-pill bg-light" id="payment-headingTwo">
+                                        <button class="accordion-button border-0 shadow-0 bg-light text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payment-collapseTwo" aria-expanded="false" aria-controls="payment-collapseTwo"> <span class="fw-normal">PayMaya</span></button>
+                                    </h5>
+                                    <div class="accordion-collapse border-0 collapse" id="payment-collapseTwo" aria-labelledby="payment-headingTwo" data-bs-parent="#paymentAccordion">
+                                        <div class="accordion-body">
+                                            <div class="p-3">
+                                                <input id="isPaymaya" asp-for="Cart.IsPayMaya" type="hidden" />
+                                                <input class="form-check-input" type="radio" name="payment-method" value="true" onclick='document.getElementById("isPaymaya").value = true; document.getElementById("isCOD").value = false; document.getElementById("paymentMethod").innerHTML = "PayMaya";'>
+                                                <label class="form-check-label ms-2" for="payment-method-1">
+                                                    <strong>Continue with PayMaya</strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border-bottom-0">
+                                    <h5 class="accordion-header mb-0 px-3 rounded-pill bg-light" id="payment-headingThree">
+                                        <button class="accordion-button border-0 shadow-0 bg-light text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payment-collapseThree" aria-expanded="false" aria-controls="payment-collapseThree"> <span class="fw-normal">Pay on delivery</span></button>
+                                    </h5>
+                                    <div class="accordion-collapse border-0 collapse" id="payment-collapseThree" aria-labelledby="payment-headingThree" data-bs-parent="#paymentAccordion">
+                                        <div class="accordion-body">
+                                            <div class="p-3">
+                                                <input id="isCOD" asp-for="Cart.IsCashOnDelivery" type="hidden" />
+                                                <input class="form-check-input" type="radio" name="payment-method" value="true" onclick='document.getElementById("isPaymaya").value = false; document.getElementById("isCOD").value = true; document.getElementById("paymentMethod").innerHTML = "Cash on delivery";'>
+                                                <label class="form-check-label ms-2" for="payment-method-2">
+                                                    <strong>Cash on delivery</strong>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="accordion-item border-bottom-0 mb-3">
-                                <h5 class="accordion-header mb-0 px-3 rounded-pill bg-light" id="payment-headingTwo">
-                                    <button class="accordion-button border-0 shadow-0 bg-light text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payment-collapseTwo" aria-expanded="false" aria-controls="payment-collapseTwo"> <span class="fw-normal">PayMaya</span></button>
-                                </h5>
-                                <div class="accordion-collapse border-0 collapse" id="payment-collapseTwo" aria-labelledby="payment-headingTwo" data-bs-parent="#paymentAccordion">
-                                    <div class="accordion-body">
-                                        <div class="p-3">
-                                            <input id="isPaymaya" asp-for="Cart.IsPayMaya" type="hidden" />
-                                            <input class="form-check-input" type="radio" name="payment-method" value="true" onclick='document.getElementById("isPaymaya").value = true; document.getElementById("isCOD").value = false; document.getElementById("paymentMethod").innerHTML = "PayMaya";'>
-                                            <label class="form-check-label ms-2" for="payment-method-1">
-                                                <strong>Continue with PayMaya</strong>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="d-flex justify-content-between flex-column flex-lg-row">
+                                <a class="btn btn-outline-secondary px-sm-5 my-1" onclick="showDeliveryMethod()"> <i class="fas fa-angle-left me-2"></i>Back to delivery method</a>
+                                <a class="btn btn-primary px-sm-5 my-1" onclick="showOrderReview()">Continue to order review<i class="fas fa-angle-right ms-2"></i></a>
                             </div>
-                            <div class="accordion-item border-bottom-0">
-                                <h5 class="accordion-header mb-0 px-3 rounded-pill bg-light" id="payment-headingThree">
-                                    <button class="accordion-button border-0 shadow-0 bg-light text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payment-collapseThree" aria-expanded="false" aria-controls="payment-collapseThree"> <span class="fw-normal">Pay on delivery</span></button>
-                                </h5>
-                                <div class="accordion-collapse border-0 collapse" id="payment-collapseThree" aria-labelledby="payment-headingThree" data-bs-parent="#paymentAccordion">
-                                    <div class="accordion-body">
-                                        <div class="p-3">
-                                            <input id="isCOD" asp-for="Cart.IsCashOnDelivery" type="hidden" />
-                                            <input class="form-check-input" type="radio" name="payment-method" value="true" onclick='document.getElementById("isPaymaya").value = false; document.getElementById("isCOD").value = true; document.getElementById("paymentMethod").innerHTML = "Cash on delivery";'>
-                                            <label class="form-check-label ms-2" for="payment-method-2">
-                                                <strong>Cash on delivery</strong>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between flex-column flex-lg-row">
-                            <a class="btn btn-outline-secondary px-sm-5 my-1" onclick="showDeliveryMethod()"> <i class="fas fa-angle-left me-2"></i>Back to delivery method</a>
-                            <a class="btn btn-primary px-sm-5 my-1" onclick="showOrderReview()">Continue to order review<i class="fas fa-angle-right ms-2"></i></a>
                         </div>
                     </div>
-                </div>
 
-                @*Order Review*@
-                <div class="col-lg-8" id="dvOrderReview" style="display: none">
-                    <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryAddress()" href="#">Address</a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryMethod()" href="#">Delivery Method </a></li>
-                        <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showPaymentMethod()" href="#">Payment Method </a></li>
-                        <li class="nav-item my-1 my-lg-0 active"><a class="nav-link py-3 small text-uppercase active" onclick="showOrderReview()" href="#">Order Review</a></li>
-                    </ul>
-                    <div id="order-review">
-                        <div class="cart-outer mb-5">
-                            <div class="cart-inner">
-                                <div class="border-top border-bottom py-2">
-                                    <div class="row text-uppercase">
-                                        <div class="col-6"><strong class="small">Product</strong></div>
-                                        <div class="col-2"> <strong class="small">Price</strong></div>
-                                        <div class="col-2"> <strong class="small">Quantity</strong></div>
-                                        <div class="col-2 text-end"><strong class="small">Unit price</strong></div>
+                    @*Order Review*@
+                    <div class="col-lg-8" id="dvOrderReview" style="display: none">
+                        <ul class="nav nav-pills rounded-lg-pill flex-column flex-lg-row nav-fill pills-lg-rounded list-separated-lg-secondary mb-5">
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryAddress()" href="#">Address</a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showDeliveryMethod()" href="#">Delivery Method </a></li>
+                            <li class="nav-item my-1 my-lg-0"><a class="nav-link py-3 small text-uppercase" onclick="showPaymentMethod()" href="#">Payment Method </a></li>
+                            <li class="nav-item my-1 my-lg-0 active"><a class="nav-link py-3 small text-uppercase active" onclick="showOrderReview()" href="#">Order Review</a></li>
+                        </ul>
+                        <div id="order-review">
+                            <div class="cart-outer mb-5">
+                                <div class="cart-inner">
+                                    <div class="border-top border-bottom py-2">
+                                        <div class="row text-uppercase">
+                                            <div class="col-6"><strong class="small">Product</strong></div>
+                                            <div class="col-2"> <strong class="small">Price</strong></div>
+                                            <div class="col-2"> <strong class="small">Quantity</strong></div>
+                                            <div class="col-2 text-end"><strong class="small">Unit price</strong></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- Product-->
-                                @foreach (var item in Model.CartDetails)
-                                {
-                                    <div class="py-4 border-bottom">
-                                        <div class="row d-flex align-items-center bord">
-                                            <div class="col-6">
-                                                <div class="d-flex align-items-center">
-                                                    <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
-                                                    <div class="ms-3">
-                                                        <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
-                                                            <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6><span class="text-muted text-sm">Size: Large</span>
-                                                        </a>
+                                    <!-- Product-->
+                                    @foreach (var item in Model.CartDetails)
+                                    {
+                                        <div class="py-4 border-bottom">
+                                            <div class="row d-flex align-items-center bord">
+                                                <div class="col-6">
+                                                    <div class="d-flex align-items-center">
+                                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
+                                                        <div class="ms-3">
+                                                            <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
+                                                                <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6><span class="text-muted text-sm">Size: Large</span>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-2"><span>Php @item.Product.Price</span></div>
-                                            <div class="col-2"><span>@item.Quantity</span></div>
-                                            <div class="col-2 text-end">
-                                                @{
-                                                    var gridTotalAmount = (item.Product.IsSale ? item.Product.PriceOnSale : item.Product.Price) * item.Quantity;
-                                                    <span>Php @gridTotalAmount</span>
-                                                }
+                                                <div class="col-2"><span>Php @item.Product.Price</span></div>
+                                                <div class="col-2"><span>@item.Quantity</span></div>
+                                                <div class="col-2 text-end">
+                                                    @{
+                                                        var gridTotalAmount = (item.Product.IsSale ? item.Product.PriceOnSale : item.Product.Price) * item.Quantity;
+                                                        <span>Php @gridTotalAmount</span>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
-                                <div class="row pt-4 pb-3">
-                                    <div class="col-6">
-                                        <p class="h5 fw-normal mb-0">Total</p>
-                                    </div>
-                                    <div class="col-6 text-end">
-                                        <h5 class="text-primary mb-0">
-                                            <span>Php @total</span>
-                                        </h5>
+                                    }
+                                    <div class="row pt-4 pb-3">
+                                        <div class="col-6">
+                                            <p class="h5 fw-normal mb-0">Total</p>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <h5 class="text-primary mb-0">
+                                                <span>Php @total</span>
+                                            </h5>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-between flex-column flex-lg-row">
-                            <input type="hidden" asp-for="Cart.CustomersId" value="@ViewBag.CustomersId" />
-                            <a class="btn btn-outline-secondary px-sm-5 my-1" onclick="showPaymentMethod()"> <i class="fas fa-angle-left me-2"></i>Back to payment method</a>
-                            <button class="btn btn-primary px-sm-5 my-1" type="submit">Checkout<i class="fas fa-angle-right ms-2"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                @*Order Summary*@
-                <div class="col-lg-4">
-                    <div class="card rounded-6 mb-4">
-                        <div class="card-body px-4 py-4">
-                            <h5 class="text-uppercase">Order Summary</h5>
-                            <ul class="list-unstyled">
-                                <li id="dvPayment" style="display: none">
-                                    <div class="d-flex justify-content-between py-3 border-bottom">
-                                        <span>Payment Method </span>
-                                        <strong class="fw-normal">
-                                            <label id="paymentMethod" type="text" class="text-end"></label>
-                                        </strong>
-                                    </div>
-                                </li>
-                                <li id="dvDelivery" style="display: none">
-                                    <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
-                                        <span>Delivery Method </span>
-                                        <strong class="fw-normal">
-                                            <label id="deliveryMethod" type="text" class="text-end"></label>
-                                        </strong>
-                                    </div>
-                                </li>
-                                @{
-                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
-                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
-                                    <li class="d-flex justify-content-between py-3 border-bottom">
-                                        <span>VAT (@vat%)</span>
-                                        @{
-                                            var vatAmount = @total * @vat / 100;
-                                            <strong class="fw-normal">Php @vatAmount</strong>
-                                        }
-                                    </li>
-                                    <li class="d-flex justify-content-between py-3 border-bottom">
-                                        <span>Total</span>
-                                        @{
-                                            var totalAmount = @total + @vatAmount + Convert.ToDecimal(@shipping);
-                                            <strong class="fw-normal">Php <label asp-for="Cart.Total">@totalAmount</label></strong>
-                                        }
-                                    </li>
-                                }
-                            </ul>
+                            <div class="d-flex justify-content-between flex-column flex-lg-row">
+                                <input type="hidden" asp-for="Cart.CustomersId" value="@ViewBag.CustomersId" />
+                                <a class="btn btn-outline-secondary px-sm-5 my-1" onclick="showPaymentMethod()"> <i class="fas fa-angle-left me-2"></i>Back to payment method</a>
+                                <button class="btn btn-primary px-sm-5 my-1" type="submit">Checkout<i class="fas fa-angle-right ms-2"></i></button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="card rounded-6">
-                        <div class="card-body px-4 py-4">
-                            <h5 class="text-uppercase">Instructions for seller</h5>
+                    @*Order Summary*@
+                    <div class="col-lg-4">
+                        <div class="card rounded-6 mb-4">
+                            <div class="card-body px-4 py-4">
+                                <h5 class="text-uppercase">Order Summary</h5>
+                                <ul class="list-unstyled">
+                                    <li id="dvPayment" style="display: none">
+                                        <div class="d-flex justify-content-between py-3 border-bottom">
+                                            <span>Payment Method </span>
+                                            <strong class="fw-normal">
+                                                <label id="paymentMethod" type="text" class="text-end"></label>
+                                            </strong>
+                                        </div>
+                                    </li>
+                                    <li id="dvDelivery" style="display: none">
+                                        <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
+                                            <span>Delivery Method </span>
+                                            <strong class="fw-normal">
+                                                <label id="deliveryMethod" type="text" class="text-end"></label>
+                                            </strong>
+                                        </div>
+                                    </li>
+                                    @{
+                                        <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
+                                        <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
+                                        <li class="d-flex justify-content-between py-3 border-bottom">
+                                            <span>VAT (@vat%)</span>
+                                            @{
+                                                var vatAmount = @total * @vat / 100;
+                                                <strong class="fw-normal">Php @vatAmount</strong>
+                                            }
+                                        </li>
+                                        <li class="d-flex justify-content-between py-3 border-bottom">
+                                            <span>Total</span>
+                                            @{
+                                                var totalAmount = @total + @vatAmount + Convert.ToDecimal(@shipping);
+                                                <strong class="fw-normal">Php <label asp-for="Cart.Total">@totalAmount</label></strong>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
 
-                            <p>If you have some information for the seller you can leave them in the box below</p>
-                            <input type="hidden" asp-for="Cart.CustomersId" value="@ViewBag.CustomersId" />
-                            <textarea class="rounded form-control" asp-for="Cart.Instructions" rows="6"></textarea>
+                        <div class="card rounded-6">
+                            <div class="card-body px-4 py-4">
+                                <h5 class="text-uppercase">Instructions for seller</h5>
+
+                                <p>If you have some information for the seller you can leave them in the box below</p>
+                                <input type="hidden" asp-for="Cart.CustomersId" value="@ViewBag.CustomersId" />
+                                <textarea class="rounded form-control" asp-for="Cart.Instructions" rows="6"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-</section>
+        </form>
+    </section>
 }
 else
 {
@@ -368,7 +368,6 @@ else
         </div>
     </section>
 }
-
 
 <div style="position: fixed; bottom: 10px; right: 10px;">
     <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
@@ -422,5 +421,4 @@ else
         else
             $("#dvBillingAddress").show();
     }
-
 </script>

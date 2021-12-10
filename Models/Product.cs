@@ -10,6 +10,7 @@ namespace ECommerce1.Models
     {
         [Key]
         public long Id { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public string Description { get; set; }
@@ -17,11 +18,13 @@ namespace ECommerce1.Models
 
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
+
         public int ColorId { get; set; }
 
         [Required]
         [Display(Name = "Status")]
         public int StatusId { get; set; }
+
         public int StockStatusId { get; set; }
 
         [Required]
@@ -44,15 +47,18 @@ namespace ECommerce1.Models
 
         public int SizeId { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
         [Display(Name = "Is on sale?")]
         public bool IsSale { get; set; }
 
         [Display(Name = "Price on sale")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? PriceOnSale { get; set; }
 
         #region Enumerables
+
         public IEnumerable<Color> Colors { get; set; }
         public IEnumerable<Gender> Genders { get; set; }
         public IEnumerable<ProductCategory> ProductCategories { get; set; }
@@ -61,13 +67,14 @@ namespace ECommerce1.Models
         public IEnumerable<Status> Statuses { get; set; }
         public IEnumerable<StockStatus> StockStatuses { get; set; }
         public IEnumerable<Size> Sizes { get; set; }
+
         #endregion Enumerables
 
         //Added temp
         [NotMapped]
         public string ProductVariantJSON { get; set; }
+
         [NotMapped]
         public string ProductImageJSON { get; set; }
-
     }
 }

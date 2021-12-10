@@ -17,16 +17,19 @@ namespace ECommerce1.Controllers
     {
         private readonly ICartService _service;
         private readonly IOrderService _orderService;
+        private readonly IAdyenService _adyenService;
         private readonly UserManager<User> _userManager;
 
         public CartController(
-            UserManager<User> userManager,
-            ICartService service,
-            IOrderService orderService)
+            UserManager<User> userManager
+            , ICartService service
+            , IOrderService orderService
+            , IAdyenService adyenService)
         {
             _service = service;
-            _orderService = orderService;            
+            _orderService = orderService;
             _userManager = userManager;
+            _adyenService = adyenService;
         }
 
         public async Task<IActionResult> Index()
@@ -55,14 +58,15 @@ namespace ECommerce1.Controllers
 
             if (cartItems == null)
                 _service.AddToCartItems(cartDetails);
-            else {
+            else
+            {
                 //increment quantity
                 cartItems.Quantity += cartDetails.Quantity;
                 _service.UpdateCartItems(cartItems);
             }
 
             // Cart
-            var cart = await _service.GetCart(userId);            
+            var cart = await _service.GetCart(userId);
             if (cart == null)
             {
                 var _cart = new Cart();
@@ -161,6 +165,7 @@ namespace ECommerce1.Controllers
 
             var cartViewModel = new CartViewModel();
             var cartDetails = await _service.GetCartItems(userId);
+            var user = new User();
 
             if (cart.CustomersId != null)
             {
@@ -168,15 +173,9 @@ namespace ECommerce1.Controllers
                 cartViewModel.CartDetails = cartDetails;
                 ViewBag.CartCount = await _service.GetCartTotalQty(userId);
                 ViewBag.CustomersId = userId;
-                var user = await _userManager.FindByIdAsync(userId);
+                user = await _userManager.FindByIdAsync(userId);
                 ViewBag.Customer = user.FirstName;
 
-                //if (cart.IsPayMaya)
-                //{
-                //    return RedirectToAction("PaymentRedirect", cartViewModel);
-                //}
-
-                // Update Cart
                 await _service.UpdateCart(userId, cart);
             }
 
@@ -185,7 +184,6 @@ namespace ECommerce1.Controllers
 
             foreach (var item in cartDetails)
             {
-
                 var _orderDetails = new OrderDetails
                 {
                     TransactionId = transactionId,
@@ -211,12 +209,22 @@ namespace ECommerce1.Controllers
             if (result)
                 await _service.EmptyCart(userId); //temporary only
 
+            //var _totalAmount = order.OrderDetails.ToList().Sum(x => x.SubTotal);
+
+            //var _resultCheckout = _adyenService.CheckoutUsingGCash(order.TransactionId.ToString()
+            //    , (long)_totalAmount
+            //    , user);
+
+            //Response.Redirect(_resultCheckout.action.url);
+
             return View(cartViewModel);
         }
 
-        public async Task<IActionResult> PaymentRedirect(CartViewModel cart)
+        [HttpGet]
+        public async Task<IActionResult> AdyenPaymentResponse()
         {
-            return View(cart);
+            await Task.Delay(0);
+            return View();
         }
     }
 }

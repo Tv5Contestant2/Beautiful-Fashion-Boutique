@@ -79,9 +79,11 @@ namespace ECommerce1
 
             // Email Settings Configuration
             services.AddOptions<EmailSettings>().Bind(Configuration.GetSection("EmailSettings")).ValidateDataAnnotations();
+            services.AddOptions<AdyenConfig>().Bind(Configuration.GetSection("AdyenConfig")).ValidateDataAnnotations();
 
             // Services Configuration
             services.AddScoped<IAdministratorService, AdministratorService>();
+            services.AddScoped<IAdyenService, AdyenService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ICommonServices, CommonServices>();
             services.AddScoped<ICustomersService, CustomersService>();
