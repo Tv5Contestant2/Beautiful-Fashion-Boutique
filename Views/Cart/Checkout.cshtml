@@ -150,12 +150,12 @@
                     <div id="delivery-method">
                         <div class="row">
                             <div class="form-check col-md-6 mb-4">
-                                <input id="isDelivery" asp-for="Cart.IsDelivery" type="hidden"/>
+                                <input id="isDelivery" asp-for="Cart.IsDelivery" type="hidden" />
                                 <input class="form-check-input" type="radio" name="delivery-method" value="true" onclick='document.getElementById("isDelivery").value = true; document.getElementById("isPickup").value = false; document.getElementById("deliveryMethod").innerHTML = "Delivery";'>
                                 <label class="form-check-label" for="option1"><strong>Delivery</strong><br><span class="text-sm text-muted">Delivered right at your doorstep - as early as possible.</span></label>
                             </div>
                             <div class="form-check col-md-6 mb-4">
-                                <input id="isPickup" asp-for="Cart.IsPickup" type="hidden"/>
+                                <input id="isPickup" asp-for="Cart.IsPickup" type="hidden" />
                                 <input class="form-check-input" type="radio" name="delivery-method" value="true" onclick='document.getElementById("isDelivery").value = false; document.getElementById("isPickup").value = true; document.getElementById("deliveryMethod").innerHTML = "Store Pick-up";'>
                                 <label class="form-check-label" for="option2"><strong>Store Pick-up</strong><br><span class="text-sm text-muted">Get it right on next day - fastest option possible.</span></label>
                             </div>
@@ -185,7 +185,7 @@
                                     <div class="accordion-body">
                                         <div class="p-3">
                                             @*<input id="isGCash" asp-for="Cart.IsGCash" type="hidden" />*@
-                                            <input class="form-check-input" type="radio" name="payment-method" value="true" onclick='document.getElementById("isGCash").value = true; document.getElementById("isCashOnDelivery").value = false; document.getElementById("isPayMaya").value = false; document.getElementById("paymentMethod").innerHTML = "GCash"';>
+                                            <input class="form-check-input" type="radio" name="payment-method" value="true" onclick='document.getElementById("isGCash").value = true; document.getElementById("isCashOnDelivery").value = false; document.getElementById("isPayMaya").value = false; document.getElementById("paymentMethod").innerHTML = "GCash"' ;>
                                             <label class="form-check-label ms-2" for="payment-method-1">
                                                 <strong>Continue with GCash</strong>
                                             </label>
@@ -300,47 +300,49 @@
 
                 @*Order Summary*@
                 <div class="col-lg-4">
-                    <div class="card rounded-6 mb-4">
-                        <div class="card-body px-4 py-4">
-                            <h5 class="text-uppercase">Order Summary</h5>
-                            <ul class="list-unstyled">
-                                <li id="dvPayment" style="display: none">
-                                    <div class="d-flex justify-content-between py-3 border-bottom">
-                                        <span>Payment Method </span>
-                                        <strong class="fw-normal">
-                                            <label id="paymentMethod" type="text" class="text-end"></label>
-                                        </strong>
-                                    </div>
-                                </li>
-                                <li id="dvDelivery" style="display: none">
-                                    <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
-                                        <span>Delivery Method </span>
-                                        <strong class="fw-normal">
-                                            <label id="deliveryMethod" type="text" class="text-end"></label>
-                                        </strong>
-                                    </div>
-                                </li>
-                                @{
+                    @{
+
+                        var vatAmount = @total * @vat / 100;
+                        var totalAmount = @total + @vatAmount + Convert.ToDecimal(@shipping);
+
+                        <input type="hidden" asp-for="Cart.Total" value="@total" />
+                        <input type="hidden" asp-for="Cart.ShippingFee" value="@shipping" />
+                        <input type="hidden" asp-for="Cart.TaxAmount" value="@vatAmount" />
+
+                        <div class="card rounded-6 mb-4">
+                            <div class="card-body px-4 py-4">
+                                <h5 class="text-uppercase">Order Summary</h5>
+                                <ul class="list-unstyled">
+                                    <li id="dvPayment" style="display: none">
+                                        <div class="d-flex justify-content-between py-3 border-bottom">
+                                            <span>Payment Method </span>
+                                            <strong class="fw-normal">
+                                                <label id="paymentMethod" type="text" class="text-end"></label>
+                                            </strong>
+                                        </div>
+                                    </li>
+                                    <li id="dvDelivery" style="display: none">
+                                        <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
+                                            <span>Delivery Method </span>
+                                            <strong class="fw-normal">
+                                                <label id="deliveryMethod" type="text" class="text-end"></label>
+                                            </strong>
+                                        </div>
+                                    </li>
                                     <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
                                     <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
                                     <li class="d-flex justify-content-between py-3 border-bottom">
                                         <span>VAT (@vat%)</span>
-                                        @{
-                                            var vatAmount = @total * @vat / 100;
-                                            <strong class="fw-normal">Php @vatAmount</strong>
-                                        }
+                                        <strong class="fw-normal">Php @vatAmount</strong>
                                     </li>
                                     <li class="d-flex justify-content-between py-3">
                                         <span>Total</span>
-                                        @{
-                                            var totalAmount = @total + @vatAmount + Convert.ToDecimal(@shipping);
-                                            <strong class="fw-normal">Php <label asp-for="Cart.Total">@totalAmount</label></strong>
-                                        }
+                                        <strong class="fw-normal">Php <label>@totalAmount</label></strong>
                                     </li>
-                                }
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     <div class="card rounded-6">
                         <div class="card-body px-4 py-4">

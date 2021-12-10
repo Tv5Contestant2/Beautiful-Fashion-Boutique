@@ -32,6 +32,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
             var result = await _userManager.FindByIdAsync(userId);
@@ -43,10 +44,25 @@ namespace ECommerce1.Controllers
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
-            ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
             var result = await _service.GetCustomerOrders(userId);
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.Customer = user.FirstName;
+            ViewBag.Address = user.AddressCity;
+
+            return View(result);
+        }
+
+        public async Task<IActionResult> Returns()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+
+            var result = await _service.GetCustomerReturns(userId);
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.Customer = user.FirstName;
             ViewBag.Address = user.AddressCity;
@@ -59,6 +75,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
 
             var result = await _service.GetCustomerWishlist(userId);
             var user = await _userManager.FindByIdAsync(userId);
@@ -74,6 +91,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
             var result = await _orderService.GetOrderDetailsById(transactionId);
@@ -90,6 +108,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
             var result = await _service.GetCustomerBillingAddresses(userId);

@@ -55,8 +55,16 @@ namespace ECommerce1.Controllers
 
             await _userService.ArchiveUsers();
 
-            if (!string.IsNullOrEmpty(userId))
-                await _userService.UpdateLastLoggedIn(userId);
+            try
+            {
+
+                if (!string.IsNullOrEmpty(userId))
+                    await _userService.UpdateLastLoggedIn(userId);
+            }
+            catch
+            {
+                return View();
+            }
 
             return View();
         }

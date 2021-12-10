@@ -16,15 +16,18 @@ namespace ECommerce1.Controllers
     public class CartController : Controller
     {
         private readonly ICartService _service;
+        private readonly IEmailService _emailService;
         private readonly IOrderService _orderService;
         private readonly UserManager<User> _userManager;
 
         public CartController(
             UserManager<User> userManager,
             ICartService service,
+            IEmailService emailService,
             IOrderService orderService)
         {
             _service = service;
+            _emailService = emailService;            
             _orderService = orderService;            
             _userManager = userManager;
         }
@@ -253,6 +256,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> OrderConfirmed(Cart cart)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
+            var user = await _userManager.FindByIdAsync(userId);
 
             var cartViewModel = new CartViewModel();
             var cartDetails = await _service.GetCartItems(userId);
@@ -264,8 +268,6 @@ namespace ECommerce1.Controllers
                 ViewBag.CartCount = await _service.GetCartTotalQty(userId);
                 ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
                 ViewBag.CustomersId = userId;
-
-                var user = await _userManager.FindByIdAsync(userId);
                 ViewBag.Customer = user.FirstName;
 
                 //if (cart.IsPayMaya)
@@ -300,13 +302,22 @@ namespace ECommerce1.Controllers
                 CustomersId = userId,
                 ModeOfPayment = 1,
                 OrderDate = DateTime.Now,
+                OrderStatusId = (int)OrderStatusEnum.Created,
+                Total = cart.Total, 
+                ShippingFee = cart.ShippingFee,
+                TaxAmount = cart.TaxAmount,
                 OrderDetails = orderDetails
             };
 
             var result = _orderService.AddToOrder(order);
 
             if (result)
-                await _service.EmptyCart(userId); //temporary only
+                await _service.EmptyCart(userId);
+
+            ViewBag.CartCount = 0;
+
+            // Send E-Receipt
+            await _emailService.SendReceipt(user.Email, orderDetails, order);
 
             return View(cartViewModel);
         }

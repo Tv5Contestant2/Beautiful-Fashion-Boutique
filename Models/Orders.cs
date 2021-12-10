@@ -20,5 +20,6 @@ namespace ECommerce1.Models
         public List<OrderDetails> OrderDetails { get; set; }
         public List<OrderShippingInfo> OrderShippingInfo { get; set; }
         public User Customers { get; set; }
+        public OrderStatus OrderStatus { get; set; }
     }
 }

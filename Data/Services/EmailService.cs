@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -72,6 +73,26 @@ namespace ECommerce1.Data.Services
                 message = message.Replace("[confirmationlink]", confirmationLink);
 
                 await SendEmail(message, recipient, "Account Confirmation");
+
+            }
+            catch (Exception) { }
+
+        }
+
+        public async Task SendReceipt(string recipient, List<OrderDetails> orderDetails, Orders orders)
+        {
+            try
+            {
+                string filePath = string.Format("{0}\\{1}", _hostEnvironment.ContentRootPath, "Templates\\Receipt.html");
+
+                StreamReader str = new StreamReader(filePath);
+                string message = str.ReadToEnd();
+                str.Close();
+
+                message = message.Replace("[reference]", orders.TransactionId.ToString());
+
+                var subject = "[" + orders.TransactionId + "] receipt for your order on " + orders.OrderDate.ToShortDateString(); 
+                await SendEmail(message, recipient, subject);
 
             }
             catch (Exception) { }

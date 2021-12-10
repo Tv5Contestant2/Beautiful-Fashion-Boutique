@@ -19,6 +19,7 @@ namespace ECommerce1.Data.Services
         public async Task<IEnumerable<Orders>> GetCustomerOrders(string userId)
         {
             var result = await _context.Orders
+                .Include(x => x.OrderStatus)
                 .Where(x => x.CustomersId == userId)
                 .ToListAsync();
 
@@ -28,6 +29,17 @@ namespace ECommerce1.Data.Services
         public async Task<IEnumerable<Wishlist>> GetCustomerWishlist(string userId)
         {
             var result = await _context.Wishlists
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductImages)
+                .Where(x => x.CustomersId == userId)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Returns>> GetCustomerReturns(string userId)
+        {
+            var result = await _context.Returns
                 .Include(x => x.Product)
                     .ThenInclude(x => x.ProductImages)
                 .Where(x => x.CustomersId == userId)

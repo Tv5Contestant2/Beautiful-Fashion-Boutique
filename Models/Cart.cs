@@ -31,6 +31,8 @@ namespace ECommerce1.Models
         public bool IsPayMaya { get; set; }
         public bool IsCashOnDelivery { get; set; }
         public decimal Total { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal ShippingFee { get; set; }
 
         public Customers Customers { get; set; }
     }

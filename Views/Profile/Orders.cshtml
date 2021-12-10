@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Orders> 
+﻿@model IEnumerable<Orders>
 @{
     ViewData["Title"] = "My Orders";
 }
@@ -37,6 +37,12 @@
                                 <use xlink:href="#shopping-bag-1"> </use>
                             </svg>Orders
                         </span><small class="badge rounded-pill bg-light text-dark">@Model.Count()</small>
+                    </a>
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Returns">
+                        <span class="fw-normal text-sm text-dark py-1">
+                            <i class="fas fa-undo"></i>&nbsp;&nbsp;&nbsp;Returns
+                        </span>
+                        <small class="badge rounded-pill bg-light text-dark">@ViewBag.ReturnsCount</small>
                     </a>
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Wishlist">
                         <span class="fw-normal text-sm text-dark py-1">
@@ -84,12 +90,13 @@
                             </div>
                             @foreach (var item in Model)
                             {
+                                var @total = item.Total + item.ShippingFee + item.TaxAmount;
                                 <div class="p-4 border-bottom">
                                     <div class="row d-flex align-items-center bord">
                                         <div class="col-5">@item.TransactionId</div>
-                                        <div class="col-2 text-center">@item.OrderDate</div>
-                                        <div class="col-2 text-center">@item.Total</div>
-                                        <div class="col-2 text-center"><span class="badge bg-info">Confirmed</span></div>
+                                        <div class="col-2 text-center">@item.OrderDate.ToShortDateString()</div>
+                                        <div class="col-2 text-center">@total</div>
+                                        <div class="col-2 text-center"><span class="badge @item.OrderStatus.Class">@item.OrderStatus.Title</span></div>
                                         <div class="col-1 text-center">
                                             <a class="btn btn-primary btn-sm" asp-action="ViewOrder" asp-route-id="@item.TransactionId">View</a>
                                         </div>
@@ -114,4 +121,15 @@
             }
         </div>
     </div>
+
+    <div style="position: fixed; bottom: 10px; right: 10px;">
+        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
 </section>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+</script>
