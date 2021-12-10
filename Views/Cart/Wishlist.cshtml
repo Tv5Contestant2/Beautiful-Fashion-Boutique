@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Wishlist>
+
+@{
+    ViewData["Title"] = "Wishlist";
+}
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-9 order-2 order-lg-1">
+                <h1>@ViewBag.Title</h1>
+                @if (Model != null)
+                {
+                    <p class="lead text-muted">
+                        You currently have @Model.Count() item(s) in your wishlist
+                    </p>
+                }
+                else
+                {
+                    <p class="lead text-muted">
+                        You currently have 0 item(s) in your wishlist
+                    </p>
+                }
+            </div>
+            <div class="col-lg-3 text-end order-1 order-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Home">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (Model.Count() > 0)
+{
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="cart-outer">
+                <div class="cart-inner">
+                    <div class="bg-light rounded-pill px-4 py-3">
+                        <div class="row fw-normal text-uppercase">
+                            <div class="col-7">Product</div>
+                            <div class="col-2 text-center">Price</div>
+                            <div class="col-2 text-center">Action</div>
+                        </div>
+                    </div>
+                    @*Product*@
+                    @foreach (var item in Model)
+                    {
+                        <div class="p-4 border-bottom">
+                            <div class="row d-flex align-items-center bord">
+                                <div class="col-7">
+                                    <div class="d-flex align-items-center">
+                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="75">
+                                        <div class="ms-3">
+                                            <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
+                                                <h5 class="mb-0 text-dark fw-normal">@item.Product.Name</h5><span class="text-muted">Size: Large</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    @{ 
+                                        if (item.Product.IsSale)
+                                        { <span>Php @item.Product.PriceOnSale</span> }
+                                        else
+                                        { <span>Php @item.Product.Price</span> }
+                                    }
+                                </div>
+                                <div class="col-2 text-center">
+                                    <a class="add btn btn-link text-dark p-0" asp-action="AddToCartFromWishlist" asp-route-id="@item.ProductId">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </a>
+                                    <a class="delete btn btn-link text-dark p-0" asp-action="RemoveFromWishlist" asp-route-id="@item.ProductId">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                     }
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="item col-xl-12">
+                <h2 class="mb-1">Your wishlist is empty.</h2>
+                <p class="text-gray-6 mb-1">Don't miss your chance! Start shopping now.</p>
+            </div>
+        </div>
+    </section>
+}
+
+<div style="position: fixed; bottom: 10px; right: 10px;">
+    <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </button>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+</script>

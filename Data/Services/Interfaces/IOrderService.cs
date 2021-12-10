@@ -10,7 +10,13 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<IEnumerable<Orders>> GetAllOrders();
 
+        public Task<int> GetCustomerOrderCount(string userId);
+
+        public Task<int> GetCustomerReturnsCount(string userId);
+
         public Task<IEnumerable<Orders>> GetAllOrdersByUser(string userId);
+
+        public Task<IEnumerable<OrderDetails>> GetOrderDetailsById(string transactionId);
 
     }
 }

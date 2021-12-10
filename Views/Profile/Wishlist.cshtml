@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Orders>
+﻿@model IEnumerable<Wishlist>
 @{
-    ViewData["Title"] = "My Orders";
+    ViewData["Title"] = "My Wishlist";
 }
 
 <section class="py-5 bg-light">
@@ -31,12 +31,12 @@
                     <p class="text-muted text-small">@ViewBag.Address</p>
                 </div>
                 <nav class="list-group">
-                    <a class="active list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Orders">
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Orders">
                         <span class="fw-normal text-sm text-dark py-1">
                             <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
                                 <use xlink:href="#shopping-bag-1"> </use>
                             </svg>Orders
-                        </span><small class="badge rounded-pill bg-light text-dark">@Model.Count()</small>
+                        </span><small class="badge rounded-pill bg-light text-dark">@ViewBag.OrderCount</small>
                     </a>
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Returns">
                         <span class="fw-normal text-sm text-dark py-1">
@@ -44,11 +44,11 @@
                         </span>
                         <small class="badge rounded-pill bg-light text-dark">@ViewBag.ReturnsCount</small>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Wishlist">
+                    <a class="active list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Wishlist">
                         <span class="fw-normal text-sm text-dark py-1">
                             <i class="far fa-heart"></i>&nbsp;&nbsp;&nbsp;Wishlist
                         </span>
-                        <small class="badge rounded-pill bg-light text-dark">@ViewBag.WishlistCount</small>
+                        <small class="badge rounded-pill bg-light text-dark">@Model.Count()</small>
                     </a>
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" asp-controller="Profile" asp-action="Index" aria-current="true">
                         <span class="fw-normal text-sm py-1">
@@ -73,7 +73,6 @@
                     </a>
                 </nav>
             </div>
-
             @{
                 if (Model.Count() > 0)
                 {
@@ -81,24 +80,40 @@
                         <div class="cart-inner">
                             <div class="bg-light rounded-pill px-4 py-3">
                                 <div class="row fw-bold text-uppercase">
-                                    <div class="col-5">Order</div>
-                                    <div class="col-2 text-center">Date</div>
-                                    <div class="col-2 text-center">Total</div>
-                                    <div class="col-2 text-center">Status</div>
-                                    <div class="col-1 text-center">Action</div>
+                                    <div class="col-7">Product</div>
+                                    <div class="col-2 text-center">Price</div>
+                                    <div class="col-2 text-center">Action</div>
                                 </div>
                             </div>
                             @foreach (var item in Model)
                             {
-                                var @total = item.Total + item.ShippingFee + item.TaxAmount;
                                 <div class="p-4 border-bottom">
                                     <div class="row d-flex align-items-center bord">
-                                        <div class="col-5">@item.TransactionId</div>
-                                        <div class="col-2 text-center">@item.OrderDate.ToShortDateString()</div>
-                                        <div class="col-2 text-center">@total</div>
-                                        <div class="col-2 text-center"><span class="badge @item.OrderStatus.Class">@item.OrderStatus.Title</span></div>
-                                        <div class="col-1 text-center">
-                                            <a class="btn btn-primary btn-sm" asp-action="ViewOrder" asp-route-id="@item.TransactionId">View</a>
+                                        <div class="col-7">
+                                            <div class="d-flex align-items-center">
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="75">
+                                                <div class="ms-3">
+                                                    <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
+                                                        <h5 class="mb-0 text-dark fw-normal">@item.Product.Name</h5><span class="text-muted">Size: Large</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            @{
+                                                if (item.Product.IsSale)
+                                                { <span>Php @item.Product.PriceOnSale</span> }
+                                            else
+                                            { <span>Php @item.Product.Price</span> }
+                                            }
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            <a class="add btn btn-link text-dark p-0" asp-controller="Cart" asp-action="AddToCartFromWishlist" asp-route-id="@item.ProductId">
+                                                <i class="fas fa-cart-plus"></i>
+                                            </a>
+                                            <a class="delete btn btn-link text-dark p-0" asp-controller="Cart" asp-action="RemoveFromWishlist" asp-route-id="@item.ProductId">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -110,14 +125,13 @@
                 {
                     <div class="col-lg-8 col-xl-9">
                         <div class="cart-inner">
-                            <h2 class="mb-1">You don't have any orders.</h2>
+                            <h2 class="mb-1">Your wishlist is empty.</h2>
                             <p class="text-gray-6 mb-3">Don't miss your chance! Start shopping now.</p>
 
                             <a class="btn btn-danger" asp-controller="StoreFront" asp-action="Home">Go to Home</a>
                         </div>
                     </div>
                 }
-
             }
         </div>
     </div>

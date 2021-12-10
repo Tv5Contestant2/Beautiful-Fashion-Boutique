@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -40,6 +41,36 @@ namespace ECommerce1.Data.Services
                 .ToListAsync();
 
             return result;
+        }
+
+        public async Task<IEnumerable<OrderDetails>> GetOrderDetailsById(string transactionId)
+        {
+            var result = await _context.OrdersDetails
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductImages)
+                .Where(x => x.TransactionId.ToString() == transactionId)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<int> GetCustomerOrderCount(string userId)
+        {
+            var result = await _context.Orders
+                .Where(x => x.CustomersId == userId)
+                .ToListAsync();
+
+            return result.Count();
+        }
+
+        public async Task<int> GetCustomerReturnsCount(string userId)
+        {
+            var result = await _context.Orders
+                .Where(x => x.CustomersId == userId 
+                         && x.OrderStatusId == (int)OrderStatusEnum.Returned)
+                .ToListAsync();
+
+            return result.Count();
         }
     }
 }

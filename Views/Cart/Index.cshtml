@@ -49,7 +49,7 @@
                             <div class="col-2">Price</div>
                             <div class="col-2">Quantity</div>
                             <div class="col-2">Total</div>
-                            <div class="col-1 text-center">Remove</div>
+                            <div class="col-1 text-center">Action</div>
                         </div>
                     </div>
                     @*Product*@
@@ -91,13 +91,16 @@
                                     }
                                 </div>
                                 <div class="col-1 text-center">
+                                    <a class="btn btn-link text-dark p-0" asp-action="AddToWishlistFromCart" asp-route-id="@item.ProductId">
+                                        <i class="far fa-heart"></i>
+                                    </a>
                                     <a class="delete btn btn-link text-dark p-0" asp-action="RemoveFromCart" asp-route-id="@item.ProductId">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
-                                        }
+                     }
                 </div>
             </div>
         </div>

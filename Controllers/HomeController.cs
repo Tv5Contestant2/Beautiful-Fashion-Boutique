@@ -59,6 +59,7 @@ namespace ECommerce1.Controllers
         public IActionResult RegistrationSuccess()
         {
             ViewBag.CartCount = 0;
+            ViewBag.WishlistCount = 0;
 
             return View(new HomeUserViewModel());
         }
@@ -73,6 +74,7 @@ namespace ECommerce1.Controllers
         public IActionResult ResetPassword(string email, string token)
         {
             ViewBag.CartCount = 0;
+            ViewBag.WishlistCount = 0;
             ViewBag.Email = email;
             ViewBag.Token = token;
 
@@ -82,6 +84,7 @@ namespace ECommerce1.Controllers
         public IActionResult SignIn()
         {
             ViewBag.CartCount = 0;
+            ViewBag.WishlistCount = 0;
 
             return View(new HomeUserViewModel());
         }
@@ -108,6 +111,7 @@ namespace ECommerce1.Controllers
                             (await _userManager.CheckPasswordAsync(user, model.SignInPassword)))
                 {
                     ViewBag.CartCount = 0;
+                    ViewBag.WishlistCount = 0;
 
                     model.isLogInError = true;
                     ModelState.AddModelError(string.Empty, "Email not confirmed yet");
@@ -120,12 +124,14 @@ namespace ECommerce1.Controllers
                 if (result.Succeeded)
                 {
                     ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+                    ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
                     return RedirectToAction("Home", "StoreFront");
                 }
             }
             else
             {
                 ViewBag.CartCount = 0;
+                ViewBag.WishlistCount = 0;
                 model.isLogInError = true;
             }
 
@@ -192,6 +198,7 @@ namespace ECommerce1.Controllers
                 if (!ModelState.IsValid)
                 {
                     ViewBag.CartCount = 0;
+                    ViewBag.WishlistCount = 0;
 
                     model.isSignUpError = true;
                     return View("SignIn", model);
@@ -200,6 +207,7 @@ namespace ECommerce1.Controllers
             else
             {
                 ViewBag.CartCount = 0;
+                ViewBag.WishlistCount = 0;
                 model.isSignUpError = true;
             }
 
@@ -209,7 +217,8 @@ namespace ECommerce1.Controllers
         public IActionResult ForgotPassword()
         {
             ViewBag.CartCount = 0;
-            
+            ViewBag.WishlistCount = 0;
+
             return View(new ForgotPasswordViewModel());
         }
 
@@ -237,6 +246,7 @@ namespace ECommerce1.Controllers
                 // To avoid account enumeration and brute force attacks, don't
                 // reveal that the user does not exist or is not confirmed
                 ViewBag.CartCount = 0;
+                ViewBag.WishlistCount = 0;
 
                 model.isLogInError = true;
                 ModelState.AddModelError(string.Empty, "Email does not exist.");
@@ -244,6 +254,7 @@ namespace ECommerce1.Controllers
             }
 
             ViewBag.CartCount = 0;
+            ViewBag.WishlistCount = 0;
 
             model.isLogInError = true;
             ModelState.AddModelError(string.Empty, "Email does not exist.");
@@ -295,6 +306,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
             return View();
         }

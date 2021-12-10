@@ -147,15 +147,33 @@ namespace ECommerce1.Data
                     {
                        new OrderStatus()
                         {
-                            Title = "Created"
+                            Title = "Returned",
+                            Class = "bg-gray-3"
                         },
                         new OrderStatus()
                         {
-                            Title = "Received"
+                            Title = "Cancelled",
+                            Class = "bg-danger"
                         },
                         new OrderStatus()
                         {
-                            Title = "Cancelled"
+                            Title = "Pending Payment",
+                            Class = "bg-warning"
+                        },
+                        new OrderStatus()
+                        {
+                            Title = "Completed",
+                            Class = "bg-success"
+                        },
+                        new OrderStatus()
+                        {
+                            Title = "Shipped",
+                            Class = "bg-secondary"
+                        },
+                        new OrderStatus()
+                        {
+                            Title = "Created", 
+                            Class = "bg-info"
                         },
                     });
 

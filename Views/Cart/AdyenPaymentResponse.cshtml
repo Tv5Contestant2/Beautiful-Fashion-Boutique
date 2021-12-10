@@ -1,5 +1,53 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Order Confirmed";
 }
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-9 order-2 order-lg-1">
+                <h1>@ViewBag.Title</h1>
+            </div>
+            <div class="col-lg-3 text-end order-1 order-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Home">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+@if (ViewBag.IsResult)
+{
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="icon-rounded icon-rounded-xl mb-4"><i class="fas fa-check"></i></div>
+            <h2>Thank you, Your order is confirmed.</h2>
+            <p class="mb-5 fw-normal">Your order hasn't shipped yet but we will send you an email when it does.</p>
+            <p> <a class="btn btn-primary px-5" asp-controller="Profile" asp-action="Orders">View or manage your order</a></p>
+        </div>
+    </section>
+}
+else
+{
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="item col-xl-12">
+                <h2 class="mb-1">Payment</h2>
+                <p class="text-gray-6 mb-1">Unable to process your payment.</p>
+            </div>
+        </div>
+    </section>
+}
+
+<div style="position: fixed; bottom: 10px; right: 10px;">
+    <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </button>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+</script>

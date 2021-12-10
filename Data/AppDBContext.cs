@@ -58,6 +58,8 @@ namespace ECommerce1.Data
 
         public DbSet<Promos> Promos { get; set; }
 
+        public DbSet<Returns> Returns { get; set; }
+
         public DbSet<RoleAccessibility> RoleAccessability { get; set; }
 
         //public DbSet<Roles> Roles { get; set; }
@@ -73,6 +75,9 @@ namespace ECommerce1.Data
         public DbSet<StockStatus> StockStatuses { get; set; }
 
         public DbSet<Transactions> Transactions { get; set; }
+
+        public DbSet<Wishlist> Wishlists { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

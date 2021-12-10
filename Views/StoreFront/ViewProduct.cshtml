@@ -103,7 +103,8 @@
                             <li class="list-inline-item">
                                 <input type="hidden" asp-for="CustomersId" value="@ViewBag.CustomersId" />
                                 <input type="hidden" asp-for="ProductId" value="@ViewBag.Product.Id" />
-                                @{if (_IsAdmin == true)
+                                @{
+                                    if (_IsAdmin == true)
                                     {
                                         <a class="btn btn-primary px-5" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@ViewBag.Product.Id" style="border: none">
                                             <i class="fas fa-pencil-alt"></i>&nbsp;Edit Product
@@ -117,10 +118,21 @@
                                             </svg>Add to cart
                                         </button>
 
-                                    <li class="list-inline-item"><a class="btn btn-outline-secondary px-5" href="#"> <i class="far fa-heart me-2"></i>Add to wishlist</a></li>
+                                        if (ViewBag.IsProductExist)
+                                        {
+                                            <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
+                                                <i class="fas fa-heart me-2"></i>Remove from wishlist
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
+                                                <i class="far fa-heart me-2"></i>Add to wishlist
+                                            </button>
+                                        }
+                                    }
                                 }
-                                }
-                                </li>
+                            </li>
                             </ul>
                     }
                 </form>

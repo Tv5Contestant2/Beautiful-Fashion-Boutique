@@ -37,6 +37,12 @@ namespace ECommerce1.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Total { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal TaxAmount { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal ShippingFee { get; set; }
+
         public Customers Customers { get; set; }
     }
 }

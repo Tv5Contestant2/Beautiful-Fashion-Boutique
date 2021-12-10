@@ -99,11 +99,30 @@
                         if (_IsAdmin == false)
                         {
                             <li class="nav-item dropdown mx-2 mx-lg-0 px-3 px-lg-0 d-none d-lg-block">
+                                <a class="nav-link position-relative" asp-controller="Cart" asp-action="Wishlist">
+                                    <i class="far fa-heart"></i>
+
+                                    @{
+                                        if (ViewBag.WishlistCount > 0)
+                                        {
+                                            <span class="cart-no">@ViewBag.WishlistCount</span>
+                                        }
+                                    }
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown mx-2 mx-lg-0 px-3 px-lg-0 d-none d-lg-block">
                                 <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
                                     <svg class="svg-icon">
                                         <use xlink:href="#cart-1"> </use>
                                     </svg>
-                                    <span class="cart-no">@ViewBag.CartCount</span>
+
+                                    @{
+                                        if (ViewBag.CartCount > 0)
+                                        {
+                                            <span class="cart-no">@ViewBag.CartCount</span>
+                                        }
+                                    }
                                 </a>
                             </li>
                         }
