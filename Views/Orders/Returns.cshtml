@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<Orders>
 @using ECommerce1.Data.Enums
- 
+
 @{
-    ViewData["Title"] = "Order Management";
+    ViewData["Title"] = "Return Requests";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -43,26 +43,15 @@
                                         <i class="far fa-thumbs-up"></i>
                                     </div>
                                     <div class="ms-3">
-                                        <h6 class="mb-0 text-dark fw-normal">Received</h6>
-                                        <span class="text-muted text-sm">@ViewBag.Received</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                        <i class="fas fa-truck"></i>
-                                    </div>
-                                    <div class="ms-3">
-                                        <h6 class="mb-0 text-dark fw-normal">Shipped</h6>
-                                        <span class="text-muted text-sm">@ViewBag.Shipped</span>
+                                        <h6 class="mb-0 text-dark fw-normal">Approved</h6>
+                                        <span class="text-muted text-sm">@ViewBag.Approved</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="d-flex align-items-center">
                                     <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                        <i class="fas fa-truck-loading"></i>
+                                        <i class="fas fa-hourglass-half"></i>
                                     </div>
                                     <div class="ms-3">
                                         <h6 class="mb-0 text-dark fw-normal">Pending</h6>
@@ -83,40 +72,20 @@
                             <div class="border-top border-bottom py-2">
                                 <div class="row text-uppercase">
                                     <div class="col-4"><strong class="small">Transaction Id</strong></div>
-                                    <div class="col-3"><strong class="small">Customer</strong></div>
-                                    <div class="col-1 text-center"> <strong class="small">Date</strong></div>
-                                    <div class="col-1 text-center"> <strong class="small">Total</strong></div>
-                                    <div class="col-1 text-center"><strong class="small">Status</strong></div>
-                                    <div class="col-1 text-center"><strong class="small">Delivery</strong></div>
-                                    <div class="col-1 text-center"><strong class="small">Action</strong></div>
+                                    <div class="col-4"><strong class="small">Customer</strong></div>
+                                    <div class="col-2 text-center"><strong class="small">Quantity Returned</strong></div>
+                                    <div class="col-2 text-center"><strong class="small">Action</strong></div>
                                 </div>
                             </div>
                             @foreach (var item in Model)
                             {
-                                var @total = item.Total + item.ShippingFee + item.TaxAmount;
                                 <div class="row-item pt-4 pb-4 border-bottom">
                                     <div class="row text-left">
                                         <div class="item col-4">@item.TransactionId</div>
-                                        <div class="item col-3">@string.Format("{0} {1}", item.Customers.FirstName, @item.Customers.LastName)</div>
-                                        <div class="item col-1 text-center">@item.OrderDate.ToShortDateString()</div>
-                                        <div class="item col-1 text-center">@total</div>
-                                        <div class="item col-1 text-center"><span class="badge @item.OrderStatus.Class">@item.OrderStatus.Title</span></div>
-                                        <div class="item col-1 text-center">
-                                            @{
-                                                if (item.OrderStatusId == (int)OrderStatusEnum.Created ||
-                                                    item.OrderStatusId == (int)OrderStatusEnum.Completed ||
-                                                    item.OrderStatusId == (int)OrderStatusEnum.Shipped)
-                                                {
-                                                    <span class="badge @item.DeliveryStatus.Class">@item.DeliveryStatus.Title</span>
-                                                }
-                                                else
-                                                {
-                                                    <span>&nbsp;</span>
-                                                }
-                                            }
-                                        </div>
-                                        <div class="item col-1 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewOrder" asp-route-id="@item.TransactionId">
+                                        <div class="item col-4">@string.Format("{0} {1}", item.Customers.FirstName, @item.Customers.LastName)</div>
+                                        <div class="col-2 text-center">@item.OrderDetails.Sum(x => x.QuantityReturned)</div>
+                                        <div class="item col-2 text-center">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewReturn" asp-route-id="@item.TransactionId">
                                                 <i class="far fa-eye"></i>
                                             </a>
                                         </div>

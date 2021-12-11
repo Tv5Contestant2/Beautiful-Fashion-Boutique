@@ -128,6 +128,9 @@ namespace ECommerce1.Migrations
                     b.Property<string>("ShippingEmail")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("ShippingFee")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ShippingFirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -136,6 +139,9 @@ namespace ECommerce1.Migrations
 
                     b.Property<string>("ShippingLot")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
@@ -358,6 +364,9 @@ namespace ECommerce1.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Class")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -517,6 +526,9 @@ namespace ECommerce1.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("IsReturned")
+                        .HasColumnType("bit");
+
                     b.Property<long?>("OrdersId")
                         .HasColumnType("bigint");
 
@@ -524,6 +536,15 @@ namespace ECommerce1.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityReturned")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReturnReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ReturnStatusId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("SubTotal")
@@ -537,6 +558,8 @@ namespace ECommerce1.Migrations
                     b.HasIndex("OrdersId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ReturnStatusId");
 
                     b.ToTable("OrdersDetails");
                 });
@@ -583,6 +606,9 @@ namespace ECommerce1.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Class")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -598,8 +624,14 @@ namespace ECommerce1.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CancellationReason")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CustomersId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DeliveryStatusId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ModeOfPayment")
                         .HasColumnType("int");
@@ -625,6 +657,10 @@ namespace ECommerce1.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomersId");
+
+                    b.HasIndex("DeliveryStatusId");
+
+                    b.HasIndex("OrderStatusId");
 
                     b.ToTable("Orders");
                 });
@@ -1182,6 +1218,38 @@ namespace ECommerce1.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("ECommerce1.Models.Wishlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomersId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GenderId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Wishlists");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -1353,7 +1421,7 @@ namespace ECommerce1.Migrations
 
             modelBuilder.Entity("ECommerce1.Models.OrderDetails", b =>
                 {
-                    b.HasOne("ECommerce1.Models.Orders", null)
+                    b.HasOne("ECommerce1.Models.Orders", "Orders")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrdersId");
 
@@ -1363,7 +1431,15 @@ namespace ECommerce1.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ECommerce1.Models.OrderStatus", "ReturnStatus")
+                        .WithMany()
+                        .HasForeignKey("ReturnStatusId");
+
+                    b.Navigation("Orders");
+
                     b.Navigation("Product");
+
+                    b.Navigation("ReturnStatus");
                 });
 
             modelBuilder.Entity("ECommerce1.Models.OrderShippingInfo", b =>
@@ -1379,7 +1455,23 @@ namespace ECommerce1.Migrations
                         .WithMany()
                         .HasForeignKey("CustomersId");
 
+                    b.HasOne("ECommerce1.Models.DeliveryStatus", "DeliveryStatus")
+                        .WithMany()
+                        .HasForeignKey("DeliveryStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ECommerce1.Models.OrderStatus", "OrderStatus")
+                        .WithMany()
+                        .HasForeignKey("OrderStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customers");
+
+                    b.Navigation("DeliveryStatus");
+
+                    b.Navigation("OrderStatus");
                 });
 
             modelBuilder.Entity("ECommerce1.Models.ProductCategory", b =>
@@ -1440,6 +1532,17 @@ namespace ECommerce1.Migrations
                     b.HasOne("ECommerce1.Models.Product", null)
                         .WithMany("StockStatuses")
                         .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("ECommerce1.Models.Wishlist", b =>
+                {
+                    b.HasOne("ECommerce1.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

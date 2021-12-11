@@ -1,5 +1,6 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -86,7 +87,7 @@ namespace ECommerce1.Controllers
         }
 
         [Route("Profile/ViewOrder/{transactionId:Guid}")]
-        public async Task<IActionResult> ViewOrder(string transactionId)
+        public async Task<IActionResult> ViewOrder(Guid transactionId)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
@@ -94,13 +95,21 @@ namespace ECommerce1.Controllers
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
-            var result = await _orderService.GetOrderDetailsById(transactionId);
             var user = await _userManager.FindByIdAsync(userId);
-            ViewBag.Customer = user.FirstName;
-            ViewBag.Address = user.AddressCity;
-            ViewBag.TransactionId = transactionId;
+            var order = _orderService.GetOrderById(transactionId.ToString());
+            var orderDetails = await _orderService.GetOrderDetailsById(transactionId.ToString());
 
-            return View(result);
+            var viewModel = new OrderViewModel();
+            viewModel.CustomersId = userId;
+            viewModel.Customer = user.FirstName;
+            viewModel.Address = user.AddressCity;
+            viewModel.TransactionId = transactionId;
+            viewModel.DeliveryStatusId = order.DeliveryStatusId;
+            viewModel.OrderStatusId = order.OrderStatusId;
+            viewModel.OrderDetails = orderDetails;
+            viewModel.OrderStatus = order.OrderStatus;
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Addresses()
@@ -118,5 +127,28 @@ namespace ECommerce1.Controllers
 
             return View(result);
         }
+
+        [Route("Profile/ReturnOrder/{productId:long}")]
+        public async Task<IActionResult> ReturnOrder(long productId, OrderViewModel viewModel)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+
+            var user = await _userManager.FindByIdAsync(userId);
+            viewModel.Customer = user.FirstName;
+            viewModel.Address = user.AddressCity;
+            viewModel.OrderDetails = await _orderService.GetOrderDetailsById(viewModel.TransactionId.ToString());
+            viewModel.ProductId = productId;
+
+            return View(viewModel);
+        }
+        public IActionResult ReturnSuccess()
+        {
+            return View();
+        }
+
     }
 }

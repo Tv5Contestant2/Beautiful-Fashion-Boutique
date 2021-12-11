@@ -37,12 +37,15 @@ namespace ECommerce1.Data.Services
             return result;
         }
 
-        public async Task<IEnumerable<Returns>> GetCustomerReturns(string userId)
+        public async Task<IEnumerable<OrderDetails>> GetCustomerReturns(string userId)
         {
-            var result = await _context.Returns
+            var result = await _context.OrdersDetails
                 .Include(x => x.Product)
                     .ThenInclude(x => x.ProductImages)
-                .Where(x => x.CustomersId == userId)
+                .Include(x => x.Orders)
+                .Include(x => x.ReturnStatus)
+                .Where(x => x.Orders.CustomersId == userId 
+                         && x.IsReturned == true)
                 .ToListAsync();
 
             return result;

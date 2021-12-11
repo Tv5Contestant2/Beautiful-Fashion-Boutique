@@ -16,10 +16,13 @@ namespace ECommerce1.Models
         public int ModeOfPayment { get; set; }
         public DateTime OrderDate { get; set; }
         public int OrderStatusId { get; set; }
+        public int DeliveryStatusId { get; set; }
+        public string CancellationReason { get; set; }
 
         public List<OrderDetails> OrderDetails { get; set; }
         public List<OrderShippingInfo> OrderShippingInfo { get; set; }
         public User Customers { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public DeliveryStatus DeliveryStatus { get; set; }
     }
 }

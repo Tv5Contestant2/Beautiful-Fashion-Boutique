@@ -80,11 +80,21 @@
                                 </ul>
                             </div>
                         </li>
-                        <li>
-                            <a asp-controller="Orders" asp-action="Index">
+                        <li class="sidebar-dropdown">
+                            <a href="#">
                                 <i class="fa fa-inbox"></i>
                                 <span>Order Management</span>
                             </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a asp-controller="Orders" asp-action="Index">Orders</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Orders" asp-action="Returns">Returns</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         <li>
                             <a asp-controller="Products" asp-action="Index">

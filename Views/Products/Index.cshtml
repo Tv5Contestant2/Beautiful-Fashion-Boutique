@@ -68,17 +68,17 @@
                                         <td>
                                             @{
                                                 var status = Enum.GetName(typeof(StatusEnum), item.StatusId);
-                                                if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.InStock)
+                                                if (item.StockStatusId == (int)StockStatusEnum.InStock)
                                                 {
                                                     status = "In-Stock";
                                                     <span class="status text-success">&bull;</span> @status
                                                 }
-                                                else if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.OutOfStock)
+                                                else if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
                                                 {
                                                     status = "Out-Of-Stock";
                                                     <span class="status text-danger">&bull;</span> @status
                                                 }
-                                                else if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.PhasedOut)
+                                                else if (item.StockStatusId == (int)StockStatusEnum.PhasedOut)
                                                 {
                                                     status = "Phased-Out";
                                                     <span class="status text-danger">&bull;</span> @status
@@ -131,17 +131,17 @@
                                         <small>
                                             @{
                                                 var status = Enum.GetName(typeof(StatusEnum), item.StatusId);
-                                                if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.InStock)
+                                                if (item.StockStatusId == (int)StockStatusEnum.InStock)
                                                 {
                                                     status = "In-Stock";
                                                     <span class="status text-success">&bull;</span> @status
                                                 }
-                                                else if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.OutOfStock)
+                                                else if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
                                                 {
                                                     status = "Out-Of-Stock";
                                                     <span class="status text-danger">&bull;</span> @status
                                                 }
-                                                else if (item.StockStatusId == (int)ECommerce1.Data.Enums.StockStatusEnum.PhasedOut)
+                                                else if (item.StockStatusId == (int)StockStatusEnum.PhasedOut)
                                                 {
                                                     status = "Phased-Out";
                                                     <span class="status text-danger">&bull;</span> @status

@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,32 @@ namespace ECommerce1.Data.Services
         public async Task<IEnumerable<Orders>> GetAllOrders()
         {
             var result = await _context.Orders
+                .Include(x => x.OrderStatus)
+                .Include(x => x.DeliveryStatus)
                 .Include(x => x.Customers)
+                .ToListAsync();
+
+            return result;
+        }
+        public async Task<IEnumerable<Orders>> GetAllReturns()
+        {
+            var result = await _context.Orders
+                .Include(x => x.OrderDetails)
+                .Include(x => x.Customers)
+                .Where(x => x.OrderDetails.Any(x => x.IsReturned))
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<OrderDetails>> GetReturnRequestById(string transactionId)
+        {
+            var result = await _context.OrdersDetails
+                .Include(x => x.ReturnStatus)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductImages)
+                .Where(x => x.TransactionId.ToString() == transactionId
+                         && x.IsReturned == true)
                 .ToListAsync();
 
             return result;
@@ -39,6 +65,14 @@ namespace ECommerce1.Data.Services
                 .Include(x => x.Customers)
                 .Where(x => x.CustomersId == userId)
                 .ToListAsync();
+
+            return result;
+        }
+        public Orders GetOrderById(string transactionId)
+        {
+            var result = _context.Orders
+                .Include(x => x.OrderStatus)
+                .FirstOrDefault(x => x.TransactionId.ToString() == transactionId);
 
             return result;
         }
@@ -65,12 +99,77 @@ namespace ECommerce1.Data.Services
 
         public async Task<int> GetCustomerReturnsCount(string userId)
         {
-            var result = await _context.Orders
-                .Where(x => x.CustomersId == userId 
-                         && x.OrderStatusId == (int)OrderStatusEnum.Returned)
+            var result = await _context.OrdersDetails
+                .Where(x => x.Orders.CustomersId == userId 
+                         && x.IsReturned == true)
                 .ToListAsync();
 
             return result.Count();
+        }
+
+        public async Task<Orders> UpdateOrderStatuses(string transactionId)
+        {
+            var result = _context.Orders.FirstOrDefault(x => x.TransactionId.ToString() == transactionId);
+
+            if (result.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
+            {
+                result.DeliveryStatusId = (int)DeliveryStatusEnum.Shipped;
+                result.OrderStatusId = (int)OrderStatusEnum.Shipped;
+            }
+            else if (result.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
+            {
+                result.DeliveryStatusId = (int)DeliveryStatusEnum.Received;
+                result.OrderStatusId = (int)OrderStatusEnum.Completed;
+            }
+
+            _context.Orders.Update(result);
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<Orders> CancelOrder(string transactionId, OrderViewModel viewModel)
+        {
+            var result = _context.Orders.FirstOrDefault(x => x.TransactionId.ToString() == transactionId);
+
+            result.OrderStatusId = viewModel.OrderStatusId;
+            result.CancellationReason = viewModel.CancellationReason;
+
+            _context.Orders.Update(result);
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<OrderDetails> ReturnOrder(OrderViewModel viewModel)
+        {
+            var result = _context.OrdersDetails
+                .FirstOrDefault(x => x.TransactionId == viewModel.TransactionId 
+                                  && x.ProductId == viewModel.ProductId);
+
+            result.IsReturned = true;
+            result.ReturnReason = viewModel.ReturnReason;
+            result.ReturnStatusId = (int)OrderStatusEnum.PendingRequest;
+            result.QuantityReturned += viewModel.QuantityReturned;
+
+            _context.OrdersDetails.Update(result);
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<OrderDetails> ApproveReturn(string transactionId, OrderViewModel viewModel)
+        {
+            var result = _context.OrdersDetails
+                .FirstOrDefault(x => x.TransactionId.ToString() == transactionId
+                                  && x.ProductId == viewModel.ProductId);
+
+            result.ReturnStatusId = (int)OrderStatusEnum.Approved;
+
+            _context.OrdersDetails.Update(result);
+            await _context.SaveChangesAsync();
+
+            return result;
         }
     }
 }

@@ -86,15 +86,18 @@ namespace ECommerce1.Data
                     {
                         new DeliveryStatus()
                         {
-                            Title = "Out For Delivery"
+                            Title = "Pending",
+                            Class = "bg-warning"
                         },
                         new DeliveryStatus()
                         {
-                            Title = "In-transit"
+                            Title = "Shipped",
+                            Class = "bg-info"
                         },
                         new DeliveryStatus()
                         {
-                            Title = "Delivered"
+                            Title = "Received",
+                            Class = "bg-success"
                         },
                     });
 
@@ -147,8 +150,13 @@ namespace ECommerce1.Data
                     {
                        new OrderStatus()
                         {
-                            Title = "Returned",
-                            Class = "bg-gray-3"
+                            Title = "Pending Request",
+                            Class = "bg-warning"
+                        },
+                       new OrderStatus()
+                        {
+                            Title = "Approved",
+                            Class = "bg-success"
                         },
                         new OrderStatus()
                         {

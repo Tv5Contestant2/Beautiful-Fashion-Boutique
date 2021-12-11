@@ -1,0 +1,221 @@
+﻿@model IEnumerable<OrderDetails>
+@using ECommerce1.Data.Enums
+
+@{
+    ViewData["Title"] = "Order Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    @*Breadcrumbs*@
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h4 class="m-0">@ViewBag.Title</h4>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right px-3 py-2">
+                        <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Content*@
+    <section class="content">
+        <div class="container-fluid">
+            @*Search*@
+            <div class="row d-flex justify-content-between">
+                <input id="inptSearch" class="form-control w-100" placeholder="Search" />
+            </div>
+
+            @*Grid View*@
+            @{
+                var total = Model.Sum(x => (x.Product.IsSale ? x.Product.PriceOnSale : x.Product.Price) * x.Quantity);
+                var shipping = 100.00;
+                var vat = 12;
+
+                var vatAmount = @total * @vat / 100;
+                var totalAmount = @total + @vatAmount + Convert.ToDecimal(@shipping);
+
+                <div class="col-lg-12 col-xl-12 py-3">
+                    <div class="row justify-content-between align-content-center pb-2">
+                        <div class="col-lg-7">
+                            <p class="text-small mb-0">Reference</p>
+                            <h5 class="text-danger mb-0">@ViewBag.TransactionId</h5>
+                        </div>
+                        @{
+                            if (ViewBag.DeliveryStatusId != (int)DeliveryStatusEnum.Received)
+                            {
+                                <div class="col-lg-4 text-end">
+                                    <a class="btn btn-outline-danger" asp-action="UpdateOrder" asp-route-id="@ViewBag.TransactionId">
+                                        @{
+                                            if (ViewBag.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
+                                            {
+                                                <span><i class="fas fa-truck"></i> Set to Shipped </span>
+                                            }
+                                            else if (ViewBag.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
+                                            {
+                                                <span><i class="fas fa-check"></i> Set to Received </span>
+                                            }
+                                        }
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="cart-outer mb-5">
+                        <div class="cart-inner">
+                            <div class="border-top border-bottom py-2">
+                                <div class="row text-uppercase">
+                                    <div class="col-6"><strong class="small">Product</strong></div>
+                                    <div class="col-2"> <strong class="small">Unit Price</strong></div>
+                                    <div class="col-2 text-center"> <strong class="small">Quantity</strong></div>
+                                    <div class="col-2 text-end"><strong class="small">Total Price</strong></div>
+                                </div>
+                            </div>
+                            @*Product*@
+                            @foreach (var item in Model)
+                            {
+                                <div class="py-4 border-bottom">
+                                    <div class="row d-flex align-items-center bord">
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center">
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
+                                                <div class="ms-3">
+                                                    <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
+                                                        <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6><span class="text-muted text-sm">Size: Large</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            @{
+                                                if (item.Product.IsSale)
+                                                { <span>Php @item.Product.PriceOnSale</span> }
+                                            else
+                                            { <span>Php @item.Product.Price</span> }
+                                            }
+                                        </div>
+                                        <div class="col-2 text-center"><span>@item.Quantity</span></div>
+                                        <div class="col-2 text-end">
+                                            @{
+                                                var gridTotalAmount = (item.Product.IsSale ? item.Product.PriceOnSale : item.Product.Price) * item.Quantity;
+                                                <span>Php @gridTotalAmount</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row d-flex">
+                        @*Order Summary*@
+                        <div class="col-lg-7 col-xl-7">
+                            <div class="card rounded-6 mb-4">
+                                <div class="card-body px-4 py-4">
+                                    <h5 class="text-uppercase">Order Summary</h5>
+                                    <ul class="list-unstyled">
+                                        @{
+                                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
+                                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
+                                            <li class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>VAT (@vat%)</span>
+                                                <strong class="fw-normal">Php @vatAmount</strong>
+                                            </li>
+                                            <li class="d-flex justify-content-between py-3">
+                                                <span>Total</span>
+                                                <strong class="fw-normal">Php <span>@totalAmount</span></strong>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*Shipping Summary*@
+                        <div class="col-lg-4 col-xl-5">
+                            <div class="card rounded-6 mb-4">
+                                <div class="card-body px-4 py-4">
+                                    <h5 class="text-uppercase">Shipping Summary</h5>
+                                    <ul class="list-unstyled">
+                                        <li id="dvPayment" style="display: none">
+                                            <div class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>Payment Method </span>
+                                                <strong class="fw-normal">
+                                                    <label id="paymentMethod" type="text" class="text-end"></label>
+                                                </strong>
+                                            </div>
+                                        </li>
+                                        <li id="dvDelivery" style="display: none">
+                                            <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>Delivery Method </span>
+                                                <strong class="fw-normal">
+                                                    <label id="deliveryMethod" type="text" class="text-end"></label>
+                                                </strong>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div style="position: fixed; bottom: 10px; right: 10px">
+                <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    $(document).ready(function () {
+        $("#inptSearch").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#dtOrderList .row-item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnGrid").click(function () {
+            $("#dvThumbnail").hide();
+            $("#dvGrid").show();
+        });
+
+        $("#btnThumbnail").click(function () {
+            $("#dvGrid").hide();
+            $("#dvThumbnail").show();
+        });
+    });
+
+</script>

@@ -284,13 +284,13 @@ namespace ECommerce1.Controllers
 
             foreach (var item in cartDetails)
             {
-
                 var _orderDetails = new OrderDetails
                 {
                     TransactionId = transactionId,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
                     SubTotal = (item.Quantity * item.Product.Price),
+                    //ReturnStatusId = 0
                 };
 
                 orderDetails.Add(_orderDetails);
@@ -303,6 +303,7 @@ namespace ECommerce1.Controllers
                 ModeOfPayment = 1,
                 OrderDate = DateTime.Now,
                 OrderStatusId = (int)OrderStatusEnum.Created,
+                DeliveryStatusId = (int)DeliveryStatusEnum.Pending,
                 Total = cart.Total, 
                 ShippingFee = cart.ShippingFee,
                 TaxAmount = cart.TaxAmount,
