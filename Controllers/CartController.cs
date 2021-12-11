@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Enums;
+﻿using Adyen.Model.Checkout;
+using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
@@ -18,18 +19,21 @@ namespace ECommerce1.Controllers
         private readonly ICartService _service;
         private readonly IEmailService _emailService;
         private readonly IOrderService _orderService;
+        private readonly IAdyenService _adyenService;
         private readonly UserManager<User> _userManager;
 
         public CartController(
-            UserManager<User> userManager,
-            ICartService service,
-            IEmailService emailService,
-            IOrderService orderService)
+            UserManager<User> userManager
+            , ICartService service
+            , IEmailService emailService
+            , IOrderService orderService
+            , IAdyenService adyenService)
         {
             _service = service;
-            _emailService = emailService;            
-            _orderService = orderService;            
+            _emailService = emailService;
+            _orderService = orderService;
             _userManager = userManager;
+            _adyenService = adyenService;
         }
 
         public async Task<IActionResult> Index()
@@ -72,14 +76,15 @@ namespace ECommerce1.Controllers
 
             if (cartItems == null)
                 _service.AddToCartItems(cartDetails);
-            else {
+            else
+            {
                 //increment quantity
                 cartItems.Quantity += cartDetails.Quantity;
                 _service.UpdateCartItems(cartItems);
             }
 
             // Cart
-            var cart = await _service.GetCart(userId);            
+            var cart = await _service.GetCart(userId);
             if (cart == null)
             {
                 var _cart = new Cart();
@@ -227,7 +232,7 @@ namespace ECommerce1.Controllers
             await _service.RemoveFromWishlist(id, userId);
 
             return Redirect(Request.Headers["Referer"].ToString());
-        }   
+        }
 
         public async Task<IActionResult> Checkout(Cart cart)
         {
@@ -253,6 +258,7 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
         public async Task<IActionResult> OrderConfirmed(Cart cart)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
@@ -260,7 +266,6 @@ namespace ECommerce1.Controllers
 
             var cartViewModel = new CartViewModel();
             var cartDetails = await _service.GetCartItems(userId);
-
             if (cart.CustomersId != null)
             {
                 cartViewModel.Cart = cart;
@@ -270,12 +275,6 @@ namespace ECommerce1.Controllers
                 ViewBag.CustomersId = userId;
                 ViewBag.Customer = user.FirstName;
 
-                //if (cart.IsPayMaya)
-                //{
-                //    return RedirectToAction("PaymentRedirect", cartViewModel);
-                //}
-
-                // Update Cart
                 await _service.UpdateCart(userId, cart);
             }
 
@@ -320,12 +319,28 @@ namespace ECommerce1.Controllers
             // Send E-Receipt
             await _emailService.SendReceipt(user.Email, orderDetails, order);
 
+            if (cart.IsGCash)
+            {
+                var _resultCheckout = _adyenService.CheckoutUsingGCash(order.TransactionId.ToString()
+                    , (long)(order.Total + order.ShippingFee + order.TaxAmount) * 100// Need to multiply into 100 since the adyen automatically convert the last two zeroes into decimal
+                    , user);
+                Response.Redirect(_resultCheckout.action.url);
+            }
+
             return View(cartViewModel);
         }
 
-        public async Task<IActionResult> PaymentRedirect(CartViewModel cart)
+        [HttpGet]
+        public async Task<IActionResult> AdyenPaymentResponse([FromQuery(Name = "redirectResult")] string redirectResult)
         {
-            return View(cart);
+            await Task.Delay(0);
+
+            var _result = _adyenService.HandlePaymentResponse(redirectResult);
+
+            ViewBag.IsResult = _result.Item1;
+            ViewBag.ResultMessage = _result.Item2;
+
+            return View();
         }
     }
 }
