@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,10 +22,18 @@ namespace ECommerce1.Controllers
             _appDBContext = appDBContext;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page)
         {
             var data = await _service.GetAllPromos();
-            return View(data);
+
+            var viewModel = new PromoViewModel
+            {
+                ItemPerPage = 10,
+                Promos = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult CreatePromo()

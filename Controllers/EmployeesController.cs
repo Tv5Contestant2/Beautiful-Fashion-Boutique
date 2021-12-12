@@ -64,10 +64,18 @@ namespace ECommerce1.Controllers
             }
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page)
         {
             var data = await _service.GetAllEmployees();
-            return View(data);
+
+            var viewModel = new HomeUserViewModel
+            {
+                ItemPerPage = 10,
+                Users = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> DeleteEmployee(string id)

@@ -50,8 +50,7 @@ namespace ECommerce1.Controllers
 
             var result = await _service.GetCustomerOrders(userId);
             var user = await _userManager.FindByIdAsync(userId);
-            ViewBag.Customer = user.FirstName;
-            ViewBag.Address = user.AddressCity;
+            ViewBag.Customer = user;
 
             return View(result);
         }
@@ -65,8 +64,7 @@ namespace ECommerce1.Controllers
 
             var result = await _service.GetCustomerReturns(userId);
             var user = await _userManager.FindByIdAsync(userId);
-            ViewBag.Customer = user.FirstName;
-            ViewBag.Address = user.AddressCity;
+            ViewBag.Customer = user;
 
             return View(result);
         }
@@ -80,8 +78,7 @@ namespace ECommerce1.Controllers
 
             var result = await _service.GetCustomerWishlist(userId);
             var user = await _userManager.FindByIdAsync(userId);
-            ViewBag.Customer = user.FirstName;
-            ViewBag.Address = user.AddressCity;
+            ViewBag.Customer = user;
 
             return View(result);
         }
@@ -109,6 +106,7 @@ namespace ECommerce1.Controllers
             viewModel.OrderDetails = orderDetails;
             viewModel.OrderStatus = order.OrderStatus;
 
+            ViewBag.Customer = user;
             return View(viewModel);
         }
 
@@ -122,8 +120,7 @@ namespace ECommerce1.Controllers
 
             var result = await _service.GetCustomerBillingAddresses(userId);
             var user = await _userManager.FindByIdAsync(userId);
-            ViewBag.Customer = user.FirstName;
-            ViewBag.Address = user.AddressCity;
+            ViewBag.Customer = user;
 
             return View(result);
         }
@@ -142,6 +139,8 @@ namespace ECommerce1.Controllers
             viewModel.Address = user.AddressCity;
             viewModel.OrderDetails = await _orderService.GetOrderDetailsById(viewModel.TransactionId.ToString());
             viewModel.ProductId = productId;
+
+            ViewBag.Customer = user;
 
             return View(viewModel);
         }

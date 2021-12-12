@@ -57,6 +57,12 @@
                                                                   htmlAttributes: new { @class = "form-control", id = "GenderId" })
                                             @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
                                         </div>
+
+                                        <div class="m-3">
+                                            <input asp-for="IsFeaturedProduct" class="form-check-input" type="checkbox" />
+                                            Set as Featured Product
+                                        </div>
+
                                         <div style="display: none;">
                                             <input id="ProductVariantJSON" asp-for="ProductVariantJSON" class="form-control" />
                                         </div>
@@ -65,10 +71,7 @@
                                         </div>
                                     </div>
 
-
-
                                     <div class="col col-md-4">
-
                                         <label asp-for="StatusId" class="control-label"></label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title", (int)StatusEnum.Active),
@@ -86,13 +89,17 @@
                                         <input asp-for="Price" class="form-control" type="number" />
                                         <span asp-validation-for="Price" class="text-danger"></span>
 
-                                        <input asp-for="IsSale" class="form-check-input" type="checkbox" />
+                                        <div class="mx-3">
+                                            <input asp-for="IsSale" class="form-check-input" type="checkbox" />
+                                            <label asp-for="PriceOnSale" class="control-label"></label>
+                                        </div>
 
-                                        <label asp-for="PriceOnSale" class="control-label"></label>
                                         <input asp-for="PriceOnSale" class="form-control" type="number" />
                                         <span asp-validation-for="PriceOnSale" class="text-danger"></span>
 
-                                        <input asp-for="IsFeaturedProduct" class="form-check-input" type="checkbox" />&nbsp; Set as Featured Product
+                                        <label asp-for="CriticalQty" class="control-label"></label>
+                                        <input asp-for="CriticalQty" class="form-control" type="number" />
+                                        <span asp-validation-for="CriticalQty" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -210,12 +217,35 @@
                 </div>
             </form>
         </div>
+
+        <div style="position: fixed; bottom: 10px; right: 10px">
+            <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 </div>
 
 
 @section Scripts {
     <script>
+        var btnTop = document.getElementById("btnTop");
+        window.onload = function () { btnTop.style.display = "none"; }
+        window.onscroll = function () { scrollFunction(); };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btnTop.style.display = "block";
+            } else {
+                btnTop.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
 
         //Start - Categories
         function handleCategories() {

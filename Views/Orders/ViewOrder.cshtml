@@ -35,7 +35,7 @@
             @*Grid View*@
             @{
                 var total = Model.Sum(x => (x.Product.IsSale ? x.Product.PriceOnSale : x.Product.Price) * x.Quantity);
-                var shipping = 100.00;
+                var shipping = (@total >= 1000 ? 100.00 : 0.00);
                 var vat = 12;
 
                 var vatAmount = @total * @vat / 100;
@@ -48,7 +48,8 @@
                             <h5 class="text-danger mb-0">@ViewBag.TransactionId</h5>
                         </div>
                         @{
-                            if (ViewBag.DeliveryStatusId != (int)DeliveryStatusEnum.Received)
+                            if (ViewBag.DeliveryStatusId != (int)DeliveryStatusEnum.Received &&
+                                ViewBag.OrderStatusId != (int)OrderStatusEnum.Cancelled)
                             {
                                 <div class="col-lg-4 text-end">
                                     <a class="btn btn-outline-danger" asp-action="UpdateOrder" asp-route-id="@ViewBag.TransactionId">

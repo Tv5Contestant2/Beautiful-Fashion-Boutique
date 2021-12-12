@@ -1,4 +1,4 @@
-﻿@model IEnumerable<User>
+﻿@model ECommerce1.ViewModel.HomeUserViewModel
 
 @{
     ViewData["Title"] = "Customer Management";
@@ -6,150 +6,170 @@
 }
 
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    @*Breadcrumbs*@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h4 class="m-0">@ViewBag.Title</h4>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right px-3 py-2">
                         <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
                         <li class="breadcrumb-item active">@ViewBag.Title</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
-    <!-- Main content -->
+
+    @*Content*@
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
+            @*Search*@
+            <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
                     <ul class="nav justify-content-end">
                         <li class="nav-item pr-2">
-                            <a asp-controller="Customers" asp-action="BlockCustomers" class="btn btn-warning float-right" type="button">
+                            <a asp-controller="Customers" asp-action="BlockCustomers" class="btn btn-info float-right" type="button">
                                 <i class="fas fa-user-slash"></i>&nbsp;&nbsp;Blocked
                             </a>
                         </li>
                         <li class="nav-item pr-2">
-                            <a asp-controller="Customers" asp-action="ArchivedCustomers" class="btn btn-warning float-right" type="button">
+                            <a asp-controller="Customers" asp-action="ArchivedCustomers" class="btn btn-info float-right" type="button">
                                 <i class="fas fa-user-clock"></i>&nbsp;&nbsp;Archived
                             </a>
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a asp-controller="Customers" asp-action="CreateCustomer" class="btn btn-info float-right" type="button">
-                                <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Customer
+                                <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Customer
                             </a>
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-3" style="margin-left: -30px" width="auto">
-            <div class="col-9">
-                @*Grid View*@
-                <div id="dvGrid" class="table-responsive-md">
-                    <table id="dtEmployeeList" name="dtEmployeeList" class="table table-hover table-fixed">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email Address</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                            <tr>
-                                <td>
-                                    <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
-                                </td>
-                                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                                @{
-                                    TimeSpan span = new TimeSpan();
-                                    span = DateTime.Now.Subtract(item.LastLoggedIn);
-
-                                    if (span.Days > 0)
-                                    {
-                                        <td>
-                                            <span class="status text-warning">&bull;</span> Active @span.Days day(s) ago
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            <span class="status text-success">&bull;</span> Active 0 day(s) ago
-                                        </td>
-}
-                                }
-
-                                <td width="10%">
-                                    <a asp-action="UpdateCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fas fa-pencil-alt">&#xE8B8;</i></a>
-                                    <a asp-action="DeleteCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
-                                    <a asp-action="BlockCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Block"><i class="fas fa-user-slash">&#xE5C9;</i></a>
-                                </td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <div class="clearfix">
-                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                        <ul class="pagination">
-                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            @*Statistics*@
-            <div class="col-md-3">
-                <div class="card card-stats">
-                    <div class="card-title m-auto py-2">
-                        <span class="h5 font-weight-bold">Statistics</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @*Active*@
-                            <div class="col-auto">
-                                <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                    <i class="fas fa-thumbs-up"></i>
+        @*Statistics*@
+        <div class="row mt-3">
+            <div class="card card-stats d-flex justify-content-between">
+                <div class="card-body">
+                    <div class="row d-flex align-items-center bord">
+                        <div class="col-4">
+                            <div class="d-flex align-items-center">
+                                <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                    <i class="fas fa-user-check"></i>
                                 </div>
-                            </div>
-                            <div class="col col-auto mb-3">
-                                <h6 class="card-title text-uppercase text-muted mb-0">Active</h6>
-                                <span class="h2 font-weight-bold mb-0">0</span>
+                                <div class="ms-3">
+                                    <h4 class="text-dark mb-0">@ViewBag.Active</h4>
+                                    <small class="text-muted text-sm text-uppercase">Active</small>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            @*Banned*@
-                            <div class="col-auto">
+                        <div class="col-4">
+                            <div class="d-flex align-items-center">
                                 <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                    <i class="fas fa-sync-alt"></i>
+                                    <i class="fas fa-user-slash"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4 class="text-dark mb-0">@ViewBag.Banned</h4>
+                                    <small class="text-muted text-sm text-uppercase">Banned</small>
                                 </div>
                             </div>
-                            <div class="col col-auto mb-3">
-                                <h6 class="card-title text-uppercase text-muted mb-0">Banned</h6>
-                                <span class="h2 font-weight-bold mb-0">0</span>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex align-items-center">
+                                <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                    <i class="fas fa-user-clock"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4 class="text-dark mb-0">@ViewBag.Inactive</h4>
+                                    <small class="text-muted text-sm text-uppercase">Inactive</small>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        @*Grid View*@
+        <div id="dvGrid" class="row mt-3">
+            <div class="d-flex justify-content-lg-around">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="cart-inner" id="dtCustomerList">
+                        <div class="border-top border-bottom py-2">
+                            <div class="row text-uppercase">
+                                <div class="col-2"><strong class="small">First Name</strong></div>
+                                <div class="col-1">&nbsp;</div>
+                                <div class="col-2 text-center"> <strong class="small">Last Name</strong></div>
+                                <div class="col-3 text-center"> <strong class="small">Email Address</strong></div>
+                                <div class="col-3 text-center"> <strong class="small">Status</strong></div>
+                                <div class="col-1 text-center"> <strong class="small">Action</strong></div>
+                            </div>
+                        </div>
+                        @foreach (var item in Model.PaginatedList())
+                        {
+                            <div class="row-item pt-4 pb-4 border-bottom">
+                                <div class="row text-left">
+                                    <div class="item col-1">
+                                        <div class="d-flex align-items-center">
+                                            <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.FirstName" width="85">
+                                        </div>
+                                    </div>
+                                    <div class="item col-2">@Html.DisplayFor(modelItem => item.FirstName)</div>
+                                    <div class="item col-2 text-center">@Html.DisplayFor(modelItem => item.LastName)</div>
+                                    <div class="item col-3 text-center">@Html.DisplayFor(modelItem => item.Email)</div>
+                                    <div class="item col-3 text-center">
+                                        @{
+                                            TimeSpan span = new TimeSpan();
+                                            span = DateTime.Now.Subtract(item.LastLoggedIn);
+
+                                            if (span.Days > 0)
+                                            {
+                                                <span class="badge bg-warning"> Active @span.Days day(s) ago</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="item col-1 text-center">
+                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateCustomer" asp-route-id="@item.Id">
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteCustomer" asp-route-id="@item.Id">
+                                            <i class="far fa-trash-alt"></i>
+                                        </a>
+                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="BlockCustomer" asp-route-id="@item.Id">
+                                            <i class="fas fa-user-slash"></i>
+</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*Pagination*@
+        <div class="row">
+            <div class=" d-flex justify-content-between px-4 py-3 w-100">
+                <div class="hint-text">Showing <b>@Model.PaginatedList().Count()</b> out of <b>@Model.Users.Count()</b> entries</div>
+                <ul class="pagination">
+                    @for (int i = 1; i <= Model.PageCount(); i++)
+                    {
+                        <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
         <div style="position: fixed; bottom: 10px; right: 10px">
             <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
                 <i class="fa fa-arrow-up" aria-hidden="true"></i>
@@ -166,7 +186,7 @@
     $(document).ready(function () {
         $("#inptSearch").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("#dtEmployeeList tr").filter(function () {
+            $("#dtCustomerList .row-item").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });

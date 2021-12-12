@@ -27,7 +27,7 @@ namespace ECommerce1.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page)
         {
             var result = await _service.GetAllOrders();
 
@@ -35,17 +35,31 @@ namespace ECommerce1.Controllers
             ViewBag.Shipped = result.Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped).ToList().Count();
             ViewBag.Pending = result.Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Pending).ToList().Count(); ;
 
-            return View(result);
+            var viewModel = new OrderViewModel
+            {
+                ItemPerPage = 10,
+                Orders = result,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
-        public async Task<IActionResult> Returns()
+        public async Task<IActionResult> Returns(int page)
         {
             var result = await _service.GetAllReturns();
 
             ViewBag.Approved = result.Where(x => x.OrderDetails.Any(x => x.ReturnStatusId == (int)OrderStatusEnum.Approved)).Count();
             ViewBag.Pending = result.Where(x => x.OrderDetails.Any(x => x.ReturnStatusId == (int)OrderStatusEnum.PendingRequest)).Count();
 
-            return View(result);
+            var viewModel = new OrderViewModel
+            {
+                ItemPerPage = 10,
+                Orders = result,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
         [Route("Orders/ViewOrder/{transactionId:Guid}")]

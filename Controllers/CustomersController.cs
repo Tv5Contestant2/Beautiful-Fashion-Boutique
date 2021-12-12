@@ -43,16 +43,32 @@ namespace ECommerce1.Controllers
             return View(customerDetails);
         }
 
-        public async Task<IActionResult> ArchivedCustomers()
+        public async Task<IActionResult> ArchivedCustomers(int page)
         {
             var data = await _service.GetAllArchivedCustomers();
-            return View(data);
+
+            var viewModel = new HomeUserViewModel
+            {
+                ItemPerPage = 10,
+                Users = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
-        public async Task<IActionResult> BlockCustomers()
+        public async Task<IActionResult> BlockCustomers(int page)
         {
             var data = await _service.GetAllBlockCustomers();
-            return View(data);
+
+            var viewModel = new HomeUserViewModel
+            {
+                ItemPerPage = 10,
+                Users = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult CreateCustomer()
@@ -120,13 +136,20 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page)
         {
             await _userService.ArchiveUsers();
 
             var data = await _service.GetAllCustomers();
 
-            return View(data);
+            var viewModel = new HomeUserViewModel
+            {
+                ItemPerPage = 10,
+                Users = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> ShowCustomers()

@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -93,7 +94,7 @@ namespace ECommerce1.Controllers
             return View(productDetails);
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page)
         {
             var data = await _service.GetAllProducts();
 
@@ -105,11 +106,18 @@ namespace ECommerce1.Controllers
                 }
             }
 
-            ViewBag.InStock = data.Where(x => x.StatusId == (int)StockStatusEnum.InStock).ToList().Count();
-            ViewBag.OutOfStock = data.Where(x => x.StatusId == (int)StockStatusEnum.OutOfStock).ToList().Count();
-            ViewBag.Critical = 0;
+            ViewBag.InStock = data.Where(x => x.StockStatusId == (int)StockStatusEnum.InStock).ToList().Count();
+            ViewBag.OutOfStock = data.Where(x => x.StockStatusId == (int)StockStatusEnum.OutOfStock).ToList().Count();
+            ViewBag.Critical = data.Where(x => x.StockStatusId == (int)StockStatusEnum.Critical).ToList().Count();
 
-            return View(data);
+            var viewModel = new ProductViewModel
+            {
+                ItemPerPage = 10,
+                Products = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> UpdateProduct(long id)
@@ -175,6 +183,20 @@ namespace ECommerce1.Controllers
             _service.InitializeProductOnUpdate(_product);
 
             return View(_product);
+        }
+
+        public IActionResult CreateReview(ProductViewModel viewModel)
+        {
+            var productReview = new ProductReview {
+                CustomersId = viewModel.CustomersId,
+                ProductId = viewModel.ProductId,
+                Review = viewModel.Review,
+                ReviewDate = DateTime.Now
+            };
+
+            _service.CreateReview(productReview);
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

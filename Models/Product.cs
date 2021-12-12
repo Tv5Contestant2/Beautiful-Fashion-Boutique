@@ -45,6 +45,10 @@ namespace ECommerce1.Models
         [Display(Name = "Category")]
         public int ProductCategoryId { get; set; }
 
+        [Required]
+        [Display(Name = "Critical Quantity")]
+        public int CriticalQty { get; set; }
+
         public int SizeId { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
@@ -64,9 +68,12 @@ namespace ECommerce1.Models
         public IEnumerable<ProductCategory> ProductCategories { get; set; }
         public IEnumerable<ProductImage> ProductImages { get; set; }
         public IEnumerable<ProductVariant> ProductVariants { get; set; }
+        public IEnumerable<ProductReview> ProductReviews { get; set; }
         public IEnumerable<Status> Statuses { get; set; }
-        public IEnumerable<StockStatus> StockStatuses { get; set; }
         public IEnumerable<Size> Sizes { get; set; }
+        public IEnumerable<StockStatus> StockStatuses { get; set; }
+        public StockStatus InventoryStatus { get; set; }
+        public ProductCategory Category { get; set; }
 
         #endregion Enumerables
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Product>
+﻿@model ECommerce1.ViewModel.ProductViewModel
 @using ECommerce1.Data.Enums
 
 @{
@@ -7,203 +7,200 @@
 }
 
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    @*Breadcrumbs*@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h4 class="m-0">@ViewBag.Title</h4>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right px-3 py-2">
                         <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
                         <li class="breadcrumb-item active">@ViewBag.Title</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
-    <!-- Main content -->
+
+    @*Content*@
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
+            @*Search*@
+            <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
                     <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Product
+                        <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Product
                     </a>
                     <button id="btnGrid" class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
                     <button id="btnThumbnail" class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
                 </div>
             </div>
 
-            <div class="row mt-3" style="margin-left: -30px" width="auto">
-                <div class="col-9">
-                    @*Grid View*@
-                    <div id="dvGrid" class="table-responsive-md">
-                        <table id="dtProductList" name="dtProductList" class="table table-hover table-fixed">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.Id</td>
-                                        <td>
-                                            <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="@item.Name">
-                                        </td>
-                                        <td><a asp-controller="Products" asp-action="ViewProduct" asp-route-id="@item.Id">@item.Name</a></td>
-                                        <td>Php @item.Price.ToString("#,##0.00")</td>
-                                        <td>@item.StockQty</td>
-                                        <td>
-                                            @{
-                                                var status = Enum.GetName(typeof(StatusEnum), item.StatusId);
-                                                if (item.StockStatusId == (int)StockStatusEnum.InStock)
-                                                {
-                                                    status = "In-Stock";
-                                                    <span class="status text-success">&bull;</span> @status
-                                                }
-                                                else if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
-                                                {
-                                                    status = "Out-Of-Stock";
-                                                    <span class="status text-danger">&bull;</span> @status
-                                                }
-                                                else if (item.StockStatusId == (int)StockStatusEnum.PhasedOut)
-                                                {
-                                                    status = "Phased-Out";
-                                                    <span class="status text-danger">&bull;</span> @status
-                                                }}
-                                        </td>
-                                        <td class="col-sm-2">
-                                            <a asp-action="ViewProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="View"><i class="fas fa-eye">&#xE5C9;</i></a>
-                                            <a asp-action="UpdateProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Edit"><small><i class="fas fa-pencil-alt">&#xE8B8;</i></small></a>
-                                            <a asp-action="DeleteProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt">&#xE5C9;</i></a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <div class="clearfix">
-                            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                            <ul class="pagination">
-                                <li class="page-item disabled"><a href="#">Previous</a></li>
-                                <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                <li class="page-item"><a href="#" class="page-link">3</a></li>
-                                <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    @*Thumbnail View*@
-                    <div id="dvThumbnail" class="row gy-5 mb-5 my-1" style="display: none;">
-                        @foreach (var item in Model)
-                        {
-                            <div class="item col-xl-4 col-md-6">
-                                <div class="product">
-                                    <div class="image align-items-center justify-content-center bg-light">
-                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
-                                        <div class="hover-overlay d-flex align-items-center justify-content-center">
-                                            <div class="CTA d-flex align-items-center justify-content-center">
-                                                <a asp-action="ViewProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="View">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a asp-action="UpdateProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
-                                                    <i class="fas fa-pencil-alt"></i>
-                                                </a>
-                                                <a asp-action="DeleteProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
-                                            </div>
-                                        </div>
+            @*Stock Count*@
+            <div class="row mt-3">
+                <div class="card card-stats d-flex justify-content-between">
+                    <div class="card-body">
+                        <div class="row d-flex align-items-center bord">
+                            <div class="col-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                        <i class="fas fa-box"></i>
                                     </div>
-                                    <div class="pt-3">
-                                        <small>
-                                            @{
-                                                var status = Enum.GetName(typeof(StatusEnum), item.StatusId);
-                                                if (item.StockStatusId == (int)StockStatusEnum.InStock)
-                                                {
-                                                    status = "In-Stock";
-                                                    <span class="status text-success">&bull;</span> @status
-                                                }
-                                                else if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
-                                                {
-                                                    status = "Out-Of-Stock";
-                                                    <span class="status text-danger">&bull;</span> @status
-                                                }
-                                                else if (item.StockStatusId == (int)StockStatusEnum.PhasedOut)
-                                                {
-                                                    status = "Phased-Out";
-                                                    <span class="status text-danger">&bull;</span> @status
-                                                }}
-                                        </small>
-                                        <a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
-                                            <h3 class="h6 mb-0 text-uppercase">@item.Name</h3>
-                                        </a><span class="text-muted">Php @item.Price</span>
+                                    <div class="ms-3">
+                                        <h4 class="text-dark mb-0">@ViewBag.InStock</h4>
+                                        <small class="text-muted text-sm text-uppercase">In-Stock</small>
                                     </div>
                                 </div>
                             </div>
-                        }
-                    </div>
-                </div>
-
-                @*Stock Count*@
-                <div class="col-md-3">
-                    <div class="card card-stats">
-                        <div class="card-title m-auto py-2">
-                            <span class="h5 font-weight-bold">Stock Count</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                @*In-Stock*@
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                        <i class="fas fa-thumbs-up"></i>
-                                    </div>
-                                </div>
-                                <div class="col col-auto mb-3">
-                                    <h6 class="card-title text-uppercase text-muted mb-0">In-Stock</h6>
-                                    <span class="h2 font-weight-bold mb-0">@ViewBag.InStock</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                @*Out-of-stock*@
-                                <div class="col-auto">
+                            <div class="col-4">
+                                <div class="d-flex align-items-center">
                                     <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                        <i class="fas fa-sync-alt"></i>
+                                        <i class="fas fa-ban"></i>
                                     </div>
-                                </div>
-                                <div class="col col-auto mb-3">
-                                    <h6 class="card-title text-uppercase text-muted mb-0">Out-of-stock</h6>
-                                    <span class="h2 font-weight-bold mb-0">@ViewBag.OutOfStock</span>
+                                    <div class="ms-3">
+                                        <h4 class="text-dark mb-0">@ViewBag.OutOfStock</h4>
+                                        <small class="text-muted text-sm text-uppercase">Out-of-stock</small>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                @*Warning*@
-                                <div class="col-auto">
+                            <div class="col-4">
+                                <div class="d-flex align-items-center">
                                     <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <i class="fas fa-exclamation"></i>
                                     </div>
-                                </div>
-                                <div class="col col-auto mb-3">
-                                    <h6 class="card-title text-uppercase text-muted mb-0">Critical</h6>
-                                    <span class="h2 font-weight-bold mb-0">@ViewBag.Critical</span>
+                                    <div class="ms-3">
+                                        <h4 class="text-dark mb-0">@ViewBag.Critical</h4>
+                                        <small class="text-muted text-sm text-uppercase">Critical</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            @*Grid View*@
+            <div id="dvGrid" class="row mt-3">
+                <div class="d-flex justify-content-lg-around">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="cart-inner" id="dtProductList">
+                            <div class="border-top border-bottom py-2">
+                                <div class="row text-uppercase">
+                                    <div class="col-3"><strong class="small">Product</strong></div>
+                                    <div class="col-2 text-center"> <strong class="small">Category</strong></div>
+                                    <div class="col-2 text-center"> <strong class="small">Price</strong></div>
+                                    <div class="col-1 text-center"> <strong class="small">Stock Qty</strong></div>
+                                    <div class="col-1 text-center"> <strong class="small">Critical Qty</strong></div>
+                                    <div class="col-2 text-center"><strong class="small">Stock Status</strong></div>
+                                    <div class="col-1 text-center"><strong class="small">Action</strong></div>
+                                </div>
+                            </div>
+                            @foreach (var item in Model.PaginatedList())
+                            {
+                                <div class="row-item pt-4 pb-4 border-bottom">
+                                    <div class="row text-left">
+                                        <div class="item col-3">
+                                            <div class="d-flex align-items-center">
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name" width="85">
+                                                <div class="ms-3">
+                                                    <a asp-controller="Products" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                        <h6 class="mb-0 text-dark fw-normal">@item.Name</h6>
+                                                        @*<span class="text-muted text-sm">Size: Large</span>*@
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item col-2 text-center">@item.Category.Title</div>
+                                        <div class="item col-2 text-center">Php @item.Price.ToString("#,##0.00")</div>
+                                        <div class="item col-1 text-center">@item.StockQty</div>
+                                        <div class="item col-1 text-center">@item.CriticalQty</div>
+                                        <div class="item col-2 text-center"><span class="badge @item.InventoryStatus.Class">@item.InventoryStatus.Title</span></div>
+                                        <div class="item col-1 text-center">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                <i class="far fa-eye"></i>
+                                            </a>
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateProduct" asp-route-id="@item.Id">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteProduct" asp-route-id="@item.Id">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Thumbnail View*@
+            <div id="dvThumbnail" class="row gy-5 mb-5 my-1" style="display: none;">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="item col-xl-3 col-md-2">
+                        <div class="product">
+                            <div class="image align-items-center justify-content-center bg-light">
+                                @{
+                                    if (item.IsSale)
+                                    {
+                                        <div class="ribbon ribbon-primary text-uppercase">Sale</div>
+                                    }
+
+                                    if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
+                                    {
+                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name" style="-webkit-filter: grayscale(100%); filter: grayscale(100%); ">
+                                    }
+                                    else
+                                    {
+                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                                    }
+                                }
+                                <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                    <div class="CTA d-flex align-items-center justify-content-center">
+                                        <a asp-action="ViewProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="UpdateProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        <a asp-action="DeleteProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
+                                            <i class="far fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-3">
+                                <small>
+                                    <span class="badge @item.InventoryStatus.Class">@item.InventoryStatus.Title</span>
+                                </small>
+                                <a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                    <h3 class="h6 mb-0 text-uppercase">@item.Name</h3>
+                                </a><span class="text-muted">Php @item.Price</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @*Pagination*@
+            <div class="row">
+                <div class=" d-flex justify-content-between px-4 py-3 w-100">
+                    <div class="hint-text">Showing <b>@Model.PaginatedList().Count()</b> out of <b>@Model.Products.Count()</b> entries</div>
+                    <ul class="pagination">
+                        @for (int i = 1; i <= Model.PageCount(); i++)
+                        {
+                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
             <div style="position: fixed; bottom: 10px; right: 10px">
                 <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
                     <i class="fa fa-arrow-up" aria-hidden="true"></i>
@@ -221,7 +218,10 @@
     $(document).ready(function () {
         $("#inptSearch").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("#dtProductList tr").filter(function () {
+            $("#dtProductList .row-item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+            $("#dvThumbnail .item").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });

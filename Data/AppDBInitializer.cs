@@ -112,8 +112,8 @@ namespace ECommerce1.Data
                     {
                         new Employees()
                         {
-                            EmployeeFirstName = "Jhon",
-                            EmployeeLastName = "Smith",
+                            EmployeeFirstName = "Beautiful",
+                            EmployeeLastName = "Administrator",
                             Image = "/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAAA8AAD/4QMraHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjMtYzAxMSA2Ni4xNDU2NjEsIDIwMTIvMDIvMDYtMTQ6NTY6MjcgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjI0ODBGNkIxRkVFQTExRTQ5RUU3RjVDODRBRTdDNkQ5IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjI0ODBGNkIyRkVFQTExRTQ5RUU3RjVDODRBRTdDNkQ5Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjQ4MEY2QUZGRUVBMTFFNDlFRTdGNUM4NEFFN0M2RDkiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjQ4MEY2QjBGRUVBMTFFNDlFRTdGNUM4NEFFN0M2RDkiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/7gAOQWRvYmUAZMAAAAAB/9sAhAAGBAQEBQQGBQUGCQYFBgkLCAYGCAsMCgoLCgoMEAwMDAwMDBAMDg8QDw4MExMUFBMTHBsbGxwfHx8fHx8fHx8fAQcHBw0MDRgQEBgaFREVGh8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx//wAARCACWAJYDAREAAhEBAxEB/8QAbAABAAMBAQEAAAAAAAAAAAAAAAIEBQMBCAEBAAAAAAAAAAAAAAAAAAAAABABAAIBAgMECQQDAAAAAAAAAAECAxEEIUFxMVESBWGRobHBIjJyE1IzFDSBQiQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APpkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFPd72cc/jx/VHbbuBT/lbjxa/ktr14eoHfH5lkjhkrFo744SCzTf7a3Oa9YBYiYmNYnWJ7JgAAAAAAAAAAAAAEM2T8eK1/wBMcOoMWZmZmZ4zPaAAAC1sdzOPJFLT8luHSQaYAAAAAAAAAAAAK3mNtNvp32iPiDLAAAABtYb+PFS3OYiZBMAAAAAAAAAAAFTzP9iv3R7pBmgAAAA19n/Wx9PiDsAAAAAAAAAAACp5l+xX7o90gzQAAAAa+z/rY+nxB2AAAAAAAAAAABV8yiZwRPdaNfVIMwAAAAGxtI022PoDqAAAAAAAAAAACGfH+TFanfHDryBizExMxPCY7QAAAe1rNrRWOMzOkA26VitK1jsrER6gegAAAAAAAAAAAAz/ADDb+G35ax8tvq6gpAAA0dls5pMZcn1f6x3AuAAAAAAAAAAAAAA4b6P+W/8Aj3wDJAABuUnWsT6IB6AAAAAAAAAAAAADhvrRG2t6dIj1gyQAAbG1yRfBSecRpPWOAOoAAAAAAAAAAAAOd9zgp9V46Rxn2Azt3upzWiI4Ur2R8QVwAAd9rupwWmJ40ntj4g0abrBeOF46Twn2g69oAAAAAAAAIZc2PFGt7ad0cwUsvmV54Yo8Md88ZBVvlyX+u026ggAAAAAACVMuSk60tNegLeLzK8cMseKO+OEgu4suPLXxUnWOYJgAAAAqbrfRjmaY+N+c8oBnWva9ptadZnnIPAAAAAAAAAAASpkvS3ipOkwDT2u8rm+W3DJHLlPQFgAAEct/Bjtf9MTIMWZmZmZ4zPaDwAAAAAAAAAAAAE8F/BmpbumNenMG0AACvv7aba3pmI9oMoAAAAAAAAAAAAAAG3it4sVLd8RPsBIAFXzL+vH3R7pBmAAAAAAAAAAAAAAA2Npr/Gx69wOoP//Z"
                 }
                     }); ;
@@ -317,15 +317,18 @@ namespace ECommerce1.Data
                     {
                        new StockStatus()
                         {
-                            Title = "Phased-out"
+                            Title = "Critical",
+                            Class = "bg-warning"
                         },
                         new StockStatus()
                         {
-                            Title = "Out-of-Stock"
+                            Title = "Out-of-Stock",
+                            Class = "bg-danger"
                         },
                         new StockStatus()
                         {
-                            Title = "In-Stock"
+                            Title = "In-Stock",
+                            Class = "bg-success"
                         },
                     });
 

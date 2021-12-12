@@ -1,88 +1,116 @@
-﻿@model IEnumerable<User>
+﻿@model ECommerce1.ViewModel.HomeUserViewModel
 
 @{
-    ViewData["Title"] = "Customer Management";
+    ViewData["Title"] = "Blocked Customers";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    @*Breadcrumbs*@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h4 class="m-0">@ViewBag.Title</h4>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right px-3 py-2">
                         <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
                         <li class="breadcrumb-item active">@ViewBag.Title</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
-    <!-- Main content -->
+
+    @*Content*@
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
+            @*Search*@
+            <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
-                    <a asp-controller="Customers" asp-action="ShowCustomers" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-user"></i>&nbsp;&nbsp;Show Customers
-                    </a>
+                    <ul class="nav justify-content-end">
+                        <li class="nav-item pr-2">
+                            <a asp-controller="Customers" asp-action="ShowCustomers" class="btn btn-info float-right" type="button">
+                                <i class="fas fa-user"></i>&nbsp;&nbsp;Show Customers
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-3" style="margin-left: -30px" width="auto">
-            <div class="col-12">
-                @*Grid View*@
-                <div id="dvGrid" class="table-responsive-md">
-                    <table id="dtEmployeeList" name="dtEmployeeList" class="table table-hover table-fixed">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email Address</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <img src="@String.Format("data:image/jpg;base64,{0}", item.Image)" class="avatar" alt="Avatar">
-                                    </td>
-                                    <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                                    <td><span class="status text-success">&bull;</span> Active</td>
+        @*Grid View*@
+        <div id="dvGrid" class="row mt-3">
+            <div class="d-flex justify-content-lg-around">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="cart-inner" id="dtCustomerList">
+                        <div class="border-top border-bottom py-2">
+                            <div class="row text-uppercase">
+                                <div class="col-2"><strong class="small">First Name</strong></div>
+                                <div class="col-1">&nbsp;</div>
+                                <div class="col-2 text-center"> <strong class="small">Last Name</strong></div>
+                                <div class="col-3 text-center"> <strong class="small">Email Address</strong></div>
+                                <div class="col-3 text-center"> <strong class="small">Status</strong></div>
+                                <div class="col-1 text-center"> <strong class="small">Action</strong></div>
+                            </div>
+                        </div>
+                        @foreach (var item in Model.PaginatedList())
+                        {
+                            <div class="row-item pt-4 pb-4 border-bottom">
+                                <div class="row text-left">
+                                    <div class="item col-1">
+                                        <div class="d-flex align-items-center">
+                                            <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.FirstName" width="85">
+                                        </div>
+                                    </div>
+                                    <div class="item col-2">@Html.DisplayFor(modelItem => item.FirstName)</div>
+                                    <div class="item col-2 text-center">@Html.DisplayFor(modelItem => item.LastName)</div>
+                                    <div class="item col-3 text-center">@Html.DisplayFor(modelItem => item.Email)</div>
+                                    <div class="item col-3 text-center">
+                                        @{
+                                            TimeSpan span = new TimeSpan();
+                                            span = DateTime.Now.Subtract(item.LastLoggedIn);
 
-                                    <td width="10%">
-                                        <a asp-action="UnBlockCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Unblock"><i class="fas fa-user">&#xE8B8;</i></a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <div class="clearfix">
-                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                        <ul class="pagination">
-                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                        </ul>
+                                            if (span.Days > 0)
+                                            {
+                                                <span class="badge bg-warning"> Active @span.Days day(s) ago</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="item col-1 text-center">
+                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UnBlockCustomer" asp-route-id="@item.Id">
+                                            <i class="fas fa-unlock-alt"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
+
+        @*Pagination*@
+        <div class="row">
+            <div class=" d-flex justify-content-between px-4 py-3 w-100">
+                <div class="hint-text">Showing <b>@Model.PaginatedList().Count()</b> out of <b>@Model.Users.Count()</b> entries</div>
+                <ul class="pagination">
+                    @for (int i = 1; i <= Model.PageCount(); i++)
+                    {
+                        <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
         <div style="position: fixed; bottom: 10px; right: 10px">
             <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
                 <i class="fa fa-arrow-up" aria-hidden="true"></i>
@@ -99,7 +127,7 @@
     $(document).ready(function () {
         $("#inptSearch").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("#dtEmployeeList tr").filter(function () {
+            $("#dtCustomerList .row-item").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });

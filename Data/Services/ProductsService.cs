@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -174,6 +175,8 @@ namespace ECommerce1.Data.Services
             var result = await _context.Products
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductVariants)
+                .Include(x => x.InventoryStatus)
+                .Include(x => x.Category)
                 .ToListAsync();
 
             foreach (var item in result)
@@ -190,6 +193,25 @@ namespace ECommerce1.Data.Services
                 }
             }
 
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
             return result;
         }
         public async Task<IEnumerable<Product>> GetFeaturedProductsOnSale()
@@ -197,6 +219,7 @@ namespace ECommerce1.Data.Services
             var result = await _context.Products
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductVariants)
+                .Include(x => x.InventoryStatus)
                 .Where(x => x.IsFeaturedProduct == true && x.IsSale == true)
                 .ToListAsync();
 
@@ -214,6 +237,26 @@ namespace ECommerce1.Data.Services
                 }
             }
 
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
+
             return result;
         }
 
@@ -223,6 +266,8 @@ namespace ECommerce1.Data.Services
                 .Include(x => x.ProductVariants).ThenInclude(x => x.Size)
                 .Include(x => x.ProductVariants).ThenInclude(x => x.Color)
                 .Include(x => x.ProductImages)
+                .Include(x => x.InventoryStatus)
+                .Include(x => x.ProductReviews).ThenInclude(x => x.Customers)
                 .ToListAsync();
 
             foreach (var item in result)
@@ -239,12 +284,36 @@ namespace ECommerce1.Data.Services
                 }
             }
 
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
+
             return result.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsByGender(int genderId)
         {
-            var result = await _context.Products.Include(x => x.ProductImages).ToListAsync();
+            var result = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductVariants)
+                .Include(x => x.InventoryStatus)
+                .ToListAsync();
 
             foreach (var item in result)
             {
@@ -260,7 +329,62 @@ namespace ECommerce1.Data.Services
                 }
             }
 
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
+
             return result.Where(x => x.GenderId == genderId).ToList();
+        }
+
+        public async Task<IEnumerable<ProductReview>> GetProductReviews(long id)
+        {
+            var result = await _context.ProductReviews
+                .Include(x => x.Customers)
+                .Where(x => x.ProductId == id)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task UpdateStocks(List<OrderDetails> orderDetails)
+        {
+            var products = await _context.ProductVariants
+                .ToListAsync();
+
+            foreach (var item in orderDetails)
+            {
+                foreach (var product in products.Where(x => x.ProductId == item.ProductId)) // must be product variant
+                {
+                    product.Quantity -= item.Quantity;
+                    _context.ProductVariants.Update(product);
+                }
+
+            }
+
+            await _context.SaveChangesAsync();
+
+        }
+
+        public void CreateReview(ProductReview productReview)
+        {
+            _context.ProductReviews.Add(productReview);
+            _context.SaveChanges();
         }
     }
 }

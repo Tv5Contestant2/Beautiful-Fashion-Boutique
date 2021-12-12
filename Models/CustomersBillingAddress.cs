@@ -13,5 +13,7 @@ namespace ECommerce1.Models
         public string City { get; set; }
         public string Barangay { get; set; }
         public string ContactNumber { get; set; }
+
+        public User Customer { get; set; }
     }
 }

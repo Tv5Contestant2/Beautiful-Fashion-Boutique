@@ -35,7 +35,7 @@
 @if (Model != null)
 {
     var total = Model.CartDetails.Sum(x => (x.Product.IsSale ? x.Product.PriceOnSale : x.Product.Price) * x.Quantity);
-    var shipping = 100.00;
+    var shipping = (total >= 1000 ? 100.00 : 0.00);
     var vat = 12;
 
     <section class="py-5">

@@ -1,6 +1,5 @@
 ﻿@model Product
 @using ECommerce1.Data.Enums
-@using System
 
 @{
     ViewData["Title"] = "View Product";
@@ -15,210 +14,260 @@
 
         <div class="form-group">
             @*<form asp-action="UpdateProduct" enctype="multipart/form-data" class="hidden">*@
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
-                <a class="btn btn-info float-right" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@Model.Id">Edit Product&nbsp;<i class="fas fa-arrow-right"></i></a>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+            <a class="btn btn-info float-right" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@Model.Id">Edit Product&nbsp;<i class="fas fa-arrow-right"></i></a>
 
-                <div id="accordion">
-                    @*Product Information*@
-                    <div class="card mt-2">
-                        <div class="card-header" id="headingOne">
-                            <b>PRIMARY INFORMATION</b>
-                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="far fa-plus-square"></i>
-                            </a>
-                        </div>
+            <div id="accordion">
+                @*Product Information*@
+                <div class="card mt-2">
+                    <div class="card-header" id="headingOne">
+                        <b>PRIMARY INFORMATION</b>
+                        <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <i class="far fa-plus-square"></i>
+                        </a>
+                    </div>
 
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                            <div class="card-body">
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
 
-                                @*Primary Info*@
-                                <div class="row form-group">
+                            @*Primary Info*@
+                            <div class="row form-group">
 
-                                    <div class="col col-md-8">
-                                        <div>
-                                            <label asp-for="Name" class="control-label"></label>
-                                            <input asp-for="Name" class="form-control" disabled/>
-                                        </div>
+                                <div class="col col-md-8">
+                                    <div>
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" class="form-control" disabled />
+                                    </div>
 
-                                        <div>
-                                            <label asp-for="Description" class="control-label"></label>
-                                            <input asp-for="Description" class="form-control" rows="4" disabled/>
-                                        </div>
+                                    <div>
+                                        <label asp-for="Description" class="control-label"></label>
+                                        <input asp-for="Description" class="form-control" rows="4" disabled />
+                                    </div>
 
-                                        <label asp-for="ProductCategoryId" class="control-label"></label>
-                                        <div>
-                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
+                                    <label asp-for="ProductCategoryId" class="control-label"></label>
+                                    <div>
+                                        @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
 htmlAttributes: new { @class = "form-control", @disabled = "disabled", id = "selectionCategories", @onchange = "handleCategories()" })
-                                        </div>
+                                    </div>
 
-                                        <label asp-for="GenderId" class="control-label"></label>
-                                        <div>
-                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
+                                    <label asp-for="GenderId" class="control-label"></label>
+                                    <div>
+                                        @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
 htmlAttributes: new { @class = "form-control", @disabled = "disabled", id = "GenderId" })
-                                        </div>
-                                        <div style="display: none;">
-                                            <input id="ProductVariantJSON" asp-for="ProductVariantJSON" class="form-control" />
-                                        </div>
-                                        <div style="display: none;">
-                                            <input id="ProductImageJSON" asp-for="ProductImageJSON" class="form-control" />
-                                        </div>
                                     </div>
+                                    <div class="m-3">
+                                        <input asp-for="IsFeaturedProduct" class="form-check-input" type="checkbox" disabled />
+                                        Set as Featured Product
+                                    </div>
+                                    <div style="display: none;">
+                                        <input id="ProductVariantJSON" asp-for="ProductVariantJSON" class="form-control" />
+                                    </div>
+                                    <div style="display: none;">
+                                        <input id="ProductImageJSON" asp-for="ProductImageJSON" class="form-control" />
+                                    </div>
+                                </div>
 
 
 
-                                    <div class="col col-md-4">
+                                <div class="col col-md-4">
 
-                                        <label asp-for="StatusId" class="control-label"></label>
-                                        <div>
-                                            @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"),
+                                    <label asp-for="StatusId" class="control-label"></label>
+                                    <div>
+                                        @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"),
 htmlAttributes: new { @class = "form-control", id = "StatusId", @readonly = "readonly", @style = "pointer-events: none;" })
-                                            @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
-                                        </div>
-                                        <label class="control-label">Stock Status</label>
-                                        <div>
-                                            @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title"),
-htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly = "readonly", @style = "pointer-events: none;" })
-                                            @Html.ValidationMessageFor(x => x.StockStatusId, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <label asp-for="Price" class="control-label"></label>
-                                        <input asp-for="Price" class="form-control" type="number" disabled/>
+                                        @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
                                     </div>
+                                    <label class="control-label">Stock Status</label>
+                                    <div>
+                                        @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title"),
+htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly = "readonly", @style = "pointer-events: none;" })
+                                        @Html.ValidationMessageFor(x => x.StockStatusId, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <label asp-for="Price" class="control-label"></label>
+                                    <input asp-for="Price" class="form-control" type="number" disabled />
+
+                                    <div class="mx-3">
+                                        <input asp-for="IsSale" class="form-check-input" type="checkbox" disabled />
+                                        <label asp-for="PriceOnSale" class="control-label"></label>
+                                    </div>
+
+                                    <input asp-for="PriceOnSale" class="form-control" type="number" disabled />
+                                    <label asp-for="CriticalQty" class="control-label"></label>
+                                    <input asp-for="CriticalQty" class="form-control" type="number" disabled />
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    @*Variants*@
-                    <div class="card">
-                        <div class="card-header" id="headingTwo">
-                            <b>VARIANTS</b>
-                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="far fa-plus-square"></i>
-                            </a>
-                        </div>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                            <div class="card-body">
-                                <table class="table order-list tblVariants" id="dtVariant">
-                                    <thead>
-                                        <tr>
-                                            @switch (Model.ProductCategoryId)
-                                            {
-                                                case (int)ProductCategoryEnum.Accessories:
-                                                    <th id="thVariantSize" style="display:none;">Size</th>
-                                                    break;
-                                                default:
-                                                    <th id="thVariantSize" style="width: 35%">Size</th>
-                                                    break;
-                                            }
-                                            <th style="width: 35%">Color</th>
-                                            <th style="width: 20%">Quantity</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="tbody" id="bodyVariant">
-                                        @if (Model.ProductVariants != null)
-                                        {
-                                            @if (Model.ProductVariants.Any())
-                                            {
-
-                                                @foreach (var item in Model.ProductVariants)
-                                                {
-                                                    <tr>
-                                                        @if (Model.ProductCategoryId != (int)ProductCategoryEnum.Accessories)
-                                                        {
-                                                            <td><span>@item.Size.Title</span><input id="inptSize" name="inptSize" type="text" value="@item.SizeId" style="display:none" /></td>
-                                                        }
-                                                        <td><span>@item.Color.Title</span><input id="inptColor" name="inptColor" type="text" value="@item.ColorId" style="display:none" /></td>
-                                                        <td><span>@item.Quantity</span><input id="inptQuantity" name="inptQuantity" type="text" value="@item.Quantity" style="display:none" /></td>
-                                                    </tr>
-                                                }
-                                            }
-                                        }
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                @*Variants*@
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <b>VARIANTS</b>
+                        <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                            <i class="far fa-plus-square"></i>
+                        </a>
                     </div>
-
-                    @*Images*@
-                    <div class="card">
-                        <div class="card-header" id="headingThree">
-                            <b>IMAGES</b>
-                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="far fa-plus-square"></i>
-                            </a>
-                        </div>
-                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                            <div class="card-body">
-                                <table class="table order-list tblImages" id="dtImage">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 40%">Image</th>
-                                            <th style="width: 40%">File Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="tbody" id="bodyImage">
-                                        @if (Model.ProductImages != null)
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            <table class="table order-list tblVariants" id="dtVariant">
+                                <thead>
+                                    <tr>
+                                        @switch (Model.ProductCategoryId)
                                         {
-                                            @if (Model.ProductImages.Any())
-                                            {
-                                                @foreach (var item in Model.ProductImages)
-                                                {
-                                                    <tr>
-                                                        <td><img width="200" src="@string.Format("data:image/jpeg;base64,{0}", item.Image)" /></td>
-                                                        <td><span>@item.FileName</span></td>
-                                                    </tr>
-                                                }
-                                            }
+                                            case (int)ProductCategoryEnum.Accessories:
+                                                <th id="thVariantSize" style="display:none;">Size</th>
+                                                break;
+                                            default:
+                                                <th id="thVariantSize" style="width: 35%">Size</th>
+                                                break;
                                         }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    @*Reviews*@
-                    <div class="card">
-                        <div class="card-header" id="headingFour">
-                            <b>REVIEWS</b>
-                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="far fa-plus-square"></i>
-                            </a>
-                        </div>
-                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-                            <p class="m-2">No reviews yet.</p>
-                            @*<div class="card-body">
-                    <table class="table order-list tblImages" id="dtImage">
-                        <thead>
-                            <tr>
-                                <th style="width: 40%">Image</th>
-                                <th style="width: 40%">File Name</th>
-                            </tr>
-                        </thead>
-                        <tbody class="tbody" id="bodyImage">
-                            @if (Model.ProductImages != null)
-                            {
-                                @if (Model.ProductImages.Any())
-                                {
-                                    @foreach (var item in Model.ProductImages)
+                                        <th style="width: 35%">Color</th>
+                                        <th style="width: 20%">Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody" id="bodyVariant">
+                                    @if (Model.ProductVariants != null)
                                     {
-                                        <tr>
-                                            <td><img width="200" src="@string.Format("data:image/jpeg;base64,{0}", item.Image)" /></td>
-                                            <td><span>@item.FileName</span></td>
-                                        </tr>
+                                        @if (Model.ProductVariants.Any())
+                                        {
+
+                                            @foreach (var item in Model.ProductVariants)
+                                            {
+                                                <tr>
+                                                    @if (Model.ProductCategoryId != (int)ProductCategoryEnum.Accessories)
+                                                    {
+                                                        <td><span>@item.Size.Title</span><input id="inptSize" name="inptSize" type="text" value="@item.SizeId" style="display:none" /></td>
+                                                    }
+                                                    <td><span>@item.Color.Title</span><input id="inptColor" name="inptColor" type="text" value="@item.ColorId" style="display:none" /></td>
+                                                    <td><span>@item.Quantity</span><input id="inptQuantity" name="inptQuantity" type="text" value="@item.Quantity" style="display:none" /></td>
+                                                </tr>
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>*@
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+
+                @*Images*@
+                <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <b>IMAGES</b>
+                        <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+                            <i class="far fa-plus-square"></i>
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            <table class="table order-list tblImages" id="dtImage">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40%">Image</th>
+                                        <th style="width: 40%">File Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody" id="bodyImage">
+                                    @if (Model.ProductImages != null)
+                                    {
+                                        @if (Model.ProductImages.Any())
+                                        {
+                                            @foreach (var item in Model.ProductImages)
+                                            {
+                                                <tr>
+                                                    <td><img width="200" src="@string.Format("data:image/jpeg;base64,{0}", item.Image)" /></td>
+                                                    <td><span>@item.FileName</span></td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                @*Reviews*@
+                <div class="card">
+                    <div class="card-header" id="headingFour">
+                        <b>REVIEWS</b>
+                        <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseOne">
+                            <i class="far fa-plus-square"></i>
+                        </a>
+                    </div>
+                    <div id="collapseFour" class="collapse my-5" aria-labelledby="headingFour" data-parent="#accordion">
+                        @*Reviews*@
+                        <div class="row">
+                            <div class="col-xl-9">
+                                @{
+                                    if (Model.ProductReviews.Count() > 0)
+                                    {
+                                        @foreach (var item in Model.ProductReviews)
+                                        {
+                                            <div class="row mb-4">
+                                                <div class="col-3 text-center">
+                                                    <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@item.Customers.Image" alt="@item.Customers.FirstName" width="120">
+                                                    <span class="text-uppercase text-muted small fw-normal">@item.ReviewDate.ToShortDateString()</span>
+                                                </div>
+                                                <div class="col-9 review-text">
+                                                    @{
+                                                        var customerName = item.Customers.FirstName + ' ' + item.Customers.LastName;
+                                                        <h6>@customerName</h6>
+                                                    }
+                                                    <div class="mb-2">
+                                                        <i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i>
+                                                    </div>
+                                                    <p class="text-muted text-sm">@item.Review</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex me-2">
+                                            <div class="ms-2">
+                                                <h4 class="mb-1">No reviews yet.</h4>
+                                                <p class="small text-gray-6 mb-1">How do you find this product? Be the first to share your thoughts.</p>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @*</form>*@
         </div>
     </div>
+
+    <div style="position: fixed; bottom: 10px; right: 10px">
+        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
 </div>
 
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>

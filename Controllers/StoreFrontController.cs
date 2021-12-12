@@ -2,6 +2,7 @@
 using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -177,7 +178,16 @@ namespace ECommerce1.Controllers
             ViewBag.CustomersId = userId;
             ViewBag.Product = productDetails;
 
-            return View(new CartDetails());
+            var productReviews = await _service.GetProductReviews(id);
+
+            var viewModel = new ProductViewModel()
+            {
+                CartDetails = new CartDetails(),
+                ProductReviews = productReviews, 
+                Wishlists = new Wishlist()
+            };
+
+            return View(viewModel);
         }
 
     }

@@ -24,6 +24,12 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<IEnumerable<Product>> GetAllProductsByGender(int genderId);
 
+        public Task<IEnumerable<ProductReview>> GetProductReviews(long id);
+
         public void InitializeProductListForResponse(Product product);
+
+        public Task UpdateStocks(List<OrderDetails> orderDetails);
+
+        public void CreateReview(ProductReview productReview);
     }
 }

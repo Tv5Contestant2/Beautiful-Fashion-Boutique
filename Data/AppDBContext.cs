@@ -54,6 +54,8 @@ namespace ECommerce1.Data
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<ProductReview> ProductReviews { get; set; }
+
         public DbSet<ProductVariant> ProductVariants { get; set; }
 
         public DbSet<Promos> Promos { get; set; }

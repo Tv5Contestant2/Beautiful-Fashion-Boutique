@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model CartDetails
 @inject UserManager<User> UserManager
+@using ECommerce1.Data.Enums
 
 @{
     ViewData["Title"] = ViewBag.PageTitle;
@@ -135,8 +136,16 @@
                                         {
                                             <div class="ribbon ribbon-primary text-uppercase">Sale</div>
                                         }
+
+                                        if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
+                                        {
+                                            <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name" style="-webkit-filter: grayscale(100%); filter: grayscale(100%); ">
+                                        }
+                                        else
+                                        {
+                                            <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                                        }
                                     }
-                                    <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
                                     <form asp-controller="Cart" asp-action="AddToCart">
                                         <div class="hover-overlay d-flex align-items-center justify-content-center">
                                             <div class="CTA d-flex align-items-center justify-content-center">
@@ -155,7 +164,7 @@
                                                         if (_IsAdmin == true)
                                                         {
                                                             <a asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none">
-                                                                <i class="fas fa-pencil-alt"></i>
+                                                                <i class="far fa-edit"></i>
                                                             </a>
                                                         }
                                                         else

@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ECommerce1.ViewModel
 {
@@ -19,5 +20,20 @@ namespace ECommerce1.ViewModel
         public string ReturnReason { get; set; }
         public IEnumerable<OrderDetails> OrderDetails { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public IEnumerable<Orders> Orders { get; set; }
+
+        #region Pagination 
+        public int ItemPerPage { get; set; }
+        public int CurrentPage { get; set; }
+        public int PageCount()
+        {
+            return Convert.ToInt32(Math.Ceiling(Orders.Count() / (double)ItemPerPage));
+        }
+        public IEnumerable<Orders> PaginatedList()
+        {
+            int start = (CurrentPage - 1) * ItemPerPage;
+            return Orders.OrderBy(b => b.Id).Skip(start).Take(ItemPerPage);
+        }
+        #endregion
     }
 }

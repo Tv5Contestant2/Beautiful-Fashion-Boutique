@@ -19,6 +19,7 @@ namespace ECommerce1.Controllers
         private readonly ICartService _service;
         private readonly IEmailService _emailService;
         private readonly IOrderService _orderService;
+        private readonly IProductsService _productsService;
         private readonly IAdyenService _adyenService;
         private readonly UserManager<User> _userManager;
 
@@ -27,11 +28,13 @@ namespace ECommerce1.Controllers
             , ICartService service
             , IEmailService emailService
             , IOrderService orderService
+            , IProductsService productsService
             , IAdyenService adyenService)
         {
             _service = service;
             _emailService = emailService;
             _orderService = orderService;
+            _productsService = productsService;
             _userManager = userManager;
             _adyenService = adyenService;
         }
@@ -96,18 +99,18 @@ namespace ECommerce1.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        public async Task<IActionResult> AddToWishlist(Wishlist wishlist)
+        public async Task<IActionResult> AddToWishlist(ProductViewModel viewModel)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
-            var wishlistItems = await _service.GetWishlistItemsByProductId(wishlist.ProductId, userId);
+            var wishlistItems = await _service.GetWishlistItemsByProductId(viewModel.Wishlists.ProductId, userId);
 
             if (wishlistItems == null)
-                _service.AddToWishlist(wishlist);
+                _service.AddToWishlist(viewModel.Wishlists);
             else
             {
-                await _service.RemoveFromWishlist(wishlist.ProductId, userId);
+                await _service.RemoveFromWishlist(viewModel.Wishlists.ProductId, userId);
             }
 
             return Redirect(Request.Headers["Referer"].ToString());
@@ -289,19 +292,23 @@ namespace ECommerce1.Controllers
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
                     SubTotal = (item.Quantity * item.Product.Price),
-                    //ReturnStatusId = 0
                 };
 
                 orderDetails.Add(_orderDetails);
             }
 
+            var modeOfPayment = cart.IsGCash ? (int)PaymentMethodEnum.GCash : 
+                                    cart.IsPayMaya ? (int)PaymentMethodEnum.PayMaya :
+                                        cart.IsCashOnDelivery ? (int)PaymentMethodEnum.COD :
+                                            0;
+
             var order = new Orders()
             {
                 TransactionId = transactionId,
                 CustomersId = userId,
-                ModeOfPayment = 1,
+                ModeOfPayment = modeOfPayment,
                 OrderDate = DateTime.Now,
-                OrderStatusId = (int)OrderStatusEnum.Created,
+                OrderStatusId = modeOfPayment == 0 ? (int)OrderStatusEnum.PendingPayment : (int)OrderStatusEnum.Created,
                 DeliveryStatusId = (int)DeliveryStatusEnum.Pending,
                 Total = cart.Total, 
                 ShippingFee = cart.ShippingFee,
@@ -312,7 +319,12 @@ namespace ECommerce1.Controllers
             var result = _orderService.AddToOrder(order);
 
             if (result)
+            {
                 await _service.EmptyCart(userId);
+
+                //Update inventory
+                await _productsService.UpdateStocks(orderDetails);
+            }
 
             ViewBag.CartCount = 0;
 

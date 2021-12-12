@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ECommerce1.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace ECommerce1.ViewModel
 {
@@ -40,5 +43,21 @@ namespace ECommerce1.ViewModel
         public bool isSignUpError { get; set; }
         public DateTime? LastLoggedIn { get; set; }
         public string Token { get; set; }
+
+        public IEnumerable<User> Users { get; set; } 
+
+        #region Pagination 
+        public int ItemPerPage { get; set; }
+        public int CurrentPage { get; set; }
+        public int PageCount()
+        {
+            return Convert.ToInt32(Math.Ceiling(Users.Count() / (double)ItemPerPage));
+        }
+        public IEnumerable<User> PaginatedList()
+        {
+            int start = (CurrentPage - 1) * ItemPerPage;
+            return Users.OrderBy(b => b.Id).Skip(start).Take(ItemPerPage);
+        }
+        #endregion
     }
 }
