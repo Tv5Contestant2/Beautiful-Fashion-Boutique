@@ -34,7 +34,7 @@ namespace ECommerce1.Data
 
         public DbSet<Gender> Genders { get; set; }
 
-        public DbSet<Messages> Messages { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
 

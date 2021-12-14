@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,6 +9,11 @@ namespace ECommerce1.Models
 {
     public class User : IdentityUser
     {
+        public User()
+        {
+            Messages = new HashSet<Message>();
+        }
+
         public string FirstName { get; set; }
 
         public bool? IsAdmin { get; set; }
@@ -54,5 +60,7 @@ namespace ECommerce1.Models
 
         [Display(Name = "Last Logged In")]
         public DateTime LastLoggedIn { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

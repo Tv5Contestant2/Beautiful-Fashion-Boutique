@@ -1,6 +1,6 @@
-﻿@model IEnumerable<OrderDetails>
+﻿@model ECommerce1.ViewModel.MessageViewModel
 @{
-    ViewData["Title"] = "My Returns";
+    ViewData["Title"] = "Messages";
 }
 
 <section class="py-5 bg-light">
@@ -49,11 +49,11 @@
                             </svg>Orders
                         </span><small class="badge rounded-pill bg-light text-dark">@ViewBag.OrderCount</small>
                     </a>
-                    <a class="active list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Returns">
+                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Returns">
                         <span class="fw-normal text-sm text-dark py-1">
                             <i class="fas fa-undo"></i>&nbsp;&nbsp;&nbsp;Returns
                         </span>
-                        <small class="badge rounded-pill bg-light text-dark">@Model.Count()</small>
+                        <small class="badge rounded-pill bg-light text-dark">@ViewBag.ReturnsCount</small>
                     </a>
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Wishlist">
                         <span class="fw-normal text-sm text-dark py-1">
@@ -61,10 +61,10 @@
                         </span>
                         <small class="badge rounded-pill bg-light text-dark">@ViewBag.WishlistCount</small>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" asp-controller="Profile" asp-action="Messages" aria-current="true">
+                    <a class="active list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" asp-controller="Profile" asp-action="Messages" aria-current="true">
                         <span class="fw-normal text-sm text-dark py-1">
                             <i class="far fa-envelope"></i>&nbsp;&nbsp;&nbsp;Messages
-                        </span><small class="badge rounded-pill bg-light text-dark">@ViewBag.MessagesCount</small>
+                        </span><small class="badge rounded-pill bg-light text-dark">@Model.Messages.Count()</small>
                     </a>
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Addresses">
                         <span class="fw-normal text-sm text-dark py-1">
@@ -82,56 +82,77 @@
                     </a>
                 </nav>
             </div>
-            @{
-                if (Model.Count() > 0)
-                {
-                    <div class="col-lg-8 col-xl-9">
-                        <div class="cart-inner">
-                            <div class="bg-light rounded-pill px-4 py-3">
-                                <div class="row fw-bold text-uppercase">
-                                    <div class="col-5">Product</div>
-                                    <div class="col-4">Order Reference Id</div>
-                                    <div class="col-2 text-center">Quantity</div>
-                                    <div class="col-1 text-center">Status</div>
-                                </div>
-                            </div>
-                            @foreach (var item in Model)
+            <div class="col-lg-5 col-xl-9 gx-5">
+                <div class="col-lg-12 d-flex justify-content-end">
+                    <button class="btn btn-outline-danger" data-toggle="modal" data-target="#MessageModal" onclick="ShowMessageModal();">
+                        <i class="far fa-paper-plane"></i>&nbsp;Send a message
+                    </button>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        @{
+                            if (Model != null)
                             {
-                                <div class="p-4 border-bottom">
-                                    <div class="row d-flex align-items-center bord">
-                                        <div class="col-5">
-                                            <div class="d-flex align-items-center">
-                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="75">
-                                                <div class="ms-3">
-                                                    <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
-                                                        <h5 class="mb-0 text-dark fw-normal">@item.Product.Name</h5><span class="text-muted">Size: Large</span>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                @foreach (var item in Model.Messages.OrderByDescending(x => x.DateSent))
+                                {
+                                    var sender = item.Sender.FirstName + ' ' + item.Sender.LastName;
+
+                                    <div class="row mb-4">
+                                        <div class="col-2 align-self-center">
+                                            <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@item.Sender.Image" alt="@sender" width="75">
+                                            <h6 class="text-center">@sender</h6>
                                         </div>
-                                        <div class="col-4">@item.TransactionId</div>
-                                        <div class="col-2 text-center">@item.QuantityReturned</div>
-                                        <div class="col-1 text-center">
-                                            <span class="badge @item.ReturnStatus.Class">@item.ReturnStatus.Title</span>
+                                        <div class="col-9">
+                                            <p class="h5 text-muted">@item.Subject</p>
+                                            <span class="small fw-lighter">@item.DateSent</span>
+                                            <p class="text-muted">@item.MessageBody</p>
+                                            <a class="btn btn-outline-danger btn-sm">
+                                                View Reply
+                                            </a>
                                         </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="d-flex me-2">
+                                    <div class="ms-2">
+                                        <h4 class="mb-1">No messages yet.</h4>
+                                        <p class="small text-gray-6 mb-1">Send us a message. We would like to hear from you. </p>
                                     </div>
                                 </div>
                             }
-                        </div>
+                        }
                     </div>
-                }
-                else
-                {
-                    <div class="col-lg-8 col-xl-9">
-                        <div class="cart-inner">
-                            <h2 class="mb-1">You don't have any returns.</h2>
-                            <p class="text-gray-6 mb-3">That's great news!</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                            <a class="btn btn-danger" asp-controller="StoreFront" asp-action="Home">Go to Home</a>
-                        </div>
+    @*Message Modal*@
+    <div class="modal fade" id="MessageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <form asp-controller="Profile" asp-action="CreateMessage">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Send Message</h4>
+                        <a class="btn btn-default text-right" data-dismiss="modal" onclick="CloseModal()">×</a>
                     </div>
-                }
-            }
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="SenderId" value="@Model.SenderId" />
+                        <input asp-for="Subject" type="text" id="message-box" class="form-control" placeholder="Subject" />
+                        <textarea asp-for="MessageBody" type="text" id="message-box" class="rounded form-control my-3" placeholder="Message"
+                                  rows="3"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-danger">
+                            Send Message
+                        </button>
+                        <a class="btn btn-outline-dark" data-dismiss="modal" onclick="CloseModal()">Close</a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -145,4 +166,12 @@
 <script>
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }
+
+    function ShowMessageModal() {
+        $('#MessageModal').modal('show');
+    }
+
+    function CloseModal() {
+        $('#MessageModal').modal('hide');
+    }
 </script>

@@ -1,0 +1,119 @@
+﻿@model ECommerce1.ViewModel.MessageViewModel
+@{
+    ViewData["Title"] = "Messages";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-9 order-2 order-lg-1">
+                <h1>@ViewBag.Title</h1>
+            </div>
+            <div class="col-lg-3 text-end order-1 order-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Home">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-5">
+    <div class="container py-4">
+        <div class="row gx-5 gy-5">
+            <div class="col-lg-5 col-xl-9 gx-5">
+                <div class="col-lg-12 d-flex justify-content-end">
+                    <button class="btn btn-outline-danger" data-toggle="modal" data-target="#MessageModal" onclick="ShowMessageModal();">
+                        <i class="far fa-paper-plane"></i>&nbsp;Send a message
+                    </button>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        @{
+                            if (Model != null)
+                            {
+                                @foreach (var item in Model.Messages.OrderByDescending(x => x.DateSent))
+                                {
+                                    var sender = item.Sender.FirstName + ' ' + item.Sender.LastName;
+
+                                    <div class="row mb-4">
+                                        <div class="col-2 align-self-center">
+                                            <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@item.Sender.Image" alt="@sender" width="75">
+                                            <h6 class="text-center">@sender</h6>
+                                        </div>
+                                        <div class="col-9">
+                                            <p class="h5 text-muted">@item.Subject</p>
+                                            <span class="small fw-lighter">@item.DateSent</span>
+                                            <p class="text-muted">@item.MessageBody</p>
+                                            <a class="btn btn-outline-danger btn-sm">
+                                                View Reply
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="d-flex me-2">
+                                    <div class="ms-2">
+                                        <h4 class="mb-1">No messages yet.</h4>
+                                        <p class="small text-gray-6 mb-1">Send us a message. We would like to hear from you. </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Message Modal*@
+    <div class="modal fade" id="MessageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <form asp-controller="Profile" asp-action="CreateMessage">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Send Message</h4>
+                        <a class="btn btn-default text-right" data-dismiss="modal" onclick="CloseModal()">×</a>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="SenderId" value="@Model.SenderId" />
+                        <input asp-for="Subject" type="text" id="message-box" class="form-control" placeholder="Subject" />
+                        <textarea asp-for="MessageBody" type="text" id="message-box" class="rounded form-control my-3" placeholder="Message"
+                                  rows="3"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-danger">
+                            Send Message
+                        </button>
+                        <a class="btn btn-outline-dark" data-dismiss="modal" onclick="CloseModal()">Close</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div style="position: fixed; bottom: 10px; right: 10px;">
+        <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
+    </div>
+</section>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+
+    function ShowMessageModal() {
+        $('#MessageModal').modal('show');
+    }
+
+    function CloseModal() {
+        $('#MessageModal').modal('hide');
+    }
+</script>

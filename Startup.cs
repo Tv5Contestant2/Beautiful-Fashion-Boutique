@@ -1,6 +1,7 @@
 using ECommerce1.Data;
 using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Hubs;
 using ECommerce1.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -51,6 +52,12 @@ namespace ECommerce1
                     pattern: "{controller=StoreFront}/{action=Home}/{id?}");
             });
 
+            // SignalR
+            app.UseSignalR(builder =>
+            {
+                builder.MapHub<ChatHub>("/chat");
+            });
+
             // Seed Database
             AppDBInitializer.Seed(app);
         }
@@ -81,6 +88,9 @@ namespace ECommerce1
             services.AddOptions<EmailSettings>().Bind(Configuration.GetSection("EmailSettings")).ValidateDataAnnotations();
             services.AddOptions<AdyenConfig>().Bind(Configuration.GetSection("AdyenConfig")).ValidateDataAnnotations();
 
+            // SignalR Configuration
+            services.AddSignalR();
+
             // Services Configuration
             services.AddScoped<IAdministratorService, AdministratorService>();
             services.AddScoped<IAdyenService, AdyenService>();
@@ -89,6 +99,7 @@ namespace ECommerce1
             services.AddScoped<ICustomersService, CustomersService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IEmployeesService, EmployeesService>();
+            services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProductCategoriesService, ProductCategoriesService>();
             services.AddScoped<IProfileService, ProfileService>();

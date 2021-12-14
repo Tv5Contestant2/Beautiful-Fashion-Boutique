@@ -1,7 +1,10 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
@@ -9,10 +12,16 @@ namespace ECommerce1.Controllers
     public class AdministratorController : Controller
     {
         private readonly IAdministratorService _service;
+        private readonly IMessageService _messageService;
+        private readonly UserManager<User> _userManager;
 
-        public AdministratorController(IAdministratorService service)
+        public AdministratorController(IAdministratorService service
+            , IMessageService messageService
+            , UserManager<User> userManager)
         {
             _service = service;
+            _messageService = messageService;
+            _userManager = userManager;
         }
 
         public IActionResult AboutUs()
@@ -42,6 +51,28 @@ namespace ECommerce1.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Messages()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var result = await _messageService.GetCustomerMessages(userId);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var viewModel = new MessageViewModel
+            {
+                Messages = result,
+                SenderId = userId
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult CreateMessage(MessageViewModel message)
+        {
+            _messageService.CreateMessage(message);
+
+            return RedirectToAction(nameof(Messages));
         }
 
         public IActionResult UnderConstruction()
