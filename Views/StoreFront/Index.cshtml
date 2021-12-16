@@ -38,7 +38,7 @@
                             @foreach (var item in ViewBag.ProductCategories)
                             {
                                 <li>
-                                    <a class="sidebar-link" href="#">
+                                    <a class="sidebar-link" asp-controller="Products" asp-action="FilterByCategory" asp-route-id="item.Id">
                                         @item.Title
                                     </a>
                                 </li>
@@ -47,39 +47,6 @@
                     </li>
                 </ul>
                 <div class="border-bottom my-5"></div>
-                @*Price Range*@
-                <h6 class="text-uppercase mb-4">Filter By Price</h6>
-                <div class="price-range pt-4 mb-5">
-                    <div id="priceRange" class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr"><div class="noUi-base"><div class="noUi-connects"><div class="noUi-connect" style="transform: translate(9.93007%, 0px) scale(0.214985, 1);"></div></div><div class="noUi-origin" style="transform: translate(-900.699%, 0px); z-index: 5;"><div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="110.0" aria-valuenow="34.8" aria-valuetext="34.76"><div class="noUi-touch-area"></div><div class="noUi-tooltip">34.76</div></div></div><div class="noUi-origin" style="transform: translate(-685.714%, 0px); z-index: 6;"><div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="34.8" aria-valuemax="350.0" aria-valuenow="110.0" aria-valuetext="110.00"><div class="noUi-touch-area"></div><div class="noUi-tooltip">110.00</div></div></div></div></div>
-                    <div class="row pt-2 mb-3">
-                        <div class="col-6"><strong class="small font-weight-bold">From</strong></div>
-                        <div class="col-6 text-end"><strong class="small font-weight-bold">To</strong></div>
-                    </div><a class="btn btn-dark btn-sm" href="#">filter</a>
-                </div>
-                <div class="border-bottom my-4"></div>
-                @*Brands*@
-                <h6 class="text-uppercase mb-4">Show by brand</h6>
-                <div class="mb-2 form-check">
-                    <input class="form-check-input" id="brand0" type="checkbox" name="clothes-brand" checked="">
-                    <label class="form-check-label" for="brand0">Calvin Klein <small class="text-xs text-muted">(18) </small></label>
-                </div>
-                <div class="mb-2 form-check">
-                    <input class="form-check-input" id="brand1" type="checkbox" name="clothes-brand" checked="">
-                    <label class="form-check-label" for="brand1">Levi Strauss <small class="text-xs text-muted">(30) </small></label>
-                </div>
-                <div class="mb-2 form-check">
-                    <input class="form-check-input" id="brand2" type="checkbox">
-                    <label class="form-check-label" for="brand2">Hugo Boss <small class="text-xs text-muted">(120) </small></label>
-                </div>
-                <div class="mb-2 form-check">
-                    <input class="form-check-input" id="brand3" type="checkbox">
-                    <label class="form-check-label" for="brand3">Tomi Hilfiger <small class="text-xs text-muted">(70) </small></label>
-                </div>
-                <div class="mb-2 form-check">
-                    <input class="form-check-input" id="brand4" type="checkbox">
-                    <label class="form-check-label" for="brand4">Tom Ford  <small class="text-xs text-muted">(110) </small></label>
-                </div>
-                <div class="border-bottom my-4"></div>
                 @*Sizes*@
                 <h6 class="text-uppercase mb-4">Size </h6>
                 <form action="#">
@@ -106,26 +73,15 @@
                 @*Filters*@
                 <header class="d-flex mb-5">
                     @*Search*@
-                    <div class="w-75 mr-5">
-                        <input class="form-control" placeholder="Search" type="text">
-                    </div>
-                    @*Sort By*@
-                    <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false">
-                        <div class="choices__inner">
-                            <select class="form-control js-sort choices__input" name="sort" hidden="" tabindex="-1" data-choice="active">
-                                <option value="">Sort by</option>
-                            </select>
-                            <div class="choices__list choices__list--single">
-                                <div class="choices__item choices__placeholder choices__item--selectable" data-item="" data-id="1" data-value="" data-custom-properties="null" aria-selected="true">Sort by</div>
-                            </div>
-                        </div>
+                    <div class="w-100 mr-5">
+                        <input id="inptSearch" class="form-control" placeholder="Search" />
                     </div>
                 </header>
                 <div class="row gy-5 mb-5">
                     <span class="visible-items">Showing <strong>1-15 </strong>of <strong>@ViewBag.Products.Count </strong>results</span>
 
                     @*Products*@
-
+                <div id="dtProductList" class="row gy-5 mb-5 my-1">
                     @foreach (var item in ViewBag.Products)
                     {
                         <div class="item col-xl-4 col-md-6">
@@ -201,6 +157,7 @@
                         </div>
                     }
                 </div>
+                </div>
                 @*Pagination*@
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
@@ -229,7 +186,21 @@
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }
 
+    $(document).ready(function () {
+        $("#inptSearch").on("keyup", function () {
+            debugger
+            var value = $(this).val().toLowerCase();
+            $("#dtProductList .row-item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+            $("#dtProductList .item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
     function setProductId(productId) {
         document.getElementById('hidden_product_id').value = document.getElementById(productId).getAttribute('data-subcat');
     }
+
 </script>

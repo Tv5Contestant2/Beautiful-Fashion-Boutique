@@ -3,6 +3,7 @@ using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -107,6 +108,17 @@ namespace ECommerce1.Data.Services
             return result.Count();
         }
 
+        public async Task<IEnumerable<Returns>> GetReturnsByReference(Guid transactionId, long productId)
+        {
+            var result = await _context.Returns
+                .Include(x => x.ChangeProducts)
+                    .ThenInclude(x => x.ProductImages)
+                .Where(x => x.OrderReference == transactionId && x.ProductId == productId)
+                .ToListAsync();
+
+            return result;
+        }
+
         public async Task<Orders> UpdateOrderStatuses(string transactionId)
         {
             var result = _context.Orders.FirstOrDefault(x => x.TransactionId.ToString() == transactionId);
@@ -170,6 +182,48 @@ namespace ECommerce1.Data.Services
             await _context.SaveChangesAsync();
 
             return result;
+        }
+
+        public void AddToReturns(OrderViewModel viewModel)
+        {
+            var result = _context.Returns.Where(
+                x => x.TransactionId == viewModel.TransactionId 
+                && x.ProductId == viewModel.ProductId)
+                .ToList();
+
+            if (!result.Any(x => x.ChangeProductsId == viewModel.Returns.ChangeProductsId))
+            {
+                var returns = new Returns()
+                {
+                    TransactionId = Guid.NewGuid(),
+                    OrderReference = viewModel.TransactionId,
+                    ProductId = viewModel.ProductId,
+                    Quantity = 1,
+                    ChangeProductsId = viewModel.Returns.ChangeProductsId,
+                    ReturnDate = DateTime.Now
+                };
+
+                _context.Returns.Add(returns);
+            }
+            else {
+
+                var returns = new Returns();
+                returns.Quantity += 1;
+
+                _context.Returns.Update(returns);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public void RemoveFromReturns(OrderViewModel viewModel)
+        {
+            var result = _context.Returns.FirstOrDefault(
+                   x => x.OrderReference == viewModel.TransactionId
+                   && x.ChangeProductsId == viewModel.Returns.ChangeProductsId);
+
+            _context.Returns.Remove(result);
+_context.SaveChangesAsync();
         }
     }
 }

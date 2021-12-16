@@ -116,5 +116,27 @@ namespace ECommerce1.Controllers
 
             return RedirectToAction("ReturnSuccess", "Profile");
         }
+
+        [Route("Orders/AddToReturns/{transactionId:Guid}")]
+        public async Task<IActionResult> AddToReturns(Guid transactionId, OrderViewModel viewModel)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (userId == null) return RedirectToAction("SignIn", "Home");
+
+            _service.AddToReturns(viewModel);
+
+            return RedirectToAction("ReturnOrder", "Profile", viewModel);
+        }
+
+        [Route("Orders/RemoveFromReturns/{transactionId:Guid}")]
+        public async Task<IActionResult> RemoveFromReturns(Guid transactionId, OrderViewModel viewModel)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (userId == null) return RedirectToAction("SignIn", "Home");
+
+            _service.RemoveFromReturns(viewModel);
+
+            return RedirectToAction("ReturnOrder", "Profile", viewModel);
+        }
     }
 }

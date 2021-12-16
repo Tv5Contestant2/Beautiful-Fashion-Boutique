@@ -16,18 +16,21 @@ namespace ECommerce1.Controllers
         private readonly ICartService _cartService;
         private readonly IOrderService _orderService;
         private readonly IMessageService _messageService;
+        private readonly IProductsService _productService;
         private readonly UserManager<User> _userManager;
 
         public ProfileController(IProfileService service
             , ICartService cartService
             , IOrderService orderService
             , IMessageService messageService
+            , IProductsService productService
             , UserManager<User> userManager)
         {
             _service = service;
             _cartService = cartService;
             _orderService = orderService;
             _messageService = messageService;
+            _productService = productService;
             _userManager = userManager;
         }
 
@@ -171,6 +174,10 @@ namespace ECommerce1.Controllers
 
             ViewBag.Customer = user;
 
+            var products = await _productService.GetProductsWithSamePrice(productId);
+            ViewBag.Products = products;
+            ViewBag.ProductLists = products.Find(x => x.Id != productId);
+            ViewBag.Returns = await _orderService.GetReturnsByReference(viewModel.TransactionId, productId);
             return View(viewModel);
         }
         public IActionResult ReturnSuccess()
@@ -182,7 +189,30 @@ namespace ECommerce1.Controllers
         {
             _messageService.CreateMessage(message);
 
-            return RedirectToAction(nameof(Messages));
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        [Route("Profile/ViewMessage/{messageId:Guid}")]
+        public async Task<IActionResult> ViewMessage(Guid messageId)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+
+            var result = await _messageService.GetMessageConversation(messageId);
+            var user = await _userManager.FindByIdAsync(userId);
+            ViewBag.Customer = user;
+
+            var viewModel = new MessageViewModel
+            {
+                Messages = result,
+                MessageId = messageId.ToString(),
+                SenderId = userId
+            };
+
+            return View(viewModel);
         }
 
     }
