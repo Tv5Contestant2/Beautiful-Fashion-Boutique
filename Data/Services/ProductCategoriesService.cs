@@ -21,5 +21,24 @@ namespace ECommerce1.Data.Services
             var result = await _context.ProductCategories.ToListAsync();
             return result;
         }
+
+        public async Task<IEnumerable<Size>> GetSizesPerCategory(int categoryId)
+        {
+            var result = new List<Size>();
+            if (categoryId != 0)
+            {
+                result = await _context.Sizes.Where(x => x.CategoryId == categoryId).OrderByDescending(x => x.CategoryId).ToListAsync();
+            }
+            else {
+                result = await _context.Sizes.OrderByDescending(x => x.CategoryId).ToListAsync();
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Color>> GetColors()
+        {
+            return await _context.Colors.OrderBy(x => x.Title).ToListAsync();
+        }
     }
 }

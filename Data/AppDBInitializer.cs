@@ -279,30 +279,80 @@ namespace ECommerce1.Data
                 {
                     context.Sizes.AddRange(new List<Size>()
                     {
+                        // Clothing
                         new Size()
                         {
                             Code = "XS",
-                            Title = "X-Small"
+                            Title = "X-Small",
+                            CategoryId = (int)ProductCategoryEnum.Clothing
                         },
                         new Size()
                         {
                             Code = "S",
-                            Title = "Small"
+                            Title = "Small",
+                            CategoryId = (int)ProductCategoryEnum.Clothing
                         },
                         new Size()
                         {
                             Code = "M",
-                            Title = "Medium"
+                            Title = "Medium",
+                            CategoryId = (int)ProductCategoryEnum.Clothing
                         },
                         new Size()
                         {
                             Code = "L",
-                            Title = "Large"
+                            Title = "Large",
+                            CategoryId = (int)ProductCategoryEnum.Clothing
                         },
                         new Size()
                         {
                             Code = "XL",
-                            Title = "X-Large"
+                            Title = "X-Large",
+                            CategoryId = (int)ProductCategoryEnum.Clothing
+                        },
+
+                        // Shoes                        
+                        new Size()
+                        {
+                            Code = "6",
+                            Title = "6",
+                            CategoryId = (int)ProductCategoryEnum.Shoes
+                        },
+                        new Size()
+                        {
+                            Code = "6.5",
+                            Title = "6.5",
+                            CategoryId = (int)ProductCategoryEnum.Shoes
+                        },
+                        new Size()
+                        {
+                            Code = "7",
+                            Title = "7",
+                            CategoryId = (int)ProductCategoryEnum.Shoes
+                        },
+                        new Size()
+                        {
+                            Code = "7.5",
+                            Title = "7.5",
+                            CategoryId = (int)ProductCategoryEnum.Shoes
+                        },
+                        new Size()
+                        {
+                            Code = "8",
+                            Title = "8",
+                            CategoryId = (int)ProductCategoryEnum.Shoes
+                        },
+                        new Size()
+                        {
+                            Code = "8.5",
+                            Title = "8.5",
+                            CategoryId = (int)ProductCategoryEnum.Shoes
+                        },
+                        new Size()
+                        {
+                            Code = "9",
+                            Title = "9",
+                            CategoryId = (int)ProductCategoryEnum.Shoes
                         },
                     });
 

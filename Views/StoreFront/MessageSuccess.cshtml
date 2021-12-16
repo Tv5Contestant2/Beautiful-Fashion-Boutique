@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Message Sent";
+}
+<section class="py-5">
+    <div class="container py-5">
+        <div class="icon-rounded icon-rounded-xl mb-4"><i class="fas fa-check"></i></div>
+        <h2>Your message has been sent.</h2>
+        <p class="mb-5 fw-normal">You'll hear from us soon.</p>
+
+        <a class="btn btn-danger" asp-controller="StoreFront" asp-action="Home">Back to Home</a>
+    </div>
+</section>
+
+<div style="position: fixed; bottom: 10px; right: 10px;">
+    <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </button>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+</script>

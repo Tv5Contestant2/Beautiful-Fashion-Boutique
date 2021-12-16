@@ -1,4 +1,4 @@
-﻿@model SocMed 
+﻿@model ECommerce1.ViewModel.MessageViewModel
 @{
     ViewData["Title"] = "Contact Us";
 }
@@ -32,10 +32,10 @@
                     <p>
 
                         @{
-                            if (@Model != null)
+                            if (@ViewBag.ContactUs != null)
                             {
                             <p class="text-justify">
-                                @Model.StoreHours
+                                @ViewBag.ContactUs.StoreHours
                             </p>
                         }
                         else
@@ -54,10 +54,10 @@
                     <p>
 
                         @{
-                            if (@Model != null)
+                            if (@ViewBag.ContactUs != null)
                             {
                             <p class="text-justify">
-                                @Model.StoreLocation
+                                @ViewBag.ContactUs.StoreLocation
                             </p>
                         }
                         else
@@ -72,9 +72,9 @@
             <div class="row col-md-12" id="map">
 
                 @{
-                    if (@Model != null)
+                    if (@ViewBag.ContactUs != null)
                     {
-                        <iframe src="@Model.MapLocation" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="@ViewBag.ContactUs.MapLocation" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     }
                     else
                     {
@@ -89,23 +89,25 @@
             </div>
 
             <div class="col col-md-4">
-                <div class="row form-group">
-                    <label>Email Address</label>
-                    <input class="form-control" />
+                <form asp-controller="StoreFront" asp-action="SendMessage">
+                    <div class="row form-group">
+                        <label>Email Address</label>
+                        <input class="form-control" asp-for="EmailAddress" />
 
-                    <label>Name</label>
-                    <input class="form-control" />
+                        <label>Name</label>
+                        <input class="form-control" asp-for="SenderName" />
 
-                    <label>Contact Number</label>
-                    <input class="form-control" />
+                        <label>Contact Number</label>
+                        <input class="form-control" asp-for="ContactNumber" />
 
-                    <label>Message</label>
-                    <textarea class="form-control" rows="5" style="border-radius: 1em"></textarea>
+                        <label>Message</label>
+                        <textarea class="form-control" rows="5" style="border-radius: 1em" asp-for="MessageBody"></textarea>
 
-                    <div class="float-right" style="margin-top: 15px">
-                        <input type="button" class="btn btn-danger" value="Send" />
+                        <div class="float-right" style="margin-top: 15px">
+                            <button type="submit" class="btn btn-danger">Send Message</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -15,6 +15,10 @@ namespace ECommerce1.ViewModel
         public string MessageBody { get; set; }
         public DateTime DateSent { get; set; }
 
+        public string EmailAddress { get; set; }
+        public string ContactNumber { get; set; }
+        public string SenderName { get; set; }
+
         public IEnumerable<Message> Messages { get; set; }
     }
 }

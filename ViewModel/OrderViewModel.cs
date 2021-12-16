@@ -22,6 +22,7 @@ namespace ECommerce1.ViewModel
         public Returns Returns { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public IEnumerable<Orders> Orders { get; set; }
+        public IEnumerable<Product> Products { get; set; }
 
         #region Pagination 
         public int ItemPerPage { get; set; }

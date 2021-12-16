@@ -1,5 +1,6 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +31,7 @@ namespace ECommerce1.Data.Services
             _userManager = userManager;
         }
 
-        public async Task SendEmail(string message, string recipient, string subject)
+        public async Task SendEmail(string message, string recipient, string subject, string sender = "")
         {
             await Task.Delay(0);
             try
@@ -39,7 +40,7 @@ namespace ECommerce1.Data.Services
                 SmtpClient smtp = new SmtpClient();
 
                 // email contents
-                mailMessage.From = new MailAddress(_appSettings.Value.Email);
+                mailMessage.From = new MailAddress(sender == "" ? _appSettings.Value.Email : sender);
                 mailMessage.To.Add(new MailAddress(recipient));
                 mailMessage.Subject = subject;
                 mailMessage.IsBodyHtml = true;
@@ -55,6 +56,26 @@ namespace ECommerce1.Data.Services
 
                 // send email
                 smtp.Send(mailMessage);
+            }
+            catch (Exception) { }
+        }
+
+        public async Task SendMessage(MessageViewModel viewModel)
+        {
+            try
+            {
+                string filePath = string.Format("{0}\\{1}", _hostEnvironment.ContentRootPath, "Templates\\Inquiry.html");
+
+                StreamReader str = new StreamReader(filePath);
+                string message = str.ReadToEnd();
+                str.Close();
+
+                message = message.Replace("[contactnumber]", viewModel.ContactNumber);
+                message = message.Replace("[emailaddress]", viewModel.EmailAddress);
+                message = message.Replace("[sendername]", viewModel.SenderName);
+                message = message.Replace("[message]", viewModel.MessageBody);
+
+                await SendEmail(message, _appSettings.Value.Email, "Inquiry", viewModel.EmailAddress);
             }
             catch (Exception) { }
         }

@@ -16,13 +16,20 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task DeleteProduct(long id);
 
-        public Task<IEnumerable<Product>> GetAllProducts();
+        public Task<List<Product>> GetAllProducts(int colorId);
+
+        public Task<List<Product>> GetLatestProducts(int colorId);
 
         public Task<IEnumerable<Product>> GetFeaturedProductsOnSale();
 
         public Task<Product> GetProductById(long id);
 
-        public Task<IEnumerable<Product>> GetAllProductsByGender(int genderId);
+        public Task<List<Product>> GetAllProductsByGender(int colorId, int genderId);
+
+        public Task<List<Product>> GetProductsByCategory(int categoryId, int colorId, int genderId = 0);
+
+        public Task<List<Product>> GetProductsBySize(int categoryId, int sizeId, int colorId, int genderId = 0);
+
 
         public Task<IEnumerable<ProductReview>> GetProductReviews(long id);
 

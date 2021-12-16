@@ -27,7 +27,7 @@ namespace ECommerce1.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(int page)
+        public async Task<IActionResult> Index(int page = 1)
         {
             var result = await _service.GetAllOrders();
 
@@ -45,7 +45,7 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Returns(int page)
+        public async Task<IActionResult> Returns(int page = 1)
         {
             var result = await _service.GetAllReturns();
 
@@ -117,8 +117,7 @@ namespace ECommerce1.Controllers
             return RedirectToAction("ReturnSuccess", "Profile");
         }
 
-        [Route("Orders/AddToReturns/{transactionId:Guid}")]
-        public async Task<IActionResult> AddToReturns(Guid transactionId, OrderViewModel viewModel)
+        public async Task<IActionResult> AddToReturns(OrderViewModel viewModel)
         {
             await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
@@ -129,14 +128,23 @@ namespace ECommerce1.Controllers
             return RedirectToAction("ReturnOrder", "Profile", viewModel);
         }
 
-        [Route("Orders/RemoveFromReturns/{transactionId:Guid}")]
-        public async Task<IActionResult> RemoveFromReturns(Guid transactionId, OrderViewModel viewModel)
+        public async Task<IActionResult> RemoveFromReturns(OrderViewModel viewModel)
         {
             await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
             _service.RemoveFromReturns(viewModel);
+
+            return RedirectToAction("ReturnOrder", "Profile", viewModel);
+        }
+
+        public async Task<IActionResult> ClearReturns(OrderViewModel viewModel)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (userId == null) return RedirectToAction("SignIn", "Home");
+
+            _service.ClearReturns(viewModel);
 
             return RedirectToAction("ReturnOrder", "Profile", viewModel);
         }

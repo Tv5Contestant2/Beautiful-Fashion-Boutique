@@ -43,7 +43,7 @@ namespace ECommerce1.Controllers
             return View(customerDetails);
         }
 
-        public async Task<IActionResult> ArchivedCustomers(int page)
+        public async Task<IActionResult> ArchivedCustomers(int page = 1)
         {
             var data = await _service.GetAllArchivedCustomers();
 
@@ -57,7 +57,7 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> BlockCustomers(int page)
+        public async Task<IActionResult> BlockCustomers(int page = 1)
         {
             var data = await _service.GetAllBlockCustomers();
 
@@ -136,7 +136,7 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Index(int page)
+        public async Task<IActionResult> Index(int page = 1)
         {
             await _userService.ArchiveUsers();
 

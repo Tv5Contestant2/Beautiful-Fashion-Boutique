@@ -29,6 +29,12 @@ namespace ECommerce1.Data.Services
             return result;
         }
 
+        public string GetFacebookLink()
+        {
+            var result = _context.Socials.OrderByDescending(x => x.Id).FirstOrDefault();
+            return result != null ? result.Facebook : "";
+        }
+
         public void CreateAboutUs(About about)
         {
             _context.AboutUs.Add(about);

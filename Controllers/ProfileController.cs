@@ -176,7 +176,6 @@ namespace ECommerce1.Controllers
 
             var products = await _productService.GetProductsWithSamePrice(productId);
             ViewBag.Products = products;
-            ViewBag.ProductLists = products.Find(x => x.Id != productId);
             ViewBag.Returns = await _orderService.GetReturnsByReference(viewModel.TransactionId, productId);
             return View(viewModel);
         }

@@ -186,44 +186,32 @@ namespace ECommerce1.Data.Services
 
         public void AddToReturns(OrderViewModel viewModel)
         {
-            var result = _context.Returns.Where(
-                x => x.TransactionId == viewModel.TransactionId 
-                && x.ProductId == viewModel.ProductId)
-                .ToList();
-
-            if (!result.Any(x => x.ChangeProductsId == viewModel.Returns.ChangeProductsId))
+            var returns = new Returns()
             {
-                var returns = new Returns()
-                {
-                    TransactionId = Guid.NewGuid(),
-                    OrderReference = viewModel.TransactionId,
-                    ProductId = viewModel.ProductId,
-                    Quantity = 1,
-                    ChangeProductsId = viewModel.Returns.ChangeProductsId,
-                    ReturnDate = DateTime.Now
-                };
+                OrderReference = viewModel.Returns.OrderReference,
+                ProductId = viewModel.Returns.ProductId,
+                ChangeProductsId = viewModel.Returns.ChangeProductsId,
+                ReturnDate = DateTime.Now
+            };
 
-                _context.Returns.Add(returns);
-            }
-            else {
-
-                var returns = new Returns();
-                returns.Quantity += 1;
-
-                _context.Returns.Update(returns);
-            }
-
+            _context.Returns.Add(returns);
             _context.SaveChanges();
         }
 
         public void RemoveFromReturns(OrderViewModel viewModel)
         {
-            var result = _context.Returns.FirstOrDefault(
-                   x => x.OrderReference == viewModel.TransactionId
-                   && x.ChangeProductsId == viewModel.Returns.ChangeProductsId);
+            var result = _context.Returns.FirstOrDefault(x => x.Id == viewModel.Returns.Id);
 
             _context.Returns.Remove(result);
-_context.SaveChangesAsync();
+            _context.SaveChanges();
+        }
+
+        public void ClearReturns(OrderViewModel viewModel)
+        {
+            var result = _context.Returns.Where(x => x.OrderReference == viewModel.TransactionId && x.ProductId == viewModel.ProductId).ToList();
+
+            _context.Returns.RemoveRange(result);
+            _context.SaveChanges();
         }
     }
 }

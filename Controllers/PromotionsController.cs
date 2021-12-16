@@ -24,7 +24,7 @@ namespace ECommerce1.Controllers
             _commonServices = commonServices;
         }
 
-        public async Task<IActionResult> Index(int page)
+        public async Task<IActionResult> Index(int page = 1)
         {
             var data = await _service.GetAllPromos();
 
