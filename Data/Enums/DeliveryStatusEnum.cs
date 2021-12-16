@@ -2,8 +2,8 @@
 {
     public enum DeliveryStatusEnum
     {
-        Received = 1,
-        Shipped = 2,
-        Pending = 3
+        Shipped = 1,
+        Pending = 2,
+        Received = 3,
     }
 }

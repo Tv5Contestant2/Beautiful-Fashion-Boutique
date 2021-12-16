@@ -26,6 +26,8 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<IEnumerable<ProductReview>> GetProductReviews(long id);
 
+        public Task<List<Product>> GetProductsWithSamePrice(long id);
+
         public void InitializeProductListForResponse(Product product);
 
         public Task UpdateStocks(List<OrderDetails> orderDetails);

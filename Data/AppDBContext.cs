@@ -40,6 +40,7 @@ namespace ECommerce1.Data
 
         public DbSet<Orders> Orders { get; set; }
 
+
         public DbSet<OrderDetails> OrdersDetails { get; set; }
 
         public DbSet<OrderStatus> OrderStatuses { get; set; }
@@ -59,6 +60,8 @@ namespace ECommerce1.Data
         public DbSet<ProductVariant> ProductVariants { get; set; }
 
         public DbSet<Promos> Promos { get; set; }
+
+        public DbSet<Returns> Returns { get; set; }
 
         public DbSet<RoleAccessibility> RoleAccessability { get; set; }
 

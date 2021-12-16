@@ -27,15 +27,26 @@
     @*Content*@
     <section class="content">
         <div class="container-fluid">
-            @*Search*@
-            <div class="row d-flex justify-content-between">
-                <input id="inptSearch" class="form-control w-100" placeholder="Search" />
-            </div>
-
             @*Grid View*@
             <div id="dvGrid" class="row mt-3">
-                <div class="d-flex justify-content-lg-around">
-                    <div class="col-xl-12 col-lg-12" id="dtMessages">
+                <div class="row d-flex justify-content-lg-between">
+                    <form asp-controller="Administrator" asp-action="CreateMessage">
+                        <div class="row d-flex justify-content-between pb-3">
+                            <div class="col-11">
+                                <input type="hidden" asp-for="MessageId" value="@Model.MessageId" />
+                                <input type="hidden" asp-for="SenderId" value="@Model.SenderId" />
+                                <input asp-for="MessageBody" type="text" class="form-control" placeholder="Message" />
+                            </div>
+
+                            <div class="col-1 d-flex justify-content-end">
+                                <button class="btn btn-danger">
+                                    <i class="far fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <div class="col-xl-12">
                         @{
                             if (Model.Messages.Count() != 0)
                             {
@@ -43,29 +54,22 @@
                                 {
                                     var sender = item.Sender.FirstName + ' ' + item.Sender.LastName;
 
-                                    <div class="row-item row mb-4">
-                                        <div class="col-2 align-self-center">
-                                            <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@item.Sender.Image" alt="@sender" width="75">
-                                            <h6 class="text-center">@sender</h6>
+                                    <div class="row mb-4">
+                                        <div class="col-1 align-self-center">
+                                            <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@item.Sender.Image" alt="@sender" width="45">
                                         </div>
-
-                                        <div class="col-10">
+                                        <div class="col-11">
                                             <div class="row d-flex justify-content-between">
                                                 <div class="col-9">
-                                                    <p class="h5 text-muted">@item.Subject</p>
+                                                    <span class="h6">@sender</span>
                                                 </div>
                                                 <div class="col-3 text-end">
                                                     <span class="small fw-lighter">@item.DateSent</span>
                                                 </div>
                                             </div>
                                             <p class="text-muted">@item.MessageBody</p>
-                                            <a class="btn btn-outline-danger btn-sm" asp-controller="Administrator" asp-action="ViewMessage" asp-route-id="@item.MessageId">
-                                                See Conversation
-                                            </a>
                                         </div>
                                     </div>
-
-                                    <hr />
                                 }
                             }
                             else
@@ -95,18 +99,6 @@
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }
     window.onscroll = function () { scrollFunction(); };
-
-    $(document).ready(function () {
-        $("#inptSearch").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#dtMessages .row-item").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-            $("#dvThumbnail .item").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
 
     function scrollFunction() {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {

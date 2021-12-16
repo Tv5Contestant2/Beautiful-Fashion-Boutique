@@ -4,6 +4,7 @@ using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -39,30 +40,34 @@ namespace ECommerce1.Controllers
         public IActionResult CreateAboutUs(About about)
         {
             _service.CreateAboutUs(about);
+
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult CreateContactUs(SocMed socMed)
         {
             _service.CreateContactUs(socMed);
+
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Index()
         {
+            ViewBag.Sales = _service.GetProductSales();
+            ViewBag.ProductsSold = _service.GetProductSold();
+            ViewBag.Pending = _service.GetPendingOrders();
             return View();
         }
 
         public async Task<IActionResult> Messages()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var result = await _messageService.GetCustomerMessages(userId);
-            var user = await _userManager.FindByIdAsync(userId);
+            var result = await _messageService.GetAllCustomerMessages();
 
             var viewModel = new MessageViewModel
             {
                 Messages = result,
-                SenderId = userId
+                SenderId = userId,
             };
 
             return View(viewModel);
@@ -72,7 +77,24 @@ namespace ECommerce1.Controllers
         {
             _messageService.CreateMessage(message);
 
-            return RedirectToAction(nameof(Messages));
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        [Route("Administrator/ViewMessage/{messageId:Guid}")]
+        public async Task<IActionResult> ViewMessage(Guid messageId)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var result = await _messageService.GetMessageConversation(messageId);
+
+            var viewModel = new MessageViewModel
+            {
+                Messages = result,
+                MessageId = messageId.ToString(),
+                SenderId = userId
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult UnderConstruction()

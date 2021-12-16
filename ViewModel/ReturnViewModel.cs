@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ECommerce1.ViewModel
 {
-    public class OrderViewModel
+    public class ReturnViewModel
     {
         public Guid TransactionId { get; set; }
         public string CustomersId { get; set; }
@@ -19,7 +19,6 @@ namespace ECommerce1.ViewModel
         public int QuantityReturned { get; set; }
         public string ReturnReason { get; set; }
         public IEnumerable<OrderDetails> OrderDetails { get; set; }
-        public Returns Returns { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public IEnumerable<Orders> Orders { get; set; }
 

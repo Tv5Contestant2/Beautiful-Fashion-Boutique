@@ -17,6 +17,9 @@ namespace ECommerce1.Data.Services.Interfaces
         public void CreateContactUs(SocMed socMed);
 
         public void UpdateContactUs(SocMed socMed);
+        public decimal GetProductSales();
+        public int GetProductSold();
+        public int GetPendingOrders();
 
     }
 }

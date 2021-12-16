@@ -362,6 +362,52 @@ namespace ECommerce1.Data.Services
             return result;
         }
 
+        public async Task<List<Product>> GetProductsWithSamePrice(long id)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            var result = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductVariants)
+                .Include(x => x.InventoryStatus)
+                .Where(x => x.Price == product.Price || x.PriceOnSale == product.Price)
+                .ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Image = _commonServices.NoImage;
+                }
+            }
+
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
+            return result.Where(x => x.StockStatusId != (int)StockStatusEnum.OutOfStock).ToList();
+        }
+
         public async Task UpdateStocks(List<OrderDetails> orderDetails)
         {
             var products = await _context.ProductVariants

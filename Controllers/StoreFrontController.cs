@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Enums;
+﻿using ECommerce1.Data;
+using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
@@ -6,6 +7,7 @@ using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -19,6 +21,8 @@ namespace ECommerce1.Controllers
         private readonly IProductsService _service;
         private readonly IUserService _userService;
 
+        private readonly AppDBContext _context;
+
         private readonly UserManager<User> _userManager;
 
         public StoreFrontController(IAdministratorService administratorService
@@ -26,7 +30,8 @@ namespace ECommerce1.Controllers
             , IProductsService service
             , IProductCategoriesService productCategoriesService
             , IUserService userService
-            , UserManager<User> userManager)
+            , UserManager<User> userManager
+            , AppDBContext context)
         {
             _service = service;
             _administratorService = administratorService;
@@ -34,6 +39,7 @@ namespace ECommerce1.Controllers
             _cartService = cartService;
             _userService = userService;
             _userManager = userManager;
+            _context = context;
         }
 
         public IActionResult Index()

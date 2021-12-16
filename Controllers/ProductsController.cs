@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Enums;
+﻿using ECommerce1.Data;
+using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
@@ -17,11 +18,13 @@ namespace ECommerce1.Controllers
     {
         private readonly ICartService _cartService;
         private readonly IProductsService _service;
+        private readonly AppDBContext _context;
 
-        public ProductsController(IProductsService service, ICartService cartService)
+        public ProductsController(IProductsService service, ICartService cartService, AppDBContext context)
         {
             _service = service;
             _cartService = cartService;
+            _context = context;
         }
 
         public IActionResult CreateProduct()

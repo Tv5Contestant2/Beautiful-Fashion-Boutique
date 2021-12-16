@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -18,13 +19,13 @@ namespace ECommerce1.Data.Services
 
         public About GetAboutUs() 
         {
-            var result = _context.AboutUs.Where(x => x.Id == 1).SingleOrDefault();
+            var result = _context.AboutUs.OrderByDescending(x => x.Id).FirstOrDefault();
             return result;
         }
 
         public SocMed GetContactUs()
         {
-            var result = _context.Socials.Where(x => x.Id == 1).SingleOrDefault();
+            var result = _context.Socials.OrderByDescending(x => x.Id).FirstOrDefault();
             return result;
         }
 
@@ -42,12 +43,32 @@ namespace ECommerce1.Data.Services
 
         public void UpdateAboutUs(About about)
         {
-            throw new System.NotImplementedException();
+            _context.AboutUs.Update(about);
+            _context.SaveChanges();
         }
 
         public void UpdateContactUs(SocMed socMed)
         {
-            throw new System.NotImplementedException();
+            _context.Socials.Update(socMed);
+            _context.SaveChanges();
+        }
+
+        public decimal GetProductSales()
+        {
+            var result = _context.Orders.Sum(x => x.Total + x.TaxAmount + x.ShippingFee);
+            return result != 0 ? result : 0;
+        }
+
+        public int GetProductSold()
+        {
+            var result = _context.OrdersDetails.Sum(x => x.Quantity);
+            return result != 0 ? result : 0;
+        }
+
+        public int GetPendingOrders()
+        {
+            var result = _context.Orders.Count(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Pending);
+            return result != 0 ? result : 0;
         }
     }
 }
