@@ -7,6 +7,9 @@ using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,18 +23,20 @@ namespace ECommerce1.Controllers
         private readonly IProductCategoriesService _productCategoriesService;
         private readonly IProductsService _service;
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
 
         private readonly AppDBContext _context;
 
         private readonly UserManager<User> _userManager;
 
-        public StoreFrontController(IAdministratorService administratorService
+        public StoreFrontController( IAdministratorService administratorService
             , ICartService cartService
             , IProductsService service
             , IProductCategoriesService productCategoriesService
             , IUserService userService
             , UserManager<User> userManager
-            , AppDBContext context)
+            , AppDBContext context
+            , IEmailService emailService)
         {
             _service = service;
             _administratorService = administratorService;
@@ -40,11 +45,12 @@ namespace ECommerce1.Controllers
             _userService = userService;
             _userManager = userManager;
             _context = context;
+            _emailService = emailService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
-            return View(new CartDetails());
+            return View(new ProductViewModel());
         }
 
         public async Task<IActionResult> Home()
@@ -64,7 +70,6 @@ namespace ECommerce1.Controllers
 
             try
             {
-
                 if (!string.IsNullOrEmpty(userId))
                     await _userService.UpdateLastLoggedIn(userId);
             }
@@ -76,76 +81,140 @@ namespace ECommerce1.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Mens()
+        public async Task<IActionResult> Mens(int categoryId = 0, int sizeId = 0, int colorId = 0, int page = 1)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
+            var products = new List<Product>();
 
-            var products = await _service.GetAllProductsByGender((int)GenderEnum.Men);
+            if (categoryId == 0)
+                products = await _service.GetAllProductsByGender(colorId, (int)GenderEnum.Men);
+            else if (categoryId != 0 && sizeId != 0)
+                products = await _service.GetProductsBySize(categoryId, sizeId, colorId, (int)GenderEnum.Men);
+            else
+                products = await _service.GetProductsByCategory(categoryId, colorId, (int)GenderEnum.Men);
+
             var productCategories = await _productCategoriesService.GetAllProductCategories();
+            var sizes = await _productCategoriesService.GetSizesPerCategory(categoryId);
+            var colors = await _productCategoriesService.GetColors();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
             ViewBag.Products = products;
             ViewBag.ProductCategories = productCategories;
-            ViewBag.PageTitle = "Men's Collection";
-            ViewBag.PageDescription = "Prepare to mesmerize. Check this collection meant just for you.";
+            ViewBag.Sizes = sizes;
+            ViewBag.Colors = colors;
 
-            return View("Index");
+            var viewModel = new ProductViewModel
+            {
+                ItemPerPage = 12,
+                Products = products.ToList(),
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
-        public async Task<IActionResult> Womens()
+        public async Task<IActionResult> Womens(int categoryId = 0, int sizeId = 0, int colorId = 0, int page = 1)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
+            var products = new List<Product>();
 
-            var products = await _service.GetAllProductsByGender((int)GenderEnum.Women);
+            if (categoryId == 0)
+                products = await _service.GetAllProductsByGender(colorId, (int)GenderEnum.Women);
+            else if (categoryId != 0 && sizeId != 0)
+                products = await _service.GetProductsBySize(categoryId, sizeId, colorId, (int)GenderEnum.Women);
+            else
+                products = await _service.GetProductsByCategory(categoryId, colorId, (int)GenderEnum.Women);
+
             var productCategories = await _productCategoriesService.GetAllProductCategories();
+            var sizes = await _productCategoriesService.GetSizesPerCategory(categoryId);
+            var colors = await _productCategoriesService.GetColors();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
             ViewBag.Products = products;
             ViewBag.ProductCategories = productCategories;
-            ViewBag.PageTitle = "Women's Collection";
-            ViewBag.PageDescription = "Ladies, be a trendsetter with these items.";
+            ViewBag.Sizes = sizes;
+            ViewBag.Colors = colors;
 
-            return View("Index");
+            var viewModel = new ProductViewModel
+            {
+                ItemPerPage = 12,
+                Products = products.ToList(),
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
-        public async Task<IActionResult> Trending()
+        public async Task<IActionResult> Trending(int categoryId = 0, int sizeId = 0, int colorId = 0, int page = 1)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
+            var products = new List<Product>();
 
-            var products = await _service.GetAllProducts();
+            if (categoryId == 0)
+                products = await _service.GetLatestProducts(colorId);
+            else if (categoryId != 0 && sizeId != 0)
+                products = await _service.GetProductsBySize(categoryId, sizeId, colorId);
+            else
+                products = await _service.GetProductsByCategory(categoryId, colorId);
+
             var productCategories = await _productCategoriesService.GetAllProductCategories();
+            var sizes = await _productCategoriesService.GetSizesPerCategory(categoryId);
+            var colors = await _productCategoriesService.GetColors();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
             ViewBag.Products = products;
             ViewBag.ProductCategories = productCategories;
-            ViewBag.PageTitle = "Trending / New Arrivals";
-            ViewBag.PageDescription = "Hottest and latest items on our stash.";
+            ViewBag.Sizes = sizes;
+            ViewBag.Colors = colors;
 
-            return View("Index");
+            var viewModel = new ProductViewModel
+            {
+                ItemPerPage = 12,
+                Products = products,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
-        public async Task<IActionResult> ShopAll()
+        public async Task<IActionResult> ShopAll(int categoryId = 0, int sizeId = 0, int colorId = 0, int page = 1)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
+            var products = new List<Product>();
 
-            var products = await _service.GetAllProducts();
+            if (categoryId == 0)
+                products = await _service.GetAllProducts(colorId);
+            else if (categoryId != 0 && sizeId != 0)
+                products = await _service.GetProductsBySize(categoryId, sizeId, colorId);
+            else
+                products = await _service.GetProductsByCategory(categoryId, colorId);
+
             var productCategories = await _productCategoriesService.GetAllProductCategories();
+            var sizes = await _productCategoriesService.GetSizesPerCategory(categoryId);
+            var colors = await _productCategoriesService.GetColors();
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
             ViewBag.Products = products;
             ViewBag.ProductCategories = productCategories;
-            ViewBag.PageTitle = "Shop All";
-            ViewBag.PageDescription = "Everything and anything under the sun.";
+            ViewBag.Sizes = sizes;
+            ViewBag.Colors = colors;
 
-            return View("Index");
+            var viewModel = new ProductViewModel
+            {
+                ItemPerPage = 12,
+                Products = products,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> AboutUs()
@@ -164,9 +233,9 @@ namespace ECommerce1.Controllers
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.ContactUs = _administratorService.GetContactUs();
 
-            var result = _administratorService.GetContactUs();
-            return View(result);
+            return View(new MessageViewModel());
         }
 
         public async Task<IActionResult> ViewProduct(long id)
@@ -194,6 +263,12 @@ namespace ECommerce1.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> SendMessage(MessageViewModel viewModel)
+        {
+            await _emailService.SendMessage(viewModel);
+            return View("MessageSuccess");
         }
 
     }

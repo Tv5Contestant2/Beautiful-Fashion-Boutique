@@ -64,7 +64,7 @@ namespace ECommerce1.Controllers
             }
         }
 
-        public async Task<IActionResult> Index(int page)
+        public async Task<IActionResult> Index(int page = 1)
         {
             var data = await _service.GetAllEmployees();
 

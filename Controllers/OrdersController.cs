@@ -27,7 +27,7 @@ namespace ECommerce1.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(int page)
+        public async Task<IActionResult> Index(int page = 1)
         {
             var result = await _service.GetAllOrders();
 
@@ -45,7 +45,7 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Returns(int page)
+        public async Task<IActionResult> Returns(int page = 1)
         {
             var result = await _service.GetAllReturns();
 

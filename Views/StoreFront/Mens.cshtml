@@ -1,0 +1,225 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model ECommerce1.ViewModel.ProductViewModel
+@inject UserManager<User> UserManager
+@using ECommerce1.Data.Enums
+
+@{
+    ViewData["Title"] = "Men's Collection";
+    ViewData["Description"] = "Prepare to mesmerize.Check this collection meant just for you.";
+}
+
+@*Hero Section*@
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-9 order-2 order-lg-1">
+                <h1>@ViewData["Title"]</h1><p class="lead text-muted">@ViewData["Description"]</p>
+            </div>
+            <div class="col-lg-3 text-end order-1 order-lg-2">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb py-4 justify-content-lg-end mb-0">
+                        <li class="breadcrumb-item"><a asp-controller="StoreFront" asp-action="Home">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+@*End Hero Section*@
+<main class="py-5">
+    <div class="container py-5">
+        <div class="row gx-lg-5">
+            <div class="col-xl-3 col-lg-4">
+                @*Product Categories*@
+                <h6 class="text-uppercase mb-4">Product Categories</h6>
+                <ul class="list-unstyled">
+                    <li class="active">
+                        <a class="sidebar-link" href="@Url.Action("Mens")">
+                            All
+                        </a>
+                    </li>
+                    @foreach (var item in ViewBag.ProductCategories)
+                    {
+                        <li>
+                            <a class="sidebar-link" href="@Url.Action("Mens", new { categoryId = item.Id })">
+                                @item.Title
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <div class="border-bottom my-5"></div>
+                @*Sizes*@
+                <h6 class="text-uppercase mb-4">Size </h6>
+                <ul class="list-unstyled">
+                    <li class="active">
+                        <a class="sidebar-link" href="@Url.Action("Mens")">
+                            All
+                        </a>
+                    </li>
+                    @if (ViewBag.Sizes != null)
+                    {
+                        @foreach (var item in ViewBag.Sizes)
+                        {
+                            <li>
+                                <a class="sidebar-link" href="@Url.Action("Mens", new { categoryId = item.CategoryId, sizeId = item.Id })">
+                                    @item.Title
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+                <div class="border-bottom my-5"></div>
+                @*Colors*@
+                <h6 class="text-uppercase mb-4">Color </h6>
+                <ul class="list-unstyled">
+                    <li class="active">
+                        <a class="sidebar-link" href="@Url.Action("Mens")">
+                            All
+                        </a>
+                    </li>
+                    @foreach (var item in ViewBag.Colors)
+                    {
+                        <li>
+                            <a class="sidebar-link" href="@Url.Action("Mens", new { categoryId = item.CategoryId, sizeId = item.SizeId, colorId = item.Id })">
+                                @item.Title
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            @*Begin Content*@
+            <div class="col-xl-9 col-lg-8">
+                @*Filters*@
+                <header class="d-flex mb-5">
+                    @*Search*@
+                    <div class="w-100 mr-5">
+                        <input id="inptSearch" class="form-control" placeholder="Search" />
+                    </div>
+                </header>
+                <div class="row gy-5 mb-5">
+                    <span class="visible-items">Showing <strong>1-15 </strong>of <strong>@ViewBag.Products.Count </strong>results</span>
+
+                    @*Products*@
+                    <div id="dtProductList" class="row gy-5 mb-5 my-1">
+                        @foreach (var item in Model.PaginatedList())
+                        {
+                            <div class="row-item col-xl-4 col-md-6">
+                                <div class="product">
+                                    <div class="image d-flex align-items-center justify-content-center bg-light">
+                                        @{
+                                            if (item.IsSale)
+                                            {
+                                                <div class="ribbon ribbon-primary text-uppercase">Sale</div>
+                                            }
+
+                                            if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
+                                            {
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name" style="-webkit-filter: grayscale(100%); filter: grayscale(100%); ">
+                                            }
+                                            else
+                                            {
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                                            }
+                                        }
+                                        <form asp-controller="Cart" asp-action="AddToCart">
+                                            <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                                <div class="CTA d-flex align-items-center justify-content-center">
+                                                    <input type="hidden" asp-for="@Model.CartDetails.CustomersId" value="@ViewBag.CustomersId" />
+                                                    <input type="hidden" asp-for="@Model.CartDetails.ProductId" value="@item.Id" />
+                                                    <input type="hidden" asp-for="@Model.CartDetails.Quantity" value="1" />
+                                                    @{
+                                                        var _IsAdmin = false;
+                                                        if (UserManager.GetUserAsync(User).Result != null)
+                                                        {
+                                                            if (UserManager.GetUserAsync(User).Result.IsAdmin != null)
+                                                            {
+                                                                if ((bool)UserManager.GetUserAsync(User).Result.IsAdmin) _IsAdmin = true;
+                                                            }
+
+                                                            if (_IsAdmin == true)
+                                                            {
+                                                                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none">
+                                                                    <i class="far fa-edit"></i>
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="submit" class="btn btn-link">
+                                                                    <i class="fas fa-shopping-cart"></i>
+                                                                </button>
+                                                            }
+                                                        }
+                                                    }
+                                                    <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="pt-3">
+                                        <small class="text-muted">@item.Category.Title</small><a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                            <h3 class="h6 mb-0 text-uppercase">@item.Name</h3>
+                                        </a>
+                                        @{
+                                            if (item.IsSale)
+                                            {
+                                                <span class="text-muted"><del>Php @item.Price</del></span> <span class="text-danger h6">Php @item.PriceOnSale</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Php @item.Price</span>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @*Pagination*@
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Model.PageCount(); i++)
+                        {
+                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                                <a class="page-link" href="@Url.Action("Mens", new { page = i })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+            @*End Content*@
+        </div>
+    </div>
+</main>
+
+<div style="position: fixed; bottom: 10px; right: 10px;">
+    <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+
+    $(document).ready(function () {
+        $("#inptSearch").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#dtProductList .row-item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+            $("#dtProductList .item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function setProductId(productId) {
+        document.getElementById('hidden_product_id').value = document.getElementById(productId).getAttribute('data-subcat');
+    }
+
+</script>

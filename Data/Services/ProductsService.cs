@@ -170,7 +170,7 @@ namespace ECommerce1.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts(int colorId)
         {
             var result = await _context.Products
                 .Include(x => x.ProductImages)
@@ -214,6 +214,52 @@ namespace ECommerce1.Data.Services
 
             return result;
         }
+
+        public async Task<List<Product>> GetLatestProducts(int colorId)
+        {
+            var result = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductVariants)
+                .Include(x => x.InventoryStatus)
+                .Include(x => x.Category)
+                .ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Image = _commonServices.NoImage;
+                }
+            }
+
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
+            return result;
+        }
+
         public async Task<IEnumerable<Product>> GetFeaturedProductsOnSale()
         {
             var result = await _context.Products
@@ -307,11 +353,12 @@ namespace ECommerce1.Data.Services
             return result.FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsByGender(int genderId)
+        public async Task<List<Product>> GetAllProductsByGender(int colorId, int genderId)
         {
             var result = await _context.Products
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductVariants)
+                    .ThenInclude(x => x.Color)
                 .Include(x => x.InventoryStatus)
                 .ToListAsync();
 
@@ -349,7 +396,112 @@ namespace ECommerce1.Data.Services
             }
 
 
-            return result.Where(x => x.GenderId == genderId).ToList();
+            return result.Where(x => x.GenderId == genderId && x.ProductVariants.Any(x => (colorId != 0 ? x.ColorId == colorId : true))).ToList();
+        }
+
+        public async Task<List<Product>> GetProductsByCategory(int categoryId, int colorId, int genderId = 0)
+        {
+            var result = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductVariants)
+                    .ThenInclude(x => x.Color)
+                .Include(x => x.InventoryStatus)
+                .ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Image = _commonServices.NoImage;
+                }
+            }
+
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
+            var filteredResult = new List<Product>();
+
+            if (genderId == 0)
+                filteredResult = result.Where(x => x.ProductCategoryId == categoryId && x.ProductVariants.Any(x => (colorId != 0 ? x.ColorId == colorId : true))).ToList();
+            else
+                filteredResult = result.Where(x => x.ProductCategoryId == categoryId && x.GenderId == genderId && x.ProductVariants.Any(x => (colorId != 0 ? x.ColorId == colorId : true))).ToList();
+
+            return filteredResult;
+        }
+
+        public async Task<List<Product>> GetProductsBySize(int categoryId, int sizeId, int colorId, int genderId = 0)
+        {
+            var result = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductVariants)
+                    .ThenInclude(x => x.Size)
+                .Include(x => x.Colors)
+                .Include(x => x.InventoryStatus)
+                .ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Image = _commonServices.NoImage;
+                }
+            }
+
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
+            var filteredResult = new List<Product>();
+
+            if (genderId == 0)
+                filteredResult = result.Where(x => x.ProductCategoryId == categoryId && x.ProductVariants.Any(x => x.SizeId == sizeId || (colorId != 0 ? x.ColorId == colorId : true))).ToList();
+            else
+                filteredResult = result.Where(x => x.ProductCategoryId == categoryId && x.ProductVariants.Any(x => x.SizeId == sizeId || (colorId != 0 ? x.ColorId == colorId : true)) && x.GenderId == genderId).ToList();
+
+            return filteredResult;
         }
 
         public async Task<IEnumerable<ProductReview>> GetProductReviews(long id)
