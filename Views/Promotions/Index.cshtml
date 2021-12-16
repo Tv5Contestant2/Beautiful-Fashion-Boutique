@@ -29,7 +29,12 @@
         <div class="container-fluid">
             @*Search*@
             <div class="row d-flex justify-content-between">
-                <input id="inptSearch" class="form-control w-100" placeholder="Search" />
+                <input id="inptSearch" class="form-control w-75" placeholder="Search" />
+                <div class="col">
+                    <a asp-controller="Promotions" asp-action="CreatePromo" class="btn btn-info float-right" type="button">
+                        <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Promo
+                    </a>
+                </div>
             </div>
 
             @*Statistics*@
@@ -83,8 +88,9 @@
                             <div class="border-top border-bottom py-2">
                                 <div class="row text-uppercase">
                                     <div class="col-2"><strong class="small">Promo Name</strong></div>
-                                    <div class="col-3"><strong class="small">Description</strong></div>
+                                    <div class="col-2"><strong class="small">Description</strong></div>
                                     <div class="col-1 text-center"> <strong class="small">Sale %</strong></div>
+                                    <div class="col-1 text-center"> <strong class="small">Promo Category</strong></div>
                                     <div class="col-2 text-center"> <strong class="small">Start Date</strong></div>
                                     <div class="col-2 text-center"><strong class="small">End Date</strong></div>
                                     <div class="col-1 text-center"><strong class="small">Status</strong></div>
@@ -96,11 +102,12 @@
                                 <div class="row-item pt-4 pb-4 border-bottom">
                                     <div class="row text-left">
                                         <div class="item col-2">@item.Name</div>
-                                        <div class="item col-3">@item.Description</div>
+                                        <div class="item col-2">@item.Description</div>
                                         <div class="item col-1 text-center">@item.SalePercentage</div>
-                                        <div class="item col-2 text-center">@item.StartDate</div>
-                                        <div class="item col-2 text-center">@item.EndDate</div>
-                                        <div class="item col-1 text-center">&nbsp;</div>
+                                        <div class="item col-1 text-center">@item.PromoCategory</div>
+                                        <div class="item col-2 text-center">@item.StartDate.Value.ToString("yyyy-MM-dd")</div>
+                                        <div class="item col-2 text-center">@item.EndDate.Value.ToString("yyyy-MM-dd")</div>
+                                        <div class="item col-1 text-center">@item.Status.Title</div>
                                         <div class="item col-1 text-center">
                                             <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdatePromo" asp-route-id="@item.Id">
                                                 <i class="far fa-eye"></i>
@@ -182,5 +189,4 @@
             $("#dvThumbnail").show();
         });
     });
-
 </script>

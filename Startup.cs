@@ -53,10 +53,10 @@ namespace ECommerce1
             });
 
             // SignalR
-            app.UseSignalR(builder =>
-            {
-                builder.MapHub<ChatHub>("/chat");
-            });
+            //app.UseSignalR(builder =>
+            //{
+            //    builder.MapHub<ChatHub>("/chat");
+            //});
 
             // Seed Database
             AppDBInitializer.Seed(app);

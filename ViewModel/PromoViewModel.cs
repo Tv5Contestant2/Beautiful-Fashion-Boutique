@@ -11,20 +11,28 @@ namespace ECommerce1.ViewModel
     public class PromoViewModel
     {
         public long Id { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
+
         public string Image { get; set; }
 
         [NotMapped]
         [Display(Name = "Upload Image")]
         public IFormFile ImageFile { get; set; }
+
         public string Description { get; set; }
+
         public string Name { get; set; }
 
         [Display(Name = "Promo Category")]
         public string PromoCategory { get; set; }
+
+        public bool IsByCategory { get; set; }
+
+        public bool IsByGender { get; set; }
 
         [Display(Name = "Sale Percentage")]
         public int SalePercentage { get; set; }
@@ -34,19 +42,28 @@ namespace ECommerce1.ViewModel
 
         public IEnumerable<Promos> Promos { get; set; }
 
-        #region Pagination 
+        public int ProductCategoryId { get; set; }
+
+        public int GenderId { get; set; }
+
+        public int StatusId { get; set; }
+
+        #region Pagination
+
         public int ItemPerPage { get; set; }
         public int CurrentPage { get; set; }
+
         public int PageCount()
         {
             return Convert.ToInt32(Math.Ceiling(Promos.Count() / (double)ItemPerPage));
         }
+
         public IEnumerable<Promos> PaginatedList()
         {
             int start = (CurrentPage - 1) * ItemPerPage;
             return Promos.OrderBy(b => b.Id).Skip(start).Take(ItemPerPage);
         }
-        #endregion
 
+        #endregion Pagination
     }
 }

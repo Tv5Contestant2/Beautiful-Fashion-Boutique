@@ -120,6 +120,7 @@ namespace ECommerce1.Controllers
         [Route("Orders/AddToReturns/{transactionId:Guid}")]
         public async Task<IActionResult> AddToReturns(Guid transactionId, OrderViewModel viewModel)
         {
+            await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -131,6 +132,7 @@ namespace ECommerce1.Controllers
         [Route("Orders/RemoveFromReturns/{transactionId:Guid}")]
         public async Task<IActionResult> RemoveFromReturns(Guid transactionId, OrderViewModel viewModel)
         {
+            await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
