@@ -88,15 +88,21 @@
                 var item = Model.OrderDetails.FirstOrDefault(x => x.ProductId == Model.ProductId);
 
                 <div class="col-lg-8 col-xl-9">
-                    <div class="row justify-content-between align-content-center pb-2">
-                        <div class="col-lg-7">
-                            <p class="text-small mb-0">Reference</p>
-                            <h5 class="fw-bold mb-0">@Model.TransactionId</h5>
+                    <form asp-controller="Orders" asp-action="ReturnOrder">
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-outline-danger">
+                                Submit Return Request
+                            </button>
                         </div>
 
-                    </div>
+                        <div class="row justify-content-between align-content-center pb-2">
+                            <div class="col-lg-7">
+                                <p class="text-small mb-0">Reference</p>
+                                <h5 class="fw-bold mb-0">@Model.TransactionId</h5>
+                            </div>
 
-                    <form asp-controller="Orders" asp-action="ReturnOrder">
+                        </div>
+
                         <div class="cart-outer mb-5">
                             <div class="cart-inner">
                                 <div class="border-top border-bottom py-2">
@@ -108,7 +114,7 @@
                                 </div>
                                 @*Product*@
                                 <div class="py-4 border-bottom">
-                                    <div class="row d-flex align-items-center bord">
+                                    <div class="row d-flex align-items-center bord mb-3">
                                         <div class="col-4">
                                             <div class="d-flex align-items-center">
                                                 <img class="img-fluid" src="@String.Format(" data:image /jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
@@ -134,18 +140,132 @@
                                             <textarea class="rounded form-control text-left" rows="3" asp-for="ReturnReason"></textarea>
                                         </div>
                                     </div>
+                                    <span class="text-warning small">Your request for change will still be for approval. You can choose from the suggested replacements below. </span>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-12 d-flex justify-content-center">
-                            <button class="btn btn-outline-danger" data-toggle="modal">
-                                Submit Return Request
-                            </button>
-                        </div>
                     </form>
+
+                    @*Product list with same price range as the original product*@
+                    <h6>Choose your replacements</h6>
+                    <span class="text-muted small">These are suggested products based on the price of your item. </span>
+                    <div class="col-lg-12 col-xl-12">
+                        @*Products*@
+                        <div id="dtProductList" class="row gy-3 mb-5 my-1">
+                            @foreach (var products in ViewBag.Products)
+                            {
+                                <div class="row-item col-xl-4 col-md-6">
+                                    <div class="product">
+                                        <div class="image d-flex align-items-center justify-content-center bg-light">
+                                            @{
+                                                if (products.IsSale)
+                                                {
+                                                    <div class="ribbon ribbon-primary text-uppercase">Sale</div>
+                                                }
+
+                                                if (products.StockStatusId == (int)StockStatusEnum.OutOfStock)
+                                                {
+                                                    <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", products.Image)" alt="@products.Name" style="-webkit-filter: grayscale(100%); filter: grayscale(100%); ">
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", products.Image)" alt="@products.Name">
+                                                }
+                                            }
+                                            <form asp-controller="Orders" asp-action="AddToReturns">
+                                                <input type="hidden" value="@Model.TransactionId" asp-for="Returns.OrderReference" />
+                                                <input type="hidden" value="@Model.ProductId" asp-for="Returns.ProductId" />
+                                                <input type="hidden" value="@products.Id" asp-for="Returns.ChangeProductsId" />
+                                                <input type="hidden" asp-for="ProductId" value="@Model.ProductId">
+                                                <input type="hidden" asp-for="TransactionId" value="@Model.TransactionId">
+                                                <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                                    <div class="CTA d-flex align-items-center justify-content-center">
+                                                        <button type="submit" class="btn btn-link" onclick="addReturn(@item.ProductId)">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="pt-3">
+                                            <small class="text-muted">@products.Category.Title</small>
+                                            <a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@products.Id">
+                                                <h3 class="h6 mb-0 text-uppercase">@products.Name</h3>
+                                            </a>
+                                            @{
+                                                if (products.IsSale)
+                                                {
+                                                    <span class="text-muted"><del>Php @products.Price</del></span> <span class="text-danger h6">Php @products.PriceOnSale</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">Php @products.Price</span>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <hr />
+                    @*Selected replacements*@
+                    <div class="col-12 d-flex justify-content-between">
+                        <h6>Your Selection</h6>
+                        @if (ViewBag.Returns != null)
+                        {
+                            <form asp-controller="Orders" asp-action="ClearReturns">
+                                <input type="hidden" asp-for="ProductId" value="@Model.ProductId">
+                                <input type="hidden" asp-for="TransactionId" value="@Model.TransactionId">
+                                <button type="submit" class="btn btn-outline-danger">Clear Selections</button>
+                            </form>
+                        }
+                    </div>
+                    <span class="text-muted small">This does not guarantee replacement of your order. Your request will still subject for approval. </span>
+                    <div class="col-lg-12 col-xl-12">
+                        @*Products*@
+                        <div id="dtProductList" class="row gy-3 mb-5 my-1">
+                            @foreach (var returns in ViewBag.Returns)
+                            {
+                                <div class="row-item col-xl-2 col-md-2">
+                                    <div class="product">
+                                        <div class="image d-flex align-items-center justify-content-center bg-light">
+                                            <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", returns.ChangeProducts.Image)" alt="@returns.ChangeProducts.Name">
+                                            <form asp-controller="Orders" asp-action="RemoveFromReturns">
+                                                <input type="hidden" value="@returns.Id" asp-for="Returns.Id" />
+                                                <input type="hidden" value="@Model.TransactionId" asp-for="Returns.OrderReference" />
+                                                <input type="hidden" value="@Model.ProductId" asp-for="Returns.ProductId" />
+                                                <input type="hidden" asp-for="ProductId" value="@Model.ProductId">
+                                                <input type="hidden" asp-for="TransactionId" value="@Model.TransactionId">
+                                                <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                                    <div class="CTA d-flex align-items-center justify-content-center">
+                                                        <button type="submit" class="btn btn-link" onclick="removeReturn(@returns.Id)">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             }
+
+            <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabelVariant" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>You exceed the number of items that you want to return.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="CloseModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -167,4 +287,21 @@
         if (qty <= returnableQty)
             $(".quantity-no").val(qty);
     };
+
+    var returns = [];
+    function addReturn(productId) {
+        returns.push(productId);
+
+        if (returns.length > $(".quantity-no").val())
+            $('#modal').modal('show');
+    }
+
+    function ShowModal() {
+        $('#modal').modal('show');
+    }
+
+    function CloseModal() {
+        $('#modal').modal('hide');
+    }
+
 </script>

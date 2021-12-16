@@ -518,6 +518,7 @@ namespace ECommerce1.Data.Services
         {
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
             var result = await _context.Products
+                .Include(x => x.Category)
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductVariants)
                 .Include(x => x.InventoryStatus)

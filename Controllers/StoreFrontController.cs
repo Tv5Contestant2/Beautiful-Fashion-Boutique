@@ -60,6 +60,7 @@ namespace ECommerce1.Controllers
             var products = await _service.GetFeaturedProductsOnSale();
             var productCategories = await _productCategoriesService.GetAllProductCategories();
 
+            ViewBag.FacebookLink = _administratorService.GetFacebookLink();
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.ProductCategories = productCategories;

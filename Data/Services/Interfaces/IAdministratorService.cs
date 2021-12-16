@@ -1,6 +1,4 @@
 ﻿using ECommerce1.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ECommerce1.Data.Services.Interfaces
 {
@@ -10,6 +8,8 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public SocMed GetContactUs();
 
+        public string GetFacebookLink();
+
         public void CreateAboutUs(About about);
 
         public void UpdateAboutUs(About about);
@@ -17,8 +17,11 @@ namespace ECommerce1.Data.Services.Interfaces
         public void CreateContactUs(SocMed socMed);
 
         public void UpdateContactUs(SocMed socMed);
+
         public decimal GetProductSales();
+
         public int GetProductSold();
+
         public int GetPendingOrders();
 
     }
