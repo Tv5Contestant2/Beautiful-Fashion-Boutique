@@ -137,9 +137,22 @@
                                                 @*<h4 class="modal-title" id="AddUpdateModelVariantLabel">Add Variant</h4>*@
                                             </div>
                                             <div class="modal-body">
-                                                <div id="divSizeField" style="display: none;" class="form-group">
+
+                                                <div id="divSizeField" @if (Model.ProductCategoryId == 1) { <text> style="display: none;" </text> } class="form-group">
                                                     <label class="control-label">Size</label>
-                                                    @Html.DropDownListFor(x => Model.SizeId, new SelectList(Model.Sizes, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "SizeId" })
+                                                    <select id="SizeId" class="form-control">
+                                                        <option value=""></option>
+                                                        @foreach (var item in Model.Sizes)
+                                                        {
+                                                            <option value="@item.Id"
+                                                                    data-categoryId="@item.CategoryId"
+                                                                    style="display: @if (Model.ProductCategoryId == item.CategoryId) { <text>block</text> } else { <text>none</text> }">
+
+                                                                @item.Title
+                                                            </option>
+                                                        }
+                                                    </select>
+
                                                     @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })
                                                 </div>
                                                 <div class="form-group">
@@ -156,7 +169,6 @@
                                                 <button type="button" class="btn btn-primary" id="btnAddVariant" onclick="return AddVariant();">Add Variant</button>
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -226,7 +238,6 @@
     </div>
 </div>
 
-
 @section Scripts {
     <script>
         var btnTop = document.getElementById("btnTop");
@@ -262,8 +273,21 @@
                     document.getElementById('thVariantSize').setAttribute('style', 'width: 35%;');
                     document.getElementById('divSizeField').setAttribute('style', 'display:block;');
                     break;
-            
+
             };
+
+            var _varList = document.getElementById("SizeId");
+            var _varOptions = _varList.getElementsByTagName("option");
+
+            for (i = 0; i < _varOptions.length; i++) {
+                var _dataCategoryId = _varOptions[i].getAttribute("data-categoryId");
+                if (_dataCategoryId == _categoryId) {
+                    _varOptions[i].style.display = "block";
+                } else {
+                    _varOptions[i].style.display = "none";
+                }
+
+            }
 
         }
 
@@ -304,7 +328,7 @@
 
             var _categoryId = $('#selectionCategories').val();
             if (_categoryId !== "1") {
-                if ($('#SizeId').val() == null) {   
+                if ($('#SizeId').val() == null) {
                     $('#SizeId').css('border-color', 'Red');
                     isValid = false;
                 } else {
@@ -363,10 +387,10 @@
 
             var _categoryId = $('#selectionCategories').val();
             if (_categoryId !== "1") {
-                cols += '<td><span>' + variantObj.Size + '</span><input id="inptSize" name="inptSize" type="text" value="' + variantObj.SizeId + '" style="display:none"/></td>';
+                cols += '<td><span>' + variantObj.Size + '</span><input id="inptSize" name="inptSize" type="text" value="' + variantObj.SizeId + '" style="display:none" /></td>';
             }
-            cols += '<td><span>' + variantObj.Color + '</span><input id="inptColor" name="inptColor" type="text" value="' + variantObj.ColorId + '" style="display:none"/></td>';
-            cols += '<td><span>' + variantObj.Quantity + '</span><input id="inptQuantity" name="inptQuantity" type="text" value="' + variantObj.Quantity + '" style="display:none"/></td>';
+            cols += '<td><span>' + variantObj.Color + '</span><input id="inptColor" name="inptColor" type="text" value="' + variantObj.ColorId + '" style="display:none" /></td>';
+            cols += '<td><span>' + variantObj.Quantity + '</span><input id="inptQuantity" name="inptQuantity" type="text" value="' + variantObj.Quantity + '" style="display:none" /></td>';
             cols += '<td><input type="button" class="ibtnDelVariant btn btn-md btn-danger" value="Delete" style="margin-top:25px"></td>';
 
             newRow.append(cols);
@@ -404,8 +428,6 @@
             } else {
                 document.getElementById("ProductVariantJSON").value = "";
             }
-
-
 
         }
         //End - variant
@@ -495,8 +517,6 @@
                 document.getElementById("ProductImageJSON").value = "";
             }
         }
-            //End - image
-
+                                                                                                                //End - image
     </script>
 }
-
