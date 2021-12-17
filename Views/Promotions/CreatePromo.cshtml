@@ -1,4 +1,5 @@
 ﻿@model Promos
+@using ECommerce1.Data.Enums
 
 @{
     ViewData["Title"] = "Add New Promo";
@@ -22,59 +23,103 @@
                         <div class="card-header" id="headingOne">
                             <b>PRIMARY INFORMATION</b>
                             <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="far fa-plus-square"></i>
+                                @*<i class="far fa-plus-square"></i>*@
                             </a>
                         </div>
 
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
-
-                                @*Primary Info*@
-                                <div class="row form-group">
-
-                                    <div class="col col-md-8">
-                                        <label asp-for="Name" class="control-label"></label>
-                                        <input asp-for="Name" class="form-control" />
-                                        <span asp-validation-for="Name" class="text-danger"></span>
-
-
-                                        <label asp-for="Description" class="control-label"></label>
-                                        <input asp-for="Description" class="form-control" />
-                                        <span asp-validation-for="Description" class="text-danger"></span>
-
-
-                                        <label asp-for="StartDate" class="control-label"></label>
-                                        <input asp-for="StartDate" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
-
-
-                                        <label asp-for="EndDate" class="control-label"></label>
-                                        <input asp-for="EndDate" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
-                                        <div class="col">
+                                <div class="row col-md-12">
+                                    <div class="col col-md-10">
+                                        <div class="form-group">
+                                            <label asp-for="Name" class="control-label"></label>
+                                            <input asp-for="Name" class="form-control" />
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Description" class="control-label"></label>
+                                            <input asp-for="Description" class="form-control" />
+                                            <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
 
-
-                                        <label asp-for="SalePercentage" class="control-label"></label>
-                                        <input asp-for="SalePercentage" class="form-control" type="number" />
-                                        <span asp-validation-for="SalePercentage" class="text-danger"></span>
-
+                                        <div class="row">
+                                            <div class="col col-md-2">
+                                                <div class="form-group">
+                                                    <label asp-for="SalePercentage" class="control-label"></label>
+                                                    <input asp-for="SalePercentage" class="form-control" type="number" min="0" />
+                                                    <span asp-validation-for="SalePercentage" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="StartDate" class="control-label"></label>
+                                                    <input asp-for="StartDate" class="form-control" id="startDate" onchange="handleStartDateChange()" placeholder="MM/DD/YYY" type="date" />
+                                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="EndDate" class="control-label"></label>
+                                                    <input asp-for="EndDate" class="form-control" id="endDate" onchange="handleEndDateChange()" placeholder="MM/DD/YYY" type="date" readonly />
+                                                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-2">
+                                                <div class="form-group">
+                                                    <label asp-for="StatusId" class="control-label"></label>
+                                                    <div>
+                                                        @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title", (int)StatusEnum.Active),
+                                                                            htmlAttributes: new { @class = "form-control", id = "StatusId", @disabled = "disabled" })
+                                                        @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <label asp-for="PromoCategory" class="control-label"></label>
-                                        <input asp-for="PromoCategory" class="form-control" />
+                                        <div class="row">
+                                            <div class="col col-md-4">
+                                                <div class="form-group ml-3">
+                                                    <input id="isByCategory" asp-for="IsByCategory" value="true" type="hidden" />
+                                                    <input class="form-check-input" type="radio" name="promocategory-selection" value="true" checked onclick='handleIsByCategory()'>
+                                                    <label class="form-check-label" for="option1"><strong>By Product Category</strong></label>
+                                                    <div id="divCategorySelection" style="display:block">
+                                                        <div>
+                                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
+                                                                                   htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()" })
+                                                            @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-4">
+                                                <div>
+                                                    <input id="isByGender" asp-for="IsByGender" value="false" type="hidden" />
+                                                    <input class="form-check-input" type="radio" name="promocategory-selection" value="true" onclick='handleIsByGender()'>
+                                                    <label class="form-check-label" for="option1"><strong>By Gender</strong></label>
+                                                    <div id="divGenderSelection" style="display:none">
+                                                        @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
+                                                                htmlAttributes: new { @class = "form-control", id = "GenderId" })
+                                                        @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="col col-md-4">
+                                    <div class="col col-md-2">
                                         <div class="row form-group">
-
-                                            <div class="col col-md-4">
-                                                <img id="ImagePreview" src="~/images/default-avatar.jpg" style="width:15em; height:15em" />
-                                            </div>
-
-                                            <div class="col col-md-8">
-                                                <div class="custom-file">
-                                                    <input asp-for="ImageFile" accept="image/*" class="form-control-file" />
+                                            <div class="custom-file">
+                                                <div class="form-group">
+                                                    <input id="inptImageUpload" type="file" accept="image/*" name="image" />
+                                                    <input id="inptImageFileName" type="text" style="display:none;" />
                                                 </div>
-
-
+                                                <div class="form-group">
+                                                    <img id="imgOutput" src="@string.Format("data:image/jpeg;base64,{0}", Model.Image)" width="200" />
+                                                    <div style="display: none;">
+                                                        <input id="Image" asp-for="Image" class="form-control" />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -95,5 +140,51 @@
             output.src = $(this).val();
         });
 
+        function handleIsByCategory() {
+            document.getElementById("isByCategory").value = true;
+            document.getElementById("isByGender").value = false;
+            document.getElementById('divCategorySelection').setAttribute('style', 'display:block;');
+            document.getElementById('divGenderSelection').setAttribute('style', 'display:none;');
+        };
+
+        function handleIsByGender() {
+            document.getElementById("isByGender").value = true;
+            document.getElementById("isByCategory").value = false;
+            document.getElementById('divGenderSelection').setAttribute('style', 'display:block;');
+            document.getElementById('divCategorySelection').setAttribute('style', 'display:none;');
+        };
+
+        function handleStartDateChange() {
+            var startDate = document.getElementById("startDate").value;
+            var minDate = new Date(startDate);
+            document.getElementById("endDate").setAttribute("max", minDate);
+            document.getElementById('endDate').removeAttribute('readonly');
+        };
+
+        function handleEndDateChange() {
+
+        };
+
+        var inptImageUpload = document.querySelector("#inptImageUpload");
+
+        // listen for the change event so we can capture the file
+        inptImageUpload.addEventListener("change", (e) => {
+            // get a reference to the file
+            const file = e.target.files[0];
+
+            // encode the file using the FileReader API
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result
+                    .replace("data:", "")
+                    .replace(/^.+,/, "");
+
+                document.getElementById('imgOutput').setAttribute('src', reader.result);
+                document.getElementById("Image").value = reader.result;
+
+            };
+            reader.readAsDataURL(file);
+            document.getElementById('inptImageFileName').value = file.name;
+        });
     </script>
 }

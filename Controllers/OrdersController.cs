@@ -131,6 +131,7 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AddToReturns(OrderViewModel viewModel)
         {
+            await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -141,6 +142,7 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> RemoveFromReturns(OrderViewModel viewModel)
         {
+            await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -151,6 +153,7 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ClearReturns(OrderViewModel viewModel)
         {
+            await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 

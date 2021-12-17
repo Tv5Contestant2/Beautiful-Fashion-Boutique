@@ -5,8 +5,8 @@ using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.IO;
 using System.Threading.Tasks;
+using ECommerce1.Data.Enums;
 
 namespace ECommerce1.Controllers
 {
@@ -14,12 +14,14 @@ namespace ECommerce1.Controllers
     public class PromotionsController : Controller
     {
         private readonly IPromotionsService _service;
+        private readonly ICommonServices _commonServices;
         private readonly AppDBContext _appDBContext;
 
-        public PromotionsController(IPromotionsService service, AppDBContext appDBContext)
+        public PromotionsController(IPromotionsService service, AppDBContext appDBContext, ICommonServices commonServices)
         {
             _service = service;
             _appDBContext = appDBContext;
+            _commonServices = commonServices;
         }
 
         public async Task<IActionResult> Index(int page = 1)
@@ -36,52 +38,82 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public IActionResult CreatePromo()
+        [HttpGet]
+        public async Task<IActionResult> CreatePromo()
         {
-            return View();
+            var _model = await _service.InitializePromo();
+            return View(_model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePromo([Bind("Name,Description,SalePercentage,ImageFile,StartDate,EndDate")] Promos promos)
+        public async Task<IActionResult> CreatePromo([Bind] Promos model)
         {
-            await Task.Delay(0);
+            if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
-            if (!ModelState.IsValid) 
-                return View(promos);
+            if (model.StartDate == null) ModelState.AddModelError("StartDate", "The field Start Date is required.");
+            if (model.StartDate == null) ModelState.AddModelError("EndDate", "The field End Date is required.");
+            if (model.EndDate < model.StartDate) ModelState.AddModelError("EndDate", "The field End Date should not be less than the Start Date.");
+            if (model.StartDate > model.EndDate) ModelState.AddModelError("StartDate", "The field Start Date should not be greater than the End Date.");
 
-            if (promos.ImageFile != null) {
-                using (var ms = new MemoryStream())
-                {
-                    promos.ImageFile.CopyTo(ms);
-                    var fileBytes = ms.ToArray();
-                    promos.Image = Convert.ToBase64String(fileBytes);
-                }
-            }
-
-            promos.DateCreated = DateTime.Now;
-
-            _service.CreatePromo(promos);
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> UpdatePromo(long id)
-        {
-            var PromoDetails = await _service.GetPromoById(id);
-            if (PromoDetails == null) return RedirectToAction("Error", "Home");
-            return View(PromoDetails);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdatePromo(long id, [Bind("Id,Name,Description, SalePercentage")] Promos promos)
-        {
             if (!ModelState.IsValid)
             {
-                return View(promos);
+                model = await _service.InitializePromo(model);
+                return View(model);
             }
-            await _service.UpdatePromo(id, promos);
-            return RedirectToAction(nameof(Index));
+
+            model.DateCreated = DateTime.Now;
+            if (model.StatusId <= 0) model.StatusId = (int)StatusEnum.Active;
+
+            if (model.IsByCategory) model.PromoCategory = await _service.GetProductCategoryTitle((int)model.ProductCategoryId);
+            if (model.IsByGender) model.PromoCategory = await _service.GetGenderTitle((int)model.GenderId);
+
+            var _result = await _service.CreatePromo(model);
+            if (_result.Item1)
+            {
+                var _promoResult = await _service.UpdateProductsSale(model);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, _result.Item2);
+                return View("CreatePromo", model);
+            }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> UpdatePromo(long id)
+        {
+            var _result = await _service.GetPromoById(id);
+            var _model = await _service.InitializePromo(_result);
+            if (_model == null) return RedirectToAction("Error", "Home");
+            return View(_model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePromo(long id, [Bind] Promos model)
+        {
+            if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
+
+            if (model.StartDate == null) ModelState.AddModelError("StartDate", "The field Start Date is required.");
+            if (model.StartDate == null) ModelState.AddModelError("EndDate", "The field End Date is required.");
+            if (model.EndDate < model.StartDate) ModelState.AddModelError("EndDate", "The field End Date should not be less than the Start Date.");
+            if (model.StartDate > model.EndDate) ModelState.AddModelError("StartDate", "The field Start Date should not be greater than the End Date.");
+
+            if (!ModelState.IsValid)
+            {
+                model = await _service.InitializePromo(model);
+                return View(model);
+            }
+
+            if (model.StatusId <= 0) model.StatusId = (int)StatusEnum.Active;
+
+            if (model.IsByCategory) model.PromoCategory = await _service.GetProductCategoryTitle((int)model.ProductCategoryId);
+            if (model.IsByGender) model.PromoCategory = await _service.GetGenderTitle((int)model.GenderId);
+
+            await _service.UpdatePromo(id, model);
+            var _promoResult = await _service.UpdateProductsSale(model);
+            return RedirectToAction(nameof(Index));
+        }
 
         public async Task<IActionResult> DeletePromo(long id)
         {

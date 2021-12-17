@@ -29,7 +29,8 @@ namespace ECommerce1.Data.Services
                 ProductCategories = _context.ProductCategories.ToList(),
                 Sizes = _context.Sizes.OrderBy(x => x.Id).ToList(),
                 Statuses = _context.Statuses.OrderBy(x => x.Id).ToList(),
-                StockStatuses = _context.StockStatuses.OrderBy(x => x.Id).ToList()
+                StockStatuses = _context.StockStatuses.OrderBy(x => x.Id).ToList(),
+                ProductCategoryId = 1
             };
 
             return _result;
@@ -302,7 +303,6 @@ namespace ECommerce1.Data.Services
                 item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
             }
 
-
             return result;
         }
 
@@ -349,7 +349,6 @@ namespace ECommerce1.Data.Services
                 item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
             }
 
-
             return result.FirstOrDefault(x => x.Id == id);
         }
 
@@ -394,7 +393,6 @@ namespace ECommerce1.Data.Services
 
                 item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
             }
-
 
             return result.Where(x => x.GenderId == genderId && x.ProductVariants.Any(x => (colorId != 0 ? x.ColorId == colorId : true))).ToList();
         }
@@ -573,11 +571,9 @@ namespace ECommerce1.Data.Services
                     product.Quantity -= item.Quantity;
                     _context.ProductVariants.Update(product);
                 }
-
             }
 
             await _context.SaveChangesAsync();
-
         }
 
         public void CreateReview(ProductReview productReview)

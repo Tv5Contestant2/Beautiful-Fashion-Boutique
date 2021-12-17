@@ -6,14 +6,24 @@ namespace ECommerce1.Data.Services.Interfaces
 {
     public interface IPromotionsService
     {
-        public void CreatePromo(Promos promos);
+        Task<(bool, string)> CreatePromo(Promos model);
 
-        public Task<Promos> UpdatePromo(long id, Promos promos);
+        public Task<Promos> UpdatePromo(long id, Promos model);
 
         public Task DeletePromo(long id);
 
         public Task<IEnumerable<Promos>> GetAllPromos();
 
         public Task<Promos> GetPromoById(long id);
+
+        Task<Promos> InitializePromo(Promos model);
+
+        Task<Promos> InitializePromo();
+
+        Task<string> GetProductCategoryTitle(int id);
+
+        Task<string> GetGenderTitle(int id);
+
+        Task<(bool, string)> UpdateProductsSale(Promos model);
     }
 }
