@@ -190,7 +190,8 @@ namespace ECommerce1.Controllers
 
         public IActionResult CreateReview(ProductViewModel viewModel)
         {
-            var productReview = new ProductReview {
+            var productReview = new ProductReview
+            {
                 CustomersId = viewModel.CustomersId,
                 ProductId = viewModel.ProductId,
                 Review = viewModel.Review,
