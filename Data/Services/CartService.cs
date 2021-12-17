@@ -23,7 +23,6 @@ namespace ECommerce1.Data.Services
         public async Task<Cart> GetCart(string userId)
         {
             var result = await _context.Carts
-                .Include(x => x.Customers)
                 .Where(x => x.CustomersId == userId)
                 .FirstOrDefaultAsync();
 
@@ -56,19 +55,21 @@ namespace ECommerce1.Data.Services
         {
             var result = await _context.CartDetails
                 .Include(x => x.Product).ThenInclude(x => x.ProductImages)
+                //.Include(x => x.Product).ThenInclude(x => x.Colors)
+                //.Include(x => x.Product).ThenInclude(x => x.Sizes)
                 .Where(x => x.CustomersId == userId)
                 .ToListAsync();
 
-            List<CartDetails> _cart = result
-                .GroupBy(l => l.ProductId)
-                .Select(cl => new CartDetails
-                {
-                    ProductId = cl.First().ProductId,
-                    Quantity = cl.Sum(x => x.Quantity),
-                    Product = cl.First().Product
-                }).ToList();
-
-            foreach (var item in _cart)
+            //List<CartDetails> _cart = result
+            //    .GroupBy(l => l.ProductId)
+            //    .Select(cl => new CartDetails
+            //    {
+            //        ProductId = cl.First().ProductId,
+            //        Quantity = cl.Sum(x => x.Quantity),
+            //        Product = cl.First().Product
+            //    }).ToList();
+            
+            foreach (var item in result)
             {
                 if (item.Product.ProductImages.Any())
                 {
@@ -80,14 +81,23 @@ namespace ECommerce1.Data.Services
                     //No Image
                     item.Product.Image = _commonServices.NoImage;
                 }
+
+                //item.Product.Colors = _context.Colors.ToList();
+                //item.Product.Sizes = _context.Sizes.ToList();
             }
 
-            return _cart;
+            return result;
         }
 
         public async Task<IEnumerable<Wishlist>> GetWishlistItems(string userId)
         {
             var result = await _context.Wishlists
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductVariants)
+                        .ThenInclude(x => x.Size)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductVariants)
+                        .ThenInclude(x => x.Color)
                 .Include(x => x.Product).ThenInclude(x => x.ProductImages)
                 .Where(x => x.CustomersId == userId)
                 .ToListAsync();
@@ -217,16 +227,36 @@ namespace ECommerce1.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<CartDetails> GetCartItemsByProductId(long productId, string userId)
+        public async Task<CartDetails> GetCartItemsByProductId(long productId, int colorId, int sizeId, string userId)
         {
-            var result = await _context.CartDetails.ToListAsync();
-            return result.Find(x => x.ProductId == productId && x.CustomersId == userId);
+            var result = await _context.CartDetails
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductVariants)
+                        .ThenInclude(x => x.Size)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductVariants)
+                        .ThenInclude(x => x.Color)
+                .ToListAsync();
+            return result.Find(x => x.ProductId == productId
+                                 && x.ColorId == colorId
+                                 && x.SizeId == sizeId
+                                 && x.CustomersId == userId);
         }
 
         public async Task<Wishlist> GetWishlistItemsByProductId(long productId, string userId)
         {
-            var result = await _context.Wishlists.ToListAsync();
-            return result.Find(x => x.ProductId == productId && x.CustomersId == userId);
+            var result = await _context.Wishlists
+                //.Include(x => x.Product)
+                //    .ThenInclude(x => x.ProductVariants)
+                //        .ThenInclude(x => x.Size)
+                //.Include(x => x.Product)
+                //    .ThenInclude(x => x.ProductVariants)
+                //        .ThenInclude(x => x.Color)
+                .ToListAsync();
+            return result.Find(x => x.ProductId == productId
+                                 //&& x.ColorId == colorId
+                                 //&& x.SizeId == sizeId
+                                 && x.CustomersId == userId);
         }
     }
 }

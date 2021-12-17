@@ -2,6 +2,7 @@
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -258,7 +259,7 @@ namespace ECommerce1.Data.Services
                 item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
             }
 
-            return result;
+            return result.Where(x => (DateTime.Today - x.DateCreated).Days <= 15).ToList();
         }
 
         public async Task<IEnumerable<Product>> GetFeaturedProductsOnSale()
@@ -266,6 +267,9 @@ namespace ECommerce1.Data.Services
             var result = await _context.Products
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductVariants)
+                    .ThenInclude(x => x.Color)
+                .Include(x => x.ProductVariants)
+                    .ThenInclude(x => x.Size)
                 .Include(x => x.InventoryStatus)
                 .Where(x => x.IsFeaturedProduct == true && x.IsSale == true)
                 .ToListAsync();
@@ -358,6 +362,8 @@ namespace ECommerce1.Data.Services
                 .Include(x => x.ProductImages)
                 .Include(x => x.ProductVariants)
                     .ThenInclude(x => x.Color)
+                .Include(x => x.ProductVariants)
+                    .ThenInclude(x => x.Size)
                 .Include(x => x.InventoryStatus)
                 .ToListAsync();
 
@@ -566,7 +572,7 @@ namespace ECommerce1.Data.Services
 
             foreach (var item in orderDetails)
             {
-                foreach (var product in products.Where(x => x.ProductId == item.ProductId)) // must be product variant
+                foreach (var product in products.Where(x => x.ProductId == item.ProductId && x.ColorId == item.ColorId && x.SizeId == item.SizeId)) // must be product variant
                 {
                     product.Quantity -= item.Quantity;
                     _context.ProductVariants.Update(product);

@@ -11,5 +11,8 @@ namespace ECommerce1.ViewModel
     {
         public Cart Cart { get; set; }
         public IEnumerable<CartDetails> CartDetails { get; set; }
+        public IEnumerable<Color> Colors { get; set; }
+        public IEnumerable<Size> Sizes { get; set; }
+
     }
 }

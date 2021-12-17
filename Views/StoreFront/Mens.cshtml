@@ -5,7 +5,7 @@
 
 @{
     ViewData["Title"] = "Men's Collection";
-    ViewData["Description"] = "Prepare to mesmerize.Check this collection meant just for you.";
+    ViewData["Description"] = "Prepare to mesmerize. Check this collection meant just for you.";
 }
 
 @*Hero Section*@
@@ -50,7 +50,7 @@
                 </ul>
                 <div class="border-bottom my-5"></div>
                 @*Sizes*@
-                <h6 class="text-uppercase mb-4">Size </h6>
+                <h6 class="text-uppercase mb-4">Sizes </h6>
                 <ul class="list-unstyled">
                     <li class="active">
                         <a class="sidebar-link" href="@Url.Action("Mens")">
@@ -108,55 +108,61 @@
                                 <div class="product">
                                     <div class="image d-flex align-items-center justify-content-center bg-light">
                                         @{
-                                            if (item.IsSale)
-                                            {
-                                                <div class="ribbon ribbon-primary text-uppercase">Sale</div>
-                                            }
-
                                             if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
                                             {
-                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name" style="-webkit-filter: grayscale(100%); filter: grayscale(100%); ">
+                                                <div class="ribbon ribbon-warning text-uppercase mt-2">Sold Out</div>
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
                                             }
                                             else
                                             {
+                                                if (item.IsSale)
+                                                {
+                                                    <div class="ribbon ribbon-primary text-uppercase mt-2">Sale</div>
+                                                }
+
                                                 <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
                                             }
                                         }
-                                        <form asp-controller="Cart" asp-action="AddToCart">
-                                            <div class="hover-overlay d-flex align-items-center justify-content-center">
-                                                <div class="CTA d-flex align-items-center justify-content-center">
-                                                    <input type="hidden" asp-for="@Model.CartDetails.CustomersId" value="@ViewBag.CustomersId" />
-                                                    <input type="hidden" asp-for="@Model.CartDetails.ProductId" value="@item.Id" />
-                                                    <input type="hidden" asp-for="@Model.CartDetails.Quantity" value="1" />
-                                                    @{
-                                                        var _IsAdmin = false;
-                                                        if (UserManager.GetUserAsync(User).Result != null)
+                                        @*<form asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">*@
+                                        <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                            <div class="CTA d-flex align-items-center justify-content-center">
+                                                <input type="hidden" asp-for="@Model.CartDetails.CustomersId" value="@ViewBag.CustomersId" />
+                                                <input type="hidden" asp-for="@Model.CartDetails.ProductId" value="@item.Id" />
+                                                <input type="hidden" asp-for="@Model.CartDetails.Quantity" value="1" />
+                                                @{
+                                                    var _IsAdmin = false;
+                                                    if (UserManager.GetUserAsync(User).Result != null)
+                                                    {
+                                                        if (UserManager.GetUserAsync(User).Result.IsAdmin != null)
                                                         {
-                                                            if (UserManager.GetUserAsync(User).Result.IsAdmin != null)
-                                                            {
-                                                                if ((bool)UserManager.GetUserAsync(User).Result.IsAdmin) _IsAdmin = true;
-                                                            }
+                                                            if ((bool)UserManager.GetUserAsync(User).Result.IsAdmin) _IsAdmin = true;
+                                                        }
 
-                                                            if (_IsAdmin == true)
+                                                        if (_IsAdmin == true)
+                                                        {
+                                                            <a class="nav nav-link" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none">
+                                                                <i class="far fa-edit"></i>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (item.StockStatusId != (int)StockStatusEnum.OutOfStock)
                                                             {
-                                                                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none">
-                                                                    <i class="far fa-edit"></i>
-                                                                </a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <button type="submit" class="btn btn-link">
+                                                                <a class="nav nav-link" onclick="ShowProductView(@item.Id)" style="border: none">
                                                                     <i class="fas fa-shopping-cart"></i>
-                                                                </button>
+                                                                </a>
                                                             }
                                                         }
                                                     }
-                                                    <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
-                                                        <i class="fas fa-search"></i>
-                                                    </button>
-                                                </div>
+
+                                                }
+                                                <a class="nav nav-link" style="border: none" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                    <i class="fas fa-search"></i>
+                                                </a>
                                             </div>
-                                        </form>
+
+                                        </div>
+                                        @*</form>*@
                                     </div>
                                     <div class="pt-3">
                                         <small class="text-muted">@item.Category.Title</small><a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
@@ -172,6 +178,125 @@
                                                 <span class="text-muted">Php @item.Price</span>
                                             }
                                         }
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*Modal*@
+                            <div class="modal fade" id="productView_@item.Id" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-xl modal-dialog-centered">
+                                    <div class="modal-content rounded-0 border-0">
+                                        <div class="modal-body p-5 shadow position-relative">
+                                            <div class="row align-items-center gx-5">
+                                                <div class="col-lg-5">
+                                                    @{
+                                                        if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
+                                                        {
+                                                            <div class="ribbon ribbon-warning text-uppercase mt-2">Sold Out</div>
+                                                            <img class="img-fluid d-block" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                                                        }
+                                                        else
+                                                        {
+                                                            if (item.IsSale)
+                                                            {
+                                                                <div class="ribbon ribbon-primary text-uppercase mt-2">Sale</div>
+                                                            }
+
+                                                            <img class="img-fluid d-block" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
+                                                        }
+                                                    }
+                                                </div>
+                                                <div class="col-lg-7">
+                                                    <button class="close modal-close p-4 border-0" type="button" data-bs-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">
+                                                            <svg class="svg-icon text-white mt-1">
+                                                                <use xlink:href="#close-1"> </use>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                    <div class="my-lg-5 my-md-4">
+                                                        <h2>@item.Name</h2>
+                                                        <ul class="list-inline mb-4">
+                                                            @{
+                                                                if (item.IsSale)
+                                                                {
+                                                                    <li class="text-muted"><del>Php @item.Price</del></li>
+                                                                    <li class="text-danger h6">Php @item.PriceOnSale</li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li class="text-muted">Php @item.Price</li>
+                                                                }
+                                                            }
+                                                        </ul>
+                                                        <p class="text-muted">@item.Description</p>
+                                                        @if (item.StockStatusId != (int)StockStatusEnum.OutOfStock)
+                                                        {
+                                                            <form asp-controller="Cart" asp-action="AddToCart">
+                                                                <div class="align-items-center justify-content-start mb-4">
+                                                                    <span class="mb-2">Quantity</span>
+                                                                    <div class="quantity d-flex align-items-center mt-2">
+                                                                        <div class="dec-btn" onclick="decrease(this)">-</div>
+                                                                        <input class="quantity-no" type="text" value="1" asp-for="CartDetails.Quantity" />
+                                                                        <div class="inc-btn" onclick="increase(this)">+</div>
+                                                                    </div>
+                                                                    <ul class="list-inline d-flex align-items-center my-4">
+                                                                        @if (item.ProductVariants.Any(x => x.Size != null))
+                                                                        {
+                                                                            <li class="list-inline-item">
+                                                                                Sizes
+                                                                                @Html.DropDownListFor(x => Model.CartDetails.SizeId, new SelectList(item.ProductVariants.Select(x => x.Size).Distinct(), "Id", "Title"),
+        htmlAttributes: new { @class = "form-control choices", id = "SizeId" })
+                                                                            </li>
+                                                                        }
+                                                                        <li class="list-inline-item">
+                                                                            Colors
+                                                                            @Html.DropDownListFor(x => Model.CartDetails.ColorId, new SelectList(item.ProductVariants.Select(x => x.Color).Distinct(), "Id", "Title"),
+   htmlAttributes: new { @class = "form-control choices", id = "ColorId" })
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <ul class="list-inline">
+                                                                    <li class="list-inline-item">
+                                                                        <input type="hidden" asp-for="CartDetails.CustomersId" value="@ViewBag.CustomersId" />
+                                                                        <input type="hidden" asp-for="CartDetails.ProductId" value="@item.Id" />
+                                                                        <input type="hidden" asp-for="Wishlists.CustomersId" value="@ViewBag.CustomersId" />
+                                                                        <input type="hidden" asp-for="Wishlists.ProductId" value="@item.Id" />
+                                                                        @{
+                                                                            @if (item.StockStatusId != (int)StockStatusEnum.OutOfStock)
+                                                                            {
+                                                                                <button type="submit" class="btn btn-primary px-5">
+                                                                                    <svg class="svg-icon svg-icon-sm svg-icon-heavy me-2">
+                                                                                        <use xlink:href="#cart-1"> </use>
+                                                                                    </svg>Add to cart
+                                                                                </button>
+                                                                            }
+
+                                                                            if (Model.CurrentWishlists.Any(x => x.ProductId == item.Id))
+                                                                            {
+                                                                                <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
+                                                                                    <i class="fas fa-heart me-2"></i>Remove from wishlist
+                                                                                </button>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
+                                                                                    <i class="far fa-heart me-2"></i>Add to wishlist
+                                                                                </button>
+                                                                            }
+                                                                        }
+                                                                    </li>
+                                                                </ul>
+                                                            </form>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="h6 text-danger">This item is currently out of stock.</p>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -214,6 +339,10 @@
             });
         });
     });
+
+    function ShowProductView(productId) {
+        $('#productView_' + productId).modal('show');
+    }
 
     function setProductId(productId) {
         document.getElementById('hidden_product_id').value = document.getElementById(productId).getAttribute('data-subcat');

@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Services;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +18,7 @@ namespace ECommerce1.Controllers
         private readonly IOrderService _orderService;
         private readonly IMessageService _messageService;
         private readonly IProductsService _productService;
+        private readonly IProductCategoriesService _productCategoriesService;
         private readonly UserManager<User> _userManager;
 
         public ProfileController(IProfileService service
@@ -24,6 +26,7 @@ namespace ECommerce1.Controllers
             , IOrderService orderService
             , IMessageService messageService
             , IProductsService productService
+            , IProductCategoriesService productCategoriesService
             , UserManager<User> userManager)
         {
             _service = service;
@@ -31,6 +34,7 @@ namespace ECommerce1.Controllers
             _orderService = orderService;
             _messageService = messageService;
             _productService = productService;
+            _productCategoriesService = productCategoriesService;
             _userManager = userManager;
         }
 
@@ -126,16 +130,19 @@ namespace ECommerce1.Controllers
             var order = _orderService.GetOrderById(transactionId.ToString());
             var orderDetails = await _orderService.GetOrderDetailsById(transactionId.ToString());
 
-            var viewModel = new OrderViewModel();
-            viewModel.CustomersId = userId;
-            viewModel.Customer = user.FirstName;
-            viewModel.Address = user.AddressCity;
-            viewModel.TransactionId = transactionId;
-            viewModel.DeliveryStatusId = order.DeliveryStatusId;
-            viewModel.OrderStatusId = order.OrderStatusId;
-            viewModel.OrderDetails = orderDetails;
-            viewModel.OrderStatus = order.OrderStatus;
-
+            var viewModel = new OrderViewModel() {
+                CustomersId = userId,
+                Customer = user.FirstName,
+                Address = user.AddressCity,
+                TransactionId = transactionId,
+                DeliveryStatusId = order.DeliveryStatusId,
+                OrderStatusId = order.OrderStatusId,
+                OrderDetails = orderDetails,
+                OrderStatus = order.OrderStatus,
+                Colors = await _productCategoriesService.GetColors(),
+                Sizes = await _productCategoriesService.GetSizes()
+            };
+            
             ViewBag.Customer = user;
             return View(viewModel);
         }

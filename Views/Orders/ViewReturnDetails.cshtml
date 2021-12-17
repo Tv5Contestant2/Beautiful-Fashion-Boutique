@@ -70,7 +70,7 @@
                                                     </button>
                                                     }
                                                 </form>
-                                                <form asp-controller="Orders" asp-action="ApproveReturn" asp-route-id="@Model.TransactionId">
+                                                <form asp-controller="Orders" asp-action="DeclineReturn" asp-route-id="@Model.TransactionId">
                                                     <input type="hidden" asp-for="Returns.ProductId" value="@item.ProductId" />
                                                     <input type="hidden" asp-for="Returns.ChangeProductsId" value="@item.ChangeProductsId" />
                                                     @*@if (item.ReturnStatus.Id != (int)OrderStatusEnum.Approved)

@@ -194,6 +194,7 @@ namespace ECommerce1.Controllers
                 CustomersId = viewModel.CustomersId,
                 ProductId = viewModel.ProductId,
                 Review = viewModel.Review,
+                Rating = viewModel.Rating,
                 ReviewDate = DateTime.Now
             };
 

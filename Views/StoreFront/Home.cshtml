@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model CartDetails
+@using ECommerce1.Data.Enums
 @inject UserManager<User> UserManager
 
 @{
@@ -88,36 +89,11 @@
                                         <div class="product mb-5">
                                             <div class="image bg-light d-flex align-items-center justify-content-center">
                                                 <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
-                                                <form asp-controller="Cart" asp-action="AddToCart">
+                                                <form asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
                                                     <div class="hover-overlay d-flex align-items-center justify-content-center">
                                                         <div class="CTA d-flex align-items-center justify-content-center">
-                                                            <input type="hidden" asp-for="CustomersId" value="@ViewBag.CustomersId" />
-                                                            <input type="hidden" asp-for="ProductId" value="@item.Id" />
-                                                            <input type="hidden" asp-for="Quantity" value="1" />
-                                                            @{
-                                                                var _IsAdmin = false;
-                                                                if (UserManager.GetUserAsync(User).Result != null)
-                                                                {
-                                                                    if (UserManager.GetUserAsync(User).Result.IsAdmin != null)
-                                                                    {
-                                                                        if ((bool)UserManager.GetUserAsync(User).Result.IsAdmin) _IsAdmin = true;
-                                                                    }
-
-                                                                    if (_IsAdmin == true)
-                                                                    {
-                                                                        <a asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none">
-                                                                            <i class="far fa-edit"></i>
-                                                                        </a>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <button type="submit" class="btn btn-link">
-                                                                            <i class="fas fa-shopping-cart"></i>
-                                                                        </button>
-                                                                    }
-                                                                }
-                                                            }
-                                                            <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                            
+                                                            <button class="btn btn-link active">
                                                                 <i class="fas fa-search"></i>
                                                             </button>
                                                         </div>

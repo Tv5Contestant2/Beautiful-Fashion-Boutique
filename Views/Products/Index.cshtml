@@ -145,17 +145,18 @@
                         <div class="product">
                             <div class="image align-items-center justify-content-center bg-light">
                                 @{
-                                    if (item.IsSale)
-                                    {
-                                        <div class="ribbon ribbon-primary text-uppercase">Sale</div>
-                                    }
-
                                     if (item.StockStatusId == (int)StockStatusEnum.OutOfStock)
                                     {
-                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name" style="-webkit-filter: grayscale(100%); filter: grayscale(100%); ">
+                                        <div class="ribbon ribbon-warning text-uppercase mt-2">Sold Out</div>
+                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
                                     }
                                     else
                                     {
+                                        if (item.IsSale)
+                                        {
+                                            <div class="ribbon ribbon-primary text-uppercase mt-2">Sale</div>
+                                        }
+
                                         <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
                                     }
                                 }

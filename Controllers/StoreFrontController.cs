@@ -97,6 +97,7 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             var sizes = await _productCategoriesService.GetSizesPerCategory(categoryId);
             var colors = await _productCategoriesService.GetColors();
+            var wishlists = await _cartService.GetWishlistItems(userId);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
@@ -108,6 +109,8 @@ namespace ECommerce1.Controllers
 
             var viewModel = new ProductViewModel
             {
+                CartDetails = new CartDetails(),
+                CurrentWishlists = wishlists,
                 ItemPerPage = 12,
                 Products = products.ToList(),
                 CurrentPage = page
@@ -124,13 +127,14 @@ namespace ECommerce1.Controllers
             if (categoryId == 0)
                 products = await _service.GetAllProductsByGender(colorId, (int)GenderEnum.Women);
             else if (categoryId != 0 && sizeId != 0)
-                products = await _service.GetProductsBySize(categoryId, sizeId, colorId, (int)GenderEnum.Women);
+                products = await _service.GetProductsBySize(categoryId, sizeId, colorId, (int)GenderEnum.Men);
             else
-                products = await _service.GetProductsByCategory(categoryId, colorId, (int)GenderEnum.Women);
+                products = await _service.GetProductsByCategory(categoryId, colorId, (int)GenderEnum.Men);
 
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             var sizes = await _productCategoriesService.GetSizesPerCategory(categoryId);
             var colors = await _productCategoriesService.GetColors();
+            var wishlists = await _cartService.GetWishlistItems(userId);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
@@ -142,6 +146,8 @@ namespace ECommerce1.Controllers
 
             var viewModel = new ProductViewModel
             {
+                CartDetails = new CartDetails(),
+                CurrentWishlists = wishlists,
                 ItemPerPage = 12,
                 Products = products.ToList(),
                 CurrentPage = page
@@ -165,6 +171,7 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             var sizes = await _productCategoriesService.GetSizesPerCategory(categoryId);
             var colors = await _productCategoriesService.GetColors();
+            var wishlists = await _cartService.GetWishlistItems(userId);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
@@ -176,8 +183,10 @@ namespace ECommerce1.Controllers
 
             var viewModel = new ProductViewModel
             {
+                CartDetails = new CartDetails(),
+                CurrentWishlists = wishlists,
                 ItemPerPage = 12,
-                Products = products,
+                Products = products.ToList(),
                 CurrentPage = page
             };
 
@@ -199,6 +208,7 @@ namespace ECommerce1.Controllers
             var productCategories = await _productCategoriesService.GetAllProductCategories();
             var sizes = await _productCategoriesService.GetSizesPerCategory(categoryId);
             var colors = await _productCategoriesService.GetColors();
+            var wishlists = await _cartService.GetWishlistItems(userId);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
@@ -210,8 +220,10 @@ namespace ECommerce1.Controllers
 
             var viewModel = new ProductViewModel
             {
+                CartDetails = new CartDetails(),
+                CurrentWishlists = wishlists,
                 ItemPerPage = 12,
-                Products = products,
+                Products = products.ToList(),
                 CurrentPage = page
             };
 
@@ -260,8 +272,14 @@ namespace ECommerce1.Controllers
             {
                 CartDetails = new CartDetails(),
                 ProductReviews = productReviews, 
-                Wishlists = new Wishlist()
-            };
+                Wishlists = new Wishlist(),
+                Colors = productDetails.ProductVariants.Select(x => x.Color).Distinct(),
+                Size = productDetails.ProductVariants.Select(x => x.Size).Distinct(),
+        };
+
+
+            var _result = viewModel.Size.FirstOrDefault();
+
 
             return View(viewModel);
         }
@@ -269,6 +287,8 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> SendMessage(MessageViewModel viewModel)
         {
             await _emailService.SendMessage(viewModel);
+
+            ViewBag.FacebookLink = _administratorService.GetFacebookLink();
             return View("MessageSuccess");
         }
 

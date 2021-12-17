@@ -33,7 +33,7 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task RemoveFromWishlist(long productId, string userId);
 
-        public Task<CartDetails> GetCartItemsByProductId(long productId, string userId);
+        public Task<CartDetails> GetCartItemsByProductId(long productId, int colorId, int sizeId, string userId);
 
         public Task<Wishlist> GetWishlistItemsByProductId(long productId, string userId);
 

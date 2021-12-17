@@ -155,54 +155,6 @@ namespace ECommerce1.Data
 
                 #endregion Gender
 
-                #region Order Status
-
-                if (!context.OrderStatuses.Any())
-                {
-                    context.OrderStatuses.AddRange(new List<OrderStatus>()
-                    {
-                       new OrderStatus()
-                        {
-                            Title = "Pending Request",
-                            Class = "bg-warning"
-                        },
-                       new OrderStatus()
-                        {
-                            Title = "Approved",
-                            Class = "bg-success"
-                        },
-                        new OrderStatus()
-                        {
-                            Title = "Cancelled",
-                            Class = "bg-danger"
-                        },
-                        new OrderStatus()
-                        {
-                            Title = "Pending Payment",
-                            Class = "bg-warning"
-                        },
-                        new OrderStatus()
-                        {
-                            Title = "Completed",
-                            Class = "bg-success"
-                        },
-                        new OrderStatus()
-                        {
-                            Title = "Shipped",
-                            Class = "bg-secondary"
-                        },
-                        new OrderStatus()
-                        {
-                            Title = "Created",
-                            Class = "bg-info"
-                        },
-                    });
-
-                    context.SaveChanges();
-                }
-
-                #endregion Order Status
-
                 #region Payment Method
 
                 if (!context.PaymentMethods.Any())
@@ -252,26 +204,6 @@ namespace ECommerce1.Data
                 }
 
                 #endregion Product Category
-
-                //#region Promos
-                //if (!context.Promos.Any())
-                //{
-                //    context.Promos.AddRange(new List<Promos>()
-                //    {
-                //        new Promos()
-                //        {
-                //            Name = "25% off",
-                //            Description = "25% off on all brands",
-                //            StartDate = DateTime.Now,
-                //            EndDate = DateTime.Now,
-                //            SalePercentage = 25,
-                //            Image = "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"
-                //}
-                //    }); ;
-
-                //    context.SaveChanges();
-                //}
-                //#endregion Promos
 
                 #region Sizes
 
@@ -360,27 +292,6 @@ namespace ECommerce1.Data
                 }
 
                 #endregion Sizes
-
-                //#region Status
-
-                //if (!context.Statuses.Any())
-                //{
-                //    context.Statuses.AddRange(new List<Status>()
-                //    {
-                //        new Status()
-                //        {
-                //            Title = "Active"
-                //        },
-                //        new Status()
-                //        {
-                //            Title = "Inactive"
-                //        }
-                //    });
-
-                //    context.SaveChanges();
-                //}
-
-                //#endregion Status
 
                 #region Stock Status
 

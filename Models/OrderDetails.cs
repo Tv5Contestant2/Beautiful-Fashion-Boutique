@@ -11,6 +11,8 @@ namespace ECommerce1.Models
 
         public Guid TransactionId { get; set; }
         public long ProductId { get; set; }
+        public int ColorId { get; set; }
+        public int SizeId { get; set; }
         public int Quantity { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]

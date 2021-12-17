@@ -22,13 +22,19 @@ namespace ECommerce1.ViewModel
         public int ProductCategoryId { get; set; }
 
         public string Review { get; set; }
+        public int Rating { get; set; }
         public long ProductId { get; set; }
+        public int ColorId { get; set; }
+        public int SizeId { get; set; }
         public string CustomersId { get; set; }
 
         public CartDetails CartDetails { get; set; }
         public Wishlist Wishlists { get; set; }
+        public IEnumerable<Color> Colors { get; set; }
+        public IEnumerable<Size> Size { get; set; }
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<ProductReview> ProductReviews { get; set; }
+        public IEnumerable<Wishlist> CurrentWishlists { get; set; }
 
         #region Pagination 
         public int ItemPerPage { get; set; }

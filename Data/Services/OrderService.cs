@@ -104,6 +104,10 @@ namespace ECommerce1.Data.Services
             var result = await _context.OrdersDetails
                 .Include(x => x.Product)
                     .ThenInclude(x => x.ProductImages)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.Colors)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.Sizes)
                 .Where(x => x.TransactionId.ToString() == transactionId)
                 .ToListAsync();
 

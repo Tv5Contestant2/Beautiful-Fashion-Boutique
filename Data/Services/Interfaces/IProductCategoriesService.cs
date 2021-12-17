@@ -11,5 +11,7 @@ namespace ECommerce1.Data.Services
         public Task<IEnumerable<Size>> GetSizesPerCategory(int categoryId);
 
         public Task<IEnumerable<Color>> GetColors();
+
+        public Task<IEnumerable<Size>> GetSizes();
     }
 }

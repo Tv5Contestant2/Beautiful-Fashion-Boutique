@@ -1,5 +1,6 @@
 ﻿using Adyen.Model.Checkout;
 using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
@@ -20,6 +21,7 @@ namespace ECommerce1.Controllers
         private readonly IEmailService _emailService;
         private readonly IOrderService _orderService;
         private readonly IProductsService _productsService;
+        private readonly IProductCategoriesService _productCategoriesService;
         private readonly IAdyenService _adyenService;
         private readonly UserManager<User> _userManager;
 
@@ -29,12 +31,14 @@ namespace ECommerce1.Controllers
             , IEmailService emailService
             , IOrderService orderService
             , IProductsService productsService
+            , IProductCategoriesService productCategoriesService
             , IAdyenService adyenService)
         {
             _service = service;
             _emailService = emailService;
             _orderService = orderService;
             _productsService = productsService;
+            _productCategoriesService = productCategoriesService;
             _userManager = userManager;
             _adyenService = adyenService;
         }
@@ -50,6 +54,8 @@ namespace ECommerce1.Controllers
 
             cartViewModel.Cart = cart;
             cartViewModel.CartDetails = cartDetails;
+            cartViewModel.Colors = await _productCategoriesService.GetColors();
+            cartViewModel.Sizes = await _productCategoriesService.GetSizes();
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
@@ -75,7 +81,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
-            var cartItems = await _service.GetCartItemsByProductId(cartDetails.ProductId, userId);
+            var cartItems = await _service.GetCartItemsByProductId(cartDetails.ProductId, cartDetails.ColorId, cartDetails.SizeId, userId);
 
             if (cartItems == null)
                 _service.AddToCartItems(cartDetails);
@@ -121,7 +127,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
-            var cartDetails = await _service.GetCartItemsByProductId(id, userId);
+            var cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
             if (cartDetails == null) return RedirectToAction("Error", "Home");
 
             //increment quantity
@@ -166,7 +172,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
-            var _cartDetails = await _service.GetCartItemsByProductId(id, userId);
+            var _cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
             if (_cartDetails == null) return RedirectToAction("Error", "Home");
 
             var wishlist = new Wishlist();
@@ -183,7 +189,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> RemoveFromCartByQty(long id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cartDetails = await _service.GetCartItemsByProductId(id, userId);
+            var cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
             if (cartDetails == null) return RedirectToAction("Error", "Home");
 
             //decrement quantity
@@ -201,7 +207,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> RemoveFromCart(long id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var _cartDetails = await _service.GetCartItemsByProductId(id, userId);
+            var _cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
             if (_cartDetails == null) return RedirectToAction("Error", "Home");
 
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
@@ -214,7 +220,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> RemoveFromCartConfirmed(long id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cartDetails = await _service.GetCartItemsByProductId(id, userId);
+            var cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
             if (cartDetails == null) return RedirectToAction("Error", "Home");
 
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
@@ -251,6 +257,8 @@ namespace ECommerce1.Controllers
                 ViewBag.CartCount = await _service.GetCartTotalQty(userId);
                 ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
                 ViewBag.CustomersId = userId;
+                cartViewModel.Colors = await _productCategoriesService.GetColors();
+                cartViewModel.Sizes = await _productCategoriesService.GetSizes();
 
                 // Update Cart
                 await _service.UpdateCart(userId, cart);
@@ -291,6 +299,8 @@ namespace ECommerce1.Controllers
                     TransactionId = transactionId,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
+                    ColorId = item.ColorId,
+                    SizeId = item.SizeId,
                     SubTotal = (item.Quantity * item.Product.Price),
                 };
 
@@ -329,7 +339,8 @@ namespace ECommerce1.Controllers
             ViewBag.CartCount = 0;
 
             // Send E-Receipt
-            await _emailService.SendReceipt(user.Email, orderDetails, order);
+            if (modeOfPayment != 0)
+                await _emailService.SendReceipt(user.Email, orderDetails, order);
 
             if (cart.IsGCash)
             {

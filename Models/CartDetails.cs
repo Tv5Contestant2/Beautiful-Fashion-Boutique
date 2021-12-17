@@ -14,5 +14,6 @@ namespace ECommerce1.Models
         public string CustomersId { get; set; }
 
         public Product Product { get; set; }
+        public ProductVariant ProductVariants { get; set; }
     }
 }

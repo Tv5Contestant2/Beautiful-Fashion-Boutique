@@ -40,5 +40,10 @@ namespace ECommerce1.Data.Services
         {
             return await _context.Colors.OrderBy(x => x.Title).ToListAsync();
         }
+
+        public async Task<IEnumerable<Size>> GetSizes()
+        {
+            return await _context.Sizes.OrderBy(x => x.Title).ToListAsync();
+        }
     }
 }

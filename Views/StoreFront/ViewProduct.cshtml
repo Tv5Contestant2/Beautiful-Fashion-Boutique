@@ -39,9 +39,16 @@
                     <div class="col-lg-6 mb-5 mb-lg-0">
                         <div class="product position-relative mb-3">
                             @{
-                                if (ViewBag.Product.IsSale)
+                                if (ViewBag.Product.StockStatusId == (int)StockStatusEnum.OutOfStock)
                                 {
-                                    <div class="ribbon ribbon-primary text-uppercase">Sale  </div>
+                                    <div class="ribbon ribbon-warning text-uppercase mt-2">Sold Out</div>
+                                }
+                                else
+                                {
+                                    if (ViewBag.Product.IsSale)
+                                    {
+                                        <div class="ribbon ribbon-primary text-uppercase mt-2">Sale</div>
+                                    }
                                 }
                             }
                             @*Image Slider*@
@@ -67,7 +74,7 @@
                                 @{
                                     foreach (var image in ViewBag.Product.ProductImages)
                                     {
-                                        <div class="swiper-slide swiper-slide-visible swiper-slide-active" role="group" aria-label="@image.Id / @ViewBag.Product.ProductImages.Count" style="width: 70.25px; margin-right: 10px;"><img class="img-fluid d-block mx-auto" src="@String.Format("data:image/jpg;base64,{0}", image.Image)" ></div>
+                                        <div class="swiper-slide swiper-slide-visible swiper-slide-active" role="group" aria-label="@image.Id / @ViewBag.Product.ProductImages.Count" style="width: 70.25px; margin-right: 10px;"><img class="img-fluid d-block mx-auto" src="@String.Format("data:image/jpg;base64,{0}", image.Image)"></div>
                                     }
                                 }
                             </div>
@@ -99,13 +106,6 @@
                                     @{
                                         if (Model.ProductReviews.Count() > 0)
                                         {
-                                            <ul class="list-inline mb-0 me-3 small">
-                                                <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i></li>
-                                                <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i></li>
-                                                <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i></li>
-                                                <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i></li>
-                                                <li class="list-inline-item m-0"><i class="far fa-star small text-primary"></i></li>
-                                            </ul>
                                             <p class="small text-muted text-uppercase fw-bold mb-0">@Model.ProductReviews.Count() &nbsp; reviews</p>
                                         }
                                         else
@@ -117,59 +117,82 @@
                             </div>
                         </div>
                         <p class="text-small text-muted mb-4">@ViewBag.Product.Description</p>
-                        <form asp-controller="Cart" asp-action="AddToCart">
 
-                            @{
-                                if (_IsAdmin != true)
-                                {
-
-                                    <div class="d-flex align-items-center justify-content-start mb-4">
-                                        <div class="quantity d-flex align-items-center me-4">
-                                            <div class="dec-btn" onclick="decrease(this)">-</div>
-                                            <input class="quantity-no" type="text" value="1" asp-for="CartDetails.Quantity" />
-                                            <div class="inc-btn" onclick="increase(this)">+</div>
-                                        </div>
-                                        <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-control js-detailsize choices__input" name="detailsize" hidden="" tabindex="-1" data-choice="active"><option value="">Select size</option></select><div class="choices__list choices__list--single"><div class="choices__item choices__placeholder choices__item--selectable" data-item="" data-id="1" data-value="" data-custom-properties="null" aria-selected="true">Select size</div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" role="listbox"><div id="choices--detailsize-cz-item-choice-3" class="choices__item choices__item--choice is-selected choices__placeholder choices__item--selectable is-highlighted" role="option" data-choice="" data-id="3" data-value="" data-select-text="" data-choice-selectable="" aria-selected="true">Select size</div><div id="choices--detailsize-cz-item-choice-1" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="1" data-value="Large" data-select-text="" data-choice-selectable="">Large</div><div id="choices--detailsize-cz-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="Medium" data-select-text="" data-choice-selectable="">Medium</div><div id="choices--detailsize-cz-item-choice-4" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="4" data-value="Small" data-select-text="" data-choice-selectable="">Small</div><div id="choices--detailsize-cz-item-choice-5" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="5" data-value="X-Large" data-select-text="" data-choice-selectable="">X-Large</div></div></div></div>
-                                    </div>
-                                }}
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <input type="hidden" asp-for="CartDetails.CustomersId" value="@ViewBag.CustomersId" />
-                                    <input type="hidden" asp-for="CartDetails.ProductId" value="@ViewBag.Product.Id" />
-                                    <input type="hidden" asp-for="Wishlists.CustomersId" value="@ViewBag.CustomersId" />
-                                    <input type="hidden" asp-for="Wishlists.ProductId" value="@ViewBag.Product.Id" />
+                        @{
+                            if (ViewBag.Product.StockStatusId != (int)StockStatusEnum.OutOfStock)
+                            {
+                                <form asp-controller="Cart" asp-action="AddToCart">
                                     @{
-                                        if (_IsAdmin == true)
+                                        if (_IsAdmin != true)
                                         {
-                                            <a class="btn btn-primary px-5" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@ViewBag.Product.Id" style="border: none">
-                                                <i class="far fa-edit"></i>&nbsp;Edit Product
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <button type="submit" class="btn btn-primary px-5">
-                                                <svg class="svg-icon svg-icon-sm svg-icon-heavy me-2">
-                                                    <use xlink:href="#cart-1"> </use>
-                                                </svg>Add to cart
-                                            </button>
+                                            <div class="col-7 align-items-center justify-content-start mb-4">
+                                                <span class="mb-2">Quantity</span>
+                                                <div class="col-7 quantity d-flex align-items-center mt-2">
+                                                    <div class="dec-btn" onclick="decrease(this)">-</div>
+                                                    <input class="quantity-no" type="text" value="1" asp-for="CartDetails.Quantity" />
+                                                    <div class="inc-btn" onclick="increase(this)">+</div>
+                                                </div>
+                                                <ul class="list-inline d-flex align-items-center my-4">
+                                                    <li class="list-inline-item mt-2">
+                                                        <span class="mb-2">Colors</span>
+                                                        @Html.DropDownListFor(x => Model.CartDetails.ColorId, new SelectList(Model.Colors, "Id", "Title"),
+htmlAttributes: new { @class = "form-control choices", id = "ColorId" })
+                                                    </li>
+                                                    @if (Model.Size.FirstOrDefault() != null)
+                                                    {
+                                                        <li class="list-inline-item mt-2">
+                                                            <span class="mb-2">Sizes</span>
+                                                            @Html.DropDownListFor(x => Model.CartDetails.SizeId, new SelectList(Model.Size, "Id", "Title"),
+htmlAttributes: new { @class = "form-control choices", id = "SizeId" })
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }}
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">
+                                            <input type="hidden" asp-for="CartDetails.CustomersId" value="@ViewBag.CustomersId" />
+                                            <input type="hidden" asp-for="CartDetails.ProductId" value="@ViewBag.Product.Id" />
+                                            <input type="hidden" asp-for="Wishlists.CustomersId" value="@ViewBag.CustomersId" />
+                                            <input type="hidden" asp-for="Wishlists.ProductId" value="@ViewBag.Product.Id" />
+                                            @{
+                                                if (_IsAdmin == true)
+                                                {
+                                                    <a class="btn btn-primary px-5" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@ViewBag.Product.Id" style="border: none">
+                                                        <i class="far fa-edit"></i>&nbsp;Edit Product
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit" class="btn btn-primary px-5">
+                                                        <svg class="svg-icon svg-icon-sm svg-icon-heavy me-2">
+                                                            <use xlink:href="#cart-1"> </use>
+                                                        </svg>Add to cart
+                                                    </button>
 
-                                            if (ViewBag.IsProductExist)
-                                            {
-                                                <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
-                                                    <i class="fas fa-heart me-2"></i>Remove from wishlist
-                                                </button>
+                                                    if (ViewBag.IsProductExist)
+                                                    {
+                                                        <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
+                                                            <i class="fas fa-heart me-2"></i>Remove from wishlist
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
+                                                            <i class="far fa-heart me-2"></i>Add to wishlist
+                                                        </button>
+                                                    }
+                                                }
                                             }
-                                            else
-                                            {
-                                                <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
-                                                    <i class="far fa-heart me-2"></i>Add to wishlist
-                                                </button>
-                                            }
-                                        }
-                                    }
-                                </li>
-                            </ul>
-                        </form>
+                                        </li>
+                                    </ul>
+                                </form>
+                            }
+                            else
+                            {
+                                <p class="h6 text-danger">This product is currently out of stock.</p>
+                            }
+                        }
                     </div>
                 </div>
             </div>
@@ -202,9 +225,12 @@
                                                     <div class="col-9 review-text">
                                                         <h6>@customerName</h6>
                                                         <div class="mb-2">
-                                                            @*<i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i><i class="small fas fa-star text-primary"></i>*@
-                                                            <i class="small fas fa-star text-primary" id="1"></i>
-                                                            <i class="small fas fa-star text-primary" id="2"></i>
+                                                            @{
+
+                                                                <ul class="list-inline mb-0 me-3 small">
+                                                                    <li class="list-inline-item m-0"><i class="fas fa-star small text-primary"></i>&nbsp;@item.Rating.ToString("#.0") / 5.0</li>
+                                                                </ul>
+                                                            }
                                                             <div class="result"></div>
 
                                                         </div>
@@ -247,7 +273,7 @@
                                                             <p>How do you find this product?</p>
                                                             <textarea class="rounded form-control" rows="6" asp-for="Review"></textarea>
                                                             <label class="form-label">Rating</label>
-                                                            <input class="form-control" type="number" max="5" min="0" value="0"/>
+                                                            <input class="form-control" type="number" max="5" min="1" value="1" asp-for="Rating" />
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="submit" class="btn btn-primary">Submit Review</button>
