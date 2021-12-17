@@ -8,7 +8,7 @@ namespace ECommerce1.Data.Services.Interfaces
     {
         Task<(bool, string)> CreatePromo(Promos model);
 
-        public Task<Promos> UpdatePromo(long id, Promos promos);
+        public Task<Promos> UpdatePromo(long id, Promos model);
 
         public Task DeletePromo(long id);
 
@@ -23,5 +23,7 @@ namespace ECommerce1.Data.Services.Interfaces
         Task<string> GetProductCategoryTitle(int id);
 
         Task<string> GetGenderTitle(int id);
+
+        Task<(bool, string)> UpdateProductsSale(Promos model);
     }
 }

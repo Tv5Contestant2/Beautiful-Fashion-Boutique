@@ -48,8 +48,6 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePromo([Bind] Promos model)
         {
-            await Task.Delay(0);
-
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
             if (model.StartDate == null) ModelState.AddModelError("StartDate", "The field Start Date is required.");
@@ -70,7 +68,11 @@ namespace ECommerce1.Controllers
             if (model.IsByGender) model.PromoCategory = await _service.GetGenderTitle((int)model.GenderId);
 
             var _result = await _service.CreatePromo(model);
-            if (_result.Item1) { return RedirectToAction(nameof(Index)); }
+            if (_result.Item1)
+            {
+                var _promoResult = await _service.UpdateProductsSale(model);
+                return RedirectToAction(nameof(Index));
+            }
             else
             {
                 ModelState.AddModelError(string.Empty, _result.Item2);
@@ -78,21 +80,38 @@ namespace ECommerce1.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> UpdatePromo(long id)
         {
-            var PromoDetails = await _service.GetPromoById(id);
-            if (PromoDetails == null) return RedirectToAction("Error", "Home");
-            return View(PromoDetails);
+            var _result = await _service.GetPromoById(id);
+            var _model = await _service.InitializePromo(_result);
+            if (_model == null) return RedirectToAction("Error", "Home");
+            return View(_model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdatePromo(long id, [Bind("Id,Name,Description, SalePercentage")] Promos promos)
+        public async Task<IActionResult> UpdatePromo(long id, [Bind] Promos model)
         {
+            if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
+
+            if (model.StartDate == null) ModelState.AddModelError("StartDate", "The field Start Date is required.");
+            if (model.StartDate == null) ModelState.AddModelError("EndDate", "The field End Date is required.");
+            if (model.EndDate < model.StartDate) ModelState.AddModelError("EndDate", "The field End Date should not be less than the Start Date.");
+            if (model.StartDate > model.EndDate) ModelState.AddModelError("StartDate", "The field Start Date should not be greater than the End Date.");
+
             if (!ModelState.IsValid)
             {
-                return View(promos);
+                model = await _service.InitializePromo(model);
+                return View(model);
             }
-            await _service.UpdatePromo(id, promos);
+
+            if (model.StatusId <= 0) model.StatusId = (int)StatusEnum.Active;
+
+            if (model.IsByCategory) model.PromoCategory = await _service.GetProductCategoryTitle((int)model.ProductCategoryId);
+            if (model.IsByGender) model.PromoCategory = await _service.GetGenderTitle((int)model.GenderId);
+
+            await _service.UpdatePromo(id, model);
+            var _promoResult = await _service.UpdateProductsSale(model);
             return RedirectToAction(nameof(Index));
         }
 
