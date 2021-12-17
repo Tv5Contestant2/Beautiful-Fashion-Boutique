@@ -175,8 +175,7 @@ namespace ECommerce1.Controllers
                 if (result.Succeeded)
                 {
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var confirmationLink = Url.Action("ConfirmEmail", "Home",
-    new { userId = user.Id, token = token }, Request.Scheme);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Home", new { userId = user.Id, token = token }, Request.Scheme);
 
                     // send email confirmation
                     await _emailService.SendConfirmationEmail(model.Email, confirmationLink);
