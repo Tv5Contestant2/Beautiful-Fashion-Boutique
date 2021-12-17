@@ -16,5 +16,6 @@ namespace ECommerce1.Models
         public DateTime ReturnDate { get; set; }
 
         public Product ChangeProducts { get; set; }
+        public OrderStatus ReturnStatus { get; set; }
     }
 }

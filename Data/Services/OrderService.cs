@@ -78,6 +78,23 @@ namespace ECommerce1.Data.Services
             return result;
         }
 
+        public Returns GetReturns(Guid transactionId)
+        {
+            var orders = _context.OrdersDetails
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductImages)
+                .Include(x => x.Orders)
+                .Include(x => x.ReturnStatus)
+                .FirstOrDefault(x => x.TransactionId == transactionId
+                         && x.IsReturned == true);
+
+            var result = _context.Returns
+                .Include(x => x.ReturnStatus)
+                .FirstOrDefault(x => x.OrderReference == transactionId);
+            result.ReturnStatus = orders.ReturnStatus;
+
+            return result;
+        }
         public async Task<IEnumerable<OrderDetails>> GetOrderDetailsById(string transactionId)
         {
             var result = await _context.OrdersDetails
@@ -101,7 +118,7 @@ namespace ECommerce1.Data.Services
         public async Task<int> GetCustomerReturnsCount(string userId)
         {
             var result = await _context.OrdersDetails
-                .Where(x => x.Orders.CustomersId == userId 
+                .Where(x => x.Orders.CustomersId == userId
                          && x.IsReturned == true)
                 .ToListAsync();
 
@@ -109,6 +126,17 @@ namespace ECommerce1.Data.Services
         }
 
         public async Task<IEnumerable<Returns>> GetReturnsByReference(Guid transactionId, long productId)
+        {
+            var result = await _context.Returns
+                .Include(x => x.ChangeProducts)
+                    .ThenInclude(x => x.ProductImages)
+                .Where(x => x.OrderReference == transactionId && x.ProductId == productId)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Returns>> GetReturnDetailsByReference(Guid transactionId, long productId)
         {
             var result = await _context.Returns
                 .Include(x => x.ChangeProducts)
@@ -156,7 +184,7 @@ namespace ECommerce1.Data.Services
         public async Task<OrderDetails> ReturnOrder(OrderViewModel viewModel)
         {
             var result = _context.OrdersDetails
-                .FirstOrDefault(x => x.TransactionId == viewModel.TransactionId 
+                .FirstOrDefault(x => x.TransactionId == viewModel.TransactionId
                                   && x.ProductId == viewModel.ProductId);
 
             result.IsReturned = true;

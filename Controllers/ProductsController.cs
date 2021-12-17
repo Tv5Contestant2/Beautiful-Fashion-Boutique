@@ -27,6 +27,32 @@ namespace ECommerce1.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Index(int page)
+        {
+            var data = await _service.GetAllProducts(0);
+
+            foreach (var item in data)
+            {
+                if (item.ProductVariants != null && item.ProductVariants.Any())
+                {
+                    item.StockQty = item.ProductVariants.Sum(x => x.Quantity);
+                }
+            }
+
+            ViewBag.InStock = data.Where(x => x.StockStatusId == (int)StockStatusEnum.InStock).ToList().Count();
+            ViewBag.OutOfStock = data.Where(x => x.StockStatusId == (int)StockStatusEnum.OutOfStock).ToList().Count();
+            ViewBag.Critical = data.Where(x => x.StockStatusId == (int)StockStatusEnum.Critical).ToList().Count();
+
+            var viewModel = new ProductViewModel
+            {
+                ItemPerPage = 10,
+                Products = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
+        }
+
         public IActionResult CreateProduct()
         {
             var viewModel = _service.InitializeProduct();
