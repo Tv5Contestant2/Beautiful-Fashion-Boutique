@@ -231,6 +231,14 @@
                             <div class="card rounded-6 mb-4">
                                 <div class="card-body px-4 py-4">
                                     <h5 class="text-uppercase">Shipping Summary</h5>
+
+                                    <div class="row gy-3">
+                                        <label class="control-label">@Model.CustomersShippingAddress.Block</label>
+                                        <label class="control-label">@Model.CustomersShippingAddress.Lot</label>
+                                        <label class="control-label">@Model.CustomersShippingAddress.Barangay</label>
+                                        <label class="control-label">@Model.CustomersShippingAddress.City</label>
+                                    </div>
+
                                     <ul class="list-unstyled">
                                         <li id="dvPayment" style="display: none">
                                             <div class="d-flex justify-content-between py-3 border-bottom">

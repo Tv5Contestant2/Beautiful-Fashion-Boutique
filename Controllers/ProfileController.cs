@@ -177,6 +177,13 @@ namespace ECommerce1.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             var order = _orderService.GetOrderById(transactionId.ToString());
             var orderDetails = await _orderService.GetOrderDetailsById(transactionId.ToString());
+            var customerShippingAddress = new CustomersShippingAddress
+            {
+                Block = user.AddressBlock,
+                Lot = user.AddressLot,
+                Barangay = user.AddressBaranggay,
+                City = user.AddressCity
+            };
 
             var viewModel = new OrderViewModel()
             {
@@ -189,7 +196,8 @@ namespace ECommerce1.Controllers
                 OrderDetails = orderDetails,
                 OrderStatus = order.OrderStatus,
                 Colors = await _productCategoriesService.GetColors(),
-                Sizes = await _productCategoriesService.GetSizes()
+                Sizes = await _productCategoriesService.GetSizes(),
+                CustomersShippingAddress = customerShippingAddress
             };
 
             ViewBag.Customer = user;
