@@ -17,6 +17,8 @@ namespace ECommerce1.Controllers
         private readonly IOrderService _orderService;
         private readonly IMessageService _messageService;
         private readonly IProductsService _productService;
+        private readonly ICustomersService _customersService;
+        private readonly ICommonServices _commonServices;
         private readonly UserManager<User> _userManager;
 
         public ProfileController(IProfileService service
@@ -24,6 +26,8 @@ namespace ECommerce1.Controllers
             , IOrderService orderService
             , IMessageService messageService
             , IProductsService productService
+            , ICustomersService customersService
+            , ICommonServices commonServices
             , UserManager<User> userManager)
         {
             _service = service;
@@ -31,21 +35,63 @@ namespace ECommerce1.Controllers
             _orderService = orderService;
             _messageService = messageService;
             _productService = productService;
+            _customersService = customersService;
+            _commonServices = commonServices;
             _userManager = userManager;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
+            var _customer = await _customersService.GetCustomerById(userId);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
 
-            var result = await _userManager.FindByIdAsync(userId);
+            var _customerViewModel = new CustomerViewModel
+            {
+                AddressBaranggay = _customer.AddressBaranggay,
+                AddressBlock = _customer.AddressBlock,
+                AddressCity = _customer.AddressCity,
+                AddressLot = _customer.AddressLot,
+                Birthday = _customer.Birthday,
+                ContactNumber = _customer.ContactNumber,
+                //DateCreated = (DateTime)_customer.DateCreated,
+                Email = _customer.Email,
+                FirstName = _customer.FirstName,
+                GenderId = _customer.GenderId,
+                Genders = await _customersService.GetGenders(),
+                Id = _customer.Id,
+                Image = _customer.Image,
+                LastName = _customer.LastName,
+            };
 
-            return View(result);
+            return View(_customerViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index([Bind] CustomerViewModel model)
+        {
+            if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
+            if (string.IsNullOrEmpty(model.Password)) //Do not update password if empty
+            {
+                ModelState.Remove("Password");
+                ModelState.Remove("ConfirmPassword");
+            }
+
+            ModelState.Remove("Email");
+
+            if (!ModelState.IsValid)
+            {
+                _customersService.InitializeCustomer(model);
+                return View(model);
+            }
+
+            await _customersService.UpdateCustomer(model);
+            return RedirectToAction("Home", "StoreFront");
         }
 
         public async Task<IActionResult> Orders()

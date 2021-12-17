@@ -207,15 +207,21 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCustomer([Bind] CustomerViewModel model)
         {
+            if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
             if (string.IsNullOrEmpty(model.Password)) //Do not update password if empty
             {
                 ModelState.Remove("Password");
                 ModelState.Remove("ConfirmPassword");
             }
 
-            if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
+            ModelState.Remove("Email");
 
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                _service.InitializeCustomer(model);
+                return RedirectToAction("Index", "Profile", model);
+                //return View(model);
+            }
 
             await _service.UpdateCustomer(model);
             return RedirectToAction(nameof(Index));

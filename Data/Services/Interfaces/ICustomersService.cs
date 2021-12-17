@@ -29,5 +29,7 @@ namespace ECommerce1.Data.Services.Interfaces
         Task<IEnumerable<User>> GetAllArchivedCustomers();
 
         Task<IEnumerable<User>> GetAllBlockCustomers();
+
+        void InitializeCustomer(CustomerViewModel model);
     }
 }
