@@ -48,15 +48,16 @@
 
                                         <label asp-for="ProductCategoryId" class="control-label"></label>
                                         <div>
-                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
-                                           htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()", @disabled = "disabled" })
+                                            <input asp-for="ProductCategoryId" value="@Model.ProductCategoryId" type="hidden" />
+                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title", Model.ProductCategoryId),
+                                           htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()", @disabled = "disabled", @value = Model.ProductCategoryId })
                                             @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
                                         </div>
 
                                         <label asp-for="GenderId" class="control-label"></label>
                                         <div>
-                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
-                                           htmlAttributes: new { @class = "form-control", id = "GenderId" })
+                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title", Model.GenderId),
+                                           htmlAttributes: new { @class = "form-control", id = "GenderId", @value = Model.GenderId })
                                             @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
                                         </div>
                                         <div class="m-3">
@@ -292,6 +293,10 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
 
 @section Scripts {
     <script>
+        $("document").ready(function () {
+            $('#selectionCategories').val('@Model.ProductCategoryId');
+        });
+
         var btnTop = document.getElementById("btnTop");
         window.onload = function () { btnTop.style.display = "none"; }
         window.onscroll = function () { scrollFunction(); };
@@ -569,6 +574,6 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
                 document.getElementById("ProductImageJSON").value = "";
             }
         }
-                                                        //End - image
+                                                                //End - image
     </script>
 }

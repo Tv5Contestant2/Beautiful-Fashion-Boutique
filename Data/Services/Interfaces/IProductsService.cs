@@ -10,7 +10,7 @@ namespace ECommerce1.Data.Services.Interfaces
 
         Product InitializeProductOnUpdate(Product product);
 
-        public void CreateProduct (Product product);
+        public void CreateProduct(Product product);
 
         public Task<Product> UpdateProduct(long id, Product product);
 
@@ -30,6 +30,7 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<List<Product>> GetProductsBySize(int categoryId, int sizeId, int colorId, int genderId = 0);
 
+        void InitializeProductListForZeroes(Product product);
 
         public Task<IEnumerable<ProductReview>> GetProductReviews(long id);
 

@@ -109,7 +109,8 @@ namespace ECommerce1.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             ViewBag.Customer = user;
 
-            var viewModel = new MessageViewModel { 
+            var viewModel = new MessageViewModel
+            {
                 Messages = result,
                 SenderId = userId
             };
@@ -210,6 +211,7 @@ namespace ECommerce1.Controllers
             ViewBag.Returns = await _orderService.GetReturnsByReference(viewModel.TransactionId, productId);
             return View(viewModel);
         }
+
         public IActionResult ReturnSuccess()
         {
             return View();
@@ -224,6 +226,7 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> CancelRequestByProduct(OrderViewModel viewModel)
         {
+            await Task.Delay(0);
             _orderService.CancelRequestByProduct(viewModel);
 
             return Redirect(Request.Headers["Referer"].ToString());
@@ -258,6 +261,5 @@ namespace ECommerce1.Controllers
 
             return View(viewModel);
         }
-
     }
 }

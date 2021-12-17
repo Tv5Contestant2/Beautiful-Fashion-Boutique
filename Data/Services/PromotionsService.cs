@@ -83,25 +83,31 @@ namespace ECommerce1.Data.Services
 
                 if (model.StatusId == (int)StatusEnum.Inactive)
                 {
-                    var _prodsCategory = await _context.Products.Where(x => x.ProductCategoryId == model.ProductCategoryId).ToListAsync();
-
-                    foreach (var item in _prodsCategory)
+                    if (model.IsByCategory)
                     {
-                        item.IsSale = false;
-                        item.PriceOnSale = 0;
+                        var _prodsCategory = await _context.Products.Where(x => x.ProductCategoryId == model.ProductCategoryId).ToListAsync();
+
+                        foreach (var item in _prodsCategory)
+                        {
+                            item.IsSale = false;
+                            item.PriceOnSale = 0;
+                        }
+
+                        _context.Products.UpdateRange(_prodsCategory);
+                        await _context.SaveChangesAsync();
                     }
 
-                    _context.Products.UpdateRange(_prodsCategory);
-                    await _context.SaveChangesAsync();
-
-                    var _prodsGender = await _context.Products.Where(x => x.GenderId == model.GenderId).ToListAsync();
-                    foreach (var item in _prodsGender)
+                    if (model.IsByGender)
                     {
-                        item.IsSale = false;
-                        item.PriceOnSale = 0;
+                        var _prodsGender = await _context.Products.Where(x => x.GenderId == model.GenderId).ToListAsync();
+                        foreach (var item in _prodsGender)
+                        {
+                            item.IsSale = false;
+                            item.PriceOnSale = 0;
+                        }
+                        _context.Products.UpdateRange(_prodsGender);
+                        await _context.SaveChangesAsync();
                     }
-                    _context.Products.UpdateRange(_prodsGender);
-                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)

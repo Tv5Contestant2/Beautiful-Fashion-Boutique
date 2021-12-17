@@ -39,12 +39,33 @@ namespace ECommerce1.Data.Services
 
         public void InitializeProductListForResponse(Product product)
         {
+            var _product = _context.Products.Where(x => x.Id == product.Id).FirstOrDefault();
+
+            if (product.ProductCategoryId <= 0) product.ProductCategoryId = _product.ProductCategoryId;
+            if (product.GenderId <= 0) product.GenderId = _product.GenderId;
+
             if (product.Colors == null) product.Colors = _context.Colors.OrderBy(x => x.Id).ToList();
             if (product.Genders == null) product.Genders = _context.Genders.ToList();
             if (product.ProductCategories == null) product.ProductCategories = _context.ProductCategories.ToList();
             if (product.Sizes == null) product.Sizes = _context.Sizes.OrderBy(x => x.Id).ToList();
             if (product.Statuses == null) product.Statuses = _context.Statuses.OrderBy(x => x.Id).ToList();
             if (product.StockStatuses == null) product.StockStatuses = _context.StockStatuses.OrderBy(x => x.Id).ToList();
+        }
+
+        public void InitializeProductListForZeroes(Product product)
+        {
+            var _product = _context.Products.Where(x => x.Id == product.Id).FirstOrDefault();
+
+            if (product.ProductCategoryId <= 0) product.ProductCategoryId = _product.ProductCategoryId;
+            if (product.GenderId <= 0) product.GenderId = _product.GenderId;
+
+            _product = null;
+
+            //var _productCategoryId = _context.Products.Where(x => x.Id == product.Id).FirstOrDefault().ProductCategoryId;
+            //var _genderId = _context.Products.Where(x => x.Id == product.Id).FirstOrDefault().GenderId;
+
+            //if (product.ProductCategoryId <= 0) product.ProductCategoryId = _productCategoryId;
+            //if (product.GenderId <= 0) product.GenderId = _genderId;
         }
 
         public Product InitializeProductOnUpdate(Product product)
