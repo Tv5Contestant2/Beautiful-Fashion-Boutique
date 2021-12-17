@@ -29,7 +29,7 @@
             <div class="col-xl-3 col-lg-4">
                 <div class="bg-light text-center p-4 rounded-top-lg border border-bottom-0">
                     @{
-                    var customerName = ViewBag.Customer.FirstName + ' ' + ViewBag.Customer.LastName;
+                        var customerName = ViewBag.Customer.FirstName + ' ' + ViewBag.Customer.LastName;
 
                     <a class="d-inline-block" href="#"><img class="img-fluid rounded-circle img-thumbnail p-2 mb-3" src="@ViewBag.Customer.Image" width="150" alt="@customerName"></a>
                     <h5>@customerName</h5>
@@ -88,7 +88,7 @@
                         <div class="col-lg-8 col-xl-9">
                             <div class="row pb-3">
                                 @{
-                                    if (Model.OrderStatusId != (int)OrderStatusEnum.Approved)
+                                    if (Model.ReturnStatus.Id != (int)OrderStatusEnum.Approved)
                                     {
                                         <div class="col-lg-12 d-flex justify-content-end">
 
@@ -105,15 +105,15 @@
                                     <h5 class="fw-bold mb-0">@Model.TransactionId</h5>
                                 </div>
 
-                                <div class="col-lg-5 text-end">
+                                @*<div class="col-lg-5 text-end">
                                     <span class="badge @Model.ReturnStatus.Class">@Model.ReturnStatus.Title</span>
-                                </div>
+                                </div>*@
                             </div>
 
                             @*<div class="row justify-content-between align-content-center pb-2">
                                 <div class="col-lg-7">
                                     <p class="text-small mb-0">Exchange For</p>
-                                    <h5 class="fw-bold mb-0"><img class="img-fluid" src="@String.Format(" data:image /jpg;base64,{0}", Model.Products.Image)" alt="@item.ChangeProducts.Name" width="70"></h5>
+                                    <h5 class="fw-bold mb-0">@Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId </h5>
                                 </div>
                             </div>*@
 
@@ -121,12 +121,9 @@
                                 <div class="cart-inner">
                                     <div class="border-top border-bottom py-2">
                                         <div class="row text-uppercase">
-                                            <div class="col-4"><strong class="small">Product</strong></div>
+                                            <div class="col-5"><strong class="small">Product</strong></div>
                                             <div class="col-2"> <strong class="small">Unit Price</strong></div>
-                                            <div class="col-1 text-center"> <strong class="small">Quantity</strong></div>
-                                            <div class="col-2 text-end"><strong class="small">Total Price</strong></div>
-                                            <div class="col-2 text-center"> <strong class="small">Qty Returned</strong></div>
-                                            <div class="col-1 text-center"><strong class="small">Return Order</strong></div>
+                                            @*<div class="col-1 text-center"><strong class="small">Remove</strong></div>*@
                                         </div>
                                     </div>
                                     @*Product*@
@@ -134,12 +131,13 @@
                                     {
                                         <div class="py-4 border-bottom">
                                             <div class="row d-flex align-items-center bord">
-                                                <div class="col-4">
+                                                <div class="col-5">
                                                     <div class="d-flex align-items-center">
-                                                        <img class="img-fluid" src="@String.Format(" data:image /jpg;base64,{0}", item.ChangeProducts.Image)" alt="@item.ChangeProducts.Name" width="70">
-                                                        <div class="ms-3">
+                                                        @*<img class="img-fluid" src="@String.Format(" data:image /jpg;base64,{0}", item.ChangeProducts.Image)" alt="@item.ChangeProducts.Name" width="70">*@
+                                                        <div class="m-3">
                                                             <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ChangeProductsId">
-                                                                <h6 class="mb-0 text-dark fw-normal">@item.ChangeProducts.Name</h6><span class="text-muted text-sm">Size: Large</span>
+                                                                <h6 class="mb-0 text-dark fw-normal">@item.ChangeProducts.Name</h6>
+                                                                @*<span class="text-muted text-sm">&nbsp;</span>*@
                                                             </a>
                                                         </div>
                                                     </div>
@@ -148,9 +146,24 @@
                                                     @{
                                                         if (item.ChangeProducts.IsSale)
                                                         { <span>Php @item.ChangeProducts.PriceOnSale</span> }
-                                                    else
-                                                    { <span>Php @item.ChangeProducts.Price</span> }
+                                                        else
+                                                        { <span>Php @item.ChangeProducts.Price</span> }
                                                     }
+                                                </div>
+                                                <div class="col-1 text-center">
+                                                    <form asp-action="CancelRequestByProduct" asp-route-id="@item.ChangeProductsId">
+
+                                                        <input type="hidden" value="@item.ChangeProductsId" asp-for="@Model.Returns.ChangeProductsId" />
+                                                        <input type="hidden" value="@Model.TransactionId" asp-for="@Model.Returns.OrderReference" />
+                                                        <input type="hidden" value="@Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId" asp-for="@Model.Returns.ProductId" />
+                                                        @*@{ 
+                                                                if (Model.ReturnStatus.Id != (int)OrderStatusEnum.Approved) { <button class="btn btn-link" type="submit">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                                }
+
+                                                        }*@ 
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -167,28 +180,22 @@
         @*Cancel Modal*@
         <div class="modal fade" id="CancelModal" tabindex="-1" role="dialog">
             <div class="modal-dialog">
-                <form asp-controller="Orders" asp-action="CancelOrder" asp-route-id="@Model.TransactionId">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Cancel Order</h4>
-                            <a class="btn btn-default text-right" data-dismiss="modal" onclick="CloseModal()">×</a>
-                        </div>
-                        <div class="modal-body">
-                            <p>Do you really want to cancel your order? Please let us know the reason.</p>
-                            @{
-                            var orderStatusId = (int)OrderStatusEnum.Cancelled;
-                            <input type="hidden" asp-for="OrderStatusId" value="@orderStatusId" />
-                            }
-                            <textarea class="rounded form-control" rows="6" asp-for="CancellationReason"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Cancel Order</button>
-                            <a class="btn btn-outline-dark" data-dismiss="modal" onclick="CloseModal()">Close</a>
-                        </div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Cancel Order</h4>
+                        <a class="btn btn-default text-right" data-dismiss="modal" onclick="CloseModal()">×</a>
                     </div>
-                </form>
+                    <div class="modal-body">
+                        <p>Do you really want to cancel your request? </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-primary" href="@Url.Action("CancelReturnRequest", new { transactionId = @Model.TransactionId, productId = @Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId })">Cancel Request</a>
+                        <a class="btn btn-outline-dark" data-dismiss="modal" onclick="CloseModal()">Close</a>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
 
     <div style="position: fixed; bottom: 10px; right: 10px;">

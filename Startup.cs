@@ -52,12 +52,6 @@ namespace ECommerce1
                     pattern: "{controller=StoreFront}/{action=Home}/{id?}");
             });
 
-            // SignalR
-            app.UseSignalR(builder =>
-            {
-                builder.MapHub<ChatHub>("/chat");
-            });
-
             // Seed Database
             AppDBInitializer.Seed(app);
         }

@@ -86,6 +86,17 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> ViewReturnDetails(Guid transactionId, long productId)
+        {
+            var result = await _service.GetReturnsByReference(transactionId, productId);
+            var viewModel = new OrderViewModel();
+
+            viewModel.TransactionId = transactionId;
+            viewModel.ReturnDetails = result;
+
+            return View(viewModel);
+        }
+
         [Route("Orders/UpdateOrder/{transactionId:Guid}")]
         public async Task<IActionResult> UpdateOrder(string transactionId)
         {
@@ -102,12 +113,13 @@ namespace ECommerce1.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
+
         [Route("Orders/ApproveReturn/{transactionId:Guid}")]
         public async Task<IActionResult> ApproveReturn(string transactionId, OrderViewModel viewModel)
         {
             await _service.ApproveReturn(transactionId, viewModel);
 
-            return Redirect(Request.Headers["Referer"].ToString());
+            return RedirectToAction("ViewReturn", viewModel);
         }
 
         public async Task<IActionResult> ReturnOrder(OrderViewModel viewModel)

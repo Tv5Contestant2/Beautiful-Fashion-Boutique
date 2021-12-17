@@ -91,7 +91,11 @@ namespace ECommerce1.Data.Services
             var result = _context.Returns
                 .Include(x => x.ReturnStatus)
                 .FirstOrDefault(x => x.OrderReference == transactionId);
-            result.ReturnStatus = orders.ReturnStatus;
+
+            if (orders != null)
+            {
+                result.ReturnStatus = orders.ReturnStatus;
+            }
 
             return result;
         }
@@ -128,19 +132,9 @@ namespace ECommerce1.Data.Services
         public async Task<IEnumerable<Returns>> GetReturnsByReference(Guid transactionId, long productId)
         {
             var result = await _context.Returns
+                .Include(x => x.ReturnStatus)
                 .Include(x => x.ChangeProducts)
-                    .ThenInclude(x => x.ProductImages)
-                .Where(x => x.OrderReference == transactionId && x.ProductId == productId)
-                .ToListAsync();
-
-            return result;
-        }
-
-        public async Task<IEnumerable<Returns>> GetReturnDetailsByReference(Guid transactionId, long productId)
-        {
-            var result = await _context.Returns
-                .Include(x => x.ChangeProducts)
-                    .ThenInclude(x => x.ProductImages)
+                .Include(x => x.ChangeProductImages)
                 .Where(x => x.OrderReference == transactionId && x.ProductId == productId)
                 .ToListAsync();
 
@@ -181,6 +175,41 @@ namespace ECommerce1.Data.Services
             return result;
         }
 
+        public async Task<OrderDetails> CancelReturnRequest(Guid transactionId, long productId)
+        {
+            var result = _context.OrdersDetails
+                .FirstOrDefault(x => x.TransactionId == transactionId 
+                                  && x.ProductId == productId);
+
+            result.ReturnStatusId = null;
+            result.ReturnReason = null;
+            result.QuantityReturned = 0;
+            result.IsReturned = false;
+
+            _context.OrdersDetails.Update(result);
+
+            var returns = _context.Returns
+                .Where(x => x.OrderReference == transactionId && x.ProductId == productId)
+                .ToList();
+
+            _context.Returns.RemoveRange(returns);
+
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+        public void CancelRequestByProduct(OrderViewModel viewModel)
+        {
+            var result = _context.Returns
+                .FirstOrDefault(x => x.OrderReference == viewModel.Returns.OrderReference && x.ProductId == viewModel.Returns.ProductId
+                && x.ChangeProductsId == viewModel.Returns.ChangeProductsId);
+
+            _context.Returns.Remove(result);
+
+            _context.SaveChanges();
+        }
+
         public async Task<OrderDetails> ReturnOrder(OrderViewModel viewModel)
         {
             var result = _context.OrdersDetails
@@ -202,9 +231,18 @@ namespace ECommerce1.Data.Services
         {
             var result = _context.OrdersDetails
                 .FirstOrDefault(x => x.TransactionId.ToString() == transactionId
-                                  && x.ProductId == viewModel.ProductId);
+                                  && x.ProductId == viewModel.Returns.ProductId);
 
             result.ReturnStatusId = (int)OrderStatusEnum.Approved;
+
+            _context.OrdersDetails.Update(result);
+
+            //var result = _context.Returns
+            //    .FirstOrDefault(x => x.OrderReference.ToString() == transactionId
+            //                      && x.ProductId == viewModel.Returns.ProductId
+            //                      && x.ChangeProductsId == viewModel.Returns.ChangeProductsId);
+
+            //result.ReturnStatusId = (int)OrderStatusEnum.Approved;
 
             _context.OrdersDetails.Update(result);
             await _context.SaveChangesAsync();

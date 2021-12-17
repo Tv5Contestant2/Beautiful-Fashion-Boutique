@@ -1,0 +1,144 @@
+﻿@model ECommerce1.ViewModel.OrderViewModel
+@using ECommerce1.Data.Enums
+
+@{
+    ViewData["Title"] = "Suggested Replacements";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    @*Breadcrumbs*@
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h4 class="m-0">@ViewBag.Title</h4>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right px-3 py-2">
+                        <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Content*@
+    <section class="content">
+        <div class="container-fluid">
+            @*Search*@
+            <div class="row d-flex justify-content-between">
+                <input id="inptSearch" class="form-control w-100" placeholder="Search" />
+            </div>
+
+            @*Grid View*@
+            <div class="row mt-3">
+                <div class="d-flex justify-content-lg-around">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="cart-inner" id="dtOrderList">
+                            <div class="border-top border-bottom py-2">
+                                <div class="row text-uppercase">
+                                    <div class="col-3"><strong class="small">Product</strong></div>
+                                    <div class="col-5"><strong class="small">Action</strong></div>
+                                </div>
+                            </div>
+                            @foreach (var item in Model.ReturnDetails)
+                            {
+                                <div class="row-item pt-4 pb-4 border-bottom">
+                                    <div class="row text-left">
+                                        <div class="item col-3">
+                                            <div class="d-flex align-items-center">
+                                                @*<img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.ChangeProducts.Image)" alt="@item.ChangeProducts.Name" width="70">*@
+                                                <div class="m-3">
+                                                    <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
+                                                        <h6 class="mb-0 text-dark fw-normal">@item.ChangeProducts.Name</h6>
+                                                        @*<span class="text-muted text-sm">&nbsp;</span>*@
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item col-5">
+                                            <div class="d-flex align-items-center">
+                                                <form asp-controller="Orders" asp-action="ApproveReturn" asp-route-id="@Model.TransactionId">
+                                                    <input type="hidden" asp-for="Returns.ProductId" value="@item.ProductId" />
+                                                    <input type="hidden" asp-for="Returns.ChangeProductsId" value="@item.ChangeProductsId" />
+                                                    @if (item.ReturnStatusId != (int)OrderStatusEnum.Approved)
+                                                    {
+                                                    <button class="btn btn-link text-danger text-hover-gray-3 p-0">
+                                                        <i class="far fa-thumbs-up"></i>
+                                                    </button>
+                                                    }
+                                                </form>
+                                                <form asp-controller="Orders" asp-action="ApproveReturn" asp-route-id="@Model.TransactionId">
+                                                    <input type="hidden" asp-for="Returns.ProductId" value="@item.ProductId" />
+                                                    <input type="hidden" asp-for="Returns.ChangeProductsId" value="@item.ChangeProductsId" />
+                                                    @*@if (item.ReturnStatus.Id != (int)OrderStatusEnum.Approved)
+            {*@
+                                                    <button class="btn btn-link text-danger text-hover-gray-3 p-0">
+                                                        <i class="far fa-times"></i>
+                                                    </button>
+                                                    @*}*@
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="position: fixed; bottom: 10px; right: 10px">
+                <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    $(document).ready(function () {
+        $("#inptSearch").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#dtOrderList .row-item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnGrid").click(function () {
+            $("#dvThumbnail").hide();
+            $("#dvGrid").show();
+        });
+
+        $("#btnThumbnail").click(function () {
+            $("#dvGrid").hide();
+            $("#dvThumbnail").show();
+        });
+    });
+
+</script>

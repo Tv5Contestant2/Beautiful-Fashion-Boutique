@@ -150,14 +150,15 @@ namespace ECommerce1.Controllers
 
             var user = await _userManager.FindByIdAsync(userId);
             var returns = _orderService.GetReturns(transactionId);
-            var returnDetails = await _orderService.GetReturnDetailsByReference(transactionId, productId); //viewModel.ProductId
+            var returnDetails = await _orderService.GetReturnsByReference(transactionId, productId); //viewModel.ProductId
 
             var viewModel = new OrderViewModel();
             viewModel.CustomersId = userId;
             viewModel.Customer = user.FirstName;
             viewModel.Address = user.AddressCity;
             viewModel.TransactionId = transactionId;
-            viewModel.ReturnStatus = returns.ReturnStatus;
+            if (returns != null)
+                viewModel.ReturnStatus = returns.ReturnStatus;
             viewModel.ReturnDetails = returnDetails;
             ViewBag.Customer = user;
             return View(viewModel);
@@ -205,6 +206,20 @@ namespace ECommerce1.Controllers
         public IActionResult ReturnSuccess()
         {
             return View();
+        }
+
+        public async Task<IActionResult> CancelReturnRequest(Guid transactionId, long productId)
+        {
+            await _orderService.CancelReturnRequest(transactionId, productId);
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        public async Task<IActionResult> CancelRequestByProduct(OrderViewModel viewModel)
+        {
+            _orderService.CancelRequestByProduct(viewModel);
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         public IActionResult CreateMessage(MessageViewModel message)

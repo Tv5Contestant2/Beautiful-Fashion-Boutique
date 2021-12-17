@@ -73,7 +73,7 @@
                                 <div class="row text-uppercase">
                                     <div class="col-4"><strong class="small">Transaction Id</strong></div>
                                     <div class="col-4"><strong class="small">Customer</strong></div>
-                                    <div class="col-2 text-center"><strong class="small">Quantity Returned</strong></div>
+                                    @*<div class="col-2 text-center"><strong class="small">Quantity Returned</strong></div>*@
                                     <div class="col-2 text-center"><strong class="small">Action</strong></div>
                                 </div>
                             </div>
@@ -83,7 +83,7 @@
                                     <div class="row text-left">
                                         <div class="item col-4">@item.TransactionId</div>
                                         <div class="item col-4">@string.Format("{0} {1}", item.Customers.FirstName, @item.Customers.LastName)</div>
-                                        <div class="col-2 text-center">@item.OrderDetails.Sum(x => x.QuantityReturned)</div>
+                                        @*<div class="col-2 text-center">@item.OrderDetails.Sum(x => x.QuantityReturned)</div>*@
                                         <div class="item col-2 text-center">
                                             <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewReturn" asp-route-id="@item.TransactionId">
                                                 <i class="far fa-eye"></i>
