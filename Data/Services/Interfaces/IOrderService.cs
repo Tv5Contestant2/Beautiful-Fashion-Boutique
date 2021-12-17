@@ -28,6 +28,10 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<IEnumerable<Returns>> GetReturnsByReference(Guid transactionId, long productId);
 
+        public Returns GetReturns(Guid transactionId);
+
+        public Task<IEnumerable<Returns>> GetReturnDetailsByReference(Guid transactionId, long productId);
+
         public Task<Orders> CancelOrder(string transactionId, OrderViewModel viewModel);
 
         public Task<OrderDetails> ReturnOrder(OrderViewModel viewModel);

@@ -140,6 +140,29 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> ViewReturns(Guid transactionId, long productId) //
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
+            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
+            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+
+            var user = await _userManager.FindByIdAsync(userId);
+            var returns = _orderService.GetReturns(transactionId);
+            var returnDetails = await _orderService.GetReturnDetailsByReference(transactionId, productId); //viewModel.ProductId
+
+            var viewModel = new OrderViewModel();
+            viewModel.CustomersId = userId;
+            viewModel.Customer = user.FirstName;
+            viewModel.Address = user.AddressCity;
+            viewModel.TransactionId = transactionId;
+            viewModel.ReturnStatus = returns.ReturnStatus;
+            viewModel.ReturnDetails = returnDetails;
+            ViewBag.Customer = user;
+            return View(viewModel);
+        }
+
         public async Task<IActionResult> Addresses()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
