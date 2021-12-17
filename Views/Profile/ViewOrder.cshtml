@@ -28,13 +28,15 @@
             @*Sidebar*@
             <div class="col-xl-3 col-lg-4">
                 <div class="bg-light text-center p-4 rounded-top-lg border border-bottom-0">
-                    @{
-                        var customerName = ViewBag.Customer.FirstName + ' ' + ViewBag.Customer.LastName;
-
-                        <a class="d-inline-block" href="#"><img class="img-fluid rounded-circle img-thumbnail p-2 mb-3" src="@ViewBag.Customer.Image" width="150" alt="@customerName"></a>
-                        <h5>@customerName</h5>
-                        <p class="text-muted text-small">@ViewBag.Customer.AddressCity</p>
-                    }
+                    <div class="product">
+                        <div class="image d-flex align-items-center justify-content-center">
+                            <img id="imgOutput" class="img-fluid rounded-circle img-thumbnail p-2 mb-3" src="@string.Format("data:image/jpeg;base64,{0}", ViewBag.Customer.Image)" width="150">
+                        </div>
+                        @{
+                            var customerName = ViewBag.Customer.FirstName + ' ' + ViewBag.Customer.LastName;
+                            <h5>@customerName</h5>
+                        }
+                    </div>
                 </div>
                 <nav class="list-group">
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" asp-controller="Profile" asp-action="Index" aria-current="true">
@@ -68,13 +70,13 @@
                             <i class="far fa-envelope"></i>&nbsp;&nbsp;&nbsp;Messages
                         </span><small class="badge rounded-pill bg-light text-dark">@ViewBag.MessagesCount</small>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Addresses">
-                        <span class="fw-normal text-sm text-dark py-1">
-                            <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
-                                <use xlink:href="#map-marker-1"> </use>
-                            </svg>Addresses
-                        </span>
-                    </a>
+                    @*<a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Addresses">
+                            <span class="fw-normal text-sm text-dark py-1">
+                                <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
+                                    <use xlink:href="#map-marker-1"> </use>
+                                </svg>Addresses
+                            </span>
+                        </a>*@
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Home" asp-action="SignOut">
                         <span class="fw-normal text-sm text-dark py-1">
                             <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
@@ -92,166 +94,166 @@
                 var vatAmount = @total * @vat / 100;
                 var totalAmount = @total + @vatAmount + Convert.ToDecimal(@shipping);
 
-                        <div class="col-lg-8 col-xl-9">
-                            <div class="row pb-3">
-                                @{
-                                    if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Received ||
-                                        Model.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
-                                    {
-                                        <div class="col-lg-12 d-flex justify-content-end">
-                                            @{
-                                                if (Model.OrderStatusId == (int)OrderStatusEnum.Created ||
-                                                    Model.OrderStatusId == (int)OrderStatusEnum.PendingPayment)
-                                                {
-                                                    <button class="btn btn-outline-danger" data-toggle="modal" data-target="#CancelModal" onclick="ShowCancelModal();">
-                                                        <i class="fas fa-times"></i> Cancel Order
-                                                    </button>
-                                                }
-                                            }
-                                        </div>
+                <div class="col-lg-8 col-xl-9">
+                    <div class="row pb-3">
+                        @{
+                            if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Received ||
+                                Model.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
+                            {
+                                <div class="col-lg-12 d-flex justify-content-end">
+                                    @{
+                                        if (Model.OrderStatusId == (int)OrderStatusEnum.Created ||
+                                            Model.OrderStatusId == (int)OrderStatusEnum.PendingPayment)
+                                        {
+                                            <button class="btn btn-outline-danger" data-toggle="modal" data-target="#CancelModal" onclick="ShowCancelModal();">
+                                                <i class="fas fa-times"></i> Cancel Order
+                                            </button>
+                                        }
                                     }
-                                }
-                            </div>
-                            <div class="row justify-content-between align-content-center pb-2">
-                                <div class="col-lg-7">
-                                    <p class="text-small mb-0">Reference</p>
-                                    <h5 class="fw-bold mb-0">@Model.TransactionId</h5>
                                 </div>
+                            }
+                        }
+                    </div>
+                    <div class="row justify-content-between align-content-center pb-2">
+                        <div class="col-lg-7">
+                            <p class="text-small mb-0">Reference</p>
+                            <h5 class="fw-bold mb-0">@Model.TransactionId</h5>
+                        </div>
 
-                                <div class="col-lg-5 text-end">
-                                    <span class="badge @Model.OrderStatus.Class">@Model.OrderStatus.Title</span>
+                        <div class="col-lg-5 text-end">
+                            <span class="badge @Model.OrderStatus.Class">@Model.OrderStatus.Title</span>
+                        </div>
+                    </div>
+
+                    <div class="cart-outer mb-3">
+                        <div class="cart-inner">
+                            <div class="border-top border-bottom py-2">
+                                <div class="row text-uppercase">
+                                    <div class="col-4"><strong class="small">Product</strong></div>
+                                    <div class="col-2"> <strong class="small">Unit Price</strong></div>
+                                    <div class="col-1 text-center"> <strong class="small">Quantity</strong></div>
+                                    <div class="col-2 text-end"><strong class="small">Total Price</strong></div>
+                                    <div class="col-2 text-center"> <strong class="small">Returnable Qty</strong></div>
+                                    <div class="col-1 text-center"><strong class="small">Return Order</strong></div>
                                 </div>
                             </div>
-
-                            <div class="cart-outer mb-3">
-                                <div class="cart-inner">
-                                    <div class="border-top border-bottom py-2">
-                                        <div class="row text-uppercase">
-                                            <div class="col-4"><strong class="small">Product</strong></div>
-                                            <div class="col-2"> <strong class="small">Unit Price</strong></div>
-                                            <div class="col-1 text-center"> <strong class="small">Quantity</strong></div>
-                                            <div class="col-2 text-end"><strong class="small">Total Price</strong></div>
-                                            <div class="col-2 text-center"> <strong class="small">Returnable Qty</strong></div>
-                                            <div class="col-1 text-center"><strong class="small">Return Order</strong></div>
-                                        </div>
-                                    </div>
-                                    @*Product*@
-                                    @foreach (var item in Model.OrderDetails)
-                                    {
-                                        <div class="py-4 border-bottom">
-                                            <div class="row d-flex align-items-center bord">
-                                                <div class="col-4">
-                                                    <div class="d-flex align-items-center">
-                                                        <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
-                                                        <div class="ms-3">
-                                                            <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
-                                                                <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6>
-                                                                <span class="text-muted text-sm">Color: @Model.Colors.First(x => x.Id == item.ColorId).Title</span>
-            @if (item.Product.SizeId != 0)
-            {
-        <span class="text-muted text-sm">, Size: @Model.Sizes.First(x => x.Id == item.SizeId).Title</span>
-            }
-                                                            </a>
-                                                        </div>
-                                                    </div>
+                            @*Product*@
+                            @foreach (var item in Model.OrderDetails)
+                            {
+                                <div class="py-4 border-bottom">
+                                    <div class="row d-flex align-items-center bord">
+                                        <div class="col-4">
+                                            <div class="d-flex align-items-center">
+                                                <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
+                                                <div class="ms-3">
+                                                    <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
+                                                        <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6>
+                                                        <span class="text-muted text-sm">Color: @Model.Colors.First(x => x.Id == item.ColorId).Title</span>
+                                                        @if (item.Product.SizeId != 0)
+                                                        {
+                                                            <span class="text-muted text-sm">, Size: @Model.Sizes.First(x => x.Id == item.SizeId).Title</span>
+                                                        }
+                                                    </a>
                                                 </div>
-                                                <div class="col-2">
-                                                    @{
-                                                        if (item.Product.IsSale)
-                                                        { <span>Php @item.Product.PriceOnSale</span> }
-                                                    else
-                                                    { <span>Php @item.Product.Price</span> }
-                                                    }
-                                                </div>
-                                                <div class="col-1 text-center">@item.Quantity</div>
-                                                <div class="col-2 text-end">
-                                                    @{
-                                                        var gridTotalAmount = (item.Product.IsSale ? item.Product.PriceOnSale : item.Product.Price) * item.Quantity;
-                                                        <span>Php @gridTotalAmount</span>
-                                                    }
-                                                </div>
-                                                <div class="col-2 text-center">
-                                                    @{
-                                                        var returnableQty = item.Quantity - item.QuantityReturned;
-                                                        <span>@returnableQty</span>
-                                                    }
-                                                </div>
-                                                @{
-                                                    if (Model.OrderStatusId == (int)OrderStatusEnum.Completed &&
-                                                            (item.Quantity - item.QuantityReturned != 0) &&
-                                                            ((DateTime.Today - item.Orders.OrderDate).Days <= 7))
-                                                    {
-                                                        <div class="col-1 d-flex justify-content-center">
-                                                            <form asp-controller="Profile" asp-action="ReturnOrder" asp-route-id="@item.ProductId">
-                                                                <div class="col-2 text-center">
-                                                                    <button type="submit" class="btn btn-link text-center text-hover-danger"><i class="fas fa-undo"></i></button>
-                                                                </div>
-                                                                <input type="hidden" asp-for="CustomersId" value="@Model.CustomersId" />
-                                                                <input type="hidden" asp-for="TransactionId" value="@Model.TransactionId" />
-                                                            </form>
-                                                        </div>
-                                                    }
-                                                }
                                             </div>
                                         </div>
-                                    }
-                                </div>
-                            </div>
-                            
-                            <p class="small text-muted" style="font-size: 11px"><b class="fw-bolder text-uppercase">Return Policy: </b> a.) The item is in pristine condition when returning; b.) the  customer shows proof of payment and; c.) the item bought should not exceed a week of being purchased. The store does not give a refund instead, they give the customer an option to change their items.</p>
-
-                            <div class="row d-flex">
-                                @*Order Summary*@
-                                <div class="col-lg-7 col-xl-7">
-                                    <div class="card rounded-6 mb-4">
-                                        <div class="card-body px-4 py-4">
-                                            <h5 class="text-uppercase">Order Summary</h5>
-                                            <ul class="list-unstyled">
-                                                @{
-                                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
-                                                    <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
-                                                    <li class="d-flex justify-content-between py-3 border-bottom">
-                                                        <span>VAT (@vat%)</span>
-                                                        <strong class="fw-normal">Php @vatAmount</strong>
-                                                    </li>
-                                                    <li class="d-flex justify-content-between py-3">
-                                                        <span>Total</span>
-                                                        <strong class="fw-normal">Php <span>@totalAmount</span></strong>
-                                                    </li>
-                                                }
-                                            </ul>
+                                        <div class="col-2">
+                                            @{
+                                                if (item.Product.IsSale)
+                                                { <span>Php @item.Product.PriceOnSale</span> }
+                                            else
+                                            { <span>Php @item.Product.Price</span> }
+                                            }
                                         </div>
+                                        <div class="col-1 text-center">@item.Quantity</div>
+                                        <div class="col-2 text-end">
+                                            @{
+                                                var gridTotalAmount = (item.Product.IsSale ? item.Product.PriceOnSale : item.Product.Price) * item.Quantity;
+                                                <span>Php @gridTotalAmount</span>
+                                            }
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            @{
+                                                var returnableQty = item.Quantity - item.QuantityReturned;
+                                                <span>@returnableQty</span>
+                                            }
+                                        </div>
+                                        @{
+                                            if (Model.OrderStatusId == (int)OrderStatusEnum.Completed &&
+                                                    (item.Quantity - item.QuantityReturned != 0) &&
+                                                    ((DateTime.Today - item.Orders.OrderDate).Days <= 7))
+                                            {
+                                                <div class="col-1 d-flex justify-content-center">
+                                                    <form asp-controller="Profile" asp-action="ReturnOrder" asp-route-id="@item.ProductId">
+                                                        <div class="col-2 text-center">
+                                                            <button type="submit" class="btn btn-link text-center text-hover-danger"><i class="fas fa-undo"></i></button>
+                                                        </div>
+                                                        <input type="hidden" asp-for="CustomersId" value="@Model.CustomersId" />
+                                                        <input type="hidden" asp-for="TransactionId" value="@Model.TransactionId" />
+                                                    </form>
+                                                </div>
+                                            }
+                                        }
                                     </div>
                                 </div>
+                            }
+                        </div>
+                    </div>
 
-                                @*Shipping Summary*@
-                                <div class="col-lg-4 col-xl-5">
-                                    <div class="card rounded-6 mb-4">
-                                        <div class="card-body px-4 py-4">
-                                            <h5 class="text-uppercase">Shipping Summary</h5>
-                                            <ul class="list-unstyled">
-                                                <li id="dvPayment" style="display: none">
-                                                    <div class="d-flex justify-content-between py-3 border-bottom">
-                                                        <span>Payment Method </span>
-                                                        <strong class="fw-normal">
-                                                            <label id="paymentMethod" type="text" class="text-end"></label>
-                                                        </strong>
-                                                    </div>
-                                                </li>
-                                                <li id="dvDelivery" style="display: none">
-                                                    <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
-                                                        <span>Delivery Method </span>
-                                                        <strong class="fw-normal">
-                                                            <label id="deliveryMethod" type="text" class="text-end"></label>
-                                                        </strong>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                    <p class="small text-muted" style="font-size: 11px"><b class="fw-bolder text-uppercase">Return Policy: </b> a.) The item is in pristine condition when returning; b.) the  customer shows proof of payment and; c.) the item bought should not exceed a week of being purchased. The store does not give a refund instead, they give the customer an option to change their items.</p>
+
+                    <div class="row d-flex">
+                        @*Order Summary*@
+                        <div class="col-lg-7 col-xl-7">
+                            <div class="card rounded-6 mb-4">
+                                <div class="card-body px-4 py-4">
+                                    <h5 class="text-uppercase">Order Summary</h5>
+                                    <ul class="list-unstyled">
+                                        @{
+                                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
+                                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
+                                            <li class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>VAT (@vat%)</span>
+                                                <strong class="fw-normal">Php @vatAmount</strong>
+                                            </li>
+                                            <li class="d-flex justify-content-between py-3">
+                                                <span>Total</span>
+                                                <strong class="fw-normal">Php <span>@totalAmount</span></strong>
+                                            </li>
+                                        }
+                                    </ul>
                                 </div>
                             </div>
                         </div>
+
+                        @*Shipping Summary*@
+                        <div class="col-lg-4 col-xl-5">
+                            <div class="card rounded-6 mb-4">
+                                <div class="card-body px-4 py-4">
+                                    <h5 class="text-uppercase">Shipping Summary</h5>
+                                    <ul class="list-unstyled">
+                                        <li id="dvPayment" style="display: none">
+                                            <div class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>Payment Method </span>
+                                                <strong class="fw-normal">
+                                                    <label id="paymentMethod" type="text" class="text-end"></label>
+                                                </strong>
+                                            </div>
+                                        </li>
+                                        <li id="dvDelivery" style="display: none">
+                                            <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
+                                                <span>Delivery Method </span>
+                                                <strong class="fw-normal">
+                                                    <label id="deliveryMethod" type="text" class="text-end"></label>
+                                                </strong>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
 

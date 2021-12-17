@@ -65,6 +65,8 @@ namespace ECommerce1.Controllers
         {
             await Task.Delay(0);
 
+            if (string.IsNullOrEmpty(product.ProductVariantJSON)) ModelState.AddModelError(string.Empty, "Product variant(s) is required.");
+
             if (!ModelState.IsValid)
             {
                 _service.InitializeProductListForResponse(product);
@@ -136,6 +138,8 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProduct(long id, Product product)
         {
+            if (string.IsNullOrEmpty(product.ProductVariantJSON)) ModelState.AddModelError(string.Empty, "Product variant(s) is required.");
+
             if (!ModelState.IsValid)
             {
                 _service.InitializeProductListForResponse(product);
