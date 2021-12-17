@@ -50,6 +50,7 @@ namespace ECommerce1.Controllers
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
+            ViewBag.Customer = _customer;
 
             var _customerViewModel = new CustomerViewModel
             {
@@ -65,7 +66,7 @@ namespace ECommerce1.Controllers
                 GenderId = _customer.GenderId,
                 Genders = await _customersService.GetGenders(),
                 Id = _customer.Id,
-                Image = _customer.Image,
+                Image = string.IsNullOrEmpty(_customer.Image) ? _commonServices.NoImage : _customer.Image,
                 LastName = _customer.LastName,
             };
 
