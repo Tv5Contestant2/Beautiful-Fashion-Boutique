@@ -114,7 +114,7 @@ namespace ECommerce1.Controllers
             var wishlistItems = await _service.GetWishlistItemsByProductId(viewModel.Wishlists.ProductId, userId);
 
             if (wishlistItems == null)
-                _service.AddToWishlist(viewModel.Wishlists);
+                _service.AddToWishlist(viewModel.Wishlists, viewModel.CartDetails);
             else
             {
                 await _service.RemoveFromWishlist(viewModel.Wishlists.ProductId, userId);
@@ -150,6 +150,9 @@ namespace ECommerce1.Controllers
             cartDetails.CustomersId = _wishlistItems.CustomersId;
             cartDetails.ProductId = _wishlistItems.ProductId;
             cartDetails.Quantity = 1;
+            cartDetails.ColorId = _wishlistItems.ColorId;
+            cartDetails.SizeId = _wishlistItems.SizeId;
+            
 
             _service.AddToCartItems(cartDetails);
 
@@ -180,7 +183,7 @@ namespace ECommerce1.Controllers
             wishlist.CustomersId = _cartDetails.CustomersId;
             wishlist.ProductId = _cartDetails.ProductId;
 
-            _service.AddToWishlist(wishlist);
+            _service.AddToWishlist(wishlist, _cartDetails);
 
             await _service.RemoveFromCart(id, userId);
 

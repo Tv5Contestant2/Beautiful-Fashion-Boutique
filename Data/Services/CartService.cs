@@ -176,8 +176,10 @@ namespace ECommerce1.Data.Services
             _context.SaveChanges();
         }
 
-        public void AddToWishlist(Wishlist wishlist)
+        public void AddToWishlist(Wishlist wishlist, CartDetails cartDetails)
         {
+            wishlist.ColorId = cartDetails.ColorId;
+            wishlist.SizeId = cartDetails.SizeId;
             _context.Wishlists.Add(wishlist);
             _context.SaveChanges();
         }

@@ -92,7 +92,7 @@
                                     @{
                                         if (Model.Returns != null)
                                         {
-                                            if (Model.ReturnStatus.Id != (int)OrderStatusEnum.Approved || Model.ReturnStatus.Id != (int)OrderStatusEnum.Declined)
+                                            if (Model.ReturnStatus.Id != (int)OrderStatusEnum.Approved && Model.ReturnStatus.Id != (int)OrderStatusEnum.Declined)
                                             {
                                                 <div class="col-lg-12 d-flex justify-content-end">
 

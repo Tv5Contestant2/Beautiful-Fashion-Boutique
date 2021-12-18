@@ -25,7 +25,7 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public void AddToCartItems(CartDetails cartDetails);
 
-        public void AddToWishlist(Wishlist wishlist);
+        public void AddToWishlist(Wishlist wishlist, CartDetails cartDetails);
 
         public void UpdateCartItems(CartDetails cartDetails);
 
