@@ -301,7 +301,7 @@ namespace ECommerce1.Controllers
         {
             await _orderService.CancelReturnRequest(transactionId, productId);
 
-            return Redirect(Request.Headers["Referer"].ToString());
+            return View("CancelSuccess");
         }
 
         public async Task<IActionResult> CancelRequestByProduct(OrderViewModel viewModel)

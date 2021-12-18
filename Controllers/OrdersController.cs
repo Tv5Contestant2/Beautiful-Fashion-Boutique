@@ -122,6 +122,14 @@ namespace ECommerce1.Controllers
             return RedirectToAction("ViewReturn", viewModel);
         }
 
+        [Route("Orders/DeclineReturn/{transactionId:Guid}")]
+        public async Task<IActionResult> DeclineReturn(string transactionId, OrderViewModel viewModel)
+        {
+            await _service.DeclineReturn(transactionId, viewModel);
+
+            return RedirectToAction("ViewReturn", viewModel);
+        }
+
         public async Task<IActionResult> ReturnOrder(OrderViewModel viewModel)
         {
             await _service.ReturnOrder(viewModel);
