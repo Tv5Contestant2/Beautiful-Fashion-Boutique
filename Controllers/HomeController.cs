@@ -22,18 +22,22 @@ namespace ECommerce1.Controllers
         private readonly IOptions<EmailSettings> _emailSettings;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly ICommonServices _commonServices;
 
         public HomeController(ICartService cartService
             , IEmailService emailService
             , IOptions<EmailSettings> emailSettings
             , UserManager<User> userManager
-            , SignInManager<User> signInManager)
+            , SignInManager<User> signInManager
+            , ICommonServices commonServices
+            )
         {
             _cartService = cartService;
             _emailService = emailService;
             _emailSettings = emailSettings;
             _userManager = userManager;
             _signInManager = signInManager;
+            _commonServices = commonServices;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -164,7 +168,8 @@ namespace ECommerce1.Controllers
                     Email = model.Email,
                     IsCustomer = true,
                     GenderId = (int)GenderEnum.Men,
-                    LastLoggedIn = DateTime.Now
+                    LastLoggedIn = DateTime.Now,
+                    Image = _commonServices.NoImage
                 };
 
                 // Store user data in AspNetUsers database table
