@@ -9,7 +9,7 @@ namespace ECommerce1.ViewModel
     {
         public string Id { get; set; }
 
-        public DateTime Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
 
         [Display(Name = "Block")]
         public string AddressBlock { get; set; }
@@ -26,7 +26,7 @@ namespace ECommerce1.ViewModel
         [Display(Name = "Contact Number")]
         public string ContactNumber { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateCreated { get; set; }
 
         public string Image { get; set; }
 
