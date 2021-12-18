@@ -103,18 +103,18 @@ namespace ECommerce1.Controllers
             var _employee = await _service.GetEmployeeById(id);
             var _employeeViewModel = new EmployeeViewModel
             {
-                AddressBaranggay = _employee.AddressBaranggay,
-                AddressBlock = _employee.AddressBlock,
-                AddressCity = _employee.AddressCity,
-                AddressLot = _employee.AddressLot,
-                Birthday = (DateTime)_employee.Birthday,
+                AddressBaranggay = string.IsNullOrEmpty(_employee.AddressBaranggay) ? string.Empty : _employee.AddressBaranggay,
+                AddressBlock = string.IsNullOrEmpty(_employee.AddressBlock) ? string.Empty : _employee.AddressBlock,
+                AddressCity = string.IsNullOrEmpty(_employee.AddressCity) ? string.Empty : _employee.AddressCity,
+                AddressLot = string.IsNullOrEmpty(_employee.AddressLot) ? string.Empty : _employee.AddressLot,
+                Birthday = _employee.Birthday,
                 ContactNumber = _employee.ContactNumber,
-                DateCreated = (DateTime)_employee.DateCreated,
+                DateCreated = _employee.DateCreated,
                 Email = _employee.Email,
-                FirstName = _employee.FirstName,
+                FirstName = string.IsNullOrEmpty(_employee.FirstName) ? string.Empty : _employee.FirstName,
                 Id = _employee.Id,
                 Image = _employee.Image,
-                LastName = _employee.LastName,
+                LastName = string.IsNullOrEmpty(_employee.LastName) ? string.Empty : _employee.LastName,
             };
 
             return View(_employeeViewModel);

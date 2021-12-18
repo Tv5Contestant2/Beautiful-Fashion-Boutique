@@ -185,20 +185,20 @@ namespace ECommerce1.Controllers
             var _customer = await _service.GetCustomerById(id);
             var _customerViewModel = new CustomerViewModel
             {
-                AddressBaranggay = _customer.AddressBaranggay,
-                AddressBlock = _customer.AddressBlock,
-                AddressCity = _customer.AddressCity,
-                AddressLot = _customer.AddressLot,
-                Birthday = (DateTime)_customer.Birthday,
-                ContactNumber = _customer.ContactNumber,
+                AddressBaranggay = string.IsNullOrEmpty(_customer.AddressBaranggay) ? string.Empty : _customer.AddressBaranggay,
+                AddressBlock = string.IsNullOrEmpty(_customer.AddressBlock) ? string.Empty : _customer.AddressBlock,
+                AddressCity = string.IsNullOrEmpty(_customer.AddressCity) ? string.Empty : _customer.AddressCity,
+                AddressLot = string.IsNullOrEmpty(_customer.AddressLot) ? string.Empty : _customer.AddressLot,
+                Birthday = _customer.Birthday,
+                ContactNumber = string.IsNullOrEmpty(_customer.ContactNumber) ? string.Empty : _customer.ContactNumber,
                 //DateCreated = (DateTime)_customer.DateCreated,
                 Email = _customer.Email,
-                FirstName = _customer.FirstName,
+                FirstName = string.IsNullOrEmpty(_customer.FirstName) ? string.Empty : _customer.FirstName,
                 GenderId = _customer.GenderId,
                 Genders = await _service.GetGenders(),
                 Id = _customer.Id,
                 Image = _customer.Image,
-                LastName = _customer.LastName,
+                LastName = string.IsNullOrEmpty(_customer.LastName) ? string.Empty : _customer.LastName,
             };
 
             return View(_customerViewModel);
