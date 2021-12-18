@@ -51,11 +51,17 @@ namespace ECommerce1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Sales = _service.GetProductSales();
             ViewBag.ProductsSold = _service.GetProductSold();
             ViewBag.Pending = _service.GetPendingOrders();
+
+            ViewBag.RecentOrders = _service.GetRecentOrders();
+            ViewBag.RecentDeliveries = _service.GetRecentDeliveries();
+            ViewBag.RecentMessages = _service.GetRecentMessages();
+            ViewBag.OutOfStock = await _service.GetOutOfStock();
+
             return View();
         }
 

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using ECommerce1.Data.Enums
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
@@ -7,46 +8,194 @@
 
 <div class="container-fluid main-container">
     @*Statistics*@
-    <div class="jumbotron">
-        <div class="row w-100">
-            <div class="col-md-3">
-                <div class="card border-info mx-sm-1 p-3">
-                    <div class="card border-info shadow text-info p-3 my-card"><span class="fas fa-ruble-sign" aria-hidden="true"></span></div>
-                    <div class="text-info text-center mt-3"><h6>Total Sales (Monthly)</h6></div>
-                    <div class="text-info text-center mt-2"><h4>@ViewBag.Sales</h4></div>
+    <div class="row w-100">
+        <div class="col-xl-6 col-md-6 mb-8">
+            <div class="card overflow-hidden">
+                <div class="card-content">
+                    <div class="card-body cleartfix">
+                        <div class="media align-items-stretch">
+                            <div class="media-body m-3">
+                                <h4 class="text-danger">Total Revenue</h4>
+                                <span>See how much you've earned</span>
+                            </div>
+                            <div class="align-self-center">
+                                <h1>@ViewBag.Sales.ToString("#,##.00")</h1>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card border-success mx-sm-1 p-3">
-                    <div class="card border-success shadow text-success p-3 my-card"><span class="fas fa-truck" aria-hidden="true"></span></div>
-                    <div class="text-success text-center mt-3"><h6>Total Products Sold</h6></div>
-                    <div class="text-success text-center mt-2"><h4>@ViewBag.ProductsSold</h4></div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-danger mx-sm-1 p-3">
-                    <div class="card border-danger shadow text-danger p-3 my-card"><span class="fa fa-inbox" aria-hidden="true"></span></div>
-                    <div class="text-danger text-center mt-3"><h6>Pending Delivery</h6></div>
-                    <div class="text-danger text-center mt-2"><h4>@ViewBag.Pending</h4></div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-warning mx-sm-1 p-3">
-                    <div class="card border-warning shadow text-warning p-3 my-card"><span class="fa fa-heart" aria-hidden="true"></span></div>
-                    <div class="text-warning text-center mt-3"><h6>Total Annual Revenue</h6></div>
-                    <div class="text-warning text-center mt-2"><h4>@ViewBag.Sales</h4></div>
+        </div>
+        <div class="col-xl-6 col-md-6">
+            <div class="card overflow-hidden">
+                <div class="card-content">
+                    <div class="card-body cleartfix">
+                        <div class="media align-items-stretch">
+                            <div class="media-body m-3">
+                                <h4 class="text-danger">Total Products Sold</h4>
+                                <span>The items you successfully sold</span>
+                            </div>
+                            <div class="align-self-center">
+                                <h1>@ViewBag.ProductsSold</h1>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    @*<div class="row">
-        <div class="col col-md-7 mx-3 jumbotron">
-            <h4>Receipts</h4>
+    <div class="row w-100 justify-content-between">
+        <div class="col col-md-8 col-xl-8 pt-3">
+            <h4 class="m-3">Recent Orders</h4>
+            <div class="d-flex justify-content-lg-around pb-3">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="cart-inner" id="dtOrderList">
+                        <div class="border-top border-bottom py-2">
+                            <div class="row text-uppercase">
+                                <div class="col-4"><strong class="small">Transaction Id</strong></div>
+                                <div class="col-2"><strong class="small">Customer</strong></div>
+                                <div class="col-1 text-center"> <strong class="small">Date</strong></div>
+                                <div class="col-2 text-center"> <strong class="small">Total</strong></div>
+                                <div class="col-1 text-center"><strong class="small">Status</strong></div>
+                                <div class="col-1 text-center"><strong class="small">Delivery</strong></div>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.RecentOrders != null)
+                        {
+                            @foreach (var item in ViewBag.RecentOrders)
+                            {
+                                var @total = item.Total + item.ShippingFee + item.TaxAmount;
+                                <div class="row-item pt-4 pb-4 border-bottom">
+                                    <div class="row text-left">
+                                        <div class="item col-4">@item.TransactionId</div>
+                                        <div class="item col-2">@string.Format("{0} {1}", item.Customers.FirstName, @item.Customers.LastName)</div>
+                                        <div class="item col-1 text-center">@item.OrderDate.ToShortDateString()</div>
+                                        <div class="item col-2 text-center">Php @total</div>
+                                        <div class="item col-1 text-center">
+                                            <span class="badge @item.OrderStatus.Class">@item.OrderStatus.Title</span>
+                                        </div>
+                                        <div class="item col-1 text-center">
+                                            <span class="badge @item.DeliveryStatus.Class">@item.DeliveryStatus.Title</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <h4 class="pt-3 text-muted">No recent orders.</h4>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="col col-md-4">
-            <h4>Number of items sold</h4>
+        <div class="col-xl-3 col-md-3 pt-3">
+            <div class="card overflow-hidden">
+                <div class="card-content">
+                    <div class="card-body cleartfix">
+                        <div class="media align-items-stretch">
+                            <div class="media-body m-3">
+                                <h4 class="text-danger">Out-of-Stock</h4>
+                            </div>
+                            <div class="align-self-center">
+                                @foreach (var item in ViewBag.OutOfStock)
+                                {
+                                    <div class="row-item pt-4 pb-4 border-bottom">
+                                        <div class="row text-left">
+                                            <div class="item col-3">
+                                                <div class="d-flex align-items-center">
+                                                    <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Products.Image)" alt="@item.Products.Name" width="85">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>*@
+    </div>
+
+    <div class="row w-100 justify-content-between">
+        <div class="col col-md-7 col-xl-7 mb-8">
+            <h4 class="m-3">Recent Messages</h4>
+            <div class="d-flex justify-content-lg-around">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="cart-inner" id="dtOrderList">
+                        <div class="border-top border-bottom py-2">
+                            <div class="row text-uppercase">
+                                <div class="col-3"><strong class="small">Customer</strong></div>
+                                <div class="col-3"><strong class="small">Email Address</strong></div>
+                                <div class="col-4"><strong class="small">Subject</strong></div>
+                                <div class="col-1 text-center"> <strong class="small">Date</strong></div>
+                            </div>
+                        </div>
+                        @foreach (var item in ViewBag.RecentMessages)
+                        {
+                            <div class="row-item pt-4 pb-4 border-bottom">
+                                <div class="row text-left">
+                                    <div class="item col-3">
+                                        <div class="d-flex align-items-center">
+                                            <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Sender.Image)" alt="@item.Sender.FirstName" width="85">
+                                            <div class="ms-3">
+                                                <h6 class="mb-0 text-dark fw-normal">@string.Format("{0} {1}", item.Sender.FirstName, item.Sender.LastName)</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item col-3">@item.Sender.Email</div>
+                                    <div class="item col-4">@item.Subject</div>
+                                    <div class="item col-1 text-center">@item.DateSent.ToShortDateString()</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col col-md-5 col-xl-5 pt-3">
+            <h4 class="m-3">Recent Deliveries</h4>
+            <div class="d-flex justify-content-lg-around pb-3">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="cart-inner" id="dtOrderList">
+                        <div class="border-top border-bottom py-2">
+                            <div class="row text-uppercase">
+                                <div class="col-5"><strong class="small">Transaction Id</strong></div>
+                                <div class="col-2"><strong class="small">Customer</strong></div>
+                                <div class="col-2"><strong class="small">Contact Number</strong></div>
+                                <div class="col-2 text-center"><strong class="small">Status</strong></div>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.RecentDeliveries != null)
+                        {
+                            @foreach (var item in ViewBag.RecentOrders)
+                            {
+                                var @total = item.Total + item.ShippingFee + item.TaxAmount;
+                                <div class="row-item pt-4 pb-4 border-bottom">
+                                    <div class="row text-left">
+                                        <div class="item col-5">@item.TransactionId</div>
+                                        <div class="item col-2">@string.Format("{0} {1}", item.Customers.FirstName, @item.Customers.LastName)</div>
+                                        <div class="col-2"><strong class="small">@item.Customers.ContactNumber</strong></div>
+                                        <div class="item col-2 text-center">
+                                            <span class="badge @item.DeliveryStatus.Class">@item.DeliveryStatus.Title</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <h4 class="pt-3 text-muted">No recent deliveries.</h4>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

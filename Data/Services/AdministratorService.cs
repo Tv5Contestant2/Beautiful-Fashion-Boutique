@@ -11,10 +11,12 @@ namespace ECommerce1.Data.Services
     public class AdministratorService : IAdministratorService
     {
         private readonly AppDBContext _context;
+        private readonly ICommonServices _commonServices;
 
-        public AdministratorService(AppDBContext context)
+        public AdministratorService(AppDBContext context, ICommonServices commonServices)
         {
             _context = context;
+            _commonServices = commonServices;
         }
 
         public About GetAboutUs() 
@@ -73,8 +75,83 @@ namespace ECommerce1.Data.Services
 
         public int GetPendingOrders()
         {
-            var result = _context.Orders.Count(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Pending);
+            var result = _context.Orders.Count(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Pending 
+                            && x.OrderStatusId != (int)OrderStatusEnum.Cancelled);
             return result != 0 ? result : 0;
+        }
+
+        public IEnumerable<Orders> GetRecentOrders()
+        {
+            return _context.Orders
+                .Include(x => x.Customers)
+                .Include(x => x.OrderStatus)
+                .Include(x => x.DeliveryStatus)
+                .OrderByDescending(x => x.OrderDate)
+                .Take(20).ToList();
+        }
+
+        public IEnumerable<Orders> GetRecentDeliveries()
+        {
+            return _context.Orders
+                .Include(x => x.Customers)
+                .Include(x => x.OrderStatus)
+                .Include(x => x.DeliveryStatus)
+                .Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
+                .OrderByDescending(x => x.OrderDate)
+                .Take(20).ToList();
+        }
+
+        public IEnumerable<Message> GetRecentMessages()
+        {
+            return _context.Messages
+                .Include(x => x.Sender)
+                .OrderByDescending(x => x.DateSent)
+                .Take(20).ToList();
+        }
+
+        public async Task<IEnumerable<Product>> GetOutOfStock()
+        {
+            var result = await _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.ProductVariants)
+                .Include(x => x.InventoryStatus)
+                .Include(x => x.Category)
+                .ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductImages.Any())
+                {
+                    var _selectFirstImage = item.ProductImages.FirstOrDefault(); // Get first image that has been added to be  as default image to display
+                    item.Image = _selectFirstImage != null ? _selectFirstImage.Image : string.Empty;
+                }
+                else
+                {
+                    //No Image
+                    item.Image = _commonServices.NoImage;
+                }
+            }
+
+            var inventoryStatus = await _context.StockStatuses.ToListAsync();
+
+            foreach (var item in result)
+            {
+                if (item.ProductVariants.Sum(x => x.Quantity) == 0)
+                {
+                    item.StockStatusId = (int)StockStatusEnum.OutOfStock;
+                    item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+                    continue;
+                }
+
+                if (item.ProductVariants.Sum(x => x.Quantity) <= item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.Critical;
+                else if (item.ProductVariants.Sum(x => x.Quantity) > item.CriticalQty)
+                    item.StockStatusId = (int)StockStatusEnum.InStock;
+
+                item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
+            }
+
+            return result.Where(x => x.StockStatusId == (int)StockStatusEnum.OutOfStock).ToList();
         }
     }
 }

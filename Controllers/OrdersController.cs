@@ -33,7 +33,7 @@ namespace ECommerce1.Controllers
 
             ViewBag.Received = result.Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Received).Count();
             ViewBag.Shipped = result.Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped).ToList().Count();
-            ViewBag.Pending = result.Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Pending).ToList().Count(); ;
+            ViewBag.Pending = result.Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Pending && x.OrderStatusId != (int)OrderStatusEnum.Cancelled).ToList().Count();
 
             var viewModel = new OrderViewModel
             {

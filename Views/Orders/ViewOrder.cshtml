@@ -28,9 +28,9 @@
     <section class="content">
         <div class="container-fluid">
             @*Search*@
-            <div class="row d-flex justify-content-between">
+            @*<div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-100" placeholder="Search" />
-            </div>
+            </div>*@
 
             @*Grid View*@
             @{
@@ -70,7 +70,7 @@
                         }
                     </div>
                     <div class="cart-outer mb-5">
-                        <div class="cart-inner">
+                        <div class="cart-inner" id="dtOrderList">
                             <div class="border-top border-bottom py-2">
                                 <div class="row text-uppercase">
                                     <div class="col-6"><strong class="small">Product</strong></div>
@@ -83,7 +83,7 @@
                             @foreach (var item in Model)
                             {
                                 <div class="py-4 border-bottom">
-                                    <div class="row d-flex align-items-center bord">
+                                    <div class="row-item d-flex align-items-center bord">
                                         <div class="col-6">
                                             <div class="d-flex align-items-center">
                                                 <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Product.Image)" alt="@item.Product.Name" width="70">
@@ -189,7 +189,9 @@
     window.onscroll = function () { scrollFunction(); };
 
     $(document).ready(function () {
+        debugger
         $("#inptSearch").on("keyup", function () {
+            debugger
             var value = $(this).val().toLowerCase();
             $("#dtOrderList .row-item").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)

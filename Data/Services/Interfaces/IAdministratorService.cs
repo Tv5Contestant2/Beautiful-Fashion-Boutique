@@ -1,4 +1,6 @@
 ﻿using ECommerce1.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ECommerce1.Data.Services.Interfaces
 {
@@ -23,6 +25,14 @@ namespace ECommerce1.Data.Services.Interfaces
         public int GetProductSold();
 
         public int GetPendingOrders();
+
+        public IEnumerable<Orders> GetRecentOrders();
+
+        public IEnumerable<Orders> GetRecentDeliveries();
+
+        public IEnumerable<Message> GetRecentMessages();
+
+        public Task<IEnumerable<Product>> GetOutOfStock();
 
     }
 }
