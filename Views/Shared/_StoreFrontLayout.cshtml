@@ -32,7 +32,6 @@
     <link rel="shortcut icon" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/favicon.e2ef10ef.ico">
     <!-- Google fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&amp;display=swap">
-
 </head>
 
 <body>
@@ -73,6 +72,11 @@
                             if (UserManager.GetUserAsync(User).Result.IsAdmin != null)
                             {
                                 if ((bool)UserManager.GetUserAsync(User).Result.IsAdmin) _IsAdmin = true;
+                            }
+
+                            if (UserManager.GetUserAsync(User).Result.IsEmployee != null)
+                            {
+                                if ((bool)UserManager.GetUserAsync(User).Result.IsEmployee) _IsAdmin = true;
                             }
 
                             if (_IsAdmin == true)
