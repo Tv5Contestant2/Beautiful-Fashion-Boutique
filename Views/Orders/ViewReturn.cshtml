@@ -82,7 +82,7 @@
                                                     @*<form asp-controller="Orders" asp-action="ViewReturnDetails" asp-route-id="@Model.TransactionId">
 
                                                         <input type="hidden" asp-for="ProductId" value="@item.ProductId" />*@
-                                                    @if (item.ReturnStatusId != (int)OrderStatusEnum.Approved)
+                                                    @if (item.ReturnStatusId != (int)OrderStatusEnum.Approved && item.ReturnStatusId != (int)OrderStatusEnum.Declined)
                                                     {
                                                         <a class="btn btn-link text-danger text-hover-gray-3 p-0" href="@Url.Action("ViewReturnDetails", new { transactionId = @Model.TransactionId, productId = @item.ProductId })">
                                                             <i class="fas fa-eye"></i>

@@ -94,7 +94,8 @@ namespace ECommerce1.Data.Services
 
             if (orders != null)
             {
-                result.ReturnStatus = orders.ReturnStatus;
+                if (result != null)
+                    result.ReturnStatus = orders.ReturnStatus;
             }
 
             return result;
@@ -181,10 +182,19 @@ namespace ECommerce1.Data.Services
 
         public async Task<OrderDetails> CancelReturnRequest(Guid transactionId, long productId)
         {
-            var result = _context.OrdersDetails
-                .FirstOrDefault(x => x.TransactionId == transactionId 
-                                  && x.ProductId == productId);
+            var result = new OrderDetails();
 
+            if (productId != 0)
+            {
+                result = _context.OrdersDetails
+                  .FirstOrDefault(x => x.TransactionId == transactionId
+                                    && x.ProductId == productId);
+            }
+            else
+            {
+                result = _context.OrdersDetails
+                  .FirstOrDefault(x => x.TransactionId == transactionId);
+            }
             result.ReturnStatusId = null;
             result.ReturnReason = null;
             result.QuantityReturned = 0;
@@ -238,6 +248,29 @@ namespace ECommerce1.Data.Services
                                   && x.ProductId == viewModel.Returns.ProductId);
 
             result.ReturnStatusId = (int)OrderStatusEnum.Approved;
+
+            _context.OrdersDetails.Update(result);
+
+            //var result = _context.Returns
+            //    .FirstOrDefault(x => x.OrderReference.ToString() == transactionId
+            //                      && x.ProductId == viewModel.Returns.ProductId
+            //                      && x.ChangeProductsId == viewModel.Returns.ChangeProductsId);
+
+            //result.ReturnStatusId = (int)OrderStatusEnum.Approved;
+
+            _context.OrdersDetails.Update(result);
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<OrderDetails> DeclineReturn(string transactionId, OrderViewModel viewModel)
+        {
+            var result = _context.OrdersDetails
+                .FirstOrDefault(x => x.TransactionId.ToString() == transactionId
+                                  && x.ProductId == viewModel.Returns.ProductId);
+
+            result.ReturnStatusId = (int)OrderStatusEnum.Declined;
 
             _context.OrdersDetails.Update(result);
 

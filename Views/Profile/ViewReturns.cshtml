@@ -71,12 +71,12 @@
                         </span><small class="badge rounded-pill bg-light text-dark">@ViewBag.MessagesCount</small>
                     </a>
                     @*<a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Addresses">
-                            <span class="fw-normal text-sm text-dark py-1">
-                                <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
-                                    <use xlink:href="#map-marker-1"> </use>
-                                </svg>Addresses
-                            </span>
-                        </a>*@
+                        <span class="fw-normal text-sm text-dark py-1">
+                            <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
+                                <use xlink:href="#map-marker-1"> </use>
+                            </svg>Addresses
+                        </span>
+                    </a>*@
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Home" asp-action="SignOut">
                         <span class="fw-normal text-sm text-dark py-1">
                             <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
@@ -88,19 +88,52 @@
             </div>
             @{
                 <div class="col-lg-8 col-xl-9">
-                    <div class="row pb-3">
-                        @{
-                            if (Model.ReturnStatus.Id != (int)OrderStatusEnum.Approved)
-                            {
-                                <div class="col-lg-12 d-flex justify-content-end">
+                                <div class="row pb-3">
+                                    @{
+                                        if (Model.Returns != null)
+                                        {
+                                            if (Model.ReturnStatus.Id != (int)OrderStatusEnum.Approved || Model.ReturnStatus.Id != (int)OrderStatusEnum.Declined)
+                                            {
+                                                <div class="col-lg-12 d-flex justify-content-end">
 
-                                    <button class="btn btn-outline-danger" data-toggle="modal" data-target="#CancelModal" onclick="ShowCancelModal();">
-                                        <i class="fas fa-times"></i> Cancel Request
-                                    </button>
+                                                    <button class="btn btn-outline-danger" data-toggle="modal" data-target="#CancelModal" onclick="ShowCancelModal();">
+                                                        <i class="fas fa-times"></i> Cancel Request
+                                                    </button>
+                                                </div>
+                                            }
+                                        }
+                                        else if (Model.Returns == null)
+                                        {
+                                            if (Model.ReturnStatus == null) //.Id == (int)OrderStatusEnum.Declined)
+                                            {
+                                            }
+                                            else if (Model.ReturnStatus.Id == (int)OrderStatusEnum.Declined)
+                                            {
+                                                <div class="col-lg-12 d-flex justify-content-end">
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-lg-12 d-flex justify-content-end">
+
+                                                    <button class="btn btn-outline-danger" data-toggle="modal" data-target="#CancelModal" onclick="ShowCancelModal();">
+                                                        <i class="fas fa-times"></i> Cancel Request
+                                                    </button>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            <div class="col-lg-12 d-flex justify-content-end">
+
+                                                <button class="btn btn-outline-danger" data-toggle="modal" data-target="#CancelModal" onclick="ShowCancelModal();">
+                                                    <i class="fas fa-times"></i> Cancel Request
+                                                </button>
+                                            </div>
+                                        }
+                                    }
                                 </div>
-                            }
-                        }
-                    </div>
                     <div class="row justify-content-between align-content-center pb-2">
                         <div class="col-lg-7">
                             <p class="text-small mb-0">Reference</p>
@@ -108,16 +141,16 @@
                         </div>
 
                         @*<div class="col-lg-5 text-end">
-                                <span class="badge @Model.ReturnStatus.Class">@Model.ReturnStatus.Title</span>
-                            </div>*@
+                            <span class="badge @Model.ReturnStatus.Class">@Model.ReturnStatus.Title</span>
+                        </div>*@
                     </div>
 
                     @*<div class="row justify-content-between align-content-center pb-2">
-                            <div class="col-lg-7">
-                                <p class="text-small mb-0">Exchange For</p>
-                                <h5 class="fw-bold mb-0">@Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId </h5>
-                            </div>
-                        </div>*@
+                        <div class="col-lg-7">
+                            <p class="text-small mb-0">Exchange For</p>
+                            <h5 class="fw-bold mb-0">@Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId </h5>
+                        </div>
+                    </div>*@
 
                     <div class="cart-outer mb-3">
                         <div class="cart-inner">
@@ -129,46 +162,49 @@
                                 </div>
                             </div>
                             @*Product*@
-                            @foreach (var item in Model.ReturnDetails)
+                            @if (Model.ReturnDetails != null)
                             {
-                                <div class="py-4 border-bottom">
-                                    <div class="row d-flex align-items-center bord">
-                                        <div class="col-5">
-                                            <div class="d-flex align-items-center">
-                                                @*<img class="img-fluid" src="@String.Format(" data:image /jpg;base64,{0}", item.ChangeProducts.Image)" alt="@item.ChangeProducts.Name" width="70">*@
-                                                <div class="m-3">
-                                                    <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ChangeProductsId">
-                                                        <h6 class="mb-0 text-dark fw-normal">@item.ChangeProducts.Name</h6>
-                                                        @*<span class="text-muted text-sm">&nbsp;</span>*@
-                                                    </a>
+                                @foreach (var item in Model.ReturnDetails)
+                                {
+                                    <div class="py-4 border-bottom">
+                                        <div class="row d-flex align-items-center bord">
+                                            <div class="col-5">
+                                                <div class="d-flex align-items-center">
+                                                    @*<img class="img-fluid" src="@String.Format(" data:image /jpg;base64,{0}", item.ChangeProducts.Image)" alt="@item.ChangeProducts.Name" width="70">*@
+                                                    <div class="m-3">
+                                                        <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ChangeProductsId">
+                                                            <h6 class="mb-0 text-dark fw-normal">@item.ChangeProducts.Name</h6>
+                                                            @*<span class="text-muted text-sm">&nbsp;</span>*@
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-2">
-                                            @{
-                                                if (item.ChangeProducts.IsSale)
-                                                { <span>Php @item.ChangeProducts.PriceOnSale</span> }
-                                            else
-                                            { <span>Php @item.ChangeProducts.Price</span> }
-                                            }
-                                        </div>
-                                        <div class="col-1 text-center">
-                                            <form asp-action="CancelRequestByProduct" asp-route-id="@item.ChangeProductsId">
+                                            <div class="col-2">
+                                                @{
+                                                    if (item.ChangeProducts.IsSale)
+                                                    { <span>Php @item.ChangeProducts.PriceOnSale</span> }
+                                                else
+                                                { <span>Php @item.ChangeProducts.Price</span> }
+                                                }
+                                            </div>
+                                            <div class="col-1 text-center">
+                                                <form asp-action="CancelRequestByProduct" asp-route-id="@item.ChangeProductsId">
 
-                                                <input type="hidden" value="@item.ChangeProductsId" asp-for="@Model.Returns.ChangeProductsId" />
-                                                <input type="hidden" value="@Model.TransactionId" asp-for="@Model.Returns.OrderReference" />
-                                                <input type="hidden" value="@Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId" asp-for="@Model.Returns.ProductId" />
-                                                @*@{
+                                                    <input type="hidden" value="@item.ChangeProductsId" asp-for="@Model.Returns.ChangeProductsId" />
+                                                    <input type="hidden" value="@Model.TransactionId" asp-for="@Model.Returns.OrderReference" />
+                                                    <input type="hidden" value="@Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId" asp-for="@Model.Returns.ProductId" />
+                                                    @*@{
                                                             if (Model.ReturnStatus.Id != (int)OrderStatusEnum.Approved) { <button class="btn btn-link" type="submit">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                             }
 
                                                     }*@
-                                            </form>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             }
                         </div>
                     </div>
@@ -178,25 +214,34 @@
             }
         </div>
 
-        @*Cancel Modal*@
-        <div class="modal fade" id="CancelModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Cancel Order</h4>
-                        <a class="btn btn-default text-right" data-dismiss="modal" onclick="CloseModal()">×</a>
-                    </div>
-                    <div class="modal-body">
-                        <p>Do you really want to cancel your request? </p>
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-primary" href="@Url.Action("CancelReturnRequest", new { transactionId = @Model.TransactionId, productId = @Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId })">Cancel Request</a>
-                        <a class="btn btn-outline-dark" data-dismiss="modal" onclick="CloseModal()">Close</a>
+        @*@if (Model.ReturnDetails.Count() > 0)*@
+        
+            @*Cancel Modal*@
+            <div class="modal fade" id="CancelModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Cancel Order</h4>
+                            <a class="btn btn-default text-right" data-dismiss="modal" onclick="CloseModal()">×</a>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you really want to cancel your request? </p>
+                        </div>
+                        <div class="modal-footer">
+
+                            @{
+                                var productId = Model.ReturnDetails.Count() == 0 ? 0 : Model.ReturnDetails.First(x => x.OrderReference == Model.TransactionId).ProductId;
+
+                                <a class="btn btn-primary" href="@Url.Action("CancelReturnRequest", new { transactionId = @Model.TransactionId, productId = @productId })">Cancel Request</a>
+                            }
+
+                            <a class="btn btn-outline-dark" data-dismiss="modal" onclick="CloseModal()">Close</a>
+                        </div>
                     </div>
                 </div>
             </div>
+        @*}*@
         </div>
-    </div>
 
     <div style="position: fixed; bottom: 10px; right: 10px;">
         <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">

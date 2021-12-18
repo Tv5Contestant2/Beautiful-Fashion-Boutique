@@ -40,6 +40,8 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<OrderDetails> ApproveReturn(string transactionId, OrderViewModel viewModel);
 
+        public Task<OrderDetails> DeclineReturn(string transactionId, OrderViewModel viewModel);
+
         public Task<Orders> UpdateOrderStatuses(string transactionId);
 
         public void AddToReturns(OrderViewModel viewModel);
