@@ -187,8 +187,7 @@
                                                 <input id="isGCash" asp-for="Cart.IsGCash" type="hidden" />
                                                 <input class="form-check-input" type="radio" name="payment-method" value="true"
                                                        onclick='document.getElementById("isGCash").value = true;
-                                                                document.getElementById("isCashOnDelivery").value = false;
-                                                                document.getElementById("isPayMaya").value = false;
+                                                                document.getElementById("isCOD").value = false;
                                                                 document.getElementById("paymentMethod").innerHTML = "GCash"' ;>
                                                 <label class="form-check-label ms-2" for="payment-method-1">
                                                     <strong>Continue with GCash</strong>
@@ -227,8 +226,7 @@
                                                 <input id="isCOD" asp-for="Cart.IsCashOnDelivery" type="hidden" />
                                                 <input class="form-check-input" type="radio" name="payment-method" value="true"
                                                        onclick='document.getElementById("isGCash").value = false;
-                                                                document.getElementById("isCashOnDelivery").value = true;
-                                                                document.getElementById("isPayMaya").value = false;
+                                                                document.getElementById("isCOD").value = true;
                                                                 document.getElementById("paymentMethod").innerHTML = "Cash on Delivery"' ;>
                                                 <label class="form-check-label ms-2" for="payment-method-2">
                                                     <strong>Cash on delivery</strong>
