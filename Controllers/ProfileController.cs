@@ -54,6 +54,9 @@ namespace ECommerce1.Controllers
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
+
+            if (string.IsNullOrEmpty(_customer.Image)) _customer.Image = _commonServices.NoImage;
+
             ViewBag.Customer = _customer;
 
             var _customerViewModel = new CustomerViewModel
@@ -109,6 +112,9 @@ namespace ECommerce1.Controllers
 
             var result = await _service.GetCustomerOrders(userId);
             var user = await _userManager.FindByIdAsync(userId);
+
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
+
             ViewBag.Customer = user;
 
             return View(result);
@@ -124,6 +130,9 @@ namespace ECommerce1.Controllers
 
             var result = await _service.GetCustomerReturns(userId);
             var user = await _userManager.FindByIdAsync(userId);
+
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
+
             ViewBag.Customer = user;
 
             return View(result);
@@ -139,6 +148,8 @@ namespace ECommerce1.Controllers
 
             var result = await _service.GetCustomerWishlist(userId);
             var user = await _userManager.FindByIdAsync(userId);
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
+
             ViewBag.Customer = user;
 
             return View(result);
@@ -154,6 +165,9 @@ namespace ECommerce1.Controllers
 
             var result = await _messageService.GetCustomerMessages(userId);
             var user = await _userManager.FindByIdAsync(userId);
+
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
+
             ViewBag.Customer = user;
 
             var viewModel = new MessageViewModel
@@ -200,6 +214,8 @@ namespace ECommerce1.Controllers
                 CustomersShippingAddress = customerShippingAddress
             };
 
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
+
             ViewBag.Customer = user;
             return View(viewModel);
         }
@@ -224,6 +240,9 @@ namespace ECommerce1.Controllers
             if (returns != null)
                 viewModel.ReturnStatus = returns.ReturnStatus;
             viewModel.ReturnDetails = returnDetails;
+
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
+
             ViewBag.Customer = user;
             return View(viewModel);
         }
@@ -239,6 +258,9 @@ namespace ECommerce1.Controllers
 
             var result = await _service.GetCustomerBillingAddresses(userId);
             var user = await _userManager.FindByIdAsync(userId);
+
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
+
             ViewBag.Customer = user;
 
             return View(result);
@@ -259,6 +281,8 @@ namespace ECommerce1.Controllers
             viewModel.Address = user.AddressCity;
             viewModel.OrderDetails = await _orderService.GetOrderDetailsById(viewModel.TransactionId.ToString());
             viewModel.ProductId = productId;
+
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
 
             ViewBag.Customer = user;
 
