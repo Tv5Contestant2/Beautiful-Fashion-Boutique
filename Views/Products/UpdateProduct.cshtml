@@ -506,7 +506,7 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
                     .replace(/^.+,/, "");
 
                 document.getElementById('imgOutput').setAttribute('src', reader.result);
-
+                document.getElementById("Image").value = reader.result;
             };
             reader.readAsDataURL(file);
             document.getElementById('inptImageFileName').value = file.name;

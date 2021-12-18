@@ -37,11 +37,6 @@ namespace ECommerce1.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
-
         public IActionResult Index()
         {
             return RedirectToAction("Home", "StoreFront");
@@ -51,6 +46,7 @@ namespace ECommerce1.Controllers
         {
             return View();
         }
+
         public IActionResult Error()
         {
             return View();
@@ -63,7 +59,7 @@ namespace ECommerce1.Controllers
 
             return View(new HomeUserViewModel());
         }
-        
+
         public IActionResult ResetLinkSent()
         {
             ViewBag.CartCount = 0;
@@ -168,8 +164,7 @@ namespace ECommerce1.Controllers
                     Email = model.Email,
                     IsCustomer = true,
                     GenderId = (int)GenderEnum.Men,
-                    LastLoggedIn = DateTime.Now,
-                    Birthday = DateTime.Parse("01/01/2000")
+                    LastLoggedIn = DateTime.Now
                 };
 
                 // Store user data in AspNetUsers database table
@@ -180,8 +175,7 @@ namespace ECommerce1.Controllers
                 if (result.Succeeded)
                 {
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var confirmationLink = Url.Action("ConfirmEmail", "Home",
-    new { userId = user.Id, token = token }, Request.Scheme);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Home", new { userId = user.Id, token = token }, Request.Scheme);
 
                     // send email confirmation
                     await _emailService.SendConfirmationEmail(model.Email, confirmationLink);
@@ -292,12 +286,13 @@ namespace ECommerce1.Controllers
             // Display validation errors if model state is not valid
             return View("ResetPasswordSuccess", model);
         }
+
         public async Task<IActionResult> ConfirmEmail(string userId)
         {
             await _emailService.AccountVerified(userId);
 
             ViewBag.CartCount = 0;
-            
+
             return View(new HomeUserViewModel());
         }
 

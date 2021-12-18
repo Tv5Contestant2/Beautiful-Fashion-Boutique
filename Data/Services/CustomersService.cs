@@ -36,6 +36,11 @@ namespace ECommerce1.Data.Services
             return _result;
         }
 
+        public void InitializeCustomer(CustomerViewModel model)
+        {
+            model.Genders = _context.Genders.ToList();
+        }
+
         public async Task<IEnumerable<Gender>> GetGenders() => await _context.Genders.ToListAsync();
 
         public async Task<(bool, IEnumerable<IdentityError>)> CreateCustomer(CustomerViewModel model)
@@ -77,12 +82,12 @@ namespace ECommerce1.Data.Services
             _userRepo.Birthday = model.Birthday;
             _userRepo.ContactNumber = model.ContactNumber;
             _userRepo.DateCreated = model.DateCreated;
-            _userRepo.Email = model.Email;
+            //_userRepo.Email = model.Email;
             _userRepo.FirstName = model.FirstName;
             _userRepo.GenderId = model.GenderId;
             _userRepo.Image = model.Image;
             _userRepo.LastName = model.LastName;
-            _userRepo.UserName = model.Email.ToLower().Trim();
+            //_userRepo.UserName = model.Email.ToLower().Trim();
 
             if (!string.IsNullOrEmpty(model.Password))
             {

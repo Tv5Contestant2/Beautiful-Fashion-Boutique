@@ -1,21 +1,20 @@
 ﻿@model ECommerce1.ViewModel.CustomerViewModel
 
 @{
-    ViewData["Title"] = "Add New Customer";
+    ViewData["Title"] = "Update Customer";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="row text">
     <div class="col-md-10 offset-md-1">
         <p>
-            <h4>Add Customer</h4>
+            <h4>View Customer</h4>
         </p>
 
         <div class="form-group">
             <form asp-action="UpdateCustomer" enctype="multipart/form-data" class="hidden">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
-                <input type="submit" value="Save" class="btn btn-success float-right" />
 
                 <div id="accordion">
                     <div class="card mt-2">

@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model ECommerce1.ViewModel.CustomerViewModel
 @{
     ViewData["Title"] = "My Profile";
 }
@@ -25,13 +25,22 @@
             @*Sidebar*@
             <div class="col-xl-3 col-lg-4">
                 <div class="bg-light text-center p-4 rounded-top-lg border border-bottom-0">
-                    @{
-                        var customerName = Model.FirstName + ' ' + Model.LastName;
-
-                        <a class="d-inline-block" href="#"><img class="img-fluid rounded-circle img-thumbnail p-2 mb-3" src="@Model.Image" width="150" alt="@customerName"></a>
-                        <h5>@customerName</h5>
-                        <p class="text-muted text-small">@Model.AddressCity</p>
-                    }
+                    <div class="product">
+                        <div class="image d-flex align-items-center justify-content-center">
+                            <img id="imgOutput" class="img-fluid rounded-circle img-thumbnail p-2 mb-3" src="@string.Format("data:image/jpeg;base64,{0}", Model.Image)" width="150">
+                            <div class="hover-overlay d-flex align-items-center justify-content-center">
+                                <div class="CTA d-flex align-items-center justify-content-center">
+                                    <label for="inptImageUpload" class="btn btn-link active">
+                                        <i class="fas fa-upload"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        @{
+                            var customerName = ViewBag.Customer.FirstName + ' ' + ViewBag.Customer.LastName;
+                            <h5>@customerName</h5>
+                        }
+                    </div>
                 </div>
                 <nav class="list-group">
                     <a class="active list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" asp-controller="Profile" asp-action="Index" aria-current="true">
@@ -65,13 +74,15 @@
                             <i class="far fa-envelope"></i>&nbsp;&nbsp;&nbsp;Messages
                         </span><small class="badge rounded-pill bg-light text-dark">@ViewBag.MessagesCount</small>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Addresses">
-                        <span class="fw-normal text-sm text-dark py-1">
-                            <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
-                                <use xlink:href="#map-marker-1"> </use>
-                            </svg>Addresses
-                        </span>
-                    </a>
+
+                    @*<a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Profile" asp-action="Addresses">
+                            <span class="fw-normal text-sm text-dark py-1">
+                                <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
+                                    <use xlink:href="#map-marker-1"> </use>
+                                </svg>Addresses
+                            </span>
+                        </a>*@
+
                     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" asp-controller="Home" asp-action="SignOut">
                         <span class="fw-normal text-sm text-dark py-1">
                             <svg class="svg-icon me-2 svg-icon-sm svg-icon-heavy">
@@ -84,81 +95,103 @@
 
             @*Profile*@
             <div class="col-lg-8 col-xl-9">
-                <div class="bg-light rounded-pill px-4 py-3 mb-5">
-                    <h5 class="mb-0">Change password  </h5>
-                </div>
-                <form class="mb-5">
-                    <div class="row mb-3">
-                        <div class="col-sm-6">
-                            <label class="form-label" for="password_old">Old password</label>
-                            <input class="form-control" id="password_old" type="password">
+                <div class="form-group ml-5">
+                    <form asp-action="Index" enctype="multipart/form-data" class="hidden">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div style="display:none;">
+                            <input id="inptImageUpload" type="file" accept="image/*" name="image" />
+                            <input id="Image" asp-for="Image" class="form-control" />
                         </div>
-                    </div>
-                    <div class="row gy-3">
-                        <div class="col-sm-6">
-                            <label class="form-label" for="password_1">New password</label>
-                            <input class="form-control" id="password_1" type="password">
+
+                        <div class="bg-light rounded-pill px-4 py-3 mb-3">
+                            <h5 class="mb-0">Personal details</h5>
                         </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="password_2">Retype new password</label>
-                            <input class="form-control" id="password_2" type="password">
+
+                        <div class="row gy-3">
+                            <div class="col-sm-6 ">
+                                <input asp-for="Id" value="@Model.Id" type="hidden" />
+                                <label asp-for="FirstName" class="control-label"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6">
+                                <label asp-for="LastName" class="control-label"></label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6">
+                                <label asp-for="Birthday" class="control-label"></label>
+                                <input asp-for="Birthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+                            </div>
+                            <div class="col-sm-6">
+                                <label asp-for="GenderId" class="control-label"></label>
+                                <div>
+                                    @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "AlternateTitle"), htmlAttributes: new { @class = "form-control", id = "GenderId", @value = Model.GenderId })
+                                    @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6 ">
+                                <label asp-for="Password" class="control-label"></label>
+                                <input asp-for="Password" class="form-control" type="password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6 ">
+                                <label asp-for="ConfirmPassword" class="control-label"></label>
+                                <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="col-12 text-center">
-                            <button class="btn btn-primary" type="submit"><i class="fas fa-save me-2"></i>Change password</button>
+
+                        <div class="bg-light rounded-pill px-4 py-3 mb-3 mt-3">
+                            <h5 class="mb-0">Contact Information</h5>
                         </div>
-                    </div>
-                    <!-- /.row-->
-                </form>
-                <div class="bg-light rounded-pill px-4 py-3 mb-5">
-                    <h5 class="mb-0">Personal details</h5>
-                </div>
-                <form>
-                    <div class="row gy-3">
-                        <div class="col-sm-6">
-                            <label class="form-label" for="firstname">Firstname</label>
-                            <input class="form-control" id="firstname" type="text">
+
+                        <div class="row gy-3">
+                            <div class="col-sm-6 ">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" disabled />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6 ">
+                                <label asp-for="ContactNumber" class="control-label"></label>
+                                <input asp-for="ContactNumber" class="form-control" />
+                                <span asp-validation-for="ContactNumber" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="lastname">Lastname</label>
-                            <input class="form-control" id="lastname" type="text">
+
+                        <div class="bg-light rounded-pill px-4 py-3 mb-3 mt-3">
+                            <h5 class="mb-0">Address Details</h5>
                         </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="company">Company</label>
-                            <input class="form-control" id="company" type="text">
+
+                        <div class="row gy-3">
+                            <div class="col-sm-6 ">
+                                <label asp-for="AddressBlock" class="control-label"></label>
+                                <input asp-for="AddressBlock" class="form-control" />
+                                <span asp-validation-for="AddressBlock" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6 ">
+                                <label asp-for="AddressLot" class="control-label"></label>
+                                <input asp-for="AddressLot" class="form-control" />
+                                <span asp-validation-for="AddressLot" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6 ">
+                                <label asp-for="AddressBaranggay" class="control-label"></label>
+                                <input asp-for="AddressBaranggay" class="form-control" />
+                                <span asp-validation-for="AddressBaranggay" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6 ">
+                                <label asp-for="AddressCity" class="control-label"></label>
+                                <input asp-for="AddressCity" class="form-control" />
+                                <span asp-validation-for="AddressCity" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="street">Street</label>
-                            <input class="form-control" id="street" type="text">
-                        </div>
-                        <div class="col-sm-6 col-md-3">
-                            <label class="form-label" for="city">Company</label>
-                            <input class="form-control" id="city" type="text">
-                        </div>
-                        <div class="col-sm-6 col-md-3">
-                            <label class="form-label" for="zip">ZIP</label>
-                            <input class="form-control" id="zip" type="text">
-                        </div>
-                        <div class="col-sm-6 col-md-3">
-                            <label class="form-label" for="state">State</label>
-                            <select class="form-control" id="state"></select>
-                        </div>
-                        <div class="col-sm-6 col-md-3">
-                            <label class="form-label" for="country">Country</label>
-                            <div class="choices" data-type="select-one" tabindex="0" role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-check js-country choices__input" id="country" name="country" hidden="" tabindex="-1" data-choice="active"><option value="country sample">country sample </option></select><div class="choices__list choices__list--single"><div class="choices__item choices__item--selectable" data-item="" data-id="1" data-value="country sample" data-custom-properties="null" aria-selected="true">country sample </div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><input type="text" class="choices__input choices__input--cloned" autocomplete="off" autocapitalize="off" spellcheck="false" role="textbox" aria-autocomplete="list" aria-label="false" placeholder=""><div class="choices__list" role="listbox"><div id="choices--country-item-choice-1" class="choices__item choices__item--choice is-selected choices__item--selectable is-highlighted" role="option" data-choice="" data-id="1" data-value="country sample" data-select-text="" data-choice-selectable="" aria-selected="true">country sample </div><div id="choices--country-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="country sample" data-select-text="" data-choice-selectable="">country sample</div><div id="choices--country-item-choice-3" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="3" data-value="country sample" data-select-text="" data-choice-selectable="">country sample</div><div id="choices--country-item-choice-4" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="4" data-value="country sample" data-select-text="" data-choice-selectable="">country sample</div></div></div></div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="phone">Telephone</label>
-                            <input class="form-control" id="phone" type="text">
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="form-label" for="email">Email</label>
-                            <input class="form-control" id="email" type="email">
-                        </div>
-                        <div class="col-sm-12 text-center">
+
+                        <div class="col-sm-12 text-center mt-4">
                             <button class="btn btn-primary" type="submit"><i class="fas fa-save me-2"></i>Save changes</button>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -173,4 +206,29 @@
 <script>
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }
+
+    //Start - image
+
+    var inptImageUpload = document.querySelector("#inptImageUpload");
+
+    // listen for the change event so we can capture the file
+    inptImageUpload.addEventListener("change", (e) => {
+        // get a reference to the file
+        const file = e.target.files[0];
+
+        // encode the file using the FileReader API
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result
+                .replace("data:", "")
+                .replace(/^.+,/, "");
+
+            document.getElementById('imgOutput').setAttribute('src', reader.result);
+            document.getElementById("Image").value = reader.result;
+
+        };
+        reader.readAsDataURL(file);
+    });
+
+    //End - image
 </script>

@@ -7,6 +7,7 @@ using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -248,9 +249,19 @@ namespace ECommerce1.Controllers
             if (cart.CustomersId != null)
             {
                 var userId = _userManager.GetUserId(HttpContext.User);
+                var user = await _userManager.FindByIdAsync(userId);  //(await _userManager.Users.Where(x => x.Id == userId).ToListAsync()).FirstOrDefault();
 
                 var cartViewModel = new CartViewModel();
                 var cartDetails = await _service.GetCartItems(userId);
+
+                cart.ShippingBarangay = user.AddressBaranggay;
+                cart.ShippingBlock = user.AddressBlock;
+                cart.ShippingCity = user.AddressCity;
+                cart.ShippingContactNumber = user.ContactNumber;
+                cart.ShippingEmail = user.Email;
+                cart.ShippingFirstName = user.FirstName;
+                cart.ShippingLastName = user.LastName;
+                cart.ShippingLot = user.AddressLot;
 
                 cartViewModel.Cart = cart;
                 cartViewModel.CartDetails = cartDetails;
@@ -307,7 +318,7 @@ namespace ECommerce1.Controllers
                 orderDetails.Add(_orderDetails);
             }
 
-            var modeOfPayment = cart.IsGCash ? (int)PaymentMethodEnum.GCash : 
+            var modeOfPayment = cart.IsGCash ? (int)PaymentMethodEnum.GCash :
                                     cart.IsPayMaya ? (int)PaymentMethodEnum.PayMaya :
                                         cart.IsCashOnDelivery ? (int)PaymentMethodEnum.COD :
                                             0;
@@ -320,7 +331,7 @@ namespace ECommerce1.Controllers
                 OrderDate = DateTime.Now,
                 OrderStatusId = modeOfPayment == 0 ? (int)OrderStatusEnum.PendingPayment : (int)OrderStatusEnum.Created,
                 DeliveryStatusId = (int)DeliveryStatusEnum.Pending,
-                Total = cart.Total, 
+                Total = cart.Total,
                 ShippingFee = cart.ShippingFee,
                 TaxAmount = cart.TaxAmount,
                 OrderDetails = orderDetails

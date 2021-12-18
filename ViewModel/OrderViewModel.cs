@@ -22,24 +22,29 @@ namespace ECommerce1.ViewModel
         public Returns Returns { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public OrderStatus ReturnStatus { get; set; }
+        public CustomersShippingAddress CustomersShippingAddress { get; set; }
         public IEnumerable<Orders> Orders { get; set; }
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<Returns> ReturnDetails { get; set; }
         public IEnumerable<Color> Colors { get; set; }
         public IEnumerable<Size> Sizes { get; set; }
 
-        #region Pagination 
+        #region Pagination
+
         public int ItemPerPage { get; set; }
         public int CurrentPage { get; set; }
+
         public int PageCount()
         {
             return Convert.ToInt32(Math.Ceiling(Orders.Count() / (double)ItemPerPage));
         }
+
         public IEnumerable<Orders> PaginatedList()
         {
             int start = (CurrentPage - 1) * ItemPerPage;
             return Orders.OrderBy(b => b.Id).Skip(start).Take(ItemPerPage);
         }
-        #endregion
+
+        #endregion Pagination
     }
 }

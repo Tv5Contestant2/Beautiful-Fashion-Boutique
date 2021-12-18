@@ -38,8 +38,10 @@ namespace ECommerce1.Data.Services
                 FirstName = model.FirstName,
                 Image = model.Image,
                 IsEmployee = true,
+                EmailConfirmed = true,
                 LastName = model.LastName,
                 UserName = model.Email,
+                LastLoggedIn = DateTime.Now
             };
 
             // Store user data in AspNetUsers database table
