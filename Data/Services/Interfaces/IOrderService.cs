@@ -22,9 +22,9 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<IEnumerable<Orders>> GetAllOrdersByUser(string userId);
 
-        public Orders GetOrderById(string transactionId);
+        public Orders GetOrderById(Guid transactionId);
 
-        public Task<IEnumerable<OrderDetails>> GetOrderDetailsById(string transactionId);
+        public Task<IEnumerable<OrderDetails>> GetOrderDetailsById(Guid transactionId);
 
         public Task<IEnumerable<Returns>> GetReturnsByReference(Guid transactionId, long productId);
 
@@ -42,7 +42,9 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task<OrderDetails> DeclineReturn(string transactionId, OrderViewModel viewModel);
 
-        public Task<Orders> UpdateOrderStatuses(string transactionId);
+        public Task<Orders> UpdateOrder(OrderViewModel viewModel);
+
+        public Task<Orders> UpdateOrderStatuses(Guid transactionId);
 
         public void AddToReturns(OrderViewModel viewModel);
 

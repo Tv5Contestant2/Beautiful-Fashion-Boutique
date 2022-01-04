@@ -29,6 +29,8 @@ namespace ECommerce1.ViewModel
         public IEnumerable<Color> Colors { get; set; }
         public IEnumerable<Size> Sizes { get; set; }
 
+        public DateTime ExpectedDeliveryDate { get; set; }
+
         #region Pagination
 
         public int ItemPerPage { get; set; }

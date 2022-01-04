@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OrderDetails>
+﻿@model ECommerce1.ViewModel.OrderViewModel
 @using ECommerce1.Data.Enums
 
 @{
@@ -29,12 +29,12 @@
         <div class="container-fluid">
             @*Search*@
             @*<div class="row d-flex justify-content-between">
-                <input id="inptSearch" class="form-control w-100" placeholder="Search" />
-            </div>*@
+                    <input id="inptSearch" class="form-control w-100" placeholder="Search" />
+                </div>*@
 
             @*Grid View*@
             @{
-                var total = Model.Sum(x => (x.Product.IsSale ? x.Product.PriceOnSale : x.Product.Price) * x.Quantity);
+                var total = Model.OrderDetails.Sum(x => (x.Product.IsSale ? x.Product.PriceOnSale : x.Product.Price) * x.Quantity);
                 var shipping = (@total >= 1000 ? 100.00 : 0.00);
                 var vat = 12;
 
@@ -45,26 +45,28 @@
                     <div class="row justify-content-between align-content-center pb-2">
                         <div class="col-lg-7">
                             <p class="text-small mb-0">Reference</p>
-                            <h5 class="text-danger mb-0">@ViewBag.TransactionId</h5>
+                            <h5 class="text-danger mb-0">@Model.TransactionId</h5>
                         </div>
                         @{
-                            if (ViewBag.DeliveryStatusId != (int)DeliveryStatusEnum.Received &&
-                                ViewBag.OrderStatusId != (int)OrderStatusEnum.Cancelled &&
-                                ViewBag.OrderStatusId != (int)OrderStatusEnum.PendingPayment)
+                            if (Model.DeliveryStatusId != (int)DeliveryStatusEnum.Received &&
+                                Model.OrderStatusId != (int)OrderStatusEnum.Cancelled &&
+                                Model.OrderStatusId != (int)OrderStatusEnum.PendingPayment)
                             {
                                 <div class="col-lg-4 text-end">
-                                    <a class="btn btn-outline-danger" asp-action="UpdateOrder" asp-route-id="@ViewBag.TransactionId">
-                                        @{
-                                            if (ViewBag.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
-                                            {
-                                                <span><i class="fas fa-truck"></i> Set to Shipped </span>
-                                            }
-                                            else if (ViewBag.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
-                                            {
-                                                <span><i class="fas fa-check"></i> Set to Received </span>
-                                            }
+                                    @{
+                                        if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
+                                        {
+                                            <button class="btn btn-outline-danger" data-toggle="modal" data-target="#modal" onclick="ShowModal();">
+                                                <i class="fas fa-truck"></i> Set to Shipped
+                                            </button>
                                         }
-                                    </a>
+                                        else if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
+                                        {
+                                            <a class="btn btn-outline-danger" asp-action="UpdateOrder" asp-route-id="@Model.TransactionId">
+                                                <span><i class="fas fa-check"></i> Set to Received </span>
+                                            </a>
+                                        }
+                                    }
                                 </div>
                             }
                         }
@@ -80,7 +82,7 @@
                                 </div>
                             </div>
                             @*Product*@
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.OrderDetails)
                             {
                                 <div class="py-4 border-bottom">
                                     <div class="row-item d-flex align-items-center bord">
@@ -91,10 +93,10 @@
                                                     <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
                                                         <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6>
                                                         @*<span class="text-muted text-sm">Color: @item.Product.Colors.First(x => x.Id == item.ColorId).Title</span>
-                                                        @if (item.Product.SizeId != 0)
-                                                        {
-                                                    <span class="text-muted text-sm">, Size: @item.Product.Sizes.First(x => x.Id == item.SizeId).Title</span>
-                                                        }*@
+                                                                @if (item.Product.SizeId != 0)
+                                                                {
+                                                            <span class="text-muted text-sm">, Size: @item.Product.Sizes.First(x => x.Id == item.SizeId).Title</span>
+                                                                }*@
                                                     </a>
                                                 </div>
                                             </div>
@@ -146,30 +148,30 @@
 
                         @*Shipping Summary*@
                         @*<div class="col-lg-4 col-xl-5">
-                            <div class="card rounded-6 mb-4">
-                                <div class="card-body px-4 py-4">
-                                    <h5 class="text-uppercase">Shipping Summary</h5>
-                                    <ul class="list-unstyled">
-                                        <li id="dvPayment" style="display: none">
-                                            <div class="d-flex justify-content-between py-3 border-bottom">
-                                                <span>Payment Method </span>
-                                                <strong class="fw-normal">
-                                                    <label id="paymentMethod" type="text" class="text-end"></label>
-                                                </strong>
-                                            </div>
-                                        </li>
-                                        <li id="dvDelivery" style="display: none">
-                                            <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
-                                                <span>Delivery Method </span>
-                                                <strong class="fw-normal">
-                                                    <label id="deliveryMethod" type="text" class="text-end"></label>
-                                                </strong>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                <div class="card rounded-6 mb-4">
+                                    <div class="card-body px-4 py-4">
+                                        <h5 class="text-uppercase">Shipping Summary</h5>
+                                        <ul class="list-unstyled">
+                                            <li id="dvPayment" style="display: none">
+                                                <div class="d-flex justify-content-between py-3 border-bottom">
+                                                    <span>Payment Method </span>
+                                                    <strong class="fw-normal">
+                                                        <label id="paymentMethod" type="text" class="text-end"></label>
+                                                    </strong>
+                                                </div>
+                                            </li>
+                                            <li id="dvDelivery" style="display: none">
+                                                <div style="display: none" class="d-flex justify-content-between py-3 border-bottom">
+                                                    <span>Delivery Method </span>
+                                                    <strong class="fw-normal">
+                                                        <label id="deliveryMethod" type="text" class="text-end"></label>
+                                                    </strong>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>*@
+                            </div>*@
                     </div>
                 </div>
             }
@@ -178,6 +180,28 @@
                 <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
                     <i class="fa fa-arrow-up" aria-hidden="true"></i>
                 </button>
+            </div>
+        </div>
+
+        @*Modal*@
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <form asp-controller="Orders" asp-action="UpdateOrder" asp-route-id="@Model.TransactionId">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Set Expected Delivery Date</h4>
+                            <a class="btn btn-default text-right" data-dismiss="modal" onclick="CloseModal()">×</a>
+                        </div>
+                        <div class="modal-body">
+                            <p>Let the customer know the expected delivery date: </p>
+                            <input asp-for="ExpectedDeliveryDate" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a class="btn btn-outline-dark" data-dismiss="modal" onclick="CloseModal()">Close</a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -227,4 +251,11 @@
         });
     });
 
+    function ShowModal() {
+        $('#modal').modal('show');
+    }
+
+    function CloseModal() {
+        $('#modal').modal('hide');
+    }
 </script>

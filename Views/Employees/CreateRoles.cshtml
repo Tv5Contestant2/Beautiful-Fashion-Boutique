@@ -1,0 +1,111 @@
+﻿@model ECommerce1.ViewModel.RoleViewModel
+
+@{
+    ViewData["Title"] = "Add New Roles";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row text">
+    <div class="col-md-10 offset-md-1">
+        <p>
+            <h4>Add Role</h4>
+        </p>
+
+        <div class="form-group">
+            <form asp-action="CreateRoles" enctype="multipart/form-data" class="hidden">
+                <div class="mb-3">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                </div>
+                <a class="btn btn-outline-secondary" asp-action="Roles">Show All</a>
+                <input type="submit" value="Save" class="btn btn-success float-right" />
+
+                <div id="accordion">
+                    <div class="card mt-2">
+                        <div class="card-header" id="headingOne">
+                            <b>PRIMARY INFORMATION</b>
+                            <a class="btn btn-link float-right" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="far fa-plus-square"></i>
+                            </a>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+
+                                @*Primary Info*@
+                                <div class="row form-group">
+                                    <div class="col col-md-8">
+                                        <label asp-for="Role" class="control-label"></label>
+                                        <input asp-for="Role" class="form-control" />
+                                        <span asp-validation-for="Role" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                                @*Modules*@
+                                <div class="row">
+                                    <div class="row col-md-12">
+                                        <div class="cart-inner" id="dtEmployeeList">
+                                            <div class="border-top border-bottom py-2">
+                                                <div class="row text-uppercase">
+                                                    <div class="col-3 text-center"><strong class="small">Module</strong></div>
+                                                    <div class="col-2 text-center"> <strong class="small">CREATE</strong></div>
+                                                    <div class="col-2 text-center"> <strong class="small">READ</strong></div>
+                                                    <div class="col-2 text-center"> <strong class="small">UPDATE</strong></div>
+                                                    <div class="col-2 text-center"> <strong class="small">DELETE</strong></div>
+                                                </div>
+                                            </div>
+                                            @foreach (var item in Model.Modules)
+                                            {
+                                                <div class="row-item pt-4 pb-4 border-bottom">
+                                                    <div class="row text-left">
+
+                                                        <div class="item col-3">@item.Title</div>
+                                                        <div class="item col-2 text-center"><input class="form-check-input" type="checkbox" /></div>
+                                                        <div class="item col-2 text-center"><input class="form-check-input" type="checkbox" /></div>
+                                                        <div class="item col-2 text-center"><input class="form-check-input" type="checkbox" /></div>
+                                                        <div class="item col-2 text-center"><input class="form-check-input" type="checkbox" /></div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#ImageFile").on("change", function () {
+            var output = document.getElementById('ImagePreview');
+            output.src = $(this).val();
+        });
+
+        var inptImageUpload = document.querySelector("#inptImageUpload");
+
+        // listen for the change event so we can capture the file
+        inptImageUpload.addEventListener("change", (e) => {
+            // get a reference to the file
+            const file = e.target.files[0];
+
+            // encode the file using the FileReader API
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result
+                    .replace("data:", "")
+                    .replace(/^.+,/, "");
+
+                document.getElementById('imgOutput').setAttribute('src', reader.result);
+                document.getElementById("Image").value = reader.result;
+
+            };
+            reader.readAsDataURL(file);
+            document.getElementById('inptImageFileName').value = file.name;
+        });
+    </script>
+}

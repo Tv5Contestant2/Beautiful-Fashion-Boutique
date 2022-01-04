@@ -36,10 +36,11 @@ namespace ECommerce1.Data
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<Modules> Modules { get; set; }
+
         public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<Orders> Orders { get; set; }
-
 
         public DbSet<OrderDetails> OrdersDetails { get; set; }
 

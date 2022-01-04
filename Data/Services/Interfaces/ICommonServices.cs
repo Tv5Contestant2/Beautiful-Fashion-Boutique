@@ -1,9 +1,14 @@
-﻿namespace ECommerce1.Data.Services.Interfaces
+﻿using ECommerce1.Models;
+using System.Collections.Generic;
+
+namespace ECommerce1.Data.Services.Interfaces
 {
     public interface ICommonServices
     {
         public string NoImage { get; set; }
 
         string GetImageByte64StringFromSplit(string value);
+
+        public IEnumerable<Modules> GetModules();
     }
 }

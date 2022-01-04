@@ -1,0 +1,145 @@
+﻿@model ECommerce1.ViewModel.HomeUserViewModel
+
+@{
+    ViewData["Title"] = "Roles Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    @*Breadcrumbs*@
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h4 class="m-0">@ViewBag.Title</h4>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right px-3 py-2">
+                        <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Content*@
+    <section class="content">
+        <div class="container-fluid">
+            @*Search*@
+            <div class="row d-flex justify-content-between">
+                <input id="inptSearch" class="form-control w-50" placeholder="Search" />
+                <div class="col">
+                    <a asp-controller="Employees" asp-action="CreateRoles" class="btn btn-info float-right" type="button">
+                        <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Roles
+                    </a>
+                </div>
+            </div>
+
+            @*Grid View*@
+            <div id="dvGrid" class="row mt-3">
+                <div class="d-flex justify-content-lg-around">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="cart-inner" id="dtEmployeeList">
+                            <div class="border-top border-bottom py-2">
+                                <div class="row text-uppercase">
+                                    <div class="col-3"><strong class="small">Role</strong></div>
+                                    <div class="col-3 text-center"> <strong class="small">Status</strong></div>
+                                    <div class="col-2 text-center"> <strong class="small">Action</strong></div>
+                                </div>
+                            </div>
+                            @foreach (var item in Model.PaginatedList())
+                            {
+                                <div class="row-item pt-4 pb-4 border-bottom">
+                                    <div class="row text-left">
+                                        <div class="item col-2">
+                                            &nbsp;
+                                        </div>
+                                        <div class="item col-3">&nbsp;</div>
+                                        <div class="item col-3">&nbsp;</div>
+                                        <div class="item col-2 text-center">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateEmployee" asp-route-id="@item.Id">
+                                                <i class="far fa-eye"></i>
+                                            </a>
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteEmployee" asp-route-id="@item.Id">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                            @*<a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="BlockCustomer" asp-route-id="@item.Id">
+                                                    <i class="fas fa-user-slash"></i>
+                                                </a>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Pagination*@
+            <div class="row">
+                <div class=" d-flex justify-content-between px-4 py-3 w-100">
+                    <div class="hint-text">Showing <b>@Model.PaginatedList().Count()</b> out of <b>@Model.Users.Count()</b> entries</div>
+                    <ul class="pagination">
+                        @for (int i = 1; i <= Model.PageCount(); i++)
+                        {
+                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div style="position: fixed; bottom: 10px; right: 10px">
+                <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    $(document).ready(function () {
+        $("#inptSearch").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#dtEmployeeList tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnGrid").click(function () {
+            $("#dvThumbnail").hide();
+            $("#dvGrid").show();
+        });
+
+        $("#btnThumbnail").click(function () {
+            $("#dvGrid").hide();
+            $("#dvThumbnail").show();
+        });
+    });
+
+</script>

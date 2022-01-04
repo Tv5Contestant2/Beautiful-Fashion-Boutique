@@ -155,6 +155,50 @@ namespace ECommerce1.Data
 
                 #endregion Gender
 
+                #region Modules
+
+                if (!context.Modules.Any())
+                {
+                    context.Modules.AddRange(new List<Modules>()
+                    {
+                        new Modules()
+                        {
+                            Title = "Customer Management",
+                        },
+                        new Modules()
+                        {
+                            Title = "Employee Management",
+                        },
+                        new Modules()
+                        {
+                            Title = "Roles Management",
+                        },
+                        new Modules()
+                        {
+                            Title = "Order Management",
+                        },
+                        new Modules()
+                        {
+                            Title = "Returns Management",
+                        },
+                        new Modules()
+                        {
+                            Title = "Product Management",
+                        },
+                        new Modules()
+                        {
+                            Title = "Promos and Discounts",
+                        },
+                        new Modules()
+                        {
+                            Title = "Site Configurations",
+                        },
+                    });
+
+                    context.SaveChanges();
+                }
+                #endregion Modules
+
                 #region Payment Method
 
                 if (!context.PaymentMethods.Any())

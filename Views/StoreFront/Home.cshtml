@@ -13,16 +13,16 @@
             @*Hero Section*@
             <section class="position-relative">
                 <video class="hero" autoplay="" muted="" loop="">
-                    <source src="~/hero/hero.webm" type="video/webm">
-                    <source src="~/hero/hero.mp4" type="video/mp4">
+                    <source src="~/hero/hero-video.webm" type="video/webm">
+                    <source src="~/hero/hero-video.mp4" type="video/mp4">
                 </video>
                 <div class="py-5 video-content">
                     <div class="container py-xl-4 position-relative">
                         <div class="row py-5">
                             <div class="col-lg-7 mx-auto text-dark text-center">
-                                <h1 class="text-uppercase text-shadow mt-3">It's fashion time!</h1>
-                                <hr class="bg-dark">
-                                <p class="lead mb-5">Our newest and freshest collections have just arrived.</p><a class="btn btn-outline-dark px-4 shop-now" asp-controller="StoreFront" asp-action="ShopAll">
+                                <h1 class="text-uppercase text-white mt-3">It's fashion time!</h1>
+                                <hr class="bg-light">
+                                <p class="lead mb-5 text-white">Our newest and freshest collections have just arrived.</p><a class="btn btn-outline-light px-4 shop-now" asp-controller="StoreFront" asp-action="ShopAll">
                                     Shop Now
                                     <svg class="svg-icon ms-2 svg-icon-heavy svg-icon-sm">
                                         <use xlink:href="#shopping-bag-1"> </use>
@@ -44,7 +44,7 @@
                 <div class="row justify-content-center pb-2">
                     <div style="width: 20rem; margin: 15px">
                         <a asp-controller="StoreFront" asp-action="Mens">
-                            <img class="card-img-top" src="~/images/categories/category_apparel_accessories.jpg" alt="Card image cap">
+                            <img class="card-img-top" src="~/images/categories/mens.jpeg" alt="Card image cap">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">Men's Apparel</h5>
@@ -56,7 +56,7 @@
                     </div>
                     <div style="width: 20rem; margin: 15px">
                         <a asp-controller="StoreFront" asp-action="Womens">
-                            <img class="card-img-top" src="~/images/categories/category_apparel.jpeg" alt="Card image cap">
+                            <img class="card-img-top" src="~/images/categories/womens.jpg" alt="Card image cap">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">Women's Apparel</h5>
@@ -67,7 +67,7 @@
                     </div>
                     <div style="width: 20rem; margin: 15px">
                         <a asp-controller="StoreFront" asp-action="ShopAll">
-                            <img class="card-img-top" src="~/images/categories/category_jewelry.jpeg" alt="Card image cap">
+                            <img class="card-img-top" src="~/images/categories/accessories.jpeg" alt="Card image cap">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">Accessories</h5>

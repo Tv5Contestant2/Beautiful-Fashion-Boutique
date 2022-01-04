@@ -63,15 +63,23 @@ namespace ECommerce1.Controllers
         }
 
         [Route("Orders/ViewOrder/{transactionId:Guid}")]
-        public async Task<IActionResult> ViewOrder(string transactionId)
+        public async Task<IActionResult> ViewOrder(Guid transactionId)
         {
-            var result = await _service.GetOrderDetailsById(transactionId);
+            var orderDetails = await _service.GetOrderDetailsById(transactionId);
             var order = _service.GetOrderById(transactionId);
             ViewBag.TransactionId = transactionId;
             ViewBag.DeliveryStatusId = order.DeliveryStatusId;
             ViewBag.OrderStatusId = order.OrderStatusId;
 
-            return View(result);
+            var viewModel = new OrderViewModel()
+            {
+                TransactionId = transactionId,
+                DeliveryStatusId = order.DeliveryStatusId,
+                OrderStatusId = order.OrderStatusId,
+                OrderDetails = orderDetails
+            };
+
+            return View(viewModel);
         }
 
         [Route("Orders/ViewReturn/{transactionId:Guid}")]
@@ -98,9 +106,10 @@ namespace ECommerce1.Controllers
         }
 
         [Route("Orders/UpdateOrder/{transactionId:Guid}")]
-        public async Task<IActionResult> UpdateOrder(string transactionId)
+        public async Task<IActionResult> UpdateOrder(Guid transactionId, OrderViewModel viewModel)
         {
-            await _service.UpdateOrderStatuses(transactionId);
+            await _service.UpdateOrder(viewModel);
+            //await _service.UpdateOrderStatuses(transactionId);
 
             return RedirectToAction(nameof(Index));
         }

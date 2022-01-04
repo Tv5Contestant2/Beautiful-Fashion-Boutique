@@ -189,8 +189,8 @@ namespace ECommerce1.Controllers
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
             var user = await _userManager.FindByIdAsync(userId);
-            var order = _orderService.GetOrderById(transactionId.ToString());
-            var orderDetails = await _orderService.GetOrderDetailsById(transactionId.ToString());
+            var order = _orderService.GetOrderById(transactionId);
+            var orderDetails = await _orderService.GetOrderDetailsById(transactionId);
             var customerShippingAddress = new CustomersShippingAddress
             {
                 Block = user.AddressBlock,
@@ -279,7 +279,7 @@ namespace ECommerce1.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             viewModel.Customer = user.FirstName;
             viewModel.Address = user.AddressCity;
-            viewModel.OrderDetails = await _orderService.GetOrderDetailsById(viewModel.TransactionId.ToString());
+            viewModel.OrderDetails = await _orderService.GetOrderDetailsById(viewModel.TransactionId);
             viewModel.ProductId = productId;
 
             if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;

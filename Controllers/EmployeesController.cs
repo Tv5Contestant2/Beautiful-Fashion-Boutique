@@ -1,4 +1,5 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,14 @@ namespace ECommerce1.Controllers
                 Image = _commonServices.NoImage,
                 Birthday = DateTime.Now
             };
+
+            return View(_initModel);
+        }
+
+        public IActionResult CreateRoles()
+        {
+            var _initModel = new RoleViewModel();
+            _initModel.Modules = _commonServices.GetModules();
 
             return View(_initModel);
         }
@@ -65,6 +74,20 @@ namespace ECommerce1.Controllers
         }
 
         public async Task<IActionResult> Index(int page = 1)
+        {
+            var data = await _service.GetAllEmployees();
+
+            var viewModel = new HomeUserViewModel
+            {
+                ItemPerPage = 10,
+                Users = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
+        }
+
+        public async Task<IActionResult> Roles(int page = 1)
         {
             var data = await _service.GetAllEmployees();
 

@@ -27,6 +27,8 @@ namespace ECommerce1.Models
         public int OrderStatusId { get; set; }
         public int DeliveryStatusId { get; set; }
         public string CancellationReason { get; set; }
+        public DateTime ExpectedDeliveryDate { get; set; }
+        public DateTime ReceivedDate { get; set; }
 
         public List<OrderDetails> OrderDetails { get; set; }
         public List<OrderShippingInfo> OrderShippingInfo { get; set; }

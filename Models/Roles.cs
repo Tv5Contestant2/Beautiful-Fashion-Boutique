@@ -8,8 +8,8 @@ namespace ECommerce1.Models
     public class Roles
     {
         [Key]
-        public int RoleID { get; set; }
-        public string EmployeeRole { get; set; }
+        public int Id { get; set; }
+        public string Role { get; set; }
 
     }
 }

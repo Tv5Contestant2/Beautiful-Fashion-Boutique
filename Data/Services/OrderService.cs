@@ -69,11 +69,11 @@ namespace ECommerce1.Data.Services
 
             return result;
         }
-        public Orders GetOrderById(string transactionId)
+        public Orders GetOrderById(Guid transactionId)
         {
             var result = _context.Orders
                 .Include(x => x.OrderStatus)
-                .FirstOrDefault(x => x.TransactionId.ToString() == transactionId);
+                .FirstOrDefault(x => x.TransactionId == transactionId);
 
             return result;
         }
@@ -100,7 +100,7 @@ namespace ECommerce1.Data.Services
 
             return result;
         }
-        public async Task<IEnumerable<OrderDetails>> GetOrderDetailsById(string transactionId)
+        public async Task<IEnumerable<OrderDetails>> GetOrderDetailsById(Guid transactionId)
         {
             var result = await _context.OrdersDetails
                 .Include(x => x.Product)
@@ -109,7 +109,7 @@ namespace ECommerce1.Data.Services
                     .ThenInclude(x => x.Colors)
                 .Include(x => x.Product)
                     .ThenInclude(x => x.Sizes)
-                .Where(x => x.TransactionId.ToString() == transactionId)
+                .Where(x => x.TransactionId == transactionId)
                 .ToListAsync();
 
             return result;
@@ -146,9 +146,34 @@ namespace ECommerce1.Data.Services
             return result;
         }
 
-        public async Task<Orders> UpdateOrderStatuses(string transactionId)
+        public async Task<Orders> UpdateOrder(OrderViewModel viewModel)
         {
-            var result = _context.Orders.FirstOrDefault(x => x.TransactionId.ToString() == transactionId);
+            var result = _context.Orders.FirstOrDefault(x => x.TransactionId == viewModel.TransactionId);
+
+            if (result.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
+            {
+                result.DeliveryStatusId = (int)DeliveryStatusEnum.Shipped;
+                result.OrderStatusId = (int)OrderStatusEnum.Shipped;
+
+                result.ExpectedDeliveryDate = viewModel.ExpectedDeliveryDate;
+            }
+            else if (result.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
+            {
+                result.DeliveryStatusId = (int)DeliveryStatusEnum.Received;
+                result.OrderStatusId = (int)OrderStatusEnum.Completed;
+
+                result.ReceivedDate = DateTime.Now;
+            }
+
+            _context.Orders.Update(result);
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
+
+        public async Task<Orders> UpdateOrderStatuses(Guid transactionId)
+        {
+            var result = _context.Orders.FirstOrDefault(x => x.TransactionId == transactionId);
 
             if (result.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
             {
