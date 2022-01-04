@@ -126,7 +126,7 @@
                                         @*<form asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">*@
                                         <div class="hover-overlay d-flex align-items-center justify-content-center">
                                             <div class="CTA d-flex align-items-center justify-content-center">
-                                                <input type="hidden" asp-for="@Model.CartDetails.CustomersId" value="@ViewBag.CustomersId" />
+                                                @*<input type="hidden" asp-for="@Model.CartDetails.CustomersId" value="@ViewBag.CustomersId" />*@
                                                 <input type="hidden" asp-for="@Model.CartDetails.ProductId" value="@item.Id" />
                                                 <input type="hidden" asp-for="@Model.CartDetails.Quantity" value="1" />
                                                 @{
@@ -258,7 +258,7 @@
                                                                 </div>
                                                                 <ul class="list-inline">
                                                                     <li class="list-inline-item">
-                                                                        <input type="hidden" asp-for="CartDetails.CustomersId" value="@ViewBag.CustomersId" />
+                                                                        @*<input type="hidden" asp-for="CartDetails.CustomersId" value="@ViewBag.CustomersId" />*@
                                                                         <input type="hidden" asp-for="CartDetails.ProductId" value="@item.Id" />
                                                                         <input type="hidden" asp-for="Wishlists.CustomersId" value="@ViewBag.CustomersId" />
                                                                         <input type="hidden" asp-for="Wishlists.ProductId" value="@item.Id" />

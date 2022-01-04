@@ -6,14 +6,15 @@ namespace ECommerce1.Models
     {
         [Key]
         public int Id { get; set; }
+        public long CartId { get; set; }
         public long ProductId { get; set; }
         public int ColorId { get; set; }
         public int SizeId { get; set; }
-        public int GenderId { get; set; }
         public int Quantity { get; set; }
-        public string CustomersId { get; set; }
 
-        public Product Product { get; set; }
-        public ProductVariant ProductVariants { get; set; }
+        public virtual Color Colors { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual ProductVariant ProductVariants { get; set; }
+        public virtual Size Sizes { get; set; }
     }
 }

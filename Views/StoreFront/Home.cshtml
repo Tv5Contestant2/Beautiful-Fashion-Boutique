@@ -1,6 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@model CartDetails
-@using ECommerce1.Data.Enums
 @inject UserManager<User> UserManager
 
 @{
@@ -39,7 +37,6 @@
                 <header class="text-center pb-4 pt-4">
                     <p class="lead text-uppercase text-muted mb-0">Top for this month</p>
                     <h2 class="text-uppercase">Our Featured Picks</h2>
-                    @*<a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">Edit</a>*@
                 </header>
                 <div class="row justify-content-center pb-2">
                     <div style="width: 20rem; margin: 15px">
@@ -78,7 +75,7 @@
             </section>
 
             @{
-                if (ViewBag.Products.Count > 0)
+                if (ViewBag.Products != null)
                 {
                     <section class="py-2">
                         <div class="row justify-content-center pb-2">

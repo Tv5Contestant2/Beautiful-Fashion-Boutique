@@ -63,25 +63,25 @@ namespace ECommerce1.Models
 
         #region Enumerables
 
-        public IEnumerable<Color> Colors { get; set; }
-        public IEnumerable<Gender> Genders { get; set; }
-        public IEnumerable<ProductCategory> ProductCategories { get; set; }
-        public IEnumerable<ProductImage> ProductImages { get; set; }
-        public IEnumerable<ProductVariant> ProductVariants { get; set; }
-        public IEnumerable<ProductReview> ProductReviews { get; set; }
-        public IEnumerable<Status> Statuses { get; set; }
-        public IEnumerable<Size> Sizes { get; set; }
-        public IEnumerable<StockStatus> StockStatuses { get; set; }
-        public StockStatus InventoryStatus { get; set; }
-        public ProductCategory Category { get; set; }
+        public virtual IEnumerable<Color> Colors { get; set; }
+        public virtual IEnumerable<Gender> Genders { get; set; }
+        public virtual IEnumerable<ProductCategory> ProductCategories { get; set; }
+        public virtual IEnumerable<ProductImage> ProductImages { get; set; }
+        public virtual IEnumerable<ProductVariant> ProductVariants { get; set; }
+        public virtual IEnumerable<ProductReview> ProductReviews { get; set; }
+        public virtual IEnumerable<Status> Statuses { get; set; }
+        public virtual IEnumerable<Size> Sizes { get; set; }
+        public virtual IEnumerable<StockStatus> StockStatuses { get; set; }
+        public virtual StockStatus InventoryStatus { get; set; }
+        public virtual ProductCategory Category { get; set; }
 
         #endregion Enumerables
 
         //Added temp
         [NotMapped]
-        public string ProductVariantJSON { get; set; }
+        public virtual string ProductVariantJSON { get; set; }
 
         [NotMapped]
-        public string ProductImageJSON { get; set; }
+        public virtual string ProductImageJSON { get; set; }
     }
 }

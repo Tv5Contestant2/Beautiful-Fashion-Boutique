@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce1.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20211217190854_initial")]
-    partial class initial
+    [Migration("20220102053406_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,9 +62,9 @@ namespace ECommerce1.Migrations
 
             modelBuilder.Entity("ECommerce1.Models.Cart", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("BillingBarangay")
@@ -97,26 +97,17 @@ namespace ECommerce1.Migrations
                     b.Property<string>("CustomersId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DeliveryMethodId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Instructions")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsBillingSame")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsCashOnDelivery")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDelivery")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsGCash")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPayMaya")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPickup")
-                        .HasColumnType("bit");
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ShippingBarangay")
                         .HasColumnType("nvarchar(max)");
@@ -165,13 +156,10 @@ namespace ECommerce1.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("CartId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CustomersId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<long>("ProductId")
@@ -188,9 +176,16 @@ namespace ECommerce1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CartId")
+                        .IsUnique();
+
+                    b.HasIndex("ColorId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("ProductVariantsId");
+
+                    b.HasIndex("SizeId");
 
                     b.ToTable("CartDetails");
                 });
@@ -1385,14 +1380,8 @@ namespace ECommerce1.Migrations
                     b.Property<string>("CustomersId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GenderId")
-                        .HasColumnType("int");
-
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
 
                     b.Property<int>("SizeId")
                         .HasColumnType("int");
@@ -1546,6 +1535,18 @@ namespace ECommerce1.Migrations
 
             modelBuilder.Entity("ECommerce1.Models.CartDetails", b =>
                 {
+                    b.HasOne("ECommerce1.Models.Cart", null)
+                        .WithOne("CartDetails")
+                        .HasForeignKey("ECommerce1.Models.CartDetails", "CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ECommerce1.Models.Color", "Colors")
+                        .WithMany()
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ECommerce1.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -1556,9 +1557,19 @@ namespace ECommerce1.Migrations
                         .WithMany()
                         .HasForeignKey("ProductVariantsId");
 
+                    b.HasOne("ECommerce1.Models.Size", "Sizes")
+                        .WithMany()
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Colors");
+
                     b.Navigation("Product");
 
                     b.Navigation("ProductVariants");
+
+                    b.Navigation("Sizes");
                 });
 
             modelBuilder.Entity("ECommerce1.Models.Color", b =>
@@ -1872,6 +1883,11 @@ namespace ECommerce1.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ECommerce1.Models.Cart", b =>
+                {
+                    b.Navigation("CartDetails");
                 });
 
             modelBuilder.Entity("ECommerce1.Models.Customers", b =>

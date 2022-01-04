@@ -49,10 +49,10 @@ namespace ECommerce1.Controllers
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             var _customer = await _customersService.GetCustomerById(userId);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; // await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //0; // await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
 
             if (string.IsNullOrEmpty(_customer.Image)) _customer.Image = _commonServices.NoImage;
@@ -105,9 +105,9 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Orders()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
 
             var result = await _service.GetCustomerOrders(userId);
@@ -123,9 +123,9 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Returns()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
 
             var result = await _service.GetCustomerReturns(userId);
@@ -141,7 +141,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Wishlist()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
@@ -158,10 +158,10 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Messages()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //await _cartService.GetWishlistCount(userId);
 
             var result = await _messageService.GetCustomerMessages(userId);
             var user = await _userManager.FindByIdAsync(userId);
@@ -183,10 +183,10 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> ViewOrder(Guid transactionId)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //await _cartService.GetWishlistCount(userId);
 
             var user = await _userManager.FindByIdAsync(userId);
             var order = _orderService.GetOrderById(transactionId.ToString());
@@ -223,10 +223,10 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> ViewReturns(Guid transactionId, long productId) //
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //await _cartService.GetWishlistCount(userId);
 
             var user = await _userManager.FindByIdAsync(userId);
             var returns = _orderService.GetReturns(transactionId);
@@ -250,10 +250,10 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Addresses()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
 
             var result = await _service.GetCustomerBillingAddresses(userId);
@@ -270,10 +270,10 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> ReturnOrder(long productId, OrderViewModel viewModel)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
 
             var user = await _userManager.FindByIdAsync(userId);
@@ -323,10 +323,10 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> ViewMessage(Guid messageId)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.CartCount = 0; //await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.WishlistCount = 0; //await _cartService.GetWishlistCount(userId);
 
             var result = await _messageService.GetMessageConversation(messageId);
             var user = await _userManager.FindByIdAsync(userId);

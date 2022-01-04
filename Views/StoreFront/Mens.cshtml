@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@model ECommerce1.ViewModel.ProductViewModel
+@model ECommerce1.ViewModel.StoreFrontViewModel
 @inject UserManager<User> UserManager
 @using ECommerce1.Data.Enums
 
@@ -39,7 +39,7 @@
                             All
                         </a>
                     </li>
-                    @foreach (var item in ViewBag.ProductCategories)
+                    @foreach (var item in Model.Filter.ProductCategories)
                     {
                         <li>
                             <a class="sidebar-link" href="@Url.Action("Mens", new { categoryId = item.Id })">
@@ -57,9 +57,9 @@
                             All
                         </a>
                     </li>
-                    @if (ViewBag.Sizes != null)
+                    @if (@Model.Filter.Colors != null)
                     {
-                        @foreach (var item in ViewBag.Sizes)
+                        @foreach (var item in @Model.Filter.Colors)
                         {
                             <li>
                                 <a class="sidebar-link" href="@Url.Action("Mens", new { categoryId = item.CategoryId, sizeId = item.Id })">
@@ -78,7 +78,7 @@
                             All
                         </a>
                     </li>
-                    @foreach (var item in ViewBag.Colors)
+                    @foreach (var item in @Model.Filter.Colors)
                     {
                         <li>
                             <a class="sidebar-link" href="@Url.Action("Mens", new { categoryId = item.CategoryId, sizeId = item.SizeId, colorId = item.Id })">
@@ -98,7 +98,7 @@
                     </div>
                 </header>
                 <div class="row gy-5 mb-5">
-                    <span class="visible-items">Showing <strong>1-15 </strong>of <strong>@ViewBag.Products.Count </strong>results</span>
+                    <span class="visible-items">Showing <strong>1-15 </strong>of <strong>@Model.Products.Count() </strong>results</span>
 
                     @*Products*@
                     <div id="dtProductList" class="row gy-5 mb-5 my-1">
@@ -123,10 +123,9 @@
                                                 <img class="img-fluid" src="@String.Format("data:image/jpg;base64,{0}", item.Image)" alt="@item.Name">
                                             }
                                         }
-                                        @*<form asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">*@
+
                                         <div class="hover-overlay d-flex align-items-center justify-content-center">
                                             <div class="CTA d-flex align-items-center justify-content-center">
-                                                <input type="hidden" asp-for="@Model.CartDetails.CustomersId" value="@ViewBag.CustomersId" />
                                                 <input type="hidden" asp-for="@Model.CartDetails.ProductId" value="@item.Id" />
                                                 <input type="hidden" asp-for="@Model.CartDetails.Quantity" value="1" />
                                                 @{
@@ -160,10 +159,9 @@
                                                     <i class="fas fa-search"></i>
                                                 </a>
                                             </div>
-
                                         </div>
-                                        @*</form>*@
                                     </div>
+
                                     <div class="pt-3">
                                         <small class="text-muted">@item.Category.Title</small><a class="reset-anchor" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
                                             <h3 class="h6 mb-0 text-uppercase">@item.Name</h3>
@@ -258,10 +256,7 @@
                                                                 </div>
                                                                 <ul class="list-inline">
                                                                     <li class="list-inline-item">
-                                                                        <input type="hidden" asp-for="CartDetails.CustomersId" value="@ViewBag.CustomersId" />
                                                                         <input type="hidden" asp-for="CartDetails.ProductId" value="@item.Id" />
-                                                                        <input type="hidden" asp-for="Wishlists.CustomersId" value="@ViewBag.CustomersId" />
-                                                                        <input type="hidden" asp-for="Wishlists.ProductId" value="@item.Id" />
                                                                         @{
                                                                             @if (item.StockStatusId != (int)StockStatusEnum.OutOfStock)
                                                                             {
@@ -272,7 +267,7 @@
                                                                                 </button>
                                                                             }
 
-                                                                            if (Model.CurrentWishlists.Any(x => x.ProductId == item.Id))
+                                                                            if (Model.Wishlists.Any(x => x.ProductId == item.Id))
                                                                             {
                                                                                 <button type="submit" class="btn btn-outline-secondary px-5" formaction="/Cart/AddToWishlist">
                                                                                     <i class="fas fa-heart me-2"></i>Remove from wishlist

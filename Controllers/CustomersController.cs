@@ -1,5 +1,4 @@
-﻿using ECommerce1.Data.Enums;
-using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

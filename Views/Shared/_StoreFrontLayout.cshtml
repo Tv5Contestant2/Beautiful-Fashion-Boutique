@@ -25,7 +25,7 @@
     <!-- Nouislider-->
     <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/nouislider/nouislider.min.css">
     <!-- Lightbox-->
-    <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/glightbox/css/glightbox.css">
+    <link id="new-stylesheet" rel="stylesheet" href="~/css/glightbox.css">
     <!-- Choices.js-->
     <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/hub/2-0/vendor/choices.js/public/assets/styles/choices.css">
     <!-- Favicon-->
@@ -38,7 +38,6 @@
     @*Navigation Bar*@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-4 px-lg-4">
         <div class="container-fluid">
-            @*<a class="navbar-brand" href="index.html"><img src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/logo.013e0372.png" alt="..." width="180"></a>*@
             <a asp-controller="StoreFront" asp-action="Home" class="navbar-brand">
                 <img src="~/images/store-logo.jpg" class="d-inline-block align-middle mr-2 img-fluid" width="250">
             </a>
@@ -107,7 +106,7 @@
                         if (_IsAdmin == false)
                         {
                             <li class="nav-item dropdown mx-2 mx-lg-0 px-3 px-lg-0 d-none d-lg-block">
-                                <a class="nav-link position-relative" asp-controller="Cart" asp-action="Wishlist">
+                                <a class="nav-link position-relative" asp-controller="Wishlist" asp-action="Index">
                                     <i class="far fa-heart"></i>
 
                                     @{

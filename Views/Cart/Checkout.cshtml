@@ -150,12 +150,12 @@
                         <div id="delivery-method">
                             <div class="row">
                                 <div class="form-check col-md-6 mb-4">
-                                    <input id="isDelivery" asp-for="Cart.IsDelivery" type="hidden" />
+                                    @*<input id="isDelivery" asp-for="Cart.IsDelivery" type="hidden" />*@
                                     <input class="form-check-input" type="radio" name="delivery-method" value="true" onclick='document.getElementById("isDelivery").value = true; document.getElementById("isPickup").value = false; document.getElementById("deliveryMethod").innerHTML = "Delivery";'>
                                     <label class="form-check-label" for="option1"><strong>Delivery</strong><br><span class="text-sm text-muted">Delivered right at your doorstep - as early as possible.</span></label>
                                 </div>
                                 <div class="form-check col-md-6 mb-4">
-                                    <input id="isPickup" asp-for="Cart.IsPickup" type="hidden" />
+                                    @*<input id="isPickup" asp-for="Cart.IsPickup" type="hidden" />*@
                                     <input class="form-check-input" type="radio" name="delivery-method" value="true" onclick='document.getElementById("isDelivery").value = false; document.getElementById("isPickup").value = true; document.getElementById("deliveryMethod").innerHTML = "Store Pick-up";'>
                                     <label class="form-check-label" for="option2"><strong>Store Pick-up</strong><br><span class="text-sm text-muted">Get it right on next day - fastest option possible.</span></label>
                                 </div>
@@ -184,7 +184,7 @@
                                     <div class="accordion-collapse border-0 collapse" id="payment-collapseOne" aria-labelledby="payment-headingOne" data-bs-parent="#paymentAccordion">
                                         <div class="accordion-body">
                                             <div class="p-3">
-                                                <input id="isGCash" asp-for="Cart.IsGCash" type="hidden" />
+                                                @*<input id="isGCash" asp-for="Cart.IsGCash" type="hidden" />*@
                                                 <input class="form-check-input" type="radio" name="payment-method" value="true"
                                                        onclick='document.getElementById("isGCash").value = true;
                                                                 document.getElementById("isCOD").value = false;
@@ -223,7 +223,7 @@
                                     <div class="accordion-collapse border-0 collapse" id="payment-collapseThree" aria-labelledby="payment-headingThree" data-bs-parent="#paymentAccordion">
                                         <div class="accordion-body">
                                             <div class="p-3">
-                                                <input id="isCOD" asp-for="Cart.IsCashOnDelivery" type="hidden" />
+                                                @*<input id="isCOD" asp-for="Cart.IsCashOnDelivery" type="hidden" />*@
                                                 <input class="form-check-input" type="radio" name="payment-method" value="true"
                                                        onclick='document.getElementById("isGCash").value = false;
                                                                 document.getElementById("isCOD").value = true;
@@ -273,10 +273,10 @@
                                                         <div class="ms-3">
                                                             <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
                                                                 <h6 class="mb-0 text-dark fw-normal">@item.Product.Name</h6>
-                                                                <span class="text-muted text-sm">Color: @Model.Colors.First(x => x.Id == item.ColorId).Title</span>
+                                                                <span class="text-muted text-sm">@Model.Colors.First(x => x.Id == item.ColorId).Title,</span>
                                                                 @if (item.Product.SizeId != 0)
                                                                 {
-                                                                    <span class="text-muted text-sm">, Size: @Model.Sizes.First(x => x.Id == item.SizeId).Title</span>
+                                                            <span class="text-muted text-sm">@Model.Sizes.First(x => x.Id == item.SizeId).Title</span>
                                                                 }
                                                             </a>
                                                         </div>

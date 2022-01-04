@@ -1,9 +1,30 @@
 ﻿using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ECommerce1.Data.Services
 {
     public class CommonServices : ICommonServices
     {
+        private readonly AppDBContext _context;
+
+        public CommonServices(AppDBContext context)
+        {
+            _context = context;
+        }
+
+        public List<Color> GetColors()
+        {
+            return _context.Colors.ToList();
+        }
+
+        public List<Size> GetSizes()
+        {
+            return _context.Sizes.ToList();
+        }
+
         public string GetImageByte64StringFromSplit(string value)
         {
             var _splitResult = value.Split(",");

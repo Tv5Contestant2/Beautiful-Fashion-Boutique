@@ -24,11 +24,15 @@ namespace ECommerce1.ViewModel
         public string Review { get; set; }
         public int Rating { get; set; }
         public long ProductId { get; set; }
+        public int CartCount { get; set; }
         public int ColorId { get; set; }
         public int SizeId { get; set; }
+        public int WishlistCount { get; set; }
         public string CustomersId { get; set; }
+        public bool IsExistInWishlist { get; set; }
 
         public CartDetails CartDetails { get; set; }
+        public Product ProductDetails { get; set; }
         public Wishlist Wishlists { get; set; }
         public IEnumerable<Color> Colors { get; set; }
         public IEnumerable<Size> Size { get; set; }

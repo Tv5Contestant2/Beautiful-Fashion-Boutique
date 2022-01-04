@@ -99,6 +99,7 @@ namespace ECommerce1
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IPromotionsService, PromotionsService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IStoreFrontService, StoreFrontService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddControllersWithViews();

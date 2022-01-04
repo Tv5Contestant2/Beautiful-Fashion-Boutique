@@ -11,7 +11,7 @@
                 @if (Model != null)
                 {
                     <p class="lead text-muted">
-                        You currently have @Model.CartDetails.Select(x => x.Quantity).Sum() item(s) in your shopping cart
+                        You currently have @Model.CartCount item(s) in your shopping cart
                     </p>
                 }
                 else
@@ -33,7 +33,7 @@
     </div>
 </section>
 
-@if (Model.CartDetails.Count() > 0)
+@if (Model.CartDetails != null)
 {
     var total = Model.CartDetails.Sum(x => (x.Product.IsSale ? x.Product.PriceOnSale : x.Product.Price) * x.Quantity);
     var shipping = (@total >= 1000 ? 100.00 : 0.00);
@@ -64,10 +64,10 @@
                                             <a asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.ProductId">
                                                 <h5 class="mb-0 text-dark fw-normal">@item.Product.Name</h5>
 
-                                                <span class="text-muted text-sm">Color: @Model.Colors.First(x => x.Id == item.ColorId).Title</span>
-                                                @if (item.Product.SizeId != 0)
+                                                <span class="text-muted text-sm">@Model.Colors.First(x => x.Id == item.ColorId).Title,</span>
+                                                @if (item.SizeId != 0)
                                                 {
-                                                    <span class="text-muted text-sm">, Size: @Model.Sizes.First(x => x.Id == item.SizeId).Title</span>
+                                                    <span class="text-muted text-sm"> @Model.Sizes.First(x => x.Id == item.SizeId).Title</span>
                                                 }
                                             </a>
                                         </div>
@@ -84,9 +84,9 @@
                                 <div class="col-2">
                                     <div class="d-flex align-items-center">
                                         <div class="quantity d-flex align-items-center me-4">
-                                            <a class="dec-btn" onclick="decrease(this)" asp-controller="Cart" asp-action="RemoveFromCartByQty" asp-route-id="@item.ProductId">-</a>
+                                            <a class="dec-btn" onclick="decrease(this)" asp-controller="Cart" asp-action="DecreaseQuantity" asp-route-id="@item.Id">-</a>
                                             <input class="quantity-no" type="text" value="@item.Quantity">
-                                            <a class="dec-btn" onclick="increase(this)" asp-controller="Cart" asp-action="AddToCartByQty" asp-route-id="@item.ProductId">+</a>
+                                            <a class="dec-btn" onclick="increase(this)" asp-controller="Cart" asp-action="IncreaseQuantity" asp-route-id="@item.Id">+</a>
                                         </div>
                                     </div>
                                 </div>
@@ -97,10 +97,10 @@
                                     }
                                 </div>
                                 <div class="col-1 text-center">
-                                    <a class="btn btn-link text-dark p-0" asp-action="AddToWishlistFromCart" asp-route-id="@item.ProductId">
+                                    <a class="btn btn-link text-dark p-0" asp-action="AddToWishlistFromCart" asp-route-id="@item.Id">
                                         <i class="far fa-heart"></i>
                                     </a>
-                                    <a class="delete btn btn-link text-dark p-0" asp-action="RemoveFromCart" asp-route-id="@item.ProductId">
+                                    <a class="delete btn btn-link text-dark p-0" asp-action="RemoveFromCart" asp-route-id="@item.Id">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                                 </div>
@@ -121,7 +121,6 @@
                         </div>
                         <div class="p-4">
                             <p>If you have some information for the seller you can leave them in the box below</p>
-                            <input type="hidden" asp-for="Cart.CustomersId" value="@ViewBag.CustomersId" />
                             <textarea class="rounded form-control" asp-for="Cart.Instructions" rows="6"></textarea>
                         </div>
                     </div>
@@ -166,10 +165,12 @@ else
 {
     <section class="py-5">
         <div class="container py-5">
-            <div class="item col-xl-12">
+            <div class="item col-xl-12 pb-5">
                 <h2 class="mb-1">Oh no! Your cart is empty.</h2>
                 <p class="text-gray-6 mb-1">Don't miss your chance! Start shopping now.</p>
             </div>
+
+            <a class="btn btn-danger" asp-controller="StoreFront" asp-action="Home">Back to Home</a>
         </div>
     </section>
 }

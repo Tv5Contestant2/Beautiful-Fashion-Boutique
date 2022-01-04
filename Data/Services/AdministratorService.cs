@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,13 @@ namespace ECommerce1.Data.Services
     public class AdministratorService : IAdministratorService
     {
         private readonly AppDBContext _context;
-        private readonly ICommonServices _commonServices;
+        private readonly ICommonServices _commonService;
 
-        public AdministratorService(AppDBContext context, ICommonServices commonServices)
+        public AdministratorService(AppDBContext context
+            , ICommonServices commonService)
         {
             _context = context;
-            _commonServices = commonServices;
+            _commonService = commonService;
         }
 
         public About GetAboutUs() 
@@ -128,7 +130,7 @@ namespace ECommerce1.Data.Services
                 else
                 {
                     //No Image
-                    item.Image = _commonServices.NoImage;
+                    item.Image = _commonService.NoImage;
                 }
             }
 

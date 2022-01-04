@@ -4,14 +4,16 @@ using ECommerce1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ECommerce1.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220102045136_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,6 +160,9 @@ namespace ECommerce1.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<long>("ProductId")
@@ -1378,8 +1383,14 @@ namespace ECommerce1.Migrations
                     b.Property<string>("CustomersId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("GenderId")
+                        .HasColumnType("int");
+
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("SizeId")
                         .HasColumnType("int");

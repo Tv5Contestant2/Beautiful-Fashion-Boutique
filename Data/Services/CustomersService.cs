@@ -13,15 +13,12 @@ namespace ECommerce1.Data.Services
     public class CustomersService : ICustomersService
     {
         private readonly AppDBContext _context;
-        private readonly ICommonServices _commonServices;
         private readonly UserManager<User> _userManager;
 
         public CustomersService(AppDBContext context
-            , ICommonServices commonServices
             , UserManager<User> userManager)
         {
             _context = context;
-            _commonServices = commonServices;
             _userManager = userManager;
         }
 

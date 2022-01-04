@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ECommerce1.Data
 {
@@ -39,7 +40,6 @@ namespace ECommerce1.Data
         public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<Orders> Orders { get; set; }
-
 
         public DbSet<OrderDetails> OrdersDetails { get; set; }
 

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace ECommerce1.ViewModel
 {
-    public class CartViewModel
+    public class WishlistViewModel
     {
-        public Cart Cart { get; set; }
+        public Wishlist Wishlist { get; set; }
         public string CustomersId { get; set; }
         public IEnumerable<ProductVariant> ProductVariants { get; set; }
-        public IEnumerable<CartDetails> CartDetails { get; set; }
+        public IEnumerable<Wishlist> Wishlists { get; set; }
 
         public int CartCount { get; set; }
         public int WishlistCount { get; set; }
