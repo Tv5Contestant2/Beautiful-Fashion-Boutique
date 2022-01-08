@@ -94,11 +94,12 @@ namespace ECommerce1
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IEmployeesService, EmployeesService>();
             services.AddScoped<IMessageService, MessageService>();
-            services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IProductCategoriesService, ProductCategoriesService>();
+            services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IPromotionsService, PromotionsService>();
-            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IRandomPasswordService, RandomPasswordService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddControllersWithViews();

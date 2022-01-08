@@ -33,6 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\EmailPassConfirmation.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Inquiry.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -97,6 +97,25 @@ namespace ECommerce1.Data.Services
             catch (Exception) { }
         }
 
+        public async Task SendConfirmationEmail(string recipient, string confirmationLink, string pass)
+        {
+            try
+            {
+                string filePath = string.Format("{0}\\{1}", _hostEnvironment.ContentRootPath, "Templates\\EmailPassConfirmation.html");
+
+                StreamReader str = new StreamReader(filePath);
+                string message = str.ReadToEnd();
+                str.Close();
+
+                message = message.Replace("[confirmationlink]", confirmationLink);
+                message = message.Replace("[emailaddress]", recipient);
+                message = message.Replace("[password]", pass);
+
+                await SendEmail(message, recipient, "Account Confirmation");
+            }
+            catch (Exception) { }
+        }
+
         public async Task SendReceipt(string recipient, List<OrderDetails> orderDetails, Orders orders)
         {
             try

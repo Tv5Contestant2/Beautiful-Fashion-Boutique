@@ -46,7 +46,6 @@ namespace ECommerce1.Data.Services
 
             // Store user data in AspNetUsers database table
             var result = await _userManager.CreateAsync(user, model.Password);
-
             return (result.Succeeded, result.Errors);
         }
 

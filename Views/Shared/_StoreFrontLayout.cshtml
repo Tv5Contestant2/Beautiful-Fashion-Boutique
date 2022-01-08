@@ -67,6 +67,7 @@
 
                     @{
                         var _IsAdmin = false;
+                        var _IsFirstTimeLogin = false;
                         if (UserManager.GetUserAsync(User).Result != null)
                         {
                             if (UserManager.GetUserAsync(User).Result.IsAdmin != null)
@@ -79,17 +80,36 @@
                                 if ((bool)UserManager.GetUserAsync(User).Result.IsEmployee) _IsAdmin = true;
                             }
 
+                            _IsFirstTimeLogin = (bool)UserManager.GetUserAsync(User).Result.IsFirstTimeLogin;
+
                             if (_IsAdmin == true)
                             {
-                                <li class="nav-item mx-2 mx-lg-0 px-lg-0">
-                                    <a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">
-                                        Dashboard
-                                        <i class="fas fa-tools"></i>
-                                    </a>
-                                </li>
+                                if (_IsFirstTimeLogin)
+                                {
+                                    <li class="nav-item mx-2 mx-lg-0 px-lg-0">
+                                        <a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">
+                                            Dashboard
+                                            <i class="fas fa-tools"></i>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link fw-normal dropdown-toggle text-uppercase text-dark" id="profileDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <svg class="svg-icon">
+                                                <use xlink:href="#user-1"> </use>
+                                            </svg>
+                                        </a>
+                                        <ul class="dropdown-menu mt-lg-4" aria-labelledby="profileDropdown">
+                                            <li><a class="dropdown-item" asp-controller="Home" asp-action="SignOut">Sign Out</a></li>
+                                        </ul>
+                                    </li>
+                                }
                             }
                             else
                             {
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link fw-normal dropdown-toggle text-uppercase text-dark" id="profileDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg class="svg-icon">
@@ -101,6 +121,7 @@
                                         <li><a class="dropdown-item" asp-controller="Home" asp-action="SignOut">Sign Out</a></li>
                                     </ul>
                                 </li>
+
                             }
                         }
 

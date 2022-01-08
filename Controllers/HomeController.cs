@@ -1,5 +1,4 @@
 ﻿using ECommerce1.Data.Enums;
-using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -118,6 +116,13 @@ namespace ECommerce1.Controllers
                     return View(model);
                 }
 
+                if (!user.IsFirstTimeLogin.Value)
+                {
+                    // Generate the reset password token
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    return RedirectToAction("UpdatePasswordFirstLogin", new { email = user.Email, token = token });
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(
                     model.SignInEmail, model.SignInPassword, model.RememberMe, false);
 
@@ -167,6 +172,7 @@ namespace ECommerce1.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     IsCustomer = true,
+                    IsFirstTimeLogin = false,
                     GenderId = (int)GenderEnum.Men,
                     LastLoggedIn = DateTime.Now,
                     Image = _commonServices.NoImage
@@ -309,6 +315,51 @@ namespace ECommerce1.Controllers
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
 
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdatePasswordFirstLogin(string email, string token)
+        {
+            await Task.Delay(0);
+            var _model = new ResetPasswordViewModel();
+            _model.Email = email;
+            _model.Token = token;
+
+            return View(_model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePasswordFirstLogin([Bind] ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Find the user by email
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user != null)
+                {
+                    // reset the user password
+                    user.IsFirstTimeLogin = true;
+                    var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+                    if (result.Succeeded)
+                    {
+                        return View("ResetPasswordSuccess", model);
+                    }
+                    // Display validation errors. For example, password reset token already
+                    // used to change the password or password complexity rules not met
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View(model);
+                }
+                else
+                {
+                    await _signInManager.SignOutAsync();
+                    return View("Error");
+                }
+            }
+            else { return View(model); }
         }
     }
 }

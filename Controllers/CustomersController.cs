@@ -91,7 +91,6 @@ namespace ECommerce1.Controllers
             }
 
             model.DateCreated = DateTime.Now;
-
             var _result = await _service.CreateCustomer(model);
             if (!_result.Item1)
             {

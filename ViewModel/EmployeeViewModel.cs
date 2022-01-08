@@ -52,5 +52,7 @@ namespace ECommerce1.ViewModel
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public bool IsAutoGeneratePassword { get; set; }
     }
 }

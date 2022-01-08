@@ -2,6 +2,7 @@
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -13,11 +14,22 @@ namespace ECommerce1.Controllers
     {
         private readonly IEmployeesService _service;
         private readonly ICommonServices _commonServices;
+        public readonly IRandomPasswordService _randomPasswordService;
+        private readonly UserManager<User> _userManager;
+        private readonly IEmailService _emailService;
 
-        public EmployeesController(IEmployeesService service, ICommonServices commonServices)
+        public EmployeesController(IEmployeesService service
+            , ICommonServices commonServices
+            , IRandomPasswordService randomPasswordService
+            , UserManager<User> userManager
+            , IEmailService emailService
+            )
         {
             _service = service;
             _commonServices = commonServices;
+            _randomPasswordService = randomPasswordService;
+            _userManager = userManager;
+            _emailService = emailService;
         }
 
         public IActionResult CreateEmployee()
@@ -44,33 +56,59 @@ namespace ECommerce1.Controllers
         {
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
+            if (model.IsAutoGeneratePassword)
+            {
+                ModelState.Remove("Password");
+                ModelState.Remove("ConfirmPassword");
+                model.Password = _randomPasswordService.GenerateRandomPassword();
+            }
+
             if (!ModelState.IsValid) return View(model);
 
             model.DateCreated = DateTime.Now;
 
-            var _result = await _service.CreateEmployee(model);
-            if (!_result.Item1)
+            // Copy data from RegisterViewModel to IdentityUser
+            var user = new User
             {
-                // If there are any errors, add them to the ModelState object
-                // which will be displayed by the validation summary tag helper
-                foreach (var error in _result.Item2)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                AddressBaranggay = model.AddressBaranggay,
+                AddressBlock = model.AddressBlock,
+                AddressCity = model.AddressCity,
+                AddressLot = model.AddressLot,
+                Birthday = model.Birthday,
+                ContactNumber = model.ContactNumber,
+                DateCreated = model.DateCreated,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                Image = model.Image,
+                IsEmployee = true,
+                IsFirstTimeLogin = false,
+                LastName = model.LastName,
+                UserName = model.Email,
+                LastLoggedIn = DateTime.Now
+            };
 
-                if (!ModelState.IsValid)
-                {
-                    return View("CreateEmployee", model);
-                }
-                else
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+            // Store user data in AspNetUsers database table
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            // If user is successfully created, sign-in the user using
+            // SignInManager and redirect to index action of HomeController
+            if (result.Succeeded)
+            {
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action("ConfirmEmail", "Home", new { userId = user.Id, token = token }, Request.Scheme);
+
+                // send email confirmation
+                await _emailService.SendConfirmationEmail(model.Email, confirmationLink, model.Password);
             }
             else
             {
-                return RedirectToAction(nameof(Index));
+                // If there are any errors, add them to the ModelState object
+                // which will be displayed by the validation summary tag helper
+                foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
+                if (!ModelState.IsValid) return View("CreateEmployee", model);
             }
+
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Index(int page = 1)
