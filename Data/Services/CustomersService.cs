@@ -60,6 +60,7 @@ namespace ECommerce1.Data.Services
                 GenderId = model.GenderId,
                 Image = model.Image,
                 IsCustomer = true,
+                IsFirstTimeLogin = false,
                 LastName = model.LastName,
                 UserName = model.Email,
             };

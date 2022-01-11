@@ -9,6 +9,7 @@ namespace ECommerce1.Data.Services.Interfaces
     {
         public Task SendMessage(MessageViewModel viewModel);
         public Task SendConfirmationEmail(string recipient, string confirmationLink);
+        public Task SendConfirmationEmail(string recipient, string confirmationLink, string pass);
         public Task SendReceipt(string recipient, Orders orders);
         public Task SendOrderShipped(string recipient, OrderViewModel orders);
         public Task SendOrderReceived(string recipient, OrderViewModel orders);

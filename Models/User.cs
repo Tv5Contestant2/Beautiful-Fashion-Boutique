@@ -22,6 +22,8 @@ namespace ECommerce1.Models
 
         public bool? IsEmployee { get; set; }
 
+        public bool? IsFirstTimeLogin { get; set; }
+
         public string LastName { get; set; }
 
         public DateTime? Birthday { get; set; }
