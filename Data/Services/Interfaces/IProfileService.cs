@@ -9,8 +9,6 @@ namespace ECommerce1.Data.Services.Interfaces
         public Task<IEnumerable<Orders>> GetCustomerOrders(string userId);
         public Task<IEnumerable<OrderDetails>> GetCustomerReturns(string userId);
         public Task<IEnumerable<Wishlist>> GetCustomerWishlist(string userId);
-        public Task<IEnumerable<CustomersBillingAddress>> GetCustomerBillingAddresses(string userId);
-        public Task<IEnumerable<CustomersShippingAddress>> GetCustomerShippingAddresses(string userId);
 
     }
 }

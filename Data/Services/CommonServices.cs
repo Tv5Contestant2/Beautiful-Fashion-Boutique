@@ -28,5 +28,15 @@ namespace ECommerce1.Data.Services
         {
             return _context.Modules.ToList();
         }
+
+        public string GetPaymentMethod(int id)
+        {
+            return _context.PaymentMethods.First(x => x.Id == id).Title;
+        }
+
+        public string GetDeliveryMethod(int id)
+        {
+            return _context.DeliveryMethods.First(x => x.Id == id).Title;
+        }
     }
 }

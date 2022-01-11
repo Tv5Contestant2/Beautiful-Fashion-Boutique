@@ -191,13 +191,7 @@ namespace ECommerce1.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             var order = _orderService.GetOrderById(transactionId);
             var orderDetails = await _orderService.GetOrderDetailsById(transactionId);
-            var customerShippingAddress = new CustomersShippingAddress
-            {
-                Block = user.AddressBlock,
-                Lot = user.AddressLot,
-                Barangay = user.AddressBaranggay,
-                City = user.AddressCity
-            };
+            var orderShippingInfo = _orderService.GetOrderShippingInfo(transactionId);
 
             var viewModel = new OrderViewModel()
             {
@@ -211,7 +205,7 @@ namespace ECommerce1.Controllers
                 OrderStatus = order.OrderStatus,
                 Colors = await _productCategoriesService.GetColors(),
                 Sizes = await _productCategoriesService.GetSizes(),
-                CustomersShippingAddress = customerShippingAddress
+                OrderShippingInfo = orderShippingInfo
             };
 
             if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
@@ -245,25 +239,6 @@ namespace ECommerce1.Controllers
 
             ViewBag.Customer = user;
             return View(viewModel);
-        }
-
-        public async Task<IActionResult> Addresses()
-        {
-            var userId = _userManager.GetUserId(HttpContext.User);
-            ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
-            ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
-            ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
-            ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
-            ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
-
-            var result = await _service.GetCustomerBillingAddresses(userId);
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
-
-            ViewBag.Customer = user;
-
-            return View(result);
         }
 
         [Route("Profile/ReturnOrder/{productId:long}")]

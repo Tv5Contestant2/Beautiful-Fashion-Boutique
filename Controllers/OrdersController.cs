@@ -14,16 +14,19 @@ namespace ECommerce1.Controllers
     [AllowAnonymous]
     public class OrdersController : Controller
     {
-        private readonly IOrderService _service;
         private readonly ICartService _cartService;
+        private readonly ICommonServices _commonService;
+        private readonly IOrderService _service;
         private readonly UserManager<User> _userManager;
 
         public OrdersController(ICartService cartService
+            , ICommonServices commonService
             , IOrderService service
             , UserManager<User> userManager)
         {
             _service = service;
             _cartService = cartService;
+            _commonService = commonService;
             _userManager = userManager;
         }
 
@@ -66,6 +69,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> ViewOrder(Guid transactionId)
         {
             var orderDetails = await _service.GetOrderDetailsById(transactionId);
+            var orderShippingInfo = _service.GetOrderShippingInfo(transactionId);
             var order = _service.GetOrderById(transactionId);
             ViewBag.TransactionId = transactionId;
             ViewBag.DeliveryStatusId = order.DeliveryStatusId;
@@ -76,7 +80,11 @@ namespace ECommerce1.Controllers
                 TransactionId = transactionId,
                 DeliveryStatusId = order.DeliveryStatusId,
                 OrderStatusId = order.OrderStatusId,
-                OrderDetails = orderDetails
+                OrderDetails = orderDetails,
+                CustomersId = order.CustomersId,
+                OrderShippingInfo = orderShippingInfo,
+                PaymentMethod = _commonService.GetPaymentMethod(order.PaymentMethodId),
+                DeliveryMethod = _commonService.GetDeliveryMethod(order.DeliveryMethodId),
             };
 
             return View(viewModel);

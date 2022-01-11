@@ -124,7 +124,7 @@
                                             @(item.ReceivedDate.ToShortDateString() != "1/1/0001" ? @item.ReceivedDate.ToShortDateString() : "--")
                                         </div>
                                         <div class="item col-1 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewOrder" asp-route-id="@item.TransactionId">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewOrder" asp-route-id="@item.TransactionId" data-toggle="tooltip" data-placement="bottom" title="View">
                                                 <i class="far fa-eye"></i>
                                             </a>
                                         </div>

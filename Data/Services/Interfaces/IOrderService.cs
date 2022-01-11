@@ -8,7 +8,7 @@ namespace ECommerce1.Data.Services.Interfaces
 {
     public interface IOrderService
     {
-        public bool AddToOrder(Orders orders);
+        public bool AddToOrder(Orders orders, OrderShippingInfo orderShippingInfo);
 
         public Task<IEnumerable<Orders>> GetAllOrders();
 
@@ -25,6 +25,8 @@ namespace ECommerce1.Data.Services.Interfaces
         public Orders GetOrderById(Guid transactionId);
 
         public Task<IEnumerable<OrderDetails>> GetOrderDetailsById(Guid transactionId);
+
+        public OrderShippingInfo GetOrderShippingInfo(Guid transactionId);
 
         public Task<IEnumerable<Returns>> GetReturnsByReference(Guid transactionId, long productId);
 

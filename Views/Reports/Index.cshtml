@@ -1,7 +1,5 @@
-﻿@model ECommerce1.ViewModel.HomeUserViewModel
-
-@{
-    ViewData["Title"] = "Roles Management";
+﻿@{
+    ViewData["Title"] = "Reports";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -29,62 +27,44 @@
             @*Search*@
             <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
-                <div class="col">
-                    <a asp-controller="Employees" asp-action="CreateRoles" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Roles
-                    </a>
-                </div>
             </div>
 
             @*Grid View*@
             <div id="dvGrid" class="row mt-3">
                 <div class="d-flex justify-content-lg-around">
                     <div class="col-xl-12 col-lg-12">
-                        <div class="cart-inner" id="dtEmployeeList">
+                        <div class="cart-inner" id="dtProductList">
                             <div class="border-top border-bottom py-2">
                                 <div class="row text-uppercase">
-                                    <div class="col-3"><strong class="small">Role</strong></div>
-                                    <div class="col-3 text-center"> <strong class="small">Status</strong></div>
-                                    <div class="col-2 text-center"> <strong class="small">Action</strong></div>
+                                    <div class="col-4"> <strong class="small">Report Name</strong></div>
+                                    <div class="col-5"> <strong class="small">Description</strong></div>
+                                    <div class="col-3 text-center"><strong class="small">Action</strong></div>
                                 </div>
                             </div>
-                            @foreach (var item in Model.PaginatedList())
-                            {
-                                <div class="row-item pt-4 pb-4 border-bottom">
-                                    <div class="row text-left">
-                                        <div class="item col-2">
-                                            &nbsp;
-                                        </div>
-                                        <div class="item col-3">&nbsp;</div>
-                                        <div class="item col-3">&nbsp;</div>
-                                        <div class="item col-2 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
-                                                <i class="far fa-edit"></i>
-                                            </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
-                                        </div>
+                            <div class="row-item pt-4 pb-4 border-bottom">
+                                <div class="row text-left">
+                                    <div class="item col-4">Monthly Sales Report</div>
+                                    <div class="item col-5">Shows detailed report on monthly sales</div>
+                                    <div class="item col-3 text-center">
+                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="GetMonthlySalesReport" data-toggle="tooltip" data-placement="bottom" title="Export as Excel">
+                                            <i class="fas fa-download"></i>
+                                        </a>
                                     </div>
                                 </div>
-                            }
+                            </div>
+                            <div class="row-item pt-4 pb-4 border-bottom">
+                                <div class="row text-left">
+                                    <div class="item col-4">Annual Sales Report</div>
+                                    <div class="item col-5">Shows detailed report on annual sales</div>
+                                    <div class="item col-3 text-center">
+                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="GetAnnualSalesReport" data-toggle="tooltip" data-placement="bottom" title="Export as Excel">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            @*Pagination*@
-            <div class="row">
-                <div class=" d-flex justify-content-between px-4 py-3 w-100">
-                    <div class="hint-text">Showing <b>@Model.PaginatedList().Count()</b> out of <b>@Model.Users.Count()</b> entries</div>
-                    <ul class="pagination">
-                        @for (int i = 1; i <= Model.PageCount(); i++)
-                        {
-                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
-                                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
-                            </li>
-                        }
-                    </ul>
                 </div>
             </div>
 
@@ -105,7 +85,10 @@
     $(document).ready(function () {
         $("#inptSearch").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("#dtEmployeeList tr").filter(function () {
+            $("#dtProductList .row-item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+            $("#dvThumbnail .item").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
@@ -138,5 +121,4 @@
             $("#dvThumbnail").show();
         });
     });
-
 </script>

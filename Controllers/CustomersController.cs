@@ -12,12 +12,17 @@ namespace ECommerce1.Controllers
     public class CustomersController : Controller
     {
         private readonly ICustomersService _service;
+        private readonly IEmailService _emailService;
         public readonly ICommonServices _commonServices;
         private readonly IUserService _userService;
 
-        public CustomersController(ICustomersService service, ICommonServices commonServices, IUserService userService)
+        public CustomersController(ICustomersService service
+            , IEmailService emailService
+            , ICommonServices commonServices
+            , IUserService userService)
         {
             _service = service;
+            _emailService = emailService;
             _commonServices = commonServices;
             _userService = userService;
         }
@@ -31,6 +36,7 @@ namespace ECommerce1.Controllers
             customer.IsBlock = true;
 
             await _service.UpdateCustomer(customer);
+            await _emailService.SendBlockEmail(customer.Email);
 
             return RedirectToAction(nameof(Index));
         }
@@ -60,6 +66,20 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> BlockCustomers(int page = 1)
         {
             var data = await _service.GetAllBlockCustomers();
+
+            var viewModel = new HomeUserViewModel
+            {
+                ItemPerPage = 10,
+                Users = data,
+                CurrentPage = page
+            };
+
+            return View(viewModel);
+        }
+
+        public async Task<IActionResult> DeletedCustomers(int page = 1)
+        {
+            var data = await _service.GetAllDeletedCustomers();
 
             var viewModel = new HomeUserViewModel
             {
@@ -128,10 +148,11 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("DeleteCustomer")]
         public async Task<IActionResult> DeleteCustomerConfirmed(string id)
         {
-            var _employee = await _service.GetCustomerById(id);
-            if (_employee == null) return RedirectToAction("Error", "Home");
+            var customer = await _service.GetCustomerById(id);
+            if (customer == null) return RedirectToAction("Error", "Home");
 
             await _service.DeleteCustomer(id);
+            await _emailService.SendTemporaryDeleteEmail(customer.Email);
 
             return RedirectToAction(nameof(Index));
         }
@@ -139,6 +160,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Index(int page = 1)
         {
             await _userService.ArchiveUsers();
+            await _userService.DeleteCustomers();
 
             var data = await _service.GetAllCustomers();
 
@@ -177,6 +199,17 @@ namespace ECommerce1.Controllers
             if (customerDetails == null) return RedirectToAction("Error", "Home");
 
             return View(customerDetails);
+        }
+        public async Task<IActionResult> UndeleteCustomer(string id)
+        {
+            var customer = await _service.GetCustomerById(id);
+            if (customer == null) return RedirectToAction("Error", "Home");
+
+            customer.DeletedOn = null;
+
+            await _service.UpdateCustomer(customer);
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]

@@ -70,10 +70,10 @@
                                     }
                                 </div>
                                 <div class="col-2 text-center">
-                                    <a class="add btn btn-link text-dark p-0" asp-action="AddToCartFromWishlist" asp-route-id="@item.ProductId">
+                                    <a class="add btn btn-link text-dark p-0" asp-action="AddToCartFromWishlist" asp-route-id="@item.ProductId" data-toggle="tooltip" data-placement="bottom" title="Add to cart">
                                         <i class="fas fa-cart-plus"></i>
                                     </a>
-                                    <a class="delete btn btn-link text-dark p-0" asp-action="RemoveFromWishlist" asp-route-id="@item.ProductId">
+                                    <a class="delete btn btn-link text-dark p-0" asp-action="RemoveFromWishlist" asp-route-id="@item.ProductId" data-toggle="tooltip" data-placement="bottom" title="Remove">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                                 </div>

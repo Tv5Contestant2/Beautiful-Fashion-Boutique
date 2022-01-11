@@ -122,15 +122,12 @@
                                             }
                                         </div>
                                         <div class="item col-1 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateEmployee" asp-route-id="@item.Id">
-                                                <i class="far fa-eye"></i>
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
+                                                <i class="far fa-edit"></i>
                                             </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteEmployee" asp-route-id="@item.Id">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
                                                 <i class="far fa-trash-alt"></i>
                                             </a>
-                                            @*<a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="BlockCustomer" asp-route-id="@item.Id">
-                                                    <i class="fas fa-user-slash"></i>
-                                                </a>*@
                                         </div>
                                     </div>
                                 </div>

@@ -113,13 +113,17 @@ namespace ECommerce1.Data.Services
         public async Task DeleteCustomer(string id)
         {
             var _customer = await GetCustomerById(id);
+            _customer.DeletedOn = DateTime.Now;
 
-            var _result = await _userManager.DeleteAsync(_customer);
+            await _userManager.UpdateAsync(_customer);
         }
 
         public async Task<IEnumerable<User>> GetAllCustomers()
         {
-            var _customers = (await _userManager.Users.Where(x => x.IsCustomer == true && (x.IsBlock == false || x.IsBlock == null) && (x.IsArchived == false || x.IsArchived == null)).ToListAsync());
+            var _customers = await _userManager.Users.Where(x => x.IsCustomer == true 
+                && (x.IsBlock == false || x.IsBlock == null)
+                && (x.IsArchived == false || x.IsArchived == null)
+                && (x.DeletedOn == null)).ToListAsync();
             return _customers;
         }
 
@@ -132,6 +136,12 @@ namespace ECommerce1.Data.Services
         public async Task<IEnumerable<User>> GetAllBlockCustomers()
         {
             var _customers = (await _userManager.Users.Where(x => x.IsCustomer == true && x.IsBlock == true).ToListAsync());
+            return _customers;
+        }
+
+        public async Task<IEnumerable<User>> GetAllDeletedCustomers()
+        {
+            var _customers = (await _userManager.Users.Where(x => x.IsCustomer == true && x.DeletedOn != null).ToListAsync());
             return _customers;
         }
 

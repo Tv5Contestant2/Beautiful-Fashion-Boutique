@@ -29,9 +29,11 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public void UpdateCartItems(CartDetails cartDetails);
 
-        public Task RemoveFromCart(long productId, string userId);
+        public Task RemoveFromCart(long id, string userId);
 
         public Task RemoveFromWishlist(long productId, string userId);
+
+        public Task<CartDetails> GetCartItemsById(long id);
 
         public Task<CartDetails> GetCartItemsByProductId(long productId, int colorId, int sizeId, string userId);
 

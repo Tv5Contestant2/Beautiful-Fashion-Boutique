@@ -22,9 +22,9 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public decimal GetProductSales();
 
-        public int GetProductSold();
+        public long GetProductSold();
 
-        public int GetPendingOrders();
+        public long GetPendingOrders();
 
         public IEnumerable<Orders> GetRecentOrders();
 
@@ -32,7 +32,11 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public IEnumerable<Message> GetRecentMessages();
 
+        public Task<IEnumerable<OrderDetails>> GetTopSelling();
+
         public Task<IEnumerable<Product>> GetOutOfStock();
+
+        public Task<IEnumerable<Product>> GetCritical();
 
     }
 }

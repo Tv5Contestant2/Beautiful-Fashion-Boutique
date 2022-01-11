@@ -85,7 +85,7 @@
                                         <div class="item col-4">@string.Format("{0} {1}", item.Customers.FirstName, @item.Customers.LastName)</div>
                                         @*<div class="col-2 text-center">@item.OrderDetails.Sum(x => x.QuantityReturned)</div>*@
                                         <div class="item col-2 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewReturn" asp-route-id="@item.TransactionId">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewReturn" asp-route-id="@item.TransactionId" data-toggle="tooltip" data-placement="bottom" title="View">
                                                 <i class="far fa-eye"></i>
                                             </a>
                                         </div>

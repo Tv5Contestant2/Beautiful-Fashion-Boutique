@@ -55,6 +55,12 @@ namespace ECommerce1.Models
         [Display(Name = "Blocked")]
         public bool? IsBlock { get; set; }
 
+        [Display(Name = "Deleted")]
+        public bool? IsDeleted { get; set; }
+
+        [Display(Name = "Deleted On")]
+        public DateTime? DeletedOn { get; set; }
+
         [Display(Name = "Archived")]
         public bool? IsArchived { get; set; }
 

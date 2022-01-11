@@ -140,7 +140,7 @@
 
                                                         if (_IsAdmin == true)
                                                         {
-                                                            <a class="nav nav-link" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none">
+                                                            <a class="nav nav-link" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none" data-toggle="tooltip" data-placement="bottom" title="Update">
                                                                 <i class="far fa-edit"></i>
                                                             </a>
                                                         }
@@ -148,7 +148,7 @@
                                                         {
                                                             @if (item.StockStatusId != (int)StockStatusEnum.OutOfStock)
                                                             {
-                                                                <a class="nav nav-link" onclick="ShowProductView(@item.Id)" style="border: none">
+                                                                <a class="nav nav-link" onclick="ShowProductView(@item.Id)" style="border: none" data-toggle="tooltip" data-placement="bottom" title="Add to cart">
                                                                     <i class="fas fa-shopping-cart"></i>
                                                                 </a>
                                                             }
@@ -156,9 +156,9 @@
                                                     }
 
                                                 }
-                                                <a class="nav nav-link" style="border: none" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
-                                                    <i class="fas fa-search"></i>
-                                                </a>
+                                            <a class="nav nav-link" style="border: none" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="View">
+                                                <i class="fas fa-search"></i>
+                                            </a>
                                             </div>
 
                                         </div>

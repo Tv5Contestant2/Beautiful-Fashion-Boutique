@@ -8,10 +8,13 @@ namespace ECommerce1.Models
         [Key]
         public long Id { get; set; }
         public Guid TransactionId { get; set; }
-        public int CustomerBillingAddressId { get; set; }
-        public int CustomerShippingAddressId { get; set; }
-        public int DeliveryMethodId { get; set; }
-        public bool IsCashOnDelivery { get; set; }
-        public string Notes { get; set; }
+        public string CustomersId { get; set; }
+        public string EmailAddress { get; set; }
+        public string Block { get; set; }
+        public string Lot { get; set; }
+        public string City { get; set; }
+        public string Barangay { get; set; }
+        public string ContactNumber { get; set; }
+        public string Instructions { get; set; }
     }
 }

@@ -84,9 +84,9 @@
                                 <div class="col-2">
                                     <div class="d-flex align-items-center">
                                         <div class="quantity d-flex align-items-center me-4">
-                                            <a class="dec-btn" onclick="decrease(this)" asp-controller="Cart" asp-action="RemoveFromCartByQty" asp-route-id="@item.ProductId">-</a>
+                                            <a class="dec-btn" onclick="decrease(this)" asp-controller="Cart" asp-action="RemoveFromCartByQty" asp-route-id="@item.Id">-</a>
                                             <input class="quantity-no" type="text" value="@item.Quantity">
-                                            <a class="dec-btn" onclick="increase(this)" asp-controller="Cart" asp-action="AddToCartByQty" asp-route-id="@item.ProductId">+</a>
+                                            <a class="dec-btn" onclick="increase(this)" asp-controller="Cart" asp-action="AddToCartByQty" asp-route-id="@item.Id">+</a>
                                         </div>
                                     </div>
                                 </div>
@@ -97,10 +97,10 @@
                                     }
                                 </div>
                                 <div class="col-1 text-center">
-                                    <a class="btn btn-link text-dark p-0" asp-action="AddToWishlistFromCart" asp-route-id="@item.ProductId">
+                                    <a class="btn btn-link text-dark p-0" asp-action="AddToWishlistFromCart" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Add to wishlist">
                                         <i class="far fa-heart"></i>
                                     </a>
-                                    <a class="delete btn btn-link text-dark p-0" asp-action="RemoveFromCart" asp-route-id="@item.ProductId">
+                                    <a class="delete btn btn-link text-dark p-0" asp-action="RemoveFromCart" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Remove from cart">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                                 </div>

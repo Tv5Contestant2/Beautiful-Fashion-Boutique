@@ -30,6 +30,8 @@ namespace ECommerce1.Data.Services.Interfaces
 
         Task<IEnumerable<User>> GetAllBlockCustomers();
 
+        Task<IEnumerable<User>> GetAllDeletedCustomers();
+
         void InitializeCustomer(CustomerViewModel model);
     }
 }

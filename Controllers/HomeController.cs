@@ -107,6 +107,29 @@ namespace ECommerce1.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(model.SignInEmail);
 
+                // Is Blocked
+                if (user != null && user.IsBlock == true)
+                {
+                    ViewBag.CartCount = 0;
+                    ViewBag.WishlistCount = 0;
+
+                    model.isLogInError = true;
+                    ModelState.AddModelError(string.Empty, "Account is blocked");
+                    return View(model);
+                }
+
+                // Is Deleted
+                if (user != null && user.DeletedOn != null)
+                {
+                    ViewBag.CartCount = 0;
+                    ViewBag.WishlistCount = 0;
+
+                    model.isLogInError = true;
+                    ModelState.AddModelError(string.Empty, "Account is deleted");
+                    return View(model);
+                }
+
+                // Email not confirmed
                 if (user != null && !user.EmailConfirmed &&
                             (await _userManager.CheckPasswordAsync(user, model.SignInPassword)))
                 {

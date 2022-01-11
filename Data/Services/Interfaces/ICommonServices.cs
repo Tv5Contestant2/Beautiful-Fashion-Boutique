@@ -10,5 +10,9 @@ namespace ECommerce1.Data.Services.Interfaces
         string GetImageByte64StringFromSplit(string value);
 
         public IEnumerable<Modules> GetModules();
+
+        public string GetPaymentMethod(int id);
+
+        public string GetDeliveryMethod(int id);
     }
 }

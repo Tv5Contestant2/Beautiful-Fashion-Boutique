@@ -11,10 +11,13 @@ namespace ECommerce1.Data.Services
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
+        private readonly IEmailService _emailService;
 
-        public UserService(UserManager<User> userManager)
+        public UserService(UserManager<User> userManager
+            , IEmailService emailService)
         {
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         public async Task UpdateLastLoggedIn(string userId)
@@ -36,6 +39,23 @@ namespace ECommerce1.Data.Services
                 foreach (var user in _forArchive) { 
                     user.IsArchived = true;
                     await _userManager.UpdateAsync(user);
+                }
+            }
+        }
+
+        public async Task DeleteCustomers()
+        {
+            var _userRepo = await _userManager.Users.Where(x => x.DeletedOn != null && x.IsDeleted != true).ToListAsync();
+            var _forDeletion = _userRepo.Where(x => (x.DeletedOn - DateTime.Today).Value.Days == 8).ToList();
+
+            if (_forDeletion.Count > 0)
+            {
+                foreach (var user in _forDeletion)
+                {
+                    user.IsDeleted = true;
+                    await _userManager.UpdateAsync(user);
+
+                    await _emailService.SendDeleteEmail(user.Email);
                 }
             }
         }

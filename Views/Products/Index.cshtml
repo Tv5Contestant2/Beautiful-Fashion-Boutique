@@ -34,8 +34,8 @@
                     <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-info float-right" type="button">
                         <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Product
                     </a>
-                    <button id="btnGrid" class="btn btn-info" type="button"><i class="fas fa-list"></i></button>
-                    <button id="btnThumbnail" class="btn btn-info" type="button"><i class="fas fa-th-large"></i></button>
+                    <button id="btnGrid" class="btn btn-info" type="button" data-toggle="tooltip" data-placement="bottom" title="View as grid"><i class="fas fa-list"></i></button>
+                    <button id="btnThumbnail" class="btn btn-info" type="button" data-toggle="tooltip" data-placement="bottom" title="View as cards"><i class="fas fa-th-large"></i></button>
                 </div>
             </div>
 
@@ -119,13 +119,13 @@
                                         <div class="item col-1 text-center">@item.CriticalQty</div>
                                         <div class="item col-2 text-center"><span class="badge @item.InventoryStatus.Class">@item.InventoryStatus.Title</span></div>
                                         <div class="item col-1 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="View">
                                                 <i class="far fa-eye"></i>
                                             </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateProduct" asp-route-id="@item.Id">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
                                                 <i class="far fa-edit"></i>
                                             </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteProduct" asp-route-id="@item.Id">
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
                                                 <i class="far fa-trash-alt"></i>
                                             </a>
                                         </div>

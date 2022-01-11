@@ -61,13 +61,13 @@
                     <ul>
                         <li>
                             <a asp-controller="Administrator" asp-action="Index">
-                                <i class="fas fa-tachometer-alt fa-10x"></i>
+                                <i class="fas fa-tachometer-alt fs-6 text-primary"></i>
                                 Dashboard
                             </a>
                         </li>
                         <li class="sidebar-dropdown">
                             <a href="#">
-                                <i class="fa fa-user"></i>
+                                <i class="fa fa-user fs-6 text-success"></i>
                                 <span>Account Management</span>
                             </a>
                             <div class="sidebar-submenu">
@@ -86,7 +86,7 @@
                         </li>
                         <li class="sidebar-dropdown">
                             <a href="#">
-                                <i class="fas fa-truck-loading"></i>
+                                <i class="fas fa-truck-loading fs-6 text-warning"></i>
                                 <span>Order Management</span>
                             </a>
                             <div class="sidebar-submenu">
@@ -102,19 +102,25 @@
                         </li>
                         <li>
                             <a asp-controller="Products" asp-action="Index">
-                                <i class="fas fa-box"></i>
+                                <i class="fas fa-box fs-6 text-primary"></i>
                                 Product Management
                             </a>
                         </li>
                         <li>
                             <a asp-controller="Promotions" asp-action="Index">
-                                <i class="fa fa-tag"></i>
+                                <i class="fa fa-tag fs-6 text-info"></i>
                                 Promos and Discounts
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Reports" asp-action="Index">
+                                <i class="fas fa-file-alt fs-6 text-danger"></i>
+                                Reports
                             </a>
                         </li>
                         <li class="sidebar-dropdown">
                             <a href="#">
-                                <i class="fa fa-cog"></i>
+                                <i class="fa fa-cog fs-6"></i>
                                 <span>Site Configurations</span>
                             </a>
                             <div class="sidebar-submenu">
@@ -134,10 +140,10 @@
             </div>
             <!-- sidebar-content  -->
             <div class="sidebar-footer">
-                <a asp-controller="Administrator" asp-action="Messages">
+                <a asp-controller="Administrator" asp-action="Messages" data-toggle="tooltip" data-placement="bottom" title="View messages">
                     <i class="h5 fa fa-envelope"></i>
                 </a>
-                <a asp-controller="Home" asp-action="SignOut">
+                <a asp-controller="Home" asp-action="SignOut" data-toggle="tooltip" data-placement="bottom" title="Sign out">
                     <i class="h5 fa fa-power-off"></i>
                 </a>
             </div>

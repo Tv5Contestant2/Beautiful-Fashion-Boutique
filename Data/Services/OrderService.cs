@@ -13,14 +13,19 @@ namespace ECommerce1.Data.Services
     public class OrderService : IOrderService
     {
         private readonly AppDBContext _context;
+        private readonly IEmailService _emailService;
 
-        public OrderService(AppDBContext context)
+        public OrderService(AppDBContext context
+            , IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
-        public bool AddToOrder(Orders order)
+
+        public bool AddToOrder(Orders order, OrderShippingInfo orderShippingInfo)
         {
             _context.Orders.Add(order);
+            _context.OrderShippingInfo.Add(orderShippingInfo);
             _context.SaveChanges();
 
             return true;
@@ -114,6 +119,11 @@ namespace ECommerce1.Data.Services
 
             return result;
         }
+        public OrderShippingInfo GetOrderShippingInfo(Guid transactionId)
+        {
+            return _context.OrderShippingInfo
+                .FirstOrDefault(x => x.TransactionId == transactionId);
+        }
 
         public async Task<int> GetCustomerOrderCount(string userId)
         {
@@ -149,6 +159,7 @@ namespace ECommerce1.Data.Services
         public async Task<Orders> UpdateOrder(OrderViewModel viewModel)
         {
             var result = _context.Orders.FirstOrDefault(x => x.TransactionId == viewModel.TransactionId);
+            var customer = _context.Users.First(x => x.Id == viewModel.CustomersId);
 
             if (result.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
             {
@@ -156,6 +167,8 @@ namespace ECommerce1.Data.Services
                 result.OrderStatusId = (int)OrderStatusEnum.Shipped;
 
                 result.ExpectedDeliveryDate = viewModel.ExpectedDeliveryDate;
+
+                await _emailService.SendOrderShipped(customer.Email, viewModel);
             }
             else if (result.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
             {
@@ -163,6 +176,8 @@ namespace ECommerce1.Data.Services
                 result.OrderStatusId = (int)OrderStatusEnum.Completed;
 
                 result.ReceivedDate = DateTime.Now;
+
+                await _emailService.SendOrderReceived(customer.Email, viewModel);
             }
 
             _context.Orders.Update(result);

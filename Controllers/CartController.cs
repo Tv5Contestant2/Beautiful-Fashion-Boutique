@@ -128,12 +128,12 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
-            var cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
-            if (cartDetails == null) return RedirectToAction("Error", "Home");
+            var cartItems = await _service.GetCartItemsById(id);
+            if (cartItems == null) return RedirectToAction("Error", "Home");
 
             //increment quantity
-            cartDetails.Quantity += 1;
-            _service.UpdateCartItems(cartDetails);
+            cartItems.Quantity += 1;
+            _service.UpdateCartItems(cartItems);
 
             return Redirect(Request.Headers["Referer"].ToString());
         }
@@ -176,7 +176,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
-            var _cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
+            var _cartDetails = await _service.GetCartItemsById(id);
             if (_cartDetails == null) return RedirectToAction("Error", "Home");
 
             var wishlist = new Wishlist();
@@ -193,7 +193,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> RemoveFromCartByQty(long id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
+            var cartDetails = await _service.GetCartItemsById(id);
             if (cartDetails == null) return RedirectToAction("Error", "Home");
 
             //decrement quantity
@@ -211,7 +211,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> RemoveFromCart(long id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var _cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
+            var _cartDetails = await _service.GetCartItemsById(id);
             if (_cartDetails == null) return RedirectToAction("Error", "Home");
 
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
@@ -224,7 +224,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> RemoveFromCartConfirmed(long id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var cartDetails = await _service.GetCartItemsByProductId(id, 0, 0, userId);
+            var cartDetails = await _service.GetCartItemsById(id);
             if (cartDetails == null) return RedirectToAction("Error", "Home");
 
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
@@ -326,11 +326,15 @@ namespace ECommerce1.Controllers
                                         cart.IsCashOnDelivery ? (int)PaymentMethodEnum.COD :
                                             0;
 
+            var deliveryMethod = cart.IsPickup ? (int)DeliveryMethodEnum.Pickup :
+                                    cart.IsDelivery ? (int)DeliveryMethodEnum.Delivery : 0;
+
             var order = new Orders()
             {
                 TransactionId = transactionId,
                 CustomersId = userId,
-                ModeOfPayment = modeOfPayment,
+                PaymentMethodId = modeOfPayment,
+                DeliveryMethodId = deliveryMethod,
                 OrderDate = DateTime.Now,
                 OrderStatusId = modeOfPayment == 0 ? (int)OrderStatusEnum.PendingPayment : (int)OrderStatusEnum.Created,
                 DeliveryStatusId = (int)DeliveryStatusEnum.Pending,
@@ -340,7 +344,20 @@ namespace ECommerce1.Controllers
                 OrderDetails = orderDetails
             };
 
-            var result = _orderService.AddToOrder(order);
+            var orderShippingInfo = new OrderShippingInfo()
+            {
+                TransactionId = transactionId,
+                CustomersId = userId,
+                EmailAddress = cart.ShippingEmail,
+                Block = cart.ShippingBlock,
+                Lot = cart.ShippingLot,
+                City = cart.ShippingCity,
+                Barangay = cart.ShippingBarangay,
+                ContactNumber = cart.ShippingContactNumber,
+                Instructions = cart.Instructions
+            };
+
+            var result = _orderService.AddToOrder(order, orderShippingInfo);
 
             if (result)
             {
@@ -354,7 +371,7 @@ namespace ECommerce1.Controllers
 
             // Send E-Receipt
             if (modeOfPayment != 0)
-                await _emailService.SendReceipt(user.Email, orderDetails, order);
+                await _emailService.SendReceipt(user.Email, order);
 
             if (cart.IsGCash)
             {

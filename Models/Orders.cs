@@ -22,7 +22,8 @@ namespace ECommerce1.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal ShippingFee { get; set; }
 
-        public int ModeOfPayment { get; set; }
+        public int PaymentMethodId { get; set; }
+        public int DeliveryMethodId { get; set; }
         public DateTime OrderDate { get; set; }
         public int OrderStatusId { get; set; }
         public int DeliveryStatusId { get; set; }

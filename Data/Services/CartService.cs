@@ -55,20 +55,9 @@ namespace ECommerce1.Data.Services
         {
             var result = await _context.CartDetails
                 .Include(x => x.Product).ThenInclude(x => x.ProductImages)
-                //.Include(x => x.Product).ThenInclude(x => x.Colors)
-                //.Include(x => x.Product).ThenInclude(x => x.Sizes)
                 .Where(x => x.CustomersId == userId)
                 .ToListAsync();
 
-            //List<CartDetails> _cart = result
-            //    .GroupBy(l => l.ProductId)
-            //    .Select(cl => new CartDetails
-            //    {
-            //        ProductId = cl.First().ProductId,
-            //        Quantity = cl.Sum(x => x.Quantity),
-            //        Product = cl.First().Product
-            //    }).ToList();
-            
             foreach (var item in result)
             {
                 if (item.Product.ProductImages.Any())
@@ -81,9 +70,6 @@ namespace ECommerce1.Data.Services
                     //No Image
                     item.Product.Image = _commonServices.NoImage;
                 }
-
-                //item.Product.Colors = _context.Colors.ToList();
-                //item.Product.Sizes = _context.Sizes.ToList();
             }
 
             return result;
@@ -147,16 +133,6 @@ namespace ECommerce1.Data.Services
                 result.ShippingCity = cart.ShippingCity;
                 result.ShippingContactNumber = cart.ShippingContactNumber;
                 result.ShippingEmail = cart.ShippingEmail;
-                result.IsBillingSame = cart.IsBillingSame;
-                result.BillingFirstName = cart.IsBillingSame ? cart.ShippingFirstName : cart.BillingFirstName;
-                result.BillingLastName = cart.IsBillingSame ? cart.ShippingLastName : cart.BillingLastName;
-                result.BillingBlock = cart.IsBillingSame ? cart.ShippingBlock : cart.BillingBlock;
-                result.BillingLot = cart.IsBillingSame ? cart.ShippingLot : cart.BillingLot;
-                result.BillingBarangay = cart.IsBillingSame ? cart.ShippingBarangay : cart.BillingBarangay;
-                result.BillingCity = cart.IsBillingSame ? cart.ShippingCity : cart.BillingCity;
-                result.BillingContactNumber = cart.IsBillingSame ? cart.ShippingContactNumber : cart.BillingContactNumber;
-                result.BillingEmail = cart.IsBillingSame ? cart.ShippingEmail : cart.BillingEmail;
-
                 result.IsCashOnDelivery = cart.IsCashOnDelivery;
                 result.IsPayMaya = cart.IsPayMaya;
 
@@ -192,9 +168,9 @@ namespace ECommerce1.Data.Services
 
         }
         
-        public async Task RemoveFromCart(long productId, string userId)
+        public async Task RemoveFromCart(long id, string userId)
         {
-            var result = _context.CartDetails.FirstOrDefault(x => x.ProductId == productId && x.CustomersId == userId);
+            var result = _context.CartDetails.FirstOrDefault(x => x.Id == id && x.CustomersId == userId);
             _context.CartDetails.Remove(result);
 
             await _context.SaveChangesAsync();
@@ -243,6 +219,19 @@ namespace ECommerce1.Data.Services
                                  && x.ColorId == colorId
                                  && x.SizeId == sizeId
                                  && x.CustomersId == userId);
+        }
+
+        public async Task<CartDetails> GetCartItemsById(long id)
+        {
+            var result = await _context.CartDetails
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductVariants)
+                        .ThenInclude(x => x.Size)
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.ProductVariants)
+                        .ThenInclude(x => x.Color)
+                .ToListAsync();
+            return result.Find(x => x.Id == id);
         }
 
         public async Task<Wishlist> GetWishlistItemsByProductId(long productId, string userId)

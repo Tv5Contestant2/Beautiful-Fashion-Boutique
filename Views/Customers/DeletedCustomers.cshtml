@@ -1,7 +1,7 @@
 ﻿@model ECommerce1.ViewModel.HomeUserViewModel
 
 @{
-    ViewData["Title"] = "Customer Management";
+    ViewData["Title"] = "Blocked Customers";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -32,64 +32,11 @@
                 <div class="col">
                     <ul class="nav justify-content-end">
                         <li class="nav-item pr-2">
-                            <a asp-controller="Customers" asp-action="BlockCustomers" class="btn btn-info float-right" type="button">
-                                <i class="fas fa-user-slash"></i>&nbsp;&nbsp;Blocked
-                            </a>
-                        </li>
-                        <li class="nav-item pr-2">
-                            <a asp-controller="Customers" asp-action="ArchivedCustomers" class="btn btn-info float-right" type="button">
-                                <i class="fas fa-user-clock"></i>&nbsp;&nbsp;Archived
-                            </a>
-                        </li>
-                        <li class="nav-item pr-2">
-                            <a asp-controller="Customers" asp-action="DeletedCustomers" class="btn btn-info float-right" type="button">
-                                <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Deleted
+                            <a asp-controller="Customers" asp-action="ShowCustomers" class="btn btn-info float-right" type="button">
+                                <i class="fas fa-user"></i>&nbsp;&nbsp;Show Customers
                             </a>
                         </li>
                     </ul>
-                </div>
-            </div>
-        </div>
-
-        @*Statistics*@
-        <div class="row mt-3">
-            <div class="card card-stats d-flex justify-content-between">
-                <div class="card-body">
-                    <div class="row d-flex align-items-center bord">
-                        <div class="col-4">
-                            <div class="d-flex align-items-center">
-                                <div class="icon icon-shape bg-success text-white rounded-circle shadow">
-                                    <i class="fas fa-user-check"></i>
-                                </div>
-                                <div class="ms-3">
-                                    <h4 class="text-dark mb-0">@ViewBag.Active</h4>
-                                    <small class="text-muted text-sm text-uppercase">Active</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="d-flex align-items-center">
-                                <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                    <i class="fas fa-user-slash"></i>
-                                </div>
-                                <div class="ms-3">
-                                    <h4 class="text-dark mb-0">@ViewBag.Banned</h4>
-                                    <small class="text-muted text-sm text-uppercase">Banned</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="d-flex align-items-center">
-                                <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                    <i class="fas fa-user-clock"></i>
-                                </div>
-                                <div class="ms-3">
-                                    <h4 class="text-dark mb-0">@ViewBag.Inactive</h4>
-                                    <small class="text-muted text-sm text-uppercase">Inactive</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -98,6 +45,7 @@
         <div id="dvGrid" class="row mt-3">
             <div class="d-flex justify-content-lg-around">
                 <div class="col-xl-12 col-lg-12">
+                    <p class="text-danger small">All customers that are marked as deleted will be <b>permanently deleted</b> after 7 days.</p>
                     <div class="cart-inner" id="dtCustomerList">
                         <div class="border-top border-bottom py-2">
                             <div class="row text-uppercase">
@@ -105,7 +53,7 @@
                                 <div class="col-1">&nbsp;</div>
                                 <div class="col-2 text-center"> <strong class="small">Last Name</strong></div>
                                 <div class="col-3 text-center"> <strong class="small">Email Address</strong></div>
-                                <div class="col-3 text-center"> <strong class="small">Status</strong></div>
+                                <div class="col-3 text-center"> <strong class="small">Mark as deleted on</strong></div>
                                 <div class="col-1 text-center"> <strong class="small">Action</strong></div>
                             </div>
                         </div>
@@ -121,39 +69,14 @@
                                     <div class="item col-2">@Html.DisplayFor(modelItem => item.FirstName)</div>
                                     <div class="item col-2 text-center">@Html.DisplayFor(modelItem => item.LastName)</div>
                                     <div class="item col-3 text-center">@Html.DisplayFor(modelItem => item.Email)</div>
-                                    <div class="item col-3 text-center">
-                                        @{
-                                            TimeSpan span = new TimeSpan();
-                                            span = DateTime.Now.Subtract(item.LastLoggedIn);
-
-
-                                            if (Model.IsDeleted)
-                                            {
-                                                <span class="badge bg-danger">Temporary Deleted</span>
-                                                }
-                                            else
-                                            {
-                                                if (span.Days > 0)
-                                                {
-                                                    <span class="badge bg-warning"> Active @span.Days day(s) ago</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-success">Active</span>
-                                                }
-                                            }
-                                        }
-                                    </div>
+                                    <div class="item col-3 text-center">@Html.DisplayFor(modelItem => item.DeletedOn)</div>
                                     <div class="item col-1 text-center">
-                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
-                                            <i class="far fa-edit"></i>
-                                        </a>
-                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
-                                            <i class="far fa-trash-alt"></i>
-                                        </a>
-                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="BlockCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Block">
-                                            <i class="fas fa-user-slash"></i>
-</a>
+                                        @if (item.IsDeleted != true)
+                                        {
+                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UndeleteCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Unmark as delete">
+                                                <i class="fas fa-undo"></i>
+                                            </a>
+                                        }
                                     </div>
                                 </div>
                             </div>

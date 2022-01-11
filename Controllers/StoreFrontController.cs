@@ -68,6 +68,7 @@ namespace ECommerce1.Controllers
             ViewBag.CustomersId = userId;
 
             await _userService.ArchiveUsers();
+            await _userService.DeleteCustomers();
 
             try
             {

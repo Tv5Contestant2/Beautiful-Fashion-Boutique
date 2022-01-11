@@ -6,5 +6,6 @@ namespace ECommerce1.Data.Services.Interfaces
     {
         public Task UpdateLastLoggedIn(string userId);
         public Task ArchiveUsers();
+        public Task DeleteCustomers();
     }
 }

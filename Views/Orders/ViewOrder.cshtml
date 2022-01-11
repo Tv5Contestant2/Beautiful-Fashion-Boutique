@@ -62,17 +62,20 @@
                                         }
                                         else if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
                                         {
-                                            <a class="btn btn-outline-danger" asp-action="UpdateOrder" asp-route-id="@Model.TransactionId">
-                                                <span><i class="fas fa-check"></i> Set to Received </span>
-                                            </a>
+                                            <form asp-controller="Orders" asp-action="UpdateOrder" asp-route-id="@Model.TransactionId">
+                                                <input type="hidden" asp-for="CustomersId" value="@Model.CustomersId" />
+                                                <button type="submit" class="btn btn-outline-danger">
+                                                    <span><i class="fas fa-check"></i> Set to Received </span>
+                                                </button>
+                                            </form>
                                         }
                                     }
                                 </div>
                             }
                         }
                     </div>
-                    <div class="cart-outer mb-5">
-                        <div class="cart-inner" id="dtOrderList">
+                    <div class="row cart-outer mb-5">
+                        <div class="col col-lg-8 cart-inner" id="dtOrderList">
                             <div class="border-top border-bottom py-2">
                                 <div class="row text-uppercase">
                                     <div class="col-6"><strong class="small">Product</strong></div>
@@ -120,31 +123,55 @@
                                 </div>
                             }
                         </div>
-                    </div>
 
-                    <div class="row d-flex">
-                        @*Order Summary*@
-                        <div class="col-lg-7 col-xl-7">
-                            <div class="card rounded-6 mb-4">
-                                <div class="card-body px-4 py-4">
-                                    <h5 class="text-uppercase">Order Summary</h5>
-                                    <ul class="list-unstyled">
-                                        @{
-                                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
-                                            <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
-                                            <li class="d-flex justify-content-between py-3 border-bottom">
-                                                <span>VAT (@vat%)</span>
-                                                <strong class="fw-normal">Php @vatAmount</strong>
-                                            </li>
-                                            <li class="d-flex justify-content-between py-3">
-                                                <span>Total</span>
-                                                <strong class="fw-normal">Php <span>@totalAmount</span></strong>
-                                            </li>
-                                        }
-                                    </ul>
+                        <div class="col col-lg-4 pl-5">
+                            @*Order Summary*@
+                            <div class="row">
+                                <div class="card rounded-6 mb-4">
+                                    <div class="card-body px-4 py-4">
+                                        <h5 class="text-uppercase">Order Summary</h5>
+                                        <ul class="list-unstyled">
+                                            @{
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Payment Method</span><strong class="fw-normal">@Model.PaymentMethod</strong></li>
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Delivery Method </span><strong class="fw-normal">@Model.DeliveryMethod</strong></li>
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Order Subtotal </span><strong class="fw-normal">Php @total</strong></li>
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Shipping and handling</span><strong class="fw-normal">Php @shipping.00</strong></li>
+                                                <li class="d-flex justify-content-between py-3 border-bottom">
+                                                    <span>VAT (@vat%)</span>
+                                                    <strong class="fw-normal">Php @vatAmount</strong>
+                                                </li>
+                                                <li class="d-flex justify-content-between py-3">
+                                                    <span class="fw-bold">Total</span>
+                                                    <strong class="fw-bold text-danger">Php @totalAmount</strong>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*Shipping Summary*@
+                            <div class="row">
+                                <div class="card rounded-6 mb-4">
+                                    <div class="card-body px-4 py-4">
+                                        <h5 class="text-uppercase">Shipping Summary</h5>
+                                        <ul class="list-unstyled">
+                                            @{
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Email Address </span><strong class="fw-normal">@Model.OrderShippingInfo.EmailAddress</strong></li>
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Contact Number</span><strong class="fw-normal">@Model.OrderShippingInfo.ContactNumber</strong></li>
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Block</span><strong class="fw-normal">@Model.OrderShippingInfo.Block</strong></li>
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Lot</span><strong class="fw-normal">@Model.OrderShippingInfo.Lot</strong></li>
+                                                <li class="d-flex justify-content-between py-3 border-bottom"><span>Barangay</span><strong class="fw-normal">@Model.OrderShippingInfo.Barangay</strong></li>
+                                                <li class="d-flex justify-content-between py-3"><span>City</span><strong class="fw-normal">@Model.OrderShippingInfo.City</strong></li>
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row d-flex">
 
                         @*Shipping Summary*@
                         @*<div class="col-lg-4 col-xl-5">
@@ -187,6 +214,7 @@
         <div class="modal fade" id="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <form asp-controller="Orders" asp-action="UpdateOrder" asp-route-id="@Model.TransactionId">
+                    <input type="hidden" asp-for="CustomersId" value="@Model.CustomersId" />
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Set Expected Delivery Date</h4>

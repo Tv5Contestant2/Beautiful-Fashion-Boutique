@@ -18,11 +18,13 @@ namespace ECommerce1.ViewModel
         public string CancellationReason { get; set; }
         public int QuantityReturned { get; set; }
         public string ReturnReason { get; set; }
+        public string PaymentMethod { get; set; }
+        public string DeliveryMethod { get; set; }
         public IEnumerable<OrderDetails> OrderDetails { get; set; }
         public Returns Returns { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public OrderStatus ReturnStatus { get; set; }
-        public CustomersShippingAddress CustomersShippingAddress { get; set; }
+        public OrderShippingInfo OrderShippingInfo { get; set; }
         public IEnumerable<Orders> Orders { get; set; }
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<Returns> ReturnDetails { get; set; }

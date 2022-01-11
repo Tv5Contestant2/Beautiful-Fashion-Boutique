@@ -50,23 +50,5 @@ namespace ECommerce1.Data.Services
 
             return result;
         }
-
-        public async Task<IEnumerable<CustomersBillingAddress>> GetCustomerBillingAddresses(string userId)
-        {
-            var result = await _context.CustomersBillingAddress
-                .Where(x => x.CustomersId == userId)
-                .ToListAsync();
-
-            return result;
-        }
-
-        public async Task<IEnumerable<CustomersShippingAddress>> GetCustomerShippingAddresses(string userId)
-        {
-            var result = await _context.CustomersShippingAddress
-                .Where(x => x.CustomersId == userId)
-                .ToListAsync();
-
-            return result;
-        }
     }
 }

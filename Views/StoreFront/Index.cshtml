@@ -120,19 +120,19 @@
 
                                                             if (_IsAdmin == true)
                                                             {
-                                                                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none">
+                                                                <a asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@item.Id" style="border: none" data-toggle="tooltip" data-placement="bottom" title="Update">
                                                                     <i class="far fa-edit"></i>
                                                                 </a>
                                                             }
                                                             else
                                                             {
-                                                                <button type="submit" class="btn btn-link">
+                                                                <button type="submit" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Add to cart">
                                                                     <i class="fas fa-shopping-cart"></i>
                                                                 </button>
                                                             }
                                                         }
                                                     }
-                                                    <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id">
+                                                    <button class="btn btn-link active" asp-controller="StoreFront" asp-action="ViewProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="View">
                                                         <i class="fas fa-search"></i>
                                                     </button>
                                                 </div>
