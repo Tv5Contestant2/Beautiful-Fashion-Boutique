@@ -1,10 +1,11 @@
 ﻿using ECommerce1.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce1.Data
 {
-    public class AppDBContext : IdentityDbContext<User>
+    public class AppDBContext : IdentityDbContext<User, IdentityRole, string>
     {
         public AppDBContext(DbContextOptions<AppDBContext> context) : base(context)
         {
@@ -81,7 +82,6 @@ namespace ECommerce1.Data
         public DbSet<Transactions> Transactions { get; set; }
 
         public DbSet<Wishlist> Wishlists { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

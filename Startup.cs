@@ -42,8 +42,8 @@ namespace ECommerce1
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -63,12 +63,17 @@ namespace ECommerce1
             services.AddDbContext<AppDBContext>(context =>
                 context.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
+            //services.AddIdentity<User, IdentityRole>()
+            //.AddEntityFrameworkStores<AppDBContext>()
+            //.AddDefaultTokenProviders();
+
             services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = true;
             })
-                .AddEntityFrameworkStores<AppDBContext>()
-                .AddDefaultTokenProviders();
+                 .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<AppDBContext>();
 
             services.AddMvc(config =>
             {
@@ -82,8 +87,8 @@ namespace ECommerce1
             services.AddOptions<EmailSettings>().Bind(Configuration.GetSection("EmailSettings")).ValidateDataAnnotations();
             services.AddOptions<AdyenConfig>().Bind(Configuration.GetSection("AdyenConfig")).ValidateDataAnnotations();
 
-            // SignalR Configuration
-            services.AddSignalR();
+            //// SignalR Configuration
+            //services.AddSignalR();
 
             // Services Configuration
             services.AddScoped<IAdministratorService, AdministratorService>();

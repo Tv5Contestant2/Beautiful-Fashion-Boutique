@@ -30,6 +30,23 @@ namespace ECommerce1.Data
                     task.GetAwaiter().GetResult();
                 }
 
+                var taskUserResult = userManager.FindByEmailAsync("admin@beautifultime.com");
+                var userAdmin = taskUserResult.GetAwaiter().GetResult();
+                if (userAdmin != null)
+                {
+                    var taskUserRoles = userManager.GetRolesAsync(userAdmin);
+                    var taskUserRolesResult = taskUserRoles.GetAwaiter().GetResult();
+                    if (taskUserRolesResult.Count <= 0)
+                    {
+                        var taskRoleResult = userManager.AddToRoleAsync(userAdmin, RolesEnum.SuperAdmin.ToString());
+                        taskRoleResult.GetAwaiter().GetResult();
+                        var taskRoleResult2 = userManager.AddToRoleAsync(userAdmin, RolesEnum.Admin.ToString());
+                        taskRoleResult2.GetAwaiter().GetResult();
+                        var taskRoleResult3 = userManager.AddToRoleAsync(userAdmin, RolesEnum.Moderator.ToString());
+                        taskRoleResult3.GetAwaiter().GetResult();
+                    }
+                }
+
                 #region Colors
 
                 if (!context.Colors.Any())
