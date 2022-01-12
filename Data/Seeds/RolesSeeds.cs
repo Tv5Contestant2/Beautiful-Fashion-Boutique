@@ -10,10 +10,9 @@ namespace ECommerce1.Data.Seeds
         public static async Task SeedRolesAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             //Seed Roles
-            await roleManager.CreateAsync(new IdentityRole(RolesEnum.SuperAdmin.ToString()));
             await roleManager.CreateAsync(new IdentityRole(RolesEnum.Admin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(RolesEnum.Moderator.ToString()));
             await roleManager.CreateAsync(new IdentityRole(RolesEnum.Basic.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(RolesEnum.Employee.ToString()));
         }
     }
 }

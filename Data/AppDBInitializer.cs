@@ -38,12 +38,14 @@ namespace ECommerce1.Data
                     var taskUserRolesResult = taskUserRoles.GetAwaiter().GetResult();
                     if (taskUserRolesResult.Count <= 0)
                     {
-                        var taskRoleResult = userManager.AddToRoleAsync(userAdmin, RolesEnum.SuperAdmin.ToString());
+                        var taskRoleResult = userManager.AddToRoleAsync(userAdmin, RolesEnum.Admin.ToString());
                         taskRoleResult.GetAwaiter().GetResult();
-                        var taskRoleResult2 = userManager.AddToRoleAsync(userAdmin, RolesEnum.Admin.ToString());
-                        taskRoleResult2.GetAwaiter().GetResult();
-                        var taskRoleResult3 = userManager.AddToRoleAsync(userAdmin, RolesEnum.Moderator.ToString());
-                        taskRoleResult3.GetAwaiter().GetResult();
+                        var taskClaimAdminResult = roleManager.SeedClaimsForAdmin();
+                        taskClaimAdminResult.GetAwaiter().GetResult();
+                        var taskClaimBasicResult = roleManager.SeedClaimsForBasic();
+                        taskClaimBasicResult.GetAwaiter().GetResult();
+                        var taskClaimEmployeeResult = roleManager.SeedClaimsForEmployee();
+                        taskClaimEmployeeResult.GetAwaiter().GetResult();
                     }
                 }
 
