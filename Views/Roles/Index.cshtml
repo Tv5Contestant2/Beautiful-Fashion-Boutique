@@ -1,4 +1,4 @@
-﻿@model ECommerce1.ViewModel.HomeUserViewModel
+﻿@model ECommerce1.ViewModel.RoleViewModel
 
 @{
     ViewData["Title"] = "Roles Management";
@@ -30,7 +30,7 @@
             <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
-                    <a asp-controller="Roles" asp-action="CreateRoles" class="btn btn-info float-right" type="button">
+                    <a asp-controller="Roles" asp-action="CreateRole" class="btn btn-info float-right" type="button">
                         <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Roles
                     </a>
                 </div>
@@ -43,27 +43,45 @@
                         <div class="cart-inner" id="dtRoleList">
                             <div class="border-top border-bottom py-2">
                                 <div class="row text-uppercase">
-                                    <div class="col-3"><strong class="small">Role</strong></div>
-                                    <div class="col-3 text-center"> <strong class="small">Status</strong></div>
-                                    <div class="col-2 text-center"> <strong class="small">Action</strong></div>
+                                    <div class="col-3"><strong class="small">Id</strong></div>
+                                    <div class="col-2"><strong class="small">Name</strong></div>
+                                    <div class="col-2 text-center"><strong class="small">Action</strong></div>
                                 </div>
                             </div>
                             @foreach (var item in Model.PaginatedList())
                             {
                                 <div class="row-item pt-4 pb-4 border-bottom">
-                                    <div class="row text-left">
-                                        <div class="item col-2">
-                                            &nbsp;
-                                        </div>
-                                        <div class="item col-3">&nbsp;</div>
-                                        <div class="item col-3">&nbsp;</div>
+                                    <div class="row text-center">
+                                        <div class="item col-3">@item.Id</div>
+                                        <div class="item col-3">@item.Name</div>
                                         <div class="item col-2 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateRole" asp-route-id="@item.Id">
-                                                <i class="far fa-eye"></i>
-                                            </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteRole" asp-route-id="@item.Id">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
+
+                                            @{
+                                                switch (item.Name.ToLower())
+                                                {
+                                                    case "admin":
+                                                    case "employee":
+                                                    case "basic":
+                                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewRole" asp-route-id="@item.Id" title="View Role">
+                                                            <i class="far fa-eye"></i>
+                                                        </a>
+                                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ManagePermission" asp-route-id="@item.Id" title="Manage Permission">
+                                                            <i class="fas fa-cogs"></i>
+                                                        </a>
+                                                        break;
+                                                    default:
+                                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateRole" asp-route-id="@item.Id" title="Update Role">
+                                                            <i class="far fa-eye"></i>
+                                                        </a>
+                                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ManagePermission" asp-route-id="@item.Id" title="Manage Permission">
+                                                            <i class="fas fa-cogs"></i>
+                                                        </a>
+                                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteRole" asp-route-id="@item.Id" title="Delete Role">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </a>
+                                                        break;
+                                                }
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +94,7 @@
             @*Pagination*@
             <div class="row">
                 <div class=" d-flex justify-content-between px-4 py-3 w-100">
-                    <div class="hint-text">Showing <b>@Model.PaginatedList().Count()</b> out of <b>@Model.Users.Count()</b> entries</div>
+                    <div class="hint-text">Showing <b>@Model.PaginatedList().Count()</b> out of <b>@Model.RoleList.Count()</b> entries</div>
                     <ul class="pagination">
                         @for (int i = 1; i <= Model.PageCount(); i++)
                         {

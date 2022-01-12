@@ -110,6 +110,7 @@ namespace ECommerce1
             services.AddScoped<IPromotionsService, PromotionsService>();
             services.AddScoped<IRandomPasswordService, RandomPasswordService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRolesService, RolesService>();
 
             services.AddControllersWithViews();
         }
