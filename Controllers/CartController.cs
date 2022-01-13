@@ -18,6 +18,7 @@ namespace ECommerce1.Controllers
     [AllowAnonymous]
     public class CartController : Controller
     {
+        private readonly IAdministratorService _administratorService;
         private readonly ICartService _service;
         private readonly IEmailService _emailService;
         private readonly IOrderService _orderService;
@@ -28,6 +29,7 @@ namespace ECommerce1.Controllers
 
         public CartController(
             UserManager<User> userManager
+            , IAdministratorService administratorService
             , ICartService service
             , IEmailService emailService
             , IOrderService orderService
@@ -36,6 +38,7 @@ namespace ECommerce1.Controllers
             , IAdyenService adyenService)
         {
             _service = service;
+            _administratorService = administratorService;
             _emailService = emailService;
             _orderService = orderService;
             _productsService = productsService;
@@ -60,6 +63,7 @@ namespace ECommerce1.Controllers
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(cartViewModel);
         }
@@ -73,6 +77,7 @@ namespace ECommerce1.Controllers
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
             ViewBag.CustomersId = userId;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(wishlists);
         }
@@ -273,6 +278,7 @@ namespace ECommerce1.Controllers
                 ViewBag.CustomersId = userId;
                 cartViewModel.Colors = await _productCategoriesService.GetColors();
                 cartViewModel.Sizes = await _productCategoriesService.GetSizes();
+                ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
                 // Update Cart
                 await _service.UpdateCart(userId, cart);
@@ -299,6 +305,7 @@ namespace ECommerce1.Controllers
                 ViewBag.WishlistCount = await _service.GetWishlistCount(userId);
                 ViewBag.CustomersId = userId;
                 ViewBag.Customer = user.FirstName;
+                ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
                 await _service.UpdateCart(userId, cart);
             }

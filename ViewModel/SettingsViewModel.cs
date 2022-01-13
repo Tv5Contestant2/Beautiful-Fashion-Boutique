@@ -7,6 +7,5 @@ namespace ECommerce1.ViewModel
     {
         public string StoreLogo { get; set; }
         public string HeroVideo { get; set; }
-        public IEnumerable<Settings> Settings { get; set; }
     }
 }

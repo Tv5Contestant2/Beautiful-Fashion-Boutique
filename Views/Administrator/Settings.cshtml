@@ -1,7 +1,7 @@
 ﻿@model ECommerce1.ViewModel.SettingsViewModel
 
 @{
-    ViewData["Title"] = "About Us";
+    ViewData["Title"] = "Site Settings";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="row text">
@@ -15,17 +15,28 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="submit" value="Save" class="btn btn-success float-right" />
 
-                <div class="row form-group">
-                    <div class="col col-md-12">
-                        <label class="control-label">Store Logo</label>
-                        <input asp-for="StoreLogo" class="form-control" />
+                <div class="row">
+                    <label class="control-label mt-5">Store Logo</label>
+                    <div class="row form-group">
+                        <img class="img-thumbnail" id="imgOutput" src="@string.Format("data:image/jpeg;base64,{0}", Model.StoreLogo)"/>
+                        <div style="display: none;">
+                            <input id="Image" asp-for="StoreLogo" class="form-control" />
+                        </div>
+                        <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm mt-3">
+                            <input id="inptImageUpload" type="file" onchange="readURL(this);" class="form-control border-0" accept="image/*" name="image">
+                            <input id="inptImageFileName" type="text" class="form-control" style="display:none;" />
+                            <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+                            <div class="input-group-append">
+                                <label for="inptImageUpload" class="btn btn-outline-danger m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2"></i><small class="text-uppercase font-weight-bold">Choose file</small></label>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="col col-md-12 mt-3">
-                        <label class="control-label">Hero Video</label>
-                        <p class="text-danger">Please use any image hosting site</p>
-                        <input asp-for="HeroVideo" class="form-control" />
-                    </div>
+                <div class="row">
+                    <label class="control-label mt-2">Hero Video</label>
+                    <p class="text-danger">Please use any image hosting site</p>
+                    <input asp-for="HeroVideo" class="form-control" />
                 </div>
             </form>
         </div>
@@ -37,6 +48,37 @@
     </div>
 </div>
 
+<style>
+    #inptImageUpload {
+        opacity: 0;
+    }
+
+    #upload-label {
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+    }
+</style>
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgOutput')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $(function () {
+        $('#upload').on('change', function () {
+            readURL(input);
+        });
+    });
+</script>
 <script>
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }
@@ -56,4 +98,30 @@
         document.documentElement.scrollTop = 0;
     }
 
+    $("#ImageFile").on("change", function () {
+        var output = document.getElementById('ImagePreview');
+        output.src = $(this).val();
+    });
+
+    var inptImageUpload = document.querySelector("#inptImageUpload");
+
+    // listen for the change event so we can capture the file
+    inptImageUpload.addEventListener("change", (e) => {
+        // get a reference to the file
+        const file = e.target.files[0];
+
+        // encode the file using the FileReader API
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result
+                .replace("data:", "")
+                .replace(/^.+,/, "");
+
+            document.getElementById('imgOutput').setAttribute('src', reader.result);
+            document.getElementById("Image").value = reader.result;
+
+        };
+        reader.readAsDataURL(file);
+        document.getElementById('inptImageFileName').value = file.name;
+    });
 </script>

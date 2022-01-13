@@ -32,12 +32,12 @@
                                 <div class="row col-md-12">
                                     <div class="col col-md-10">
                                         <div class="form-group">
-                                            <label asp-for="Name" class="control-label"></label>
+                                            <label asp-for="Name" class="control-label mt-2"></label>
                                             <input asp-for="Name" class="form-control" />
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="Description" class="control-label"></label>
+                                            <label asp-for="Description" class="control-label mt-2"></label>
                                             <input asp-for="Description" class="form-control" />
                                             <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
@@ -45,28 +45,28 @@
                                         <div class="row">
                                             <div class="col col-md-2">
                                                 <div class="form-group">
-                                                    <label asp-for="SalePercentage" class="control-label"></label>
+                                                    <label asp-for="SalePercentage" class="control-label mt-2"></label>
                                                     <input asp-for="SalePercentage" class="form-control" type="number" min="0" />
                                                     <span asp-validation-for="SalePercentage" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col col-md-3">
                                                 <div class="form-group">
-                                                    <label asp-for="StartDate" class="control-label"></label>
+                                                    <label asp-for="StartDate" class="control-label mt-2"></label>
                                                     <input asp-for="StartDate" class="form-control" id="startDate" onchange="handleStartDateChange()" placeholder="MM/DD/YYY" type="date" />
                                                     <span asp-validation-for="StartDate" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col col-md-3">
                                                 <div class="form-group">
-                                                    <label asp-for="EndDate" class="control-label"></label>
+                                                    <label asp-for="EndDate" class="control-label mt-2"></label>
                                                     <input asp-for="EndDate" class="form-control" id="endDate" onchange="handleEndDateChange()" placeholder="MM/DD/YYY" type="date" />
                                                     <span asp-validation-for="EndDate" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col col-md-2">
                                                 <div class="form-group">
-                                                    <label asp-for="StatusId" class="control-label"></label>
+                                                    <label asp-for="StatusId" class="control-label mt-2"></label>
                                                     <div>
                                                         @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title", Model.StatusId), htmlAttributes: new { @class = "form-control", id = "StatusId" })
                                                         @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
@@ -75,7 +75,7 @@
                                             </div>
                                         </div>
 
-                                        <label asp-for="PromoCategory" class="control-label"></label>
+                                        <label asp-for="PromoCategory" class="control-label mt-2"></label>
                                         <div class="row">
                                             <div class="col col-md-4">
                                                 <div class="form-group ml-3">

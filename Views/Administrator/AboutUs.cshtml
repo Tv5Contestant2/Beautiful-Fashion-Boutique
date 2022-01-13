@@ -18,13 +18,13 @@
                 @*About Us*@
                 <div class="row form-group">
                     <div class="col col-md-12">
-                        <label asp-for="History" class="control-label"></label>
+                        <label asp-for="History" class="control-label mt-2"></label>
                         <textarea asp-for="History" class="form-control" rows="10" style="border-radius: 1em"></textarea>
 
-                        <label asp-for="Mission" class="control-label"></label>
+                        <label asp-for="Mission" class="control-label mt-2"></label>
                         <textarea asp-for="Mission" class="form-control" rows="10" style="border-radius: 1em"></textarea>
 
-                        <label asp-for="Vision" class="control-label"></label>
+                        <label asp-for="Vision" class="control-label mt-2"></label>
                         <textarea asp-for="Vision" class="form-control" rows="10" style="border-radius: 1em"></textarea>
                     </div>
                 </div>
@@ -37,7 +37,10 @@
         </button>
     </div>
 </div>
-
+<script src="https://cdn.tiny.cloud/1/0hvbyznd49kqd5zwdmnpd1e36ghlvc54m0qjb4ed3zfn98b6/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script type="text/javascript">
+    tinymce.init({ selector: 'textarea', width: 'auto'});
+</script>
 <script>
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }

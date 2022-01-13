@@ -29,9 +29,7 @@
             @{
                 if (@Model != null)
                 {
-                    <p class="text-justify">
-                        @Model.History
-                    </p>
+                        <span>@Html.Raw(Model.History)</span>
                 }
                 else
                 {
@@ -47,9 +45,7 @@
             @{
                 if (@Model != null)
                 {
-                    <p class="text-justify">
-                        @Model.Mission
-                    </p>
+                        <span>@Html.Raw(Model.Mission)</span>
                 }
                 else
                 {
@@ -65,9 +61,7 @@
             @{
                 if (@Model != null)
                 {
-                    <p class="text-justify">
-                        @Model.Vision
-                    </p>
+                        <span>@Html.Raw(Model.Vision)</span>
                 }
                 else
                 {

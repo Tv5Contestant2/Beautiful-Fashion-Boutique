@@ -280,7 +280,7 @@ namespace ECommerce1.Data.Services
                 item.InventoryStatus = inventoryStatus.FirstOrDefault(x => x.Id == item.StockStatusId);
             }
 
-            return result.Where(x => (DateTime.Today - x.DateCreated).Days <= 15).ToList();
+            return result.OrderByDescending(x => x.DateCreated).ToList();
         }
 
         public async Task<IEnumerable<Product>> GetFeaturedProductsOnSale()

@@ -33,24 +33,24 @@
 
                                     <div class="col col-md-8">
                                         <div>
-                                            <label asp-for="FirstName" class="control-label"></label>
+                                            <label asp-for="FirstName" class="control-label mt-2"></label>
                                             <input asp-for="FirstName" class="form-control" />
                                             <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
 
                                         <div>
-                                            <label asp-for="LastName" class="control-label"></label>
+                                            <label asp-for="LastName" class="control-label mt-2"></label>
                                             <input asp-for="LastName" class="form-control" />
                                             <span asp-validation-for="LastName" class="text-danger"></span>
                                         </div>
 
                                         <div>
-                                            <label asp-for="Birthday" class="control-label"></label>
+                                            <label asp-for="Birthday" class="control-label mt-2"></label>
                                             <input asp-for="Birthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
                                         </div>
 
                                         <div>
-                                            <label asp-for="GenderId" class="control-label"></label>
+                                            <label asp-for="GenderId" class="control-label mt-2"></label>
                                             <div>
                                                 @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "AlternateTitle"), htmlAttributes: new { @class = "form-control", id = "GenderId" })
                                                 @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
@@ -91,7 +91,7 @@
                                     <div class="row col-md-12">
                                         <div class="col col-md-6">
                                             <div class="form-group">
-                                                <label asp-for="Email" class="control-label"></label>
+                                                <label asp-for="Email" class="control-label mt-2"></label>
                                                 <input asp-for="Email" class="form-control" />
                                                 <span asp-validation-for="Email" class="text-danger"></span>
                                             </div>
@@ -99,7 +99,7 @@
 
                                         <div class="col col-md-6">
                                             <div class="form-group">
-                                                <label asp-for="Password" class="control-label"></label>
+                                                <label asp-for="Password" class="control-label mt-2"></label>
                                                 <input asp-for="Password" class="form-control" type="password" />
                                                 <span asp-validation-for="Password" class="text-danger"></span>
                                             </div>
@@ -108,23 +108,23 @@
                                     <div class="row col-md-12">
                                         <div class="col">
                                             <div class="form-group">
-                                                <label asp-for="AddressBlock" class="control-label"></label>
+                                                <label asp-for="AddressBlock" class="control-label mt-2"></label>
                                                 <input asp-for="AddressBlock" class="form-control" />
                                                 <span asp-validation-for="AddressBlock" class="text-danger"></span>
 
-                                                <label asp-for="AddressLot" class="control-label"></label>
+                                                <label asp-for="AddressLot" class="control-label mt-2"></label>
                                                 <input asp-for="AddressLot" class="form-control" />
                                                 <span asp-validation-for="AddressLot" class="text-danger"></span>
 
-                                                <label asp-for="AddressBaranggay" class="control-label"></label>
+                                                <label asp-for="AddressBaranggay" class="control-label mt-2"></label>
                                                 <input asp-for="AddressBaranggay" class="form-control" />
                                                 <span asp-validation-for="AddressBaranggay" class="text-danger"></span>
 
-                                                <label asp-for="AddressCity" class="control-label"></label>
+                                                <label asp-for="AddressCity" class="control-label mt-2"></label>
                                                 <input asp-for="AddressCity" class="form-control" />
                                                 <span asp-validation-for="AddressCity" class="text-danger"></span>
 
-                                                <label asp-for="ContactNumber" class="control-label"></label>
+                                                <label asp-for="ContactNumber" class="control-label mt-2"></label>
                                                 <input asp-for="ContactNumber" class="form-control" />
                                                 <span asp-validation-for="ContactNumber" class="text-danger"></span>
                                             </div>

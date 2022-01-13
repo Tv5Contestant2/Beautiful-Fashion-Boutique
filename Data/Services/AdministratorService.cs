@@ -23,13 +23,13 @@ namespace ECommerce1.Data.Services
 
         public string GetStoreLogo() 
         {
-            var result = _context.Settings.First(x => x.Title == "Store Logo").Value;
+            var result = _context.Settings.Select(x => x.StoreLogo).First();
             return result;
         }
 
         public string GetHeroVideo() 
         {
-            var result = _context.Settings.First(x => x.Title == "Hero Video").Value;
+            var result = _context.Settings.Select(x => x.HeroVideo).First();
             return result;
         }
 
@@ -77,11 +77,17 @@ namespace ECommerce1.Data.Services
 
         public void UpdateSettings(SettingsViewModel settings)
         {
-            var _storelogo = _context.Settings.First(x => x.Title == "Store Logo");
-            var _herovideo = _context.Settings.First(x => x.Title == "Hero Video");
+            var result = _context.Settings.FirstOrDefault();
+            var _split = settings.StoreLogo.Split(",");
 
-            _context.Settings.Update(_storelogo);
-            _context.Settings.Update(_herovideo);
+            if (_split.Any())
+            {
+                result.StoreLogo = _split[1]; //Get Base64String only.
+            }
+
+            result.HeroVideo = settings.HeroVideo;
+
+            _context.Settings.Update(result);
             _context.SaveChanges();
         }
 

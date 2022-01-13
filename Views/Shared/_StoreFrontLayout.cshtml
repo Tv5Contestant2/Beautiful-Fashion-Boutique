@@ -56,13 +56,12 @@
                 <ul class="navbar-nav flex-row mb-2 mb-lg-0 ms-lg-5 actions-nav-menu">
                     @if (!SignInManager.IsSignedIn(User))
                     {
-                        <li class="nav-item mx-2 mx-lg-0 px-lg-0">
-                            <a class="nav-link" asp-controller="Home" asp-action="SignIn">
-                                <svg class="svg-icon">
-                                    <use xlink:href="#user-1"> </use>
-                                </svg>
-                            </a>
-                        </li>
+                    <li class="nav-item mx-2 mx-lg-0 px-lg-0">
+                        <a class="btn btn-outline-danger" asp-controller="Home" asp-action="SignIn">
+                            <i class="fas fa-sign-in-alt"></i> &nbsp;
+                            Sign In
+                        </a>
+                    </li>
                     }
 
                     @{
@@ -87,22 +86,29 @@
                                 if (_IsFirstTimeLogin)
                                 {
                                     <li class="nav-item mx-2 mx-lg-0 px-lg-0">
-                                        <a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">
-                                            Dashboard
-                                            <i class="fas fa-tools"></i>
+                                                            <a class="btn btn-outline-danger" asp-controller="Administrator" asp-action="Index">
+                                                                <i class="fas fa-tools"></i>
+                                                                &nbsp; Dashboard
+                                                            </a>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li class="nav-item mx-2 mx-lg-0 px-lg-0 ml-3">
+                                        <a class="btn btn-outline-danger" asp-controller="Home" asp-action="SignOut" data-toggle="tooltip" data-placement="bottom" title="Sign Out">
+                                            <i class="fas fa-power-off"></i>
+                                            &nbsp; Sign Out
                                         </a>
                                     </li>
                                 }
                                 else
                                 {
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link fw-normal dropdown-toggle text-uppercase text-dark" id="profileDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a class="nav-link fw-normal dropdown-toggle text-uppercase text-dark" id="profileDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-toggle="tooltip" data-placement="bottom" title="My Profile">
                                             <svg class="svg-icon">
                                                 <use xlink:href="#user-1"> </use>
                                             </svg>
                                         </a>
                                         <ul class="dropdown-menu mt-lg-4" aria-labelledby="profileDropdown">
-                                            <li><a class="dropdown-item" asp-controller="Home" asp-action="SignOut">Sign Out</a></li>
+                                            <li><a class="dropdown-item" asp-controller="Home" asp-action="SignOut" data-toggle="tooltip" data-placement="bottom" title="Sign Out">Sign Out</a></li>
                                         </ul>
                                     </li>
                                 }
@@ -111,7 +117,7 @@
                             {
 
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link fw-normal dropdown-toggle text-uppercase text-dark" id="profileDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="nav-link fw-normal dropdown-toggle text-uppercase text-dark" id="profileDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-toggle="tooltip" data-placement="bottom" title="My Profile">
                                         <svg class="svg-icon">
                                             <use xlink:href="#user-1"> </use>
                                         </svg>

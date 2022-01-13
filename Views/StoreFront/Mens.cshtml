@@ -229,7 +229,7 @@
                                                                 }
                                                             }
                                                         </ul>
-                                                        <p class="text-muted">@item.Description</p>
+                                                        <p class="text-muted">@Html.Raw(item.Description)</p>
                                                         @if (item.StockStatusId != (int)StockStatusEnum.OutOfStock)
                                                         {
                                                             <form asp-controller="Cart" asp-action="AddToCart">

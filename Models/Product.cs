@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace ECommerce1.Models
 {
@@ -13,6 +14,7 @@ namespace ECommerce1.Models
 
         public DateTime DateCreated { get; set; }
 
+        [AllowHtml]
         public string Description { get; set; }
         public string Image { get; set; }
 

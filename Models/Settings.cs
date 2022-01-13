@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECommerce1.Models
 {
@@ -6,7 +7,7 @@ namespace ECommerce1.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Value { get; set; }
+        public string StoreLogo { get; set; }
+        public string HeroVideo { get; set; }
     }
 }

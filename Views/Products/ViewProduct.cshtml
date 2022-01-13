@@ -30,72 +30,80 @@
 
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="card-body">
-
                             @*Primary Info*@
                             <div class="row form-group">
-
                                 <div class="col col-md-8">
                                     <div>
-                                        <label asp-for="Name" class="control-label"></label>
+                                        <label asp-for="Name" class="control-label mt-2"></label>
                                         <input asp-for="Name" class="form-control" disabled />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                    <div>
+                                        <label asp-for="Description" class="control-label mt-2"></label>
+                                        <textarea asp-for="Description" class="form-control" rows="9" style="border-radius: 1em" disabled></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-6">
+                                            <label asp-for="ProductCategoryId" class="control-label mt-2"></label>
+                                            <div>
+                                                @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
+                                                                       htmlAttributes: new { @class = "form-control", id = "selectionCategories", @disabled = "disabled", @onchange = "handleCategories()" })
+                                                @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col col-6">
+                                            <label asp-for="GenderId" class="control-label mt-2"></label>
+                                            <div>
+                                                @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
+                                                                      htmlAttributes: new { @class = "form-control", @disabled = "disabled", id = "GenderId" })
+                                                @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <label asp-for="Description" class="control-label"></label>
-                                        <input asp-for="Description" class="form-control" rows="4" disabled />
-                                    </div>
-
-                                    <label asp-for="ProductCategoryId" class="control-label"></label>
-                                    <div>
-                                        @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title"),
-htmlAttributes: new { @class = "form-control", @disabled = "disabled", id = "selectionCategories", @onchange = "handleCategories()" })
-                                    </div>
-
-                                    <label asp-for="GenderId" class="control-label"></label>
-                                    <div>
-                                        @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title"),
-htmlAttributes: new { @class = "form-control", @disabled = "disabled", id = "GenderId" })
-                                    </div>
-                                    <div class="m-3">
-                                        <input asp-for="IsFeaturedProduct" class="form-check-input" type="checkbox" disabled />
-                                        Set as Featured Product
-                                    </div>
                                     <div style="display: none;">
                                         <input id="ProductVariantJSON" asp-for="ProductVariantJSON" class="form-control" />
                                     </div>
-                                    <div style="display: none;">
+                                    <div style="display: none; ">
                                         <input id="ProductImageJSON" asp-for="ProductImageJSON" class="form-control" />
                                     </div>
                                 </div>
 
-
-
                                 <div class="col col-md-4">
+                                    <div class="ml-3 mt-3">
+                                        <input asp-for="IsFeaturedProduct" class="form-check-input" type="checkbox" disabled />
+                                        Set as Featured Product
+                                    </div>
 
-                                    <label asp-for="StatusId" class="control-label"></label>
+                                    <label asp-for="StatusId" class="control-label mt-2"></label>
                                     <div>
-                                        @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"),
-htmlAttributes: new { @class = "form-control", id = "StatusId", @readonly = "readonly", @style = "pointer-events: none;" })
+                                        @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title", (int)StatusEnum.Active),
+                                                            htmlAttributes: new { @class = "form-control", id = "StatusId", @disabled = "disabled" })
                                         @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
                                     </div>
-                                    <label class="control-label">Stock Status</label>
+                                    <label class="control-label mt-2">Stock Status</label>
                                     <div>
-                                        @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title"),
-htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly = "readonly", @style = "pointer-events: none;" })
+                                        @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title", (int)StockStatusEnum.InStock),
+                                                        htmlAttributes: new { @class = "form-control", id = "StockStatusId", @disabled = "disabled" })
                                         @Html.ValidationMessageFor(x => x.StockStatusId, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <label asp-for="Price" class="control-label"></label>
+                                    <label asp-for="Price" class="control-label mt-2"></label>
                                     <input asp-for="Price" class="form-control" type="number" disabled />
+                                    <span asp-validation-for="Price" class="text-danger"></span>
 
-                                    <div class="mx-3">
+                                    <div class="ml-3 mt-2">
                                         <input asp-for="IsSale" class="form-check-input" type="checkbox" disabled />
-                                        <label asp-for="PriceOnSale" class="control-label"></label>
+                                        <label asp-for="PriceOnSale" class="control-label2"></label>
                                     </div>
 
                                     <input asp-for="PriceOnSale" class="form-control" type="number" disabled />
-                                    <label asp-for="CriticalQty" class="control-label"></label>
+                                    <span asp-validation-for="PriceOnSale" class="text-danger"></span>
+
+                                    <label asp-for="CriticalQty" class="control-label mt-2"></label>
                                     <input asp-for="CriticalQty" class="form-control" type="number" disabled />
+                                    <span asp-validation-for="CriticalQty" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -252,6 +260,10 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
     </div>
 </div>
 
+<script src="https://cdn.tiny.cloud/1/0hvbyznd49kqd5zwdmnpd1e36ghlvc54m0qjb4ed3zfn98b6/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script type="text/javascript">
+    tinymce.init({ selector: 'textarea', width: 'auto', readonly: 'true' });
+</script>
 <script>
     var btnTop = document.getElementById("btnTop");
     window.onload = function () { btnTop.style.display = "none"; }

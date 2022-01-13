@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -16,18 +17,30 @@ namespace ECommerce1.Controllers
     [AllowAnonymous]
     public class ReportsController : Controller
     {
+        private readonly ICommonServices _commonService;
         private readonly IReportService _service;
         private readonly IProductsService _productService;
+        private readonly UserManager<User> _userManager;
 
         public ReportsController(IReportService service
-            , IProductsService productService)
+            , ICommonServices commonService
+            , IProductsService productService
+            , UserManager<User> userManager)
         {
             _service = service;
+            _commonService = commonService;
             _productService = productService;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             return View();
         }
 

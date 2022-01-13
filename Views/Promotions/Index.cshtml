@@ -102,7 +102,7 @@
                                 <div class="row-item pt-4 pb-4 border-bottom">
                                     <div class="row text-left">
                                         <div class="item col-2">@item.Name</div>
-                                        <div class="item col-2">@item.Description</div>
+                                        <div class="item col-2">@Html.Raw(item.Description)</div>
                                         <div class="item col-1 text-center">@item.SalePercentage</div>
                                         <div class="item col-1 text-center">@item.PromoCategory</div>
                                         <div class="item col-2 text-center">@item.StartDate.Value.ToString("yyyy-MM-dd")</div>

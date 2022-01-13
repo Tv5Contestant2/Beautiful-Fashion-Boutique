@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using ECommerce1.Data.Enums;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace ECommerce1.Controllers
 {
@@ -15,17 +17,28 @@ namespace ECommerce1.Controllers
     {
         private readonly IPromotionsService _service;
         private readonly ICommonServices _commonServices;
+        private readonly UserManager<User> _userManager;
         private readonly AppDBContext _appDBContext;
 
-        public PromotionsController(IPromotionsService service, AppDBContext appDBContext, ICommonServices commonServices)
+        public PromotionsController(IPromotionsService service
+            , AppDBContext appDBContext
+            , ICommonServices commonServices
+            , UserManager<User> userManager)
         {
             _service = service;
             _appDBContext = appDBContext;
             _commonServices = commonServices;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var data = await _service.GetAllPromos();
 
             var viewModel = new PromoViewModel

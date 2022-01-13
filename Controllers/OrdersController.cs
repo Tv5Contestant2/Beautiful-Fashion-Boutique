@@ -32,6 +32,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = await _service.GetAllOrders();
 
             ViewBag.Received = result.Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Received).Count();

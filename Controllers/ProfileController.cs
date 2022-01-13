@@ -14,6 +14,7 @@ namespace ECommerce1.Controllers
     public class ProfileController : Controller
     {
         private readonly IProfileService _service;
+        private readonly IAdministratorService _administratorService;
         private readonly ICartService _cartService;
         private readonly IOrderService _orderService;
         private readonly IMessageService _messageService;
@@ -24,6 +25,7 @@ namespace ECommerce1.Controllers
         private readonly UserManager<User> _userManager;
 
         public ProfileController(IProfileService service
+            , IAdministratorService administratorService
             , ICartService cartService
             , IOrderService orderService
             , IMessageService messageService
@@ -34,6 +36,7 @@ namespace ECommerce1.Controllers
             , UserManager<User> userManager)
         {
             _service = service;
+            _administratorService = administratorService;
             _cartService = cartService;
             _orderService = orderService;
             _messageService = messageService;
@@ -58,6 +61,7 @@ namespace ECommerce1.Controllers
             if (string.IsNullOrEmpty(_customer.Image)) _customer.Image = _commonServices.NoImage;
 
             ViewBag.Customer = _customer;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var _customerViewModel = new CustomerViewModel
             {
@@ -109,6 +113,7 @@ namespace ECommerce1.Controllers
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var result = await _service.GetCustomerOrders(userId);
             var user = await _userManager.FindByIdAsync(userId);
@@ -127,6 +132,7 @@ namespace ECommerce1.Controllers
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var result = await _service.GetCustomerReturns(userId);
             var user = await _userManager.FindByIdAsync(userId);
@@ -145,6 +151,7 @@ namespace ECommerce1.Controllers
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var result = await _service.GetCustomerWishlist(userId);
             var user = await _userManager.FindByIdAsync(userId);
@@ -162,6 +169,7 @@ namespace ECommerce1.Controllers
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var result = await _messageService.GetCustomerMessages(userId);
             var user = await _userManager.FindByIdAsync(userId);
@@ -187,6 +195,7 @@ namespace ECommerce1.Controllers
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var user = await _userManager.FindByIdAsync(userId);
             var order = _orderService.GetOrderById(transactionId);
@@ -221,6 +230,7 @@ namespace ECommerce1.Controllers
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var user = await _userManager.FindByIdAsync(userId);
             var returns = _orderService.GetReturns(transactionId);
@@ -250,6 +260,7 @@ namespace ECommerce1.Controllers
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.MessagesCount = await _messageService.GetCustomerMessagesCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var user = await _userManager.FindByIdAsync(userId);
             viewModel.Customer = user.FirstName;
@@ -269,6 +280,7 @@ namespace ECommerce1.Controllers
 
         public IActionResult ReturnSuccess()
         {
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             return View();
         }
 
@@ -302,6 +314,7 @@ namespace ECommerce1.Controllers
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var result = await _messageService.GetMessageConversation(messageId);
             var user = await _userManager.FindByIdAsync(userId);

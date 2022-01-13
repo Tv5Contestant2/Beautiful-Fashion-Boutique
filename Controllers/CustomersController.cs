@@ -1,9 +1,12 @@
 ﻿using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -14,16 +17,19 @@ namespace ECommerce1.Controllers
         private readonly IEmailService _emailService;
         public readonly ICommonServices _commonServices;
         private readonly IUserService _userService;
+        private readonly UserManager<User> _userManager;
 
         public CustomersController(ICustomersService service
             , IEmailService emailService
             , ICommonServices commonServices
-            , IUserService userService)
+            , IUserService userService
+            , UserManager<User> userManager)
         {
             _service = service;
             _emailService = emailService;
             _commonServices = commonServices;
             _userService = userService;
+            _userManager = userManager;
         }
 
         [HttpPost, ActionName("BlockCustomer")]
@@ -157,6 +163,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _userService.ArchiveUsers();
             await _userService.DeleteCustomers();
 

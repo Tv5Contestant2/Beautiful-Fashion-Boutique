@@ -116,7 +116,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="text-small text-muted mb-4">@ViewBag.Product.Description</p>
+                              <p class="text-small text-muted mb-4">@Html.Raw(ViewBag.Product.Description)</p>
 
                         @{
                             if (ViewBag.Product.StockStatusId != (int)StockStatusEnum.OutOfStock)

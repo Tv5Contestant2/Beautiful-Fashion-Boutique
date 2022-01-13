@@ -4,6 +4,7 @@ using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,18 +18,29 @@ namespace ECommerce1.Controllers
     public class ProductsController : Controller
     {
         private readonly ICartService _cartService;
+        private readonly ICommonServices _commonService;
         private readonly IProductsService _service;
-        private readonly AppDBContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ProductsController(IProductsService service, ICartService cartService, AppDBContext context)
+        public ProductsController(IProductsService service
+            , ICartService cartService
+            , ICommonServices commonService
+            , UserManager<User> userManager)
         {
             _service = service;
             _cartService = cartService;
-            _context = context;
+            _commonService = commonService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(int page)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var data = await _service.GetAllProducts();
 
             foreach (var item in data)

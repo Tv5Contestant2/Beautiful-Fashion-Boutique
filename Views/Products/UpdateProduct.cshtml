@@ -35,34 +35,36 @@
 
                                     <div class="col col-md-8">
                                         <div>
-                                            <label asp-for="Name" class="control-label"></label>
+                                            <label asp-for="Name" class="control-label mt-2"></label>
                                             <input asp-for="Name" class="form-control" />
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
 
                                         <div>
-                                            <label asp-for="Description" class="control-label"></label>
-                                            <input asp-for="Description" class="form-control" rows="4" />
+                                            <label asp-for="Description" class="control-label mt-2"></label>
+                                            <textarea asp-for="Description" class="form-control" rows="9" style="border-radius: 1em"></textarea>
                                             <span asp-validation-for="Description" class="text-danger"></span>
                                         </div>
 
-                                        <label asp-for="ProductCategoryId" class="control-label"></label>
-                                        <div>
-                                            <input asp-for="ProductCategoryId" value="@Model.ProductCategoryId" type="hidden" />
-                                            @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title", Model.ProductCategoryId),
-                                           htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()", @disabled = "disabled", @value = Model.ProductCategoryId })
-                                            @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
-                                        </div>
+                                        <div class="row">
+                                            <div class="col col-6">
+                                                <label asp-for="ProductCategoryId" class="control-label mt-2"></label>
+                                                <div>
+                                                    <input asp-for="ProductCategoryId" value="@Model.ProductCategoryId" type="hidden" />
+                                                    @Html.DropDownListFor(x => Model.ProductCategoryId, new SelectList(Model.ProductCategories, "Id", "Title", Model.ProductCategoryId),
+                                                   htmlAttributes: new { @class = "form-control", id = "selectionCategories", @onchange = "handleCategories()", @disabled = "disabled", @value = Model.ProductCategoryId })
+                                                    @Html.ValidationMessageFor(x => x.ProductCategoryId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="col col-6">
 
-                                        <label asp-for="GenderId" class="control-label"></label>
-                                        <div>
-                                            @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title", Model.GenderId),
-                                           htmlAttributes: new { @class = "form-control", id = "GenderId", @value = Model.GenderId })
-                                            @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
-                                        </div>
-                                        <div class="m-3">
-                                            <input asp-for="IsFeaturedProduct" class="form-check-input" type="checkbox" />
-                                            Set as Featured Product
+                                                <label asp-for="GenderId" class="control-label mt-2"></label>
+                                                <div>
+                                                    @Html.DropDownListFor(x => Model.GenderId, new SelectList(Model.Genders, "Id", "Title", Model.GenderId),
+                                                   htmlAttributes: new { @class = "form-control", id = "GenderId", @value = Model.GenderId })
+                                                    @Html.ValidationMessageFor(x => x.GenderId, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div style="display: none;">
@@ -74,32 +76,37 @@
                                     </div>
 
                                     <div class="col col-md-4">
-                                        <label asp-for="StatusId" class="control-label"></label>
+                                        <div class="ml-3 mt-3">
+                                            <input asp-for="IsFeaturedProduct" class="form-check-input" type="checkbox" />
+                                            Set as Featured Product
+                                        </div>
+
+                                        <label asp-for="StatusId" class="control-label mt-2"></label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.StatusId, new SelectList(Model.Statuses, "Id", "Title"),
 htmlAttributes: new { @class = "form-control", id = "StatusId", @readonly = "readonly", @style = "pointer-events: none;" })
                                             @Html.ValidationMessageFor(x => x.StatusId, "", new { @class = "text-danger" })
                                         </div>
-                                        <label class="control-label">Stock Status</label>
+                                        <label class="control-label mt-2">Stock Status</label>
                                         <div>
                                             @Html.DropDownListFor(x => Model.StockStatusId, new SelectList(Model.StockStatuses, "Id", "Title"),
 htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly = "readonly", @style = "pointer-events: none;" })
                                             @Html.ValidationMessageFor(x => x.StockStatusId, "", new { @class = "text-danger" })
                                         </div>
 
-                                        <label asp-for="Price" class="control-label"></label>
+                                        <label asp-for="Price" class="control-label mt-2"></label>
                                         <input asp-for="Price" class="form-control" type="number" />
                                         <span asp-validation-for="Price" class="text-danger"></span>
 
-                                        <div class="mx-3">
+                                        <div class="ml-3 mt-2">
                                             <input asp-for="IsSale" class="form-check-input" type="checkbox" />
-                                            <label asp-for="PriceOnSale" class="control-label"></label>
+                                            <label asp-for="PriceOnSale" class="control-label mt-2"></label>
                                         </div>
 
                                         <input asp-for="PriceOnSale" class="form-control" type="number" />
                                         <span asp-validation-for="PriceOnSale" class="text-danger"></span>
 
-                                        <label asp-for="CriticalQty" class="control-label"></label>
+                                        <label asp-for="CriticalQty" class="control-label mt-2"></label>
                                         <input asp-for="CriticalQty" class="form-control" type="number" />
                                         <span asp-validation-for="CriticalQty" class="text-danger"></span>
                                     </div>
@@ -179,7 +186,7 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
                                                     }
                                                 }
                                                 <div id="divSizeField" style="@divSizeStyle" class="form-group">
-                                                    <label class="control-label">Size</label>
+                                                    <label class="control-label mt-2">Size</label>
                                                     <select id="SizeId" class="form-control">
                                                         <option value=""></option>
                                                         @foreach (var item in Model.Sizes)
@@ -195,12 +202,12 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
                                                     @Html.ValidationMessageFor(x => x.SizeId, "", new { @class = "text-danger" })
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label">Color</label>
+                                                    <label class="control-label mt-2">Color</label>
                                                     @Html.DropDownListFor(x => Model.ColorId, new SelectList(Model.Colors, "Id", "Title"), htmlAttributes: new { @class = "form-control", id = "ColorId" })
                                                     @Html.ValidationMessageFor(x => x.ColorId, "", new { @class = "text-danger" })
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label">Quantity</label>
+                                                    <label class="control-label mt-2">Quantity</label>
                                                     <input type="number" min="1" id="Quantity" name="Quantity" class="form-control" />
                                                 </div>
                                             </div>
@@ -251,26 +258,35 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
                                     </tbody>
                                 </table>
 
+
+
                                 @*Start - BootsTrap Model Popup for Adding and Updating the Image Record *@
                                 <div class="modal fade" id="AddUpdateModelImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabelImage" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">×</button>
-                                                @*<h4 class="modal-title" id="AddUpdateModelImageLabel">Add Image</h4>*@
+                                                <h4 class="modal-title">Add Image</h4>
+                                                <a class="btn btn-default text-right" data-dismiss="modal" onclick="CloseModal()">×</a>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="form-group">
-                                                    <input id="inptImageUpload" type="file" accept="image/*" name="image" />
-                                                    <input id="inptImageFileName" type="text" style="display:none;" />
+                                                <div class=" border-1 border-bottom">
+                                                    <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm mt-3">
+                                                        <input id="inptImageUpload" type="file" onchange="readURL(this);" class="form-control border-0" accept="image/*" name="image">
+                                                        <input id="inptImageFileName" type="text" class="form-control" style="display:none;" />
+                                                        <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+                                                        <div class="input-group-append">
+                                                            <label for="inptImageUpload" class="btn btn-outline-danger m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2"></i><small class="text-uppercase font-weight-bold">Choose file</small></label>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group mx-2 mt-3">
+                                                    <p class="small font-weight-bold">Preview</p>
                                                     <img id="imgOutput" width="200" />
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-primary" id="btnAddImage" onclick="return AddImage();">Add Image</button>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <a class="btn btn-outline-dark" data-dismiss="modal" onclick="CloseModal()">Close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -292,6 +308,41 @@ htmlAttributes: new { @class = "form-control", id = "StockStatusId", @readonly =
 </div>
 
 @section Scripts {
+    <style>
+        #inptImageUpload {
+            opacity: 0;
+        }
+
+        #upload-label {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+        }
+    </style>
+    <script src="https://cdn.tiny.cloud/1/0hvbyznd49kqd5zwdmnpd1e36ghlvc54m0qjb4ed3zfn98b6/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="text/javascript">
+        tinymce.init({ selector: 'textarea', width: 'auto' });
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgOutput')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(function () {
+            $('#upload').on('change', function () {
+                readURL(input);
+            });
+        });
+    </script>
     <script>
         $("document").ready(function () {
             $('#selectionCategories').val('@Model.ProductCategoryId');
