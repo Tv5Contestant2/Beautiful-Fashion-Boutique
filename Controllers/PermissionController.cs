@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Helper;
+using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,16 +15,28 @@ namespace ECommerce1.Controllers
     [Authorize(Roles = "Admin")]
     public class PermissionController : Controller
     {
+        private readonly ICommonServices _commonService;
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public PermissionController(RoleManager<IdentityRole> roleManager)
+        public PermissionController(ICommonServices commonService
+            , UserManager<User> userManager
+            , RoleManager<IdentityRole> roleManager)
         {
+            _commonService = commonService;
+            _userManager = userManager;
             _roleManager = roleManager;
         }
 
         [HttpGet]
         public async Task<ActionResult> Index(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var _role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = _role;
+
             var model = new PermissionViewModel();
             var allPermissions = new List<RoleClaimsViewModel>();
 

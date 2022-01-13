@@ -35,6 +35,12 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("BlockCustomer")]
         public async Task<IActionResult> BlockConfirmed(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var customer = await _service.GetCustomerById(id);
             if (customer == null) return RedirectToAction("Error", "Home");
 
@@ -48,6 +54,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> BlockCustomer(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var customerDetails = await _service.GetCustomerById(id);
             if (customerDetails == null) return RedirectToAction("Error", "Home");
 
@@ -56,6 +68,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ArchivedCustomers(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var data = await _service.GetAllArchivedCustomers();
 
             var viewModel = new HomeUserViewModel
@@ -70,6 +88,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> BlockCustomers(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var data = await _service.GetAllBlockCustomers();
 
             var viewModel = new HomeUserViewModel
@@ -84,6 +108,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> DeletedCustomers(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var data = await _service.GetAllDeletedCustomers();
 
             var viewModel = new HomeUserViewModel
@@ -96,8 +126,14 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public IActionResult CreateCustomer()
+        public async Task<IActionResult> CreateCustomer()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var viewModel = _service.InitializeCustomer();
             if (string.IsNullOrEmpty(viewModel.Image)) viewModel.Image = _commonServices.NoImage;
 
@@ -143,6 +179,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> DeleteCustomer(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _customer = await _service.GetCustomerById(id);
             if (_customer == null) return RedirectToAction("Error", "Home");
 
@@ -186,6 +228,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ShowCustomers()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await Task.Delay(0);
             return RedirectToAction(nameof(Index));
         }
@@ -205,6 +253,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> UnBlockCustomer(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var customerDetails = await _service.GetCustomerById(id);
             if (customerDetails == null) return RedirectToAction("Error", "Home");
 
@@ -212,6 +266,12 @@ namespace ECommerce1.Controllers
         }
         public async Task<IActionResult> UndeleteCustomer(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var customer = await _service.GetCustomerById(id);
             if (customer == null) return RedirectToAction("Error", "Home");
 
@@ -225,6 +285,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateCustomer(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _customer = await _service.GetCustomerById(id);
             var _customerViewModel = new CustomerViewModel
             {

@@ -54,6 +54,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> CreatePromo()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _model = await _service.InitializePromo();
             return View(_model);
         }
@@ -96,6 +102,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdatePromo(long id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _result = await _service.GetPromoById(id);
             var _model = await _service.InitializePromo(_result);
             if (_model == null) return RedirectToAction("Error", "Home");
@@ -130,6 +142,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> DeletePromo(long id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var PromoDetails = await _service.GetPromoById(id);
             if (PromoDetails == null) return RedirectToAction("Error", "Home");
             return View(PromoDetails);

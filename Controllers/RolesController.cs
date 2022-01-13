@@ -43,8 +43,14 @@ namespace ECommerce1.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateRole()
+        public async Task<IActionResult> CreateRole()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             return View();
         }
 
@@ -64,6 +70,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewRole(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = await _rolesService.FindByIdAsync(id);
 
             var model = new RoleViewModel
@@ -78,6 +90,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateRole(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = await _rolesService.FindByIdAsync(id);
 
             var model = new RoleViewModel
@@ -105,6 +123,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteRole(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _model = await _rolesService.FindByIdAsync(id);
             if (_model == null) return RedirectToAction("Error", "Home");
 

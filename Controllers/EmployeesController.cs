@@ -36,8 +36,14 @@ namespace ECommerce1.Controllers
             _emailService = emailService;
         }
 
-        public IActionResult CreateEmployee()
+        public async Task<IActionResult> CreateEmployee()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _roleList = _roleManager.Roles.Where(x => x.Name.ToLower() != RolesEnum.Admin.ToString().ToLower());
             var _selectedDefaultRoleId = _roleManager.Roles.Where(x => x.Name.ToLower() == RolesEnum.Employee.ToString().ToLower()).FirstOrDefault().Id;
             var _initModel = new EmployeeViewModel()
@@ -50,14 +56,6 @@ namespace ECommerce1.Controllers
 
             return View(_initModel);
         }
-
-        //public IActionResult CreateRoles()
-        //{
-        //    var _initModel = new RoleViewModel();
-        //    _initModel.Modules = _commonServices.GetModules();
-
-        //    return View(_initModel);
-        //}
 
         [HttpPost]
         public async Task<IActionResult> CreateEmployee([Bind] EmployeeViewModel model)
@@ -142,22 +140,14 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        //public async Task<IActionResult> Roles(int page = 1)
-        //{
-        //    var data = await _service.GetAllEmployees();
-
-        //    var viewModel = new HomeUserViewModel
-        //    {
-        //        ItemPerPage = 10,
-        //        Users = data,
-        //        CurrentPage = page
-        //    };
-
-        //    return View(viewModel);
-        //}
-
         public async Task<IActionResult> DeleteEmployee(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _employee = await _service.GetEmployeeById(id);
             if (_employee == null) return RedirectToAction("Error", "Home");
 
@@ -178,6 +168,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateEmployee(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _employee = await _service.GetEmployeeById(id);
             var _employeeRoleName = (await _userManager.GetRolesAsync(_employee)).FirstOrDefault();
             var _employeeRole = _roleManager.Roles.Where(x => x.Name == _employeeRoleName).FirstOrDefault();

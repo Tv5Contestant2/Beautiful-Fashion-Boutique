@@ -44,8 +44,14 @@ namespace ECommerce1.Controllers
             return View();
         }
 
-        public IActionResult ViewMonthlySalesReport(int page = 1)
+        public async Task<IActionResult> ViewMonthlySalesReport(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = _service.GetMonthlySalesReport();
 
             var viewModel = new OrderViewModel
@@ -58,8 +64,14 @@ namespace ECommerce1.Controllers
             return View("MonthlySales", viewModel);
         }
 
-        public IActionResult ViewAnnualSalesReport(int page = 1)
+        public async Task<IActionResult> ViewAnnualSalesReport(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = _service.GetAnnualSalesReport();
 
             var viewModel = new OrderViewModel
@@ -74,6 +86,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ViewProductList(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = await _productService.GetAllProducts();
 
             var viewModel = new ProductViewModel
@@ -86,8 +104,14 @@ namespace ECommerce1.Controllers
             return View("ProductList", viewModel);
         }
 
-        public void GetMonthlySalesReport()
+        public async Task GetMonthlySalesReport()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result =_service.GetMonthlySalesReport();
             using (var workbook = new XLWorkbook())
             {
@@ -140,13 +164,19 @@ namespace ECommerce1.Controllers
                 Response.Clear();
                 Response.Headers.Add("content-disposition", "attachment;filename=MonthlySalesReport_" + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss") + ".xls");
                 Response.ContentType = "application/xls";
-                Response.Body.WriteAsync(content);
+                await Response.Body.WriteAsync(content);
                 Response.Body.Flush();
             }
         }
 
-        public void GetAnnualSalesReport()
+        public async Task GetAnnualSalesReport()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result =_service.GetAnnualSalesReport();
             using (var workbook = new XLWorkbook())
             {
@@ -189,13 +219,19 @@ namespace ECommerce1.Controllers
                 Response.Clear();
                 Response.Headers.Add("content-disposition", "attachment;filename=AnnualSalesReport_" + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss") + ".xls");
                 Response.ContentType = "application/xls";
-                Response.Body.WriteAsync(content);
+                await Response.Body.WriteAsync(content);
                 Response.Body.Flush();
             }
         }
 
         public async Task GetProductList()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = await _productService.GetAllProducts();
             using (var workbook = new XLWorkbook())
             {

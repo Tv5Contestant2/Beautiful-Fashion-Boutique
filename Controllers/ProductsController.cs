@@ -65,8 +65,14 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public IActionResult CreateProduct()
+        public async Task<IActionResult> CreateProduct()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var viewModel = _service.InitializeProduct();
 
             return View(viewModel);
@@ -131,6 +137,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> DeleteProduct(long id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var productDetails = await _service.GetProductById(id);
             if (productDetails == null) return RedirectToAction("Error", "Home");
 
@@ -139,6 +151,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> UpdateProduct(long id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _product = await _service.GetProductById(id);
             if (_product == null) return RedirectToAction("Error", "Home");
 
@@ -196,6 +214,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ViewProduct(long id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _product = await _service.GetProductById(id);
             if (_product == null) return RedirectToAction("Error", "Home");
 

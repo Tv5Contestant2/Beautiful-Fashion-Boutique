@@ -56,6 +56,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Returns(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = await _service.GetAllReturns();
 
             ViewBag.Approved = result.Where(x => x.OrderDetails.Any(x => x.ReturnStatusId == (int)OrderStatusEnum.Approved)).Count();
@@ -74,6 +80,12 @@ namespace ECommerce1.Controllers
         [Route("Orders/ViewOrder/{transactionId:Guid}")]
         public async Task<IActionResult> ViewOrder(Guid transactionId)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var orderDetails = await _service.GetOrderDetailsById(transactionId);
             var orderShippingInfo = _service.GetOrderShippingInfo(transactionId);
             var order = _service.GetOrderById(transactionId);
@@ -99,6 +111,12 @@ namespace ECommerce1.Controllers
         [Route("Orders/ViewReturn/{transactionId:Guid}")]
         public async Task<IActionResult> ViewReturn(Guid transactionId)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = await _service.GetReturnRequestById(transactionId.ToString());
             var viewModel = new OrderViewModel();
 
@@ -110,6 +128,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ViewReturnDetails(Guid transactionId, long productId)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var result = await _service.GetReturnsByReference(transactionId, productId);
             var viewModel = new OrderViewModel();
 
@@ -122,6 +146,12 @@ namespace ECommerce1.Controllers
         [Route("Orders/UpdateOrder/{transactionId:Guid}")]
         public async Task<IActionResult> UpdateOrder(Guid transactionId, OrderViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _service.UpdateOrder(viewModel);
             //await _service.UpdateOrderStatuses(transactionId);
 
@@ -140,6 +170,12 @@ namespace ECommerce1.Controllers
         [Route("Orders/ApproveReturn/{transactionId:Guid}")]
         public async Task<IActionResult> ApproveReturn(string transactionId, OrderViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _service.ApproveReturn(transactionId, viewModel);
 
             return RedirectToAction("ViewReturn", viewModel);
@@ -155,6 +191,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ReturnOrder(OrderViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _service.ReturnOrder(viewModel);
 
             return RedirectToAction("ReturnSuccess", "Profile");
