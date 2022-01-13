@@ -1,5 +1,8 @@
 ﻿@model Product
 @using ECommerce1.Data.Enums
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ECommerce1.Data
 
 @{
     ViewData["Title"] = "View Product";
@@ -16,7 +19,10 @@
             @*<form asp-action="UpdateProduct" enctype="multipart/form-data" class="hidden">*@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
-            <a class="btn btn-info float-right" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@Model.Id">Edit Product&nbsp;<i class="fas fa-arrow-right"></i></a>
+            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Products.Edit)).Result.Succeeded)
+            {
+                <a class="btn btn-info float-right" asp-controller="Products" asp-action="UpdateProduct" asp-route-id="@Model.Id">Edit Product&nbsp;<i class="fas fa-arrow-right"></i></a>
+            }
 
             <div id="accordion">
                 @*Product Information*@
@@ -155,7 +161,6 @@
                                             }
                                         }
                                     }
-
                                 </tbody>
                             </table>
                         </div>
