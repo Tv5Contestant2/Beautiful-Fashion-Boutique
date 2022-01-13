@@ -20,7 +20,7 @@ namespace ECommerce1.Data
 
                 case "customers":
                     _results.AddRange(new List<string>(){
-                        //$"Permissions.{module}.View",
+                        $"Permissions.{module}.Delete",
                         $"Permissions.{module}.Edit",
                         $"Permissions.{module}.ArchivedCustomer",
                         $"Permissions.{module}.BlockCustomer",
