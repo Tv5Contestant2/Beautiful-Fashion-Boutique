@@ -1,4 +1,7 @@
 ﻿@model ECommerce1.ViewModel.RoleViewModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ECommerce1.Data
 
 @{
     ViewData["Title"] = "Roles Management";
@@ -30,9 +33,12 @@
             <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
-                    <a asp-controller="Roles" asp-action="CreateRole" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Roles
-                    </a>
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Roles.Create)).Result.Succeeded)
+                    {
+                        <a asp-controller="Roles" asp-action="CreateRole" class="btn btn-info float-right" type="button">
+                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Roles
+                        </a>
+                    }
                 </div>
             </div>
 
@@ -70,15 +76,25 @@
                                                         </a>
                                                         break;
                                                     default:
-                                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateRole" asp-route-id="@item.Id" title="Update Role">
-                                                            <i class="far fa-eye"></i>
-                                                        </a>
-                                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-controller="Permission" asp-action="Index" asp-route-id="@item.Id" title="Manage Permission">
-                                                            <i class="fas fa-cogs"></i>
-                                                        </a>
-                                                        <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteRole" asp-route-id="@item.Id" title="Delete Role">
-                                                            <i class="far fa-trash-alt"></i>
-                                                        </a>
+                                                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Roles.Edit)).Result.Succeeded)
+                                                        {
+                                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateRole" asp-route-id="@item.Id" title="Update Role">
+                                                                <i class="far fa-eye"></i>
+                                                            </a>
+                                                        }
+                                                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Roles.ManagePermission)).Result.Succeeded)
+                                                        {
+                                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-controller="Permission" asp-action="Index" asp-route-id="@item.Id" title="Manage Permission">
+                                                                <i class="fas fa-cogs"></i>
+                                                            </a>
+                                                        }
+                                                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Roles.Delete)).Result.Succeeded)
+                                                        {
+                                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteRole" asp-route-id="@item.Id" title="Delete Role">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </a>
+                                                        }
+
                                                         break;
                                                 }
                                             }

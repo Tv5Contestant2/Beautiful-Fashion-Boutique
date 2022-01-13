@@ -1,4 +1,7 @@
 ﻿@model ECommerce1.ViewModel.HomeUserViewModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ECommerce1.Data
 
 @{
     ViewData["Title"] = "Employee Management";
@@ -30,9 +33,12 @@
             <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
-                    <a asp-controller="Employees" asp-action="CreateEmployee" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Employee
-                    </a>
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Employees.Create)).Result.Succeeded)
+                    {
+                        <a asp-controller="Employees" asp-action="CreateEmployee" class="btn btn-info float-right" type="button">
+                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Employee
+                        </a>
+                    }
                 </div>
             </div>
 
@@ -122,12 +128,18 @@
                                             }
                                         </div>
                                         <div class="item col-1 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
-                                                <i class="far fa-edit"></i>
-                                            </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
+                                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Employees.Edit)).Result.Succeeded)
+                                            {
+                                                <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
+                                                    <i class="far fa-edit"></i>
+                                                </a>
+                                            }
+                                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Employees.Delete)).Result.Succeeded)
+                                            {
+                                                <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteEmployee" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -202,5 +214,4 @@
             $("#dvThumbnail").show();
         });
     });
-
 </script>

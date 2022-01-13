@@ -27,7 +27,7 @@ namespace ECommerce1.Controllers
             var model = new PermissionViewModel();
             var allPermissions = new List<RoleClaimsViewModel>();
 
-            allPermissions.GetPermissions(typeof(Permissions.Dashboard), id);
+            //allPermissions.GetPermissions(typeof(Permissions.Dashboard), id);
             allPermissions.GetPermissions(typeof(Permissions.Customers), id);
             allPermissions.GetPermissions(typeof(Permissions.Employees), id);
             allPermissions.GetPermissions(typeof(Permissions.Roles), id);
