@@ -143,7 +143,7 @@ namespace ECommerce1.Controllers
                     return View(model);
                 }
 
-                if (!user.IsFirstTimeLogin.Value && !user.IsCustomer.Value)
+                if (!user.IsFirstTimeLogin.Value && !user.IsCustomer.GetValueOrDefault())
                 {
                     // Generate the reset password token
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
