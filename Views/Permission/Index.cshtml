@@ -32,7 +32,7 @@
                     <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                     <input id="roleId" asp-for="RoleId" value="@Model.RoleId" type="hidden" />
                     <div class="col">
-                        <button type="submit" class="btn btn-info float-right">
+                        <button type="submit" class="btn btn-info float-right" @if (Model.RoleName.ToLower() == "admin") { <text> disabled</text>}>
                             <i class="fas fa-plus"></i>&nbsp;&nbsp;Save
                         </button>
                     </div>

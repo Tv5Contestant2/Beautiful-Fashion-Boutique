@@ -26,43 +26,22 @@ namespace ECommerce1.Controllers
         {
             var model = new PermissionViewModel();
             var allPermissions = new List<RoleClaimsViewModel>();
-            var listPermissions = new List<RoleClaimsViewModel>();
 
-            listPermissions.GetPermissions(typeof(Permissions.Dashboard), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.Customers), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.Employees), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.Roles), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.Orders), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.Returns), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.Products), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.PromosAndDiscounts), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.Reports), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.AboutUs), id);
-            allPermissions.AddRange(listPermissions);
-
-            listPermissions.GetPermissions(typeof(Permissions.ContactUs), id);
-            allPermissions.AddRange(listPermissions);
+            allPermissions.GetPermissions(typeof(Permissions.Dashboard), id);
+            allPermissions.GetPermissions(typeof(Permissions.Customers), id);
+            allPermissions.GetPermissions(typeof(Permissions.Employees), id);
+            allPermissions.GetPermissions(typeof(Permissions.Roles), id);
+            allPermissions.GetPermissions(typeof(Permissions.Orders), id);
+            allPermissions.GetPermissions(typeof(Permissions.Returns), id);
+            allPermissions.GetPermissions(typeof(Permissions.Products), id);
+            allPermissions.GetPermissions(typeof(Permissions.PromosAndDiscounts), id);
+            allPermissions.GetPermissions(typeof(Permissions.Reports), id);
+            allPermissions.GetPermissions(typeof(Permissions.AboutUs), id);
+            allPermissions.GetPermissions(typeof(Permissions.ContactUs), id);
 
             var role = await _roleManager.FindByIdAsync(id);
             model.RoleId = id;
+            model.RoleName = role.Name;
             var claims = await _roleManager.GetClaimsAsync(role);
             var allClaimValues = allPermissions.Select(a => a.Value).ToList();
             var roleClaimValues = claims.Select(a => a.Value).ToList();
