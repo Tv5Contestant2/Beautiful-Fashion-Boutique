@@ -112,7 +112,7 @@
 
                                     <div class="row mb-4">
                                         <div class="col-1 align-self-center">
-                                            <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@item.Sender.Image" alt="@sender" width="45">
+                                            <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@string.Format("data:image/jpeg;base64,{0}", item.Sender.Image)" alt="@sender" width="45">
                                         </div>
                                         <div class="col-11">
                                             <div class="row d-flex justify-content-between">

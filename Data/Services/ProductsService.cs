@@ -536,6 +536,11 @@ namespace ECommerce1.Data.Services
                 .Where(x => x.ProductId == id)
                 .ToListAsync();
 
+            foreach (var item in result)
+            {
+                item.Customers.Image = item.Customers.Image != null ? item.Customers.Image : _commonServices.NoImage;
+            }
+
             return result;
         }
 

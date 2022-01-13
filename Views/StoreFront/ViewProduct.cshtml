@@ -219,7 +219,7 @@ htmlAttributes: new { @class = "form-control choices", id = "SizeId" })
 
                                                 <div class="row mb-4">
                                                     <div class="col-3 text-center">
-                                                        <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@item.Customers.Image" alt="@customerName" width="120">
+                                                        <img class="rounded-circle d-block mx-auto img-thumbnail p-2 mb-2" src="@string.Format("data:image/jpeg;base64,{0}",@item.Customers.Image)" alt="@customerName" width="120">
                                                         <span class="text-uppercase text-muted small fw-normal">@item.ReviewDate.ToShortDateString()</span>
                                                     </div>
                                                     <div class="col-9 review-text">

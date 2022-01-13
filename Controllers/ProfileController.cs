@@ -318,6 +318,8 @@ namespace ECommerce1.Controllers
 
             var result = await _messageService.GetMessageConversation(messageId);
             var user = await _userManager.FindByIdAsync(userId);
+
+            if (string.IsNullOrEmpty(user.Image)) user.Image = _commonServices.NoImage;
             ViewBag.Customer = user;
 
             var viewModel = new MessageViewModel

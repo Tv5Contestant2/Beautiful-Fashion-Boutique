@@ -11,6 +11,8 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public string GetHeroVideo();
 
+        public string GetEmailLogo();
+
         public About GetAboutUs();
 
         public SocMed GetContactUs();

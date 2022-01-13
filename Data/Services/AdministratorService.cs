@@ -33,6 +33,12 @@ namespace ECommerce1.Data.Services
             return result;
         }
 
+        public string GetEmailLogo() 
+        {
+            var result = _context.Settings.Select(x => x.EmailLogo).First();
+            return result;
+        }
+
         public About GetAboutUs() 
         {
             var result = _context.AboutUs.OrderByDescending(x => x.Id).FirstOrDefault();
@@ -86,6 +92,7 @@ namespace ECommerce1.Data.Services
             }
 
             result.HeroVideo = settings.HeroVideo;
+            result.EmailLogo = settings.EmailLogo;
 
             _context.Settings.Update(result);
             _context.SaveChanges();

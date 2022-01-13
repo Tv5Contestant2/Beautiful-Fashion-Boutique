@@ -287,7 +287,7 @@ namespace ECommerce1.Controllers
                 Wishlists = new Wishlist(),
                 Colors = productDetails.ProductVariants.Select(x => x.Color).Distinct(),
                 Size = productDetails.ProductVariants.Select(x => x.Size).Distinct(),
-        };
+            };
 
 
             var _result = viewModel.Size.FirstOrDefault();

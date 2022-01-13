@@ -66,6 +66,7 @@ namespace ECommerce1.Controllers
             {
                 StoreLogo = _service.GetStoreLogo(),
                 HeroVideo = _service.GetHeroVideo(),
+                EmailLogo = _service.GetEmailLogo(),
             };
 
             return View(viewModel);

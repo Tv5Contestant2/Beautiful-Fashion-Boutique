@@ -16,15 +16,18 @@ namespace ECommerce1.Data.Services
 {
     public class EmailService : IEmailService
     {
+        private readonly IAdministratorService _administratorService;
         private readonly IOptions<EmailSettings> _appSettings;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly UserManager<User> _userManager;
 
         public EmailService(IOptions<EmailSettings> appSettings
+            , IAdministratorService administratorService
             , IWebHostEnvironment hostEnvironment
             , UserManager<User> userManager)
         {
             _appSettings = appSettings;
+            _administratorService = administratorService;
             _hostEnvironment = hostEnvironment;
             _userManager = userManager;
         }
@@ -72,6 +75,7 @@ namespace ECommerce1.Data.Services
                 message = message.Replace("[emailaddress]", viewModel.EmailAddress);
                 message = message.Replace("[sendername]", viewModel.SenderName);
                 message = message.Replace("[message]", viewModel.MessageBody);
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
 
                 await SendEmail(message, _appSettings.Value.Email, "Inquiry", viewModel.EmailAddress);
             }
@@ -89,6 +93,7 @@ namespace ECommerce1.Data.Services
                 str.Close();
 
                 message = message.Replace("[confirmationlink]", confirmationLink);
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
 
                 await SendEmail(message, recipient, "Account Confirmation");
             }
@@ -108,6 +113,7 @@ namespace ECommerce1.Data.Services
                 message = message.Replace("[confirmationlink]", confirmationLink);
                 message = message.Replace("[emailaddress]", recipient);
                 message = message.Replace("[password]", pass);
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
 
                 await SendEmail(message, recipient, "Account Confirmation");
             }
@@ -125,6 +131,7 @@ namespace ECommerce1.Data.Services
                 str.Close();
 
                 message = message.Replace("[reference]", orders.TransactionId.ToString());
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
 
                 var subject = "[" + orders.TransactionId + "] receipt for your order on " + orders.OrderDate.ToShortDateString();
                 await SendEmail(message, recipient, subject);
@@ -144,6 +151,7 @@ namespace ECommerce1.Data.Services
 
                 message = message.Replace("[reference]", orders.TransactionId.ToString());
                 message = message.Replace("[expecteddate]", orders.ExpectedDeliveryDate.ToShortDateString());
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
 
                 var subject = "[" + orders.TransactionId + "] has been shipped";
                 await SendEmail(message, recipient, subject);
@@ -162,6 +170,7 @@ namespace ECommerce1.Data.Services
                 str.Close();
 
                 message = message.Replace("[reference]", orders.TransactionId.ToString());
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
 
                 var subject = "[" + orders.TransactionId + "] completed";
                 await SendEmail(message, recipient, subject);
@@ -180,6 +189,7 @@ namespace ECommerce1.Data.Services
                 str.Close();
 
                 message = message.Replace("[resetlink]", resetLink);
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
 
                 await SendEmail(message, recipient, "Password Reset Link");
             }
@@ -196,6 +206,8 @@ namespace ECommerce1.Data.Services
                 string message = str.ReadToEnd();
                 str.Close();
 
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
+
                 await SendEmail(message, recipient, "Your account has been blocked");
             }
             catch (Exception) { }
@@ -211,6 +223,8 @@ namespace ECommerce1.Data.Services
                 string message = str.ReadToEnd();
                 str.Close();
 
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
+
                 await SendEmail(message, recipient, "Your account has been tagged for deletion");
             }
             catch (Exception) { }
@@ -225,6 +239,8 @@ namespace ECommerce1.Data.Services
                 StreamReader str = new StreamReader(filePath);
                 string message = str.ReadToEnd();
                 str.Close();
+
+                message = message.Replace("[logo]", _administratorService.GetEmailLogo());
 
                 await SendEmail(message, recipient, "Your account has been deleted");
             }
