@@ -35,16 +35,28 @@
                                 <div class="row form-group">
 
                                     <div class="col col-md-8">
-                                        <label asp-for="FirstName" class="control-label mt-2"></label>
-                                        <input asp-for="FirstName" class="form-control" />
-                                        <span asp-validation-for="FirstName" class="text-danger"></span>
-
-                                        <label asp-for="LastName" class="control-label mt-2"></label>
-                                        <input asp-for="LastName" class="form-control" />
-                                        <span asp-validation-for="LastName" class="text-danger"></span>
-
-                                        <label asp-for="Birthday" class="control-label mt-2"></label>
-                                        <input asp-for="Birthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+                                        <div>
+                                            <label asp-for="FirstName" class="control-label mt-2"></label>
+                                            <input asp-for="FirstName" class="form-control" />
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                        <div>
+                                            <label asp-for="LastName" class="control-label mt-2"></label>
+                                            <input asp-for="LastName" class="form-control" />
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                        <div>
+                                            <label asp-for="Birthday" class="control-label mt-2"></label>
+                                            <input asp-for="Birthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
+                                        </div>
+                                        <div>
+                                            <label asp-for="RoleId" class="control-label mt-2"></label>
+                                            <div>
+                                                @Html.DropDownListFor(x => Model.RoleId, new SelectList(Model.RoleList, "Id", "Name"),
+                                                                       htmlAttributes: new { @class = "form-control", id = "selectionRoles" })
+                                                @Html.ValidationMessageFor(x => x.RoleId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="col col-md-4">

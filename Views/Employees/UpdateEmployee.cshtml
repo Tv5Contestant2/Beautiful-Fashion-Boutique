@@ -47,6 +47,16 @@
                                         <input asp-for="Birthday" class="form-control" id="date" placeholder="MM/DD/YYY" type="date" />
                                     </div>
 
+                                        <div>
+                                            <label asp-for="RoleId" class="control-label mt-2"></label>
+                                            <div>
+                                                @Html.DropDownListFor(x => Model.RoleId, new SelectList(Model.RoleList, "Id", "Name"),
+                                                                       htmlAttributes: new { @class = "form-control", id = "selectionRoles" })
+                                                @Html.ValidationMessageFor(x => x.RoleId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="col col-md-4">
                                         <div class="row form-group">
                                             <div class="col col-md-8">

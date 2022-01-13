@@ -1,4 +1,5 @@
-﻿using ECommerce1.Data.Services.Interfaces;
+﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
 using ECommerce1.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -16,12 +17,14 @@ namespace ECommerce1.Controllers
         private readonly ICommonServices _commonServices;
         public readonly IRandomPasswordService _randomPasswordService;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailService _emailService;
 
         public EmployeesController(IEmployeesService service
             , ICommonServices commonServices
             , IRandomPasswordService randomPasswordService
             , UserManager<User> userManager
+            , RoleManager<IdentityRole> roleManager
             , IEmailService emailService
             )
         {
@@ -29,15 +32,20 @@ namespace ECommerce1.Controllers
             _commonServices = commonServices;
             _randomPasswordService = randomPasswordService;
             _userManager = userManager;
+            _roleManager = roleManager;
             _emailService = emailService;
         }
 
         public IActionResult CreateEmployee()
         {
+            var _roleList = _roleManager.Roles.Where(x => x.Name.ToLower() != RolesEnum.Admin.ToString().ToLower());
+            var _selectedDefaultRoleId = _roleManager.Roles.Where(x => x.Name.ToLower() == RolesEnum.Employee.ToString().ToLower()).FirstOrDefault().Id;
             var _initModel = new EmployeeViewModel()
             {
                 Image = _commonServices.NoImage,
-                Birthday = DateTime.Now
+                Birthday = DateTime.Now,
+                RoleId = _selectedDefaultRoleId,
+                RoleList = _roleList
             };
 
             return View(_initModel);
@@ -94,6 +102,9 @@ namespace ECommerce1.Controllers
             // SignInManager and redirect to index action of HomeController
             if (result.Succeeded)
             {
+                var _selectedRole = await _roleManager.FindByIdAsync(model.RoleId);
+                await _userManager.AddToRoleAsync(user, _selectedRole.Name);
+
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = Url.Action("ConfirmEmail", "Home", new { userId = user.Id, token = token }, Request.Scheme);
 
@@ -168,6 +179,10 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> UpdateEmployee(string id)
         {
             var _employee = await _service.GetEmployeeById(id);
+            var _employeeRoleName = (await _userManager.GetRolesAsync(_employee)).FirstOrDefault();
+            var _employeeRole = _roleManager.Roles.Where(x => x.Name == _employeeRoleName).FirstOrDefault();
+
+            var _roleList = _roleManager.Roles.Where(x => x.Name.ToLower() != RolesEnum.Admin.ToString().ToLower());
             var _employeeViewModel = new EmployeeViewModel
             {
                 AddressBaranggay = string.IsNullOrEmpty(_employee.AddressBaranggay) ? string.Empty : _employee.AddressBaranggay,
@@ -182,6 +197,8 @@ namespace ECommerce1.Controllers
                 Id = _employee.Id,
                 Image = _employee.Image,
                 LastName = string.IsNullOrEmpty(_employee.LastName) ? string.Empty : _employee.LastName,
+                RoleList = _roleList,
+                RoleId = _employeeRole.Id
             };
 
             return View(_employeeViewModel);

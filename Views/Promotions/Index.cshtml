@@ -1,5 +1,7 @@
 ﻿@model ECommerce1.ViewModel.PromoViewModel
-@using ECommerce1.Data.Enums
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ECommerce1.Data
 
 @{
     ViewData["Title"] = "Promo and Discounts Management";
@@ -31,9 +33,12 @@
             <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-75" placeholder="Search" />
                 <div class="col">
-                    <a asp-controller="Promotions" asp-action="CreatePromo" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Promo
-                    </a>
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.PromosAndDiscounts.Create)).Result.Succeeded)
+                    {
+                        <a asp-controller="Promotions" asp-action="CreatePromo" class="btn btn-info float-right" type="button">
+                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Promo
+                        </a>
+                    }
                 </div>
             </div>
 
@@ -109,12 +114,19 @@
                                         <div class="item col-2 text-center">@item.EndDate.Value.ToString("yyyy-MM-dd")</div>
                                         <div class="item col-1 text-center">@item.Status.Title</div>
                                         <div class="item col-1 text-center">
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdatePromo" asp-route-id="@item.Id">
-                                                <i class="far fa-edit"></i>
-                                            </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeletePromo" asp-route-id="@item.Id">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
+                                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.PromosAndDiscounts.Edit)).Result.Succeeded)
+                                            {
+                                                <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdatePromo" asp-route-id="@item.Id">
+                                                    <i class="far fa-edit"></i>
+                                                </a>
+                                            }
+                                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.PromosAndDiscounts.Delete)).Result.Succeeded)
+                                            {
+
+                                                <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeletePromo" asp-route-id="@item.Id">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                            }
                                         </div>
                                     </div>
                                 </div>

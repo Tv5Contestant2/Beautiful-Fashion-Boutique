@@ -11,7 +11,7 @@ namespace ECommerce1.Data.Seeds
         {
             //Seed Roles
             await roleManager.CreateAsync(new IdentityRole(RolesEnum.Admin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(RolesEnum.Basic.ToString()));
+            //await roleManager.CreateAsync(new IdentityRole(RolesEnum.Basic.ToString()));
             await roleManager.CreateAsync(new IdentityRole(RolesEnum.Employee.ToString()));
         }
     }

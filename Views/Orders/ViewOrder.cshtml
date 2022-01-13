@@ -1,5 +1,8 @@
 ﻿@model ECommerce1.ViewModel.OrderViewModel
 @using ECommerce1.Data.Enums
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ECommerce1.Data
 
 @{
     ViewData["Title"] = "Order Management";
@@ -54,21 +57,26 @@
                             {
                                 <div class="col-lg-4 text-end">
                                     @{
-                                        if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
+
+                                        if ((AuthorizationService.AuthorizeAsync(User, Permissions.Orders.Edit)).Result.Succeeded)
                                         {
-                                            <button class="btn btn-outline-danger" data-toggle="modal" data-target="#modal" onclick="ShowModal();">
-                                                <i class="fas fa-truck"></i> Set to Shipped
-                                            </button>
-                                        }
-                                        else if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
-                                        {
-                                            <form asp-controller="Orders" asp-action="UpdateOrder" asp-route-id="@Model.TransactionId">
-                                                <input type="hidden" asp-for="CustomersId" value="@Model.CustomersId" />
-                                                <button type="submit" class="btn btn-outline-danger">
-                                                    <span><i class="fas fa-check"></i> Set to Received </span>
+                                            if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Pending)
+                                            {
+                                                <button class="btn btn-outline-danger" data-toggle="modal" data-target="#modal" onclick="ShowModal();">
+                                                    <i class="fas fa-truck"></i> Set to Shipped
                                                 </button>
-                                            </form>
+                                            }
+                                            else if (Model.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
+                                            {
+                                                <form asp-controller="Orders" asp-action="UpdateOrder" asp-route-id="@Model.TransactionId">
+                                                    <input type="hidden" asp-for="CustomersId" value="@Model.CustomersId" />
+                                                    <button type="submit" class="btn btn-outline-danger">
+                                                        <span><i class="fas fa-check"></i> Set to Received </span>
+                                                    </button>
+                                                </form>
+                                            }
                                         }
+
                                     }
                                 </div>
                             }

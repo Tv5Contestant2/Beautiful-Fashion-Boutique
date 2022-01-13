@@ -1,5 +1,8 @@
 ﻿@model ECommerce1.ViewModel.ProductViewModel
 @using ECommerce1.Data.Enums
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ECommerce1.Data
 
 @{
     ViewData["Title"] = "Product Management";
@@ -31,9 +34,12 @@
             <div class="row d-flex justify-content-between">
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
-                    <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-info float-right" type="button">
-                        <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Product
-                    </a>
+                    @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Products.Create)).Result.Succeeded)
+                    {
+                        <a asp-controller="Products" asp-action="CreateProduct" class="btn btn-info float-right" type="button">
+                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Product
+                        </a>
+                    }
                     <button id="btnGrid" class="btn btn-info" type="button" data-toggle="tooltip" data-placement="bottom" title="View as grid"><i class="fas fa-list"></i></button>
                     <button id="btnThumbnail" class="btn btn-info" type="button" data-toggle="tooltip" data-placement="bottom" title="View as cards"><i class="fas fa-th-large"></i></button>
                 </div>
@@ -122,12 +128,19 @@
                                             <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="ViewProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="View">
                                                 <i class="far fa-eye"></i>
                                             </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
-                                                <i class="far fa-edit"></i>
-                                            </a>
-                                            <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
+                                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Products.Edit)).Result.Succeeded)
+                                            {
+                                                <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="UpdateProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Update">
+                                                    <i class="far fa-edit"></i>
+                                                </a>
+                                            }
+
+                                            @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Products.Delete)).Result.Succeeded)
+                                            {
+                                                <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="DeleteProduct" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Delete">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                            }
                                         </div>
                                     </div>
                                 </div>

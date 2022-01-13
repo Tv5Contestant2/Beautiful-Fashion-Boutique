@@ -42,8 +42,8 @@ namespace ECommerce1.Data
                         taskRoleResult.GetAwaiter().GetResult();
                         var taskClaimAdminResult = roleManager.SeedClaimsForAdmin();
                         taskClaimAdminResult.GetAwaiter().GetResult();
-                        var taskClaimBasicResult = roleManager.SeedClaimsForBasic();
-                        taskClaimBasicResult.GetAwaiter().GetResult();
+                        //var taskClaimBasicResult = roleManager.SeedClaimsForBasic();
+                        //taskClaimBasicResult.GetAwaiter().GetResult();
                         var taskClaimEmployeeResult = roleManager.SeedClaimsForEmployee();
                         taskClaimEmployeeResult.GetAwaiter().GetResult();
                     }

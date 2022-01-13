@@ -1,4 +1,7 @@
 ﻿@model ECommerce1.ViewModel.HomeUserViewModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using ECommerce1.Data
 
 @{
     ViewData["Title"] = "Customer Management";
@@ -31,21 +34,32 @@
                 <input id="inptSearch" class="form-control w-50" placeholder="Search" />
                 <div class="col">
                     <ul class="nav justify-content-end">
-                        <li class="nav-item pr-2">
-                            <a asp-controller="Customers" asp-action="BlockCustomers" class="btn btn-info float-right" type="button">
-                                <i class="fas fa-user-slash"></i>&nbsp;&nbsp;Blocked
-                            </a>
-                        </li>
-                        <li class="nav-item pr-2">
-                            <a asp-controller="Customers" asp-action="ArchivedCustomers" class="btn btn-info float-right" type="button">
-                                <i class="fas fa-user-clock"></i>&nbsp;&nbsp;Archived
-                            </a>
-                        </li>
-                        <li class="nav-item pr-2">
-                            <a asp-controller="Customers" asp-action="DeletedCustomers" class="btn btn-info float-right" type="button">
-                                <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Deleted
-                            </a>
-                        </li>
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Customers.BlockCustomer)).Result.Succeeded)
+                        {
+                            <li class="nav-item pr-2">
+                                <a asp-controller="Customers" asp-action="BlockCustomers" class="btn btn-info float-right" type="button">
+                                    <i class="fas fa-user-slash"></i>&nbsp;&nbsp;Blocked
+                                </a>
+                            </li>
+                        }
+
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Customers.ArchivedCustomer)).Result.Succeeded)
+                        {
+                            <li class="nav-item pr-2">
+                                <a asp-controller="Customers" asp-action="ArchivedCustomers" class="btn btn-info float-right" type="button">
+                                    <i class="fas fa-user-clock"></i>&nbsp;&nbsp;Archived
+                                </a>
+                            </li>
+                        }
+
+                        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Customers.Delete)).Result.Succeeded)
+                        {
+                            <li class="nav-item pr-2">
+                                <a asp-controller="Customers" asp-action="DeletedCustomers" class="btn btn-info float-right" type="button">
+                                    <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Deleted
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -126,11 +140,10 @@
                                             TimeSpan span = new TimeSpan();
                                             span = DateTime.Now.Subtract(item.LastLoggedIn);
 
-
                                             if (Model.IsDeleted)
                                             {
                                                 <span class="badge bg-danger">Temporary Deleted</span>
-                                                }
+                                            }
                                             else
                                             {
                                                 if (span.Days > 0)
@@ -153,7 +166,7 @@
                                         </a>
                                         <a class="btn btn-link text-danger text-hover-gray-3 p-0" asp-action="BlockCustomer" asp-route-id="@item.Id" data-toggle="tooltip" data-placement="bottom" title="Block">
                                             <i class="fas fa-user-slash"></i>
-</a>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

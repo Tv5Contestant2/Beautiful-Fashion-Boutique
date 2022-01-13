@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -54,5 +56,11 @@ namespace ECommerce1.ViewModel
         public string Password { get; set; }
 
         public bool IsAutoGeneratePassword { get; set; }
+
+        [Required]
+        [Display(Name = "Role")]
+        public string RoleId { get; set; }
+
+        public IEnumerable<IdentityRole> RoleList { get; set; }
     }
 }

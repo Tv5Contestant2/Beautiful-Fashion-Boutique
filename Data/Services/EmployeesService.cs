@@ -14,12 +14,15 @@ namespace ECommerce1.Data.Services
     {
         private readonly AppDBContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public EmployeesService(AppDBContext context
-            , UserManager<User> userManager)
+            , UserManager<User> userManager
+            , RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<(bool, IEnumerable<IdentityError>)> CreateEmployee(EmployeeViewModel model)
@@ -74,6 +77,14 @@ namespace ECommerce1.Data.Services
 
             // Update user data in AspNetUsers database table
             var result = await _userManager.UpdateAsync(_userRepo);
+
+            var _employeeRoleName = (await _userManager.GetRolesAsync(_userRepo)).FirstOrDefault();
+            var _selectedRole = _roleManager.Roles.Where(x => x.Id == model.RoleId).FirstOrDefault();
+            if (_employeeRoleName.ToLower() != _selectedRole.Name.ToLower())
+            {
+                await _userManager.RemoveFromRoleAsync(_userRepo, _employeeRoleName);
+                await _userManager.AddToRoleAsync(_userRepo, _selectedRole.Name);
+            }
         }
 
         public async Task<Employees> UpdateEmployee(long id, Employees employee)
