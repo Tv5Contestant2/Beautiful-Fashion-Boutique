@@ -1,0 +1,123 @@
+﻿@model ECommerce1.ViewModel.PermissionViewModel
+
+@{
+    ViewData["Title"] = "Permissions";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    @*Breadcrumbs*@
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h4 class="m-0">@ViewBag.Title</h4>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right px-3 py-2">
+                        <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Content*@
+    <section class="content">
+        <div class="container-fluid">
+            @*Search*@
+            <form asp-controller="Roles" asp-action="UpdatePermission">
+                <div class="row d-flex justify-content-between">
+                    <input id="inptSearch" class="form-control w-50" placeholder="Search" />
+                    <div class="col">
+                        <button type="submit" class="btn btn-info float-right">
+                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Save
+                        </button>
+                    </div>
+                </div>
+
+                @*Grid View*@
+                <div id="dvGrid" class="row mt-3">
+                    <div class="d-flex justify-content-lg-around">
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="cart-inner" id="dtRoleList">
+                                <div class="border-top border-bottom py-2">
+                                    <div class="row text-uppercase">
+                                        <div class="col-3"><strong class="small">Permission</strong></div>
+                                        <div class="col-2 text-center"><strong class="small">Status</strong></div>
+                                    </div>
+                                </div>
+                                @for (int i = 0; i < Model.RoleClaims.Count(); i++)
+                                {
+                                    <div class="row-item pt-4 pb-4 border-bottom">
+                                        <div class="row">
+                                            <div class="item col-3">
+                                                <input asp-for="@Model.RoleClaims[i].Value" type="hidden" />
+                                                @Model.RoleClaims[i].Value
+                                            </div>
+                                            <div class="item col-2 text-center">
+                                                <div class="form-check m-1">
+                                                    <input asp-for="@Model.RoleClaims[i].Selected" class="form-check-input" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div style="position: fixed; bottom: 10px; right: 10px">
+                <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    $(document).ready(function () {
+        $("#inptSearch").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#dtRoleList tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $("#btnGrid").click(function () {
+            $("#dvThumbnail").hide();
+            $("#dvGrid").show();
+        });
+
+        $("#btnThumbnail").click(function () {
+            $("#dvGrid").hide();
+            $("#dvThumbnail").show();
+        });
+    });
+</script>

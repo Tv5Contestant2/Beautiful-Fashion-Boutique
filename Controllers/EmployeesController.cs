@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
-    [AllowAnonymous]
     public class EmployeesController : Controller
     {
         private readonly IEmployeesService _service;
@@ -43,13 +42,13 @@ namespace ECommerce1.Controllers
             return View(_initModel);
         }
 
-        public IActionResult CreateRoles()
-        {
-            var _initModel = new RoleViewModel();
-            _initModel.Modules = _commonServices.GetModules();
+        //public IActionResult CreateRoles()
+        //{
+        //    var _initModel = new RoleViewModel();
+        //    _initModel.Modules = _commonServices.GetModules();
 
-            return View(_initModel);
-        }
+        //    return View(_initModel);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> CreateEmployee([Bind] EmployeeViewModel model)
@@ -125,19 +124,19 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Roles(int page = 1)
-        {
-            var data = await _service.GetAllEmployees();
+        //public async Task<IActionResult> Roles(int page = 1)
+        //{
+        //    var data = await _service.GetAllEmployees();
 
-            var viewModel = new HomeUserViewModel
-            {
-                ItemPerPage = 10,
-                Users = data,
-                CurrentPage = page
-            };
+        //    var viewModel = new HomeUserViewModel
+        //    {
+        //        ItemPerPage = 10,
+        //        Users = data,
+        //        CurrentPage = page
+        //    };
 
-            return View(viewModel);
-        }
+        //    return View(viewModel);
+        //}
 
         public async Task<IActionResult> DeleteEmployee(string id)
         {

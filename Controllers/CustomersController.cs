@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
 {
-    [AllowAnonymous]
     public class CustomersController : Controller
     {
         private readonly ICustomersService _service;

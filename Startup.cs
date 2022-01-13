@@ -1,6 +1,7 @@
 using ECommerce1.Data;
 using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
+using ECommerce1.Helper;
 using ECommerce1.Hubs;
 using ECommerce1.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -42,8 +43,8 @@ namespace ECommerce1
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -59,16 +60,24 @@ namespace ECommerce1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+            services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
             // DBContext configuration
             services.AddDbContext<AppDBContext>(context =>
                 context.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
+
+            //services.AddIdentity<User, IdentityRole>()
+            //.AddEntityFrameworkStores<AppDBContext>()
+            //.AddDefaultTokenProviders();
 
             services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = true;
             })
-                .AddEntityFrameworkStores<AppDBContext>()
-                .AddDefaultTokenProviders();
+                 .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<AppDBContext>();
 
             services.AddMvc(config =>
             {
@@ -82,8 +91,8 @@ namespace ECommerce1
             services.AddOptions<EmailSettings>().Bind(Configuration.GetSection("EmailSettings")).ValidateDataAnnotations();
             services.AddOptions<AdyenConfig>().Bind(Configuration.GetSection("AdyenConfig")).ValidateDataAnnotations();
 
-            // SignalR Configuration
-            services.AddSignalR();
+            //// SignalR Configuration
+            //services.AddSignalR();
 
             // Services Configuration
             services.AddScoped<IAdministratorService, AdministratorService>();
@@ -103,6 +112,7 @@ namespace ECommerce1
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IRandomPasswordService, RandomPasswordService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRolesService, RolesService>();
 
             services.AddControllersWithViews();
         }

@@ -1,10 +1,13 @@
 ﻿using ECommerce1.Data.Enums;
+using ECommerce1.Data.Seeds;
 using ECommerce1.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ECommerce1.Data
 {
@@ -16,6 +19,35 @@ namespace ECommerce1.Data
             {
                 var context = serviceScope.ServiceProvider.GetService<AppDBContext>();
                 context.Database.EnsureCreated();
+
+                var services = serviceScope.ServiceProvider;
+                var userManager = services.GetRequiredService<UserManager<User>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                if (roleManager.Roles.ToList().Count <= 0)
+                {
+                    var task = RolesSeeds.SeedRolesAsync(userManager, roleManager);
+                    task.GetAwaiter().GetResult();
+                }
+
+                var taskUserResult = userManager.FindByEmailAsync("admin@beautifultime.com");
+                var userAdmin = taskUserResult.GetAwaiter().GetResult();
+                if (userAdmin != null)
+                {
+                    var taskUserRoles = userManager.GetRolesAsync(userAdmin);
+                    var taskUserRolesResult = taskUserRoles.GetAwaiter().GetResult();
+                    if (taskUserRolesResult.Count <= 0)
+                    {
+                        var taskRoleResult = userManager.AddToRoleAsync(userAdmin, RolesEnum.Admin.ToString());
+                        taskRoleResult.GetAwaiter().GetResult();
+                        var taskClaimAdminResult = roleManager.SeedClaimsForAdmin();
+                        taskClaimAdminResult.GetAwaiter().GetResult();
+                        var taskClaimBasicResult = roleManager.SeedClaimsForBasic();
+                        taskClaimBasicResult.GetAwaiter().GetResult();
+                        var taskClaimEmployeeResult = roleManager.SeedClaimsForEmployee();
+                        taskClaimEmployeeResult.GetAwaiter().GetResult();
+                    }
+                }
 
                 #region Colors
 
@@ -178,6 +210,7 @@ namespace ECommerce1.Data
 
                     context.SaveChanges();
                 }
+
                 #endregion Modules
 
                 #region Payment Method
@@ -268,7 +301,7 @@ namespace ECommerce1.Data
                             CategoryId = (int)ProductCategoryEnum.Clothing
                         },
 
-                        // Shoes                        
+                        // Shoes
                         new Size()
                         {
                             Code = "6",
