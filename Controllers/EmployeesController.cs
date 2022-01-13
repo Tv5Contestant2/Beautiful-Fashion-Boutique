@@ -75,7 +75,12 @@ namespace ECommerce1.Controllers
                 model.Password = _randomPasswordService.GenerateRandomPassword();
             }
 
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                var _roleList = _roleManager.Roles.Where(x => x.Name.ToLower() != RolesEnum.Admin.ToString().ToLower());
+                model.RoleList = _roleList;
+                return View(model);
+            }
 
             model.DateCreated = DateTime.Now;
 
