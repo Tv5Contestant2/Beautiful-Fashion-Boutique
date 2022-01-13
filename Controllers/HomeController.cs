@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -42,20 +43,38 @@ namespace ECommerce1.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             ViewBag.HeroVideo = _administratorService.GetHeroVideo();
             return RedirectToAction("Home", "StoreFront");
         }
 
-        public IActionResult Error()
+        public async Task<IActionResult> Error()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             return View();
         }
 
-        public IActionResult RegistrationSuccess()
+        public async Task<IActionResult> RegistrationSuccess()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.CartCount = 0;
             ViewBag.WishlistCount = 0;
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
@@ -63,16 +82,28 @@ namespace ECommerce1.Controllers
             return View(new HomeUserViewModel());
         }
 
-        public IActionResult ResetLinkSent()
+        public async Task<IActionResult> ResetLinkSent()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.CartCount = 0;
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(new HomeUserViewModel());
         }
 
-        public IActionResult ResetPassword(string email, string token)
+        public async Task<IActionResult> ResetPassword(string email, string token)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.CartCount = 0;
             ViewBag.WishlistCount = 0;
             ViewBag.Email = email;
@@ -82,8 +113,14 @@ namespace ECommerce1.Controllers
             return View(new ResetPasswordViewModel());
         }
 
-        public IActionResult SignIn()
+        public async Task<IActionResult> SignIn()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.CartCount = 0;
             ViewBag.WishlistCount = 0;
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
@@ -94,6 +131,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn([Bind("SignInEmail,SignInPassword")] HomeUserViewModel model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             model.isLogInError = false;
             model.isSignUpError = false;
             var _removeValidation = "FirstName,LastName,Password,Email".Split(",");
@@ -173,6 +216,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> SignOut()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _signInManager.SignOutAsync();
             return RedirectToAction("Home", "StoreFront");
         }
@@ -180,6 +229,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp([Bind("FirstName,LastName,Email,Password,ConfirmPassword")] HomeUserViewModel model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             model.isLogInError = false;
             model.isSignUpError = false;
             var _removeValidation = "SignInEmail,SignInPassword".Split(",");
@@ -248,8 +303,14 @@ namespace ECommerce1.Controllers
             return View("SignIn", model);
         }
 
-        public IActionResult ForgotPassword()
+        public async Task<IActionResult> ForgotPassword()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.CartCount = 0;
             ViewBag.WishlistCount = 0;
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
@@ -259,6 +320,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> SubmitForgotPassword(ForgotPasswordViewModel model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (ModelState.IsValid)
             {
                 // Find the user by email
@@ -299,6 +366,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> SubmitResetPassword(ResetPasswordViewModel model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (ModelState.IsValid)
             {
                 // Find the user by email
@@ -332,6 +405,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ConfirmEmail(string userId)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _emailService.AccountVerified(userId);
 
             ViewBag.CartCount = 0;
@@ -342,6 +421,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> UnderConstruction()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
@@ -354,6 +439,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdatePasswordFirstLogin(string email, string token)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await Task.Delay(0);
             var _model = new ResetPasswordViewModel();
             _model.Email = email;
@@ -366,6 +457,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePasswordFirstLogin([Bind] ResetPasswordViewModel model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             if (ModelState.IsValid)
             {

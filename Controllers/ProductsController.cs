@@ -81,6 +81,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProduct(Product product)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await Task.Delay(0);
 
             if (string.IsNullOrEmpty(product.ProductVariantJSON)) ModelState.AddModelError(string.Empty, "Product variant(s) is required.");
@@ -127,6 +133,12 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("DeleteProduct")]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var productDetails = await _service.GetProductById(id);
             if (productDetails == null) return RedirectToAction("Error", "Home");
 
@@ -168,6 +180,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProduct(long id, Product product)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (string.IsNullOrEmpty(product.ProductVariantJSON)) ModelState.AddModelError(string.Empty, "Product variant(s) is required.");
 
             if (!ModelState.IsValid)
@@ -228,8 +246,14 @@ namespace ECommerce1.Controllers
             return View(_product);
         }
 
-        public IActionResult CreateReview(ProductViewModel viewModel)
+        public async Task<IActionResult> CreateReview(ProductViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var productReview = new ProductReview
             {
                 CustomersId = viewModel.CustomersId,

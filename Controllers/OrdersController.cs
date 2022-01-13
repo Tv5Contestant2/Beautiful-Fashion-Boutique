@@ -161,6 +161,12 @@ namespace ECommerce1.Controllers
         [Route("Orders/CancelOrder/{transactionId:Guid}")]
         public async Task<IActionResult> CancelOrder(string transactionId, OrderViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _service.CancelOrder(transactionId, viewModel);
 
             return Redirect(Request.Headers["Referer"].ToString());
@@ -184,6 +190,12 @@ namespace ECommerce1.Controllers
         [Route("Orders/DeclineReturn/{transactionId:Guid}")]
         public async Task<IActionResult> DeclineReturn(string transactionId, OrderViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _service.DeclineReturn(transactionId, viewModel);
 
             return RedirectToAction("ViewReturn", viewModel);
@@ -204,6 +216,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AddToReturns(OrderViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
@@ -215,6 +233,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> RemoveFromReturns(OrderViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
@@ -226,6 +250,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ClearReturns(OrderViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await Task.Delay(0);
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");

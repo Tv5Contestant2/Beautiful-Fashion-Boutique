@@ -143,6 +143,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([Bind] CustomerViewModel model)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
             if (!ModelState.IsValid)
@@ -194,6 +200,12 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("DeleteCustomer")]
         public async Task<IActionResult> DeleteCustomerConfirmed(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var customer = await _service.GetCustomerById(id);
             if (customer == null) return RedirectToAction("Error", "Home");
 
@@ -241,6 +253,12 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("UnBlockCustomer")]
         public async Task<IActionResult> UnBlockConfirmed(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var customer = await _service.GetCustomerById(id);
             if (customer == null) return RedirectToAction("Error", "Home");
 
@@ -316,6 +334,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCustomer([Bind] CustomerViewModel model)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
             if (string.IsNullOrEmpty(model.Password)) //Do not update password if empty
             {

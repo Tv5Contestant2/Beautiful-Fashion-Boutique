@@ -19,6 +19,7 @@ namespace ECommerce1.Controllers
     public class StoreFrontController : Controller
     {
         private readonly IAdministratorService _administratorService;
+        private readonly ICommonServices _commonService;
         private readonly ICartService _cartService;
         private readonly IProductCategoriesService _productCategoriesService;
         private readonly IProductsService _service;
@@ -31,6 +32,7 @@ namespace ECommerce1.Controllers
 
         public StoreFrontController( IAdministratorService administratorService
             , ICartService cartService
+            , ICommonServices commonService
             , IProductsService service
             , IProductCategoriesService productCategoriesService
             , IUserService userService
@@ -41,6 +43,7 @@ namespace ECommerce1.Controllers
             _service = service;
             _administratorService = administratorService;
             _productCategoriesService = productCategoriesService;
+            _commonService = commonService;
             _cartService = cartService;
             _userService = userService;
             _userManager = userManager;
@@ -48,8 +51,14 @@ namespace ECommerce1.Controllers
             _emailService = emailService;
         }
 
-        public IActionResult Index(int page = 1)
+        public async Task<IActionResult> Index(int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             ViewBag.HeroVideo = _administratorService.GetHeroVideo();
             return View(new ProductViewModel());
@@ -57,6 +66,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Home()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
 
             var products = await _service.GetFeaturedProductsOnSale();
@@ -89,6 +104,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Mens(int categoryId = 0, int sizeId = 0, int colorId = 0, int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             var products = new List<Product>();
 
@@ -127,6 +148,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Womens(int categoryId = 0, int sizeId = 0, int colorId = 0, int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             var products = new List<Product>();
 
@@ -165,6 +192,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Trending(int categoryId = 0, int sizeId = 0, int colorId = 0, int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             var products = new List<Product>();
 
@@ -203,6 +236,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ShopAll(int categoryId = 0, int sizeId = 0, int colorId = 0, int page = 1)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             var products = new List<Product>();
 
@@ -241,6 +280,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AboutUs()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
@@ -252,6 +297,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ContactUs()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
@@ -264,6 +315,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ViewProduct(long id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -298,6 +355,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> SendMessage(MessageViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _emailService.SendMessage(viewModel);
 
             ViewBag.FacebookLink = _administratorService.GetFacebookLink();

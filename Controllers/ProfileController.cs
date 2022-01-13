@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECommerce1.Controllers
@@ -50,6 +51,12 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             var _customer = await _customersService.GetCustomerById(userId);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
@@ -87,6 +94,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([Bind] CustomerViewModel model)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
             if (string.IsNullOrEmpty(model.Password)) //Do not update password if empty
             {
@@ -108,6 +121,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Orders()
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.ReturnsCount = await _orderService.GetCustomerReturnsCount(userId);
@@ -127,6 +146,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Returns()
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
@@ -146,6 +171,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Wishlist()
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
@@ -164,6 +195,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Messages()
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
@@ -190,6 +227,12 @@ namespace ECommerce1.Controllers
         [Route("Profile/ViewOrder/{transactionId:Guid}")]
         public async Task<IActionResult> ViewOrder(Guid transactionId)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
@@ -225,6 +268,12 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> ViewReturns(Guid transactionId, long productId) //
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
@@ -254,6 +303,12 @@ namespace ECommerce1.Controllers
         [Route("Profile/ReturnOrder/{productId:long}")]
         public async Task<IActionResult> ReturnOrder(long productId, OrderViewModel viewModel)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);
@@ -278,14 +333,26 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public IActionResult ReturnSuccess()
+        public async Task<IActionResult> ReturnSuccess()
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             return View();
         }
 
         public async Task<IActionResult> CancelReturnRequest(Guid transactionId, long productId)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await _orderService.CancelReturnRequest(transactionId, productId);
 
             return View("CancelSuccess");
@@ -293,14 +360,27 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> CancelRequestByProduct(OrderViewModel viewModel)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             await Task.Delay(0);
             _orderService.CancelRequestByProduct(viewModel);
 
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        public IActionResult CreateMessage(MessageViewModel message)
+        public async Task<IActionResult> CreateMessage(MessageViewModel message)
         {
+
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             _messageService.CreateMessage(message);
 
             return Redirect(Request.Headers["Referer"].ToString());
@@ -309,6 +389,12 @@ namespace ECommerce1.Controllers
         [Route("Profile/ViewMessage/{messageId:Guid}")]
         public async Task<IActionResult> ViewMessage(Guid messageId)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var userId = _userManager.GetUserId(HttpContext.User);
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.OrderCount = await _orderService.GetCustomerOrderCount(userId);

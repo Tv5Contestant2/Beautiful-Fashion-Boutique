@@ -57,6 +57,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRole([Bind] RoleViewModel model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!ModelState.IsValid) return View(model);
 
             var _result = await _rolesService.AddRole(model.Role);
@@ -110,6 +116,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateRole([Bind] RoleViewModel model)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!ModelState.IsValid) return View(model);
 
             var _result = await _rolesService.UpdateRole(model.Id, model.Role);
@@ -138,6 +150,12 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("DeleteRole")]
         public async Task<IActionResult> DeleteRoleConfirmed(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _model = await _rolesService.FindByIdAsync(id);
             if (_model == null) return RedirectToAction("Error", "Home");
 

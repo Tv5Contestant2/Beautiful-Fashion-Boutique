@@ -31,7 +31,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AboutUs()
         {
-
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
 
@@ -72,15 +71,27 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public IActionResult CreateAboutUs(About about)
+        public async Task<IActionResult> CreateAboutUs(About about)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             _service.CreateAboutUs(about);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult CreateContactUs(SocMed socMed)
+        public async Task<IActionResult> CreateContactUs(SocMed socMed)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             _service.CreateContactUs(socMed);
 
             return RedirectToAction(nameof(Index));
@@ -131,16 +142,28 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public IActionResult CreateMessage(MessageViewModel message)
+        public async Task<IActionResult> CreateMessage(MessageViewModel message)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             _messageService.CreateMessage(message);
 
             return Redirect(Request.Headers["Referer"].ToString());
         }
         
 
-        public IActionResult UpdateSettings(SettingsViewModel viewModel)
+        public async Task<IActionResult> UpdateSettings(SettingsViewModel viewModel)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             _service.UpdateSettings(viewModel);
 
             return RedirectToAction(nameof(Index));

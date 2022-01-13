@@ -67,6 +67,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePromo([Bind] Promos model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
             if (model.StartDate == null) ModelState.AddModelError("StartDate", "The field Start Date is required.");
@@ -117,6 +123,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePromo(long id, [Bind] Promos model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
             if (model.StartDate == null) ModelState.AddModelError("StartDate", "The field Start Date is required.");
@@ -156,6 +168,12 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("DeletePromo")]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var PromoDetails = await _service.GetPromoById(id);
             if (PromoDetails == null) return RedirectToAction("Error", "Home");
 

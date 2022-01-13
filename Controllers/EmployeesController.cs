@@ -60,6 +60,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEmployee([Bind] EmployeeViewModel model)
         {
+            var _user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
             if (model.IsAutoGeneratePassword)
@@ -157,6 +163,12 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("DeleteEmployee")]
         public async Task<IActionResult> DeleteEmployeeConfirmed(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             var _employee = await _service.GetEmployeeById(id);
             if (_employee == null) return RedirectToAction("Error", "Home");
 
@@ -203,6 +215,12 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateEmployee([Bind] EmployeeViewModel model)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
+
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            ViewBag.Role = role;
+
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
             if (string.IsNullOrEmpty(model.Password)) //Do not update password if empty
             {
