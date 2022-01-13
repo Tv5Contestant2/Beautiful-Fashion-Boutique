@@ -1,0 +1,147 @@
+﻿@model ECommerce1.ViewModel.OrderViewModel
+@using ECommerce1.Data.Enums
+
+@{
+    ViewData["Title"] = "Monthly Sales Report";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    @*Breadcrumbs*@
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h4 class="m-0">@ViewBag.Title</h4>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right px-3 py-2">
+                        <li class="breadcrumb-item"><a asp-controller="Administrator" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Content*@
+    <section class="content">
+        <div class="container-fluid">
+            @*Search*@
+            <div class="row d-flex justify-content-between">
+                <input id="inptSearch" class="form-control w-50" placeholder="Search" />
+                <div class="col">
+                    <a asp-controller="Reports" asp-action="GetMonthlySalesReport" class="btn btn-info float-right" type="button">
+                        <i class="fas fa-download"></i>&nbsp;&nbsp;Print Report
+                    </a>
+                </div>
+            </div>
+
+            @*Grid View*@
+            <div class="row mt-3">
+                <div class="d-flex justify-content-lg-around">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="cart-inner" id="dtOrderList">
+                            <div class="border-top border-bottom py-2">
+                                <div class="row text-uppercase">
+                                    <div class="col-2"><strong class="small">Transaction Id</strong></div>
+                                    <div class="col-2"><strong class="small">Customer</strong></div>
+                                    <div class="col-1 text-center"> <strong class="small">Order Date</strong></div>
+                                    <div class="col-2 text-center"> <strong class="small">Total</strong></div>
+                                    <div class="col-1 text-center"><strong class="small">Status</strong></div>
+                                    <div class="col-1 text-center"><strong class="small">Delivery Status</strong></div>
+                                    <div class="col-1 text-center"> <strong class="small">Expected Delivery</strong></div>
+                                    <div class="col-1 text-center"> <strong class="small">Date Received</strong></div>
+                                </div>
+                            </div>
+                            @foreach (var item in Model.PaginatedList())
+                            {
+                                var @total = item.Total + item.ShippingFee + item.TaxAmount;
+                                <div class="row-item pt-4 pb-4 border-bottom">
+                                    <div class="row text-left">
+                                        <div class="item col-2">@item.TransactionId</div>
+                                        <div class="item col-2">@string.Format("{0} {1}", item.Customers.FirstName, @item.Customers.LastName)</div>
+                                        <div class="item col-1 text-center">@item.OrderDate.ToShortDateString()</div>
+                                        <div class="item col-2 text-center">Php @total</div>
+                                        <div class="item col-1 text-center"><span class="badge @item.OrderStatus.Class">@item.OrderStatus.Title</span></div>
+                                        <div class="item col-1 text-center">
+                                            @{
+                                                if (item.OrderStatusId == (int)OrderStatusEnum.Created ||
+                                                    item.OrderStatusId == (int)OrderStatusEnum.Completed ||
+                                                    item.OrderStatusId == (int)OrderStatusEnum.Shipped)
+                                                {
+                                                    <span class="badge @item.DeliveryStatus.Class">@item.DeliveryStatus.Title</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>&nbsp;</span>
+                                                }
+                                            }
+                                        </div>
+                                        <div class="item col-1 text-center">
+                                            @(item.ExpectedDeliveryDate.ToShortDateString() != "1/1/0001" ? @item.ExpectedDeliveryDate.ToShortDateString() : "--")
+                                        </div>
+                                        <div class="item col-1 text-center">
+                                            @(item.ReceivedDate.ToShortDateString() != "1/1/0001" ? @item.ReceivedDate.ToShortDateString() : "--")
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Pagination*@
+            <div class="row">
+                <div class=" d-flex justify-content-between px-4 py-3 w-100">
+                    <div class="hint-text">Showing <b>@Model.PaginatedList().Count()</b> out of <b>@Model.Orders.Count()</b> entries</div>
+                    <ul class="pagination">
+                        @for (int i = 1; i <= Model.PageCount(); i++)
+                        {
+                            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div style="position: fixed; bottom: 10px; right: 10px">
+                <button onclick="topFunction()" id="btnTop" value="Back to Top" class="btn btn-outline-danger">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    var btnTop = document.getElementById("btnTop");
+    window.onload = function () { btnTop.style.display = "none"; }
+    window.onscroll = function () { scrollFunction(); };
+
+    $(document).ready(function () {
+        $("#inptSearch").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#dtOrderList .row-item").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            btnTop.style.display = "block";
+        } else {
+            btnTop.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+</script>

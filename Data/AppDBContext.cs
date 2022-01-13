@@ -74,6 +74,8 @@ namespace ECommerce1.Data
 
         public DbSet<Status> Statuses { get; set; }
 
+        public DbSet<Settings> Settings { get; set; }
+
         public DbSet<StockStatus> StockStatuses { get; set; }
 
         public DbSet<Transactions> Transactions { get; set; }

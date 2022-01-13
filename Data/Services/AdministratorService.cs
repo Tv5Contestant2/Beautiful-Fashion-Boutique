@@ -1,6 +1,7 @@
 ﻿using ECommerce1.Data.Enums;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,18 @@ namespace ECommerce1.Data.Services
         {
             _context = context;
             _commonServices = commonServices;
+        }
+
+        public string GetStoreLogo() 
+        {
+            var result = _context.Settings.First(x => x.Title == "Store Logo").Value;
+            return result;
+        }
+
+        public string GetHeroVideo() 
+        {
+            var result = _context.Settings.First(x => x.Title == "Hero Video").Value;
+            return result;
         }
 
         public About GetAboutUs() 
@@ -59,6 +72,16 @@ namespace ECommerce1.Data.Services
         public void UpdateContactUs(SocMed socMed)
         {
             _context.Socials.Update(socMed);
+            _context.SaveChanges();
+        }
+
+        public void UpdateSettings(SettingsViewModel settings)
+        {
+            var _storelogo = _context.Settings.First(x => x.Title == "Store Logo");
+            var _herovideo = _context.Settings.First(x => x.Title == "Hero Video");
+
+            _context.Settings.Update(_storelogo);
+            _context.Settings.Update(_herovideo);
             _context.SaveChanges();
         }
 

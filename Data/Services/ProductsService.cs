@@ -193,7 +193,7 @@ namespace ECommerce1.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Product>> GetAllProducts(int colorId)
+        public async Task<List<Product>> GetAllProducts()
         {
             var result = await _context.Products
                 .Include(x => x.ProductImages)

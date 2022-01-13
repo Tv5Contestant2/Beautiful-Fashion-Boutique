@@ -37,6 +37,17 @@ namespace ECommerce1.Controllers
             return View(result);
         }
 
+        public IActionResult Settings()
+        {
+            var viewModel = new SettingsViewModel()
+            {
+                StoreLogo = _service.GetStoreLogo(),
+                HeroVideo = _service.GetHeroVideo(),
+            };
+
+            return View(viewModel);
+        }
+
         public IActionResult CreateAboutUs(About about)
         {
             _service.CreateAboutUs(about);
@@ -87,6 +98,14 @@ namespace ECommerce1.Controllers
         public IActionResult CreateMessage(MessageViewModel message)
         {
             _messageService.CreateMessage(message);
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+        
+
+        public IActionResult UpdateSettings(SettingsViewModel settings)
+        {
+            _service.UpdateSettings(settings);
 
             return Redirect(Request.Headers["Referer"].ToString());
         }

@@ -40,7 +40,7 @@
         <div class="container-fluid">
             @*<a class="navbar-brand" href="index.html"><img src="https://d19m59y37dris4.cloudfront.net/hub/2-0/img/logo.013e0372.png" alt="..." width="180"></a>*@
             <a asp-controller="StoreFront" asp-action="Home" class="navbar-brand">
-                <img src="~/images/store-logo.jpg" class="d-inline-block align-middle mr-2 img-fluid" width="250">
+                <img src="@String.Format("data:image/jpg;base64,{0}", ViewBag.StoreLogo)" class="d-inline-block align-middle mr-2 img-fluid" width="250">
             </a>
             <button class="navbar-toggler rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">

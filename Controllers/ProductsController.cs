@@ -29,7 +29,7 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index(int page)
         {
-            var data = await _service.GetAllProducts(0);
+            var data = await _service.GetAllProducts();
 
             foreach (var item in data)
             {

@@ -1,4 +1,5 @@
 ﻿using ECommerce1.Models;
+using ECommerce1.ViewModel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,6 +7,10 @@ namespace ECommerce1.Data.Services.Interfaces
 {
     public interface IAdministratorService
     {
+        public string GetStoreLogo();
+
+        public string GetHeroVideo();
+
         public About GetAboutUs();
 
         public SocMed GetContactUs();
@@ -19,6 +24,8 @@ namespace ECommerce1.Data.Services.Interfaces
         public void CreateContactUs(SocMed socMed);
 
         public void UpdateContactUs(SocMed socMed);
+
+        public void UpdateSettings(SettingsViewModel settings);
 
         public decimal GetProductSales();
 

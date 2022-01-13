@@ -15,6 +15,7 @@ namespace ECommerce1.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
+        private readonly IAdministratorService _administratorService;
         private readonly ICartService _cartService;
         private readonly IEmailService _emailService;
         private readonly IOptions<EmailSettings> _emailSettings;
@@ -23,6 +24,7 @@ namespace ECommerce1.Controllers
         private readonly ICommonServices _commonServices;
 
         public HomeController(ICartService cartService
+            , IAdministratorService administratorService
             , IEmailService emailService
             , IOptions<EmailSettings> emailSettings
             , UserManager<User> userManager
@@ -30,6 +32,7 @@ namespace ECommerce1.Controllers
             , ICommonServices commonServices
             )
         {
+            _administratorService = administratorService;
             _cartService = cartService;
             _emailService = emailService;
             _emailSettings = emailSettings;
@@ -41,12 +44,9 @@ namespace ECommerce1.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Index()
         {
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
+            ViewBag.HeroVideo = _administratorService.GetHeroVideo();
             return RedirectToAction("Home", "StoreFront");
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         public IActionResult Error()
@@ -58,6 +58,7 @@ namespace ECommerce1.Controllers
         {
             ViewBag.CartCount = 0;
             ViewBag.WishlistCount = 0;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(new HomeUserViewModel());
         }
@@ -65,6 +66,7 @@ namespace ECommerce1.Controllers
         public IActionResult ResetLinkSent()
         {
             ViewBag.CartCount = 0;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(new HomeUserViewModel());
         }
@@ -75,6 +77,7 @@ namespace ECommerce1.Controllers
             ViewBag.WishlistCount = 0;
             ViewBag.Email = email;
             ViewBag.Token = token;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(new ResetPasswordViewModel());
         }
@@ -83,6 +86,7 @@ namespace ECommerce1.Controllers
         {
             ViewBag.CartCount = 0;
             ViewBag.WishlistCount = 0;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(new HomeUserViewModel());
         }
@@ -163,6 +167,7 @@ namespace ECommerce1.Controllers
                 model.isLogInError = true;
             }
 
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             return View(model);
         }
 
@@ -239,6 +244,7 @@ namespace ECommerce1.Controllers
                 model.isSignUpError = true;
             }
 
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             return View("SignIn", model);
         }
 
@@ -246,6 +252,7 @@ namespace ECommerce1.Controllers
         {
             ViewBag.CartCount = 0;
             ViewBag.WishlistCount = 0;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(new ForgotPasswordViewModel());
         }
@@ -283,6 +290,7 @@ namespace ECommerce1.Controllers
 
             ViewBag.CartCount = 0;
             ViewBag.WishlistCount = 0;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             model.isLogInError = true;
             ModelState.AddModelError(string.Empty, "Email does not exist.");
@@ -318,6 +326,7 @@ namespace ECommerce1.Controllers
                 return View("ResetPasswordSuccess", model);
             }
             // Display validation errors if model state is not valid
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             return View("ResetPasswordSuccess", model);
         }
 
@@ -326,6 +335,7 @@ namespace ECommerce1.Controllers
             await _emailService.AccountVerified(userId);
 
             ViewBag.CartCount = 0;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(new HomeUserViewModel());
         }
@@ -336,6 +346,7 @@ namespace ECommerce1.Controllers
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View();
         }
@@ -348,12 +359,14 @@ namespace ECommerce1.Controllers
             _model.Email = email;
             _model.Token = token;
 
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             return View(_model);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdatePasswordFirstLogin([Bind] ResetPasswordViewModel model)
         {
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             if (ModelState.IsValid)
             {
                 // Find the user by email

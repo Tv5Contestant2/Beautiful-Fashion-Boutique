@@ -16,7 +16,7 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public Task DeleteProduct(long id);
 
-        public Task<List<Product>> GetAllProducts(int colorId);
+        public Task<List<Product>> GetAllProducts();
 
         public Task<List<Product>> GetLatestProducts(int colorId);
 

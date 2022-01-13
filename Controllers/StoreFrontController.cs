@@ -50,6 +50,8 @@ namespace ECommerce1.Controllers
 
         public IActionResult Index(int page = 1)
         {
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
+            ViewBag.HeroVideo = _administratorService.GetHeroVideo();
             return View(new ProductViewModel());
         }
 
@@ -66,6 +68,8 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
             ViewBag.Products = products;
             ViewBag.CustomersId = userId;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
+            ViewBag.HeroVideo = _administratorService.GetHeroVideo();
 
             await _userService.ArchiveUsers();
             await _userService.DeleteCustomers();
@@ -107,6 +111,7 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
             ViewBag.Sizes = sizes;
             ViewBag.Colors = colors;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var viewModel = new ProductViewModel
             {
@@ -144,6 +149,7 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
             ViewBag.Sizes = sizes;
             ViewBag.Colors = colors;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var viewModel = new ProductViewModel
             {
@@ -181,6 +187,7 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
             ViewBag.Sizes = sizes;
             ViewBag.Colors = colors;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var viewModel = new ProductViewModel
             {
@@ -200,7 +207,7 @@ namespace ECommerce1.Controllers
             var products = new List<Product>();
 
             if (categoryId == 0)
-                products = await _service.GetAllProducts(colorId);
+                products = await _service.GetAllProducts();
             else if (categoryId != 0 && sizeId != 0)
                 products = await _service.GetProductsBySize(categoryId, sizeId, colorId);
             else
@@ -218,6 +225,7 @@ namespace ECommerce1.Controllers
             ViewBag.ProductCategories = productCategories;
             ViewBag.Sizes = sizes;
             ViewBag.Colors = colors;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var viewModel = new ProductViewModel
             {
@@ -236,6 +244,7 @@ namespace ECommerce1.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
 
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var result = _administratorService.GetAboutUs();
             return View(result);
@@ -248,6 +257,7 @@ namespace ECommerce1.Controllers
             ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
             ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
             ViewBag.ContactUs = _administratorService.GetContactUs();
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             return View(new MessageViewModel());
         }
@@ -266,6 +276,7 @@ namespace ECommerce1.Controllers
 
             ViewBag.CustomersId = userId;
             ViewBag.Product = productDetails;
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
             var productReviews = await _service.GetProductReviews(id);
 
@@ -290,6 +301,7 @@ namespace ECommerce1.Controllers
             await _emailService.SendMessage(viewModel);
 
             ViewBag.FacebookLink = _administratorService.GetFacebookLink();
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             return View("MessageSuccess");
         }
 
