@@ -136,14 +136,14 @@
                                                     <li class="list-inline-item mt-2">
                                                         <span class="mb-2">Colors</span>
                                                         @Html.DropDownListFor(x => Model.CartDetails.ColorId, new SelectList(Model.Colors, "Id", "Title"),
-htmlAttributes: new { @class = "form-control choices", id = "ColorId" })
+htmlAttributes: new { @class = "form-control", id = "ColorId" })
                                                     </li>
                                                     @if (Model.Size.FirstOrDefault() != null)
                                                     {
                                                         <li class="list-inline-item mt-2">
                                                             <span class="mb-2">Sizes</span>
                                                             @Html.DropDownListFor(x => Model.CartDetails.SizeId, new SelectList(Model.Size, "Id", "Title"),
-htmlAttributes: new { @class = "form-control choices", id = "SizeId" })
+htmlAttributes: new { @class = "form-control", id = "SizeId" })
                                                         </li>
                                                     }
                                                 </ul>

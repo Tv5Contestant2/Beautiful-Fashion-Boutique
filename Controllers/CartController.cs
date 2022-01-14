@@ -19,7 +19,6 @@ namespace ECommerce1.Controllers
     public class CartController : Controller
     {
         private readonly IAdministratorService _administratorService;
-        private readonly ICommonServices _commonService;
         private readonly ICartService _service;
         private readonly IEmailService _emailService;
         private readonly IOrderService _orderService;
@@ -31,7 +30,6 @@ namespace ECommerce1.Controllers
         public CartController(
             UserManager<User> userManager
             , IAdministratorService administratorService
-            , ICommonServices commonService
             , ICartService service
             , IEmailService emailService
             , IOrderService orderService
@@ -41,7 +39,6 @@ namespace ECommerce1.Controllers
         {
             _service = service;
             _administratorService = administratorService;
-            _commonService = commonService;
             _emailService = emailService;
             _orderService = orderService;
             _productsService = productsService;
@@ -52,12 +49,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -79,12 +70,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Wishlist()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -99,12 +84,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AddToCart(CartDetails cartDetails)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -134,12 +113,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AddToWishlist(ProductViewModel viewModel)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -157,12 +130,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AddToCartByQty(long id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -178,12 +145,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AddToCartFromWishlist(long id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -217,12 +178,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AddToWishlistFromCart(long id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             if (userId == null) return RedirectToAction("SignIn", "Home");
 
@@ -242,12 +197,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> RemoveFromCartByQty(long id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             var cartDetails = await _service.GetCartItemsById(id);
             if (cartDetails == null) return RedirectToAction("Error", "Home");
@@ -266,12 +215,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> RemoveFromCart(long id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             var _cartDetails = await _service.GetCartItemsById(id);
             if (_cartDetails == null) return RedirectToAction("Error", "Home");
@@ -285,12 +228,6 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("RemoveFromCart")]
         public async Task<IActionResult> RemoveFromCartConfirmed(long id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             var cartDetails = await _service.GetCartItemsById(id);
             if (cartDetails == null) return RedirectToAction("Error", "Home");
@@ -305,12 +242,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> RemoveFromWishlist(long id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
 
             ViewBag.CartCount = await _service.GetCartTotalQty(userId);
@@ -323,12 +254,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Checkout(Cart cart)
         {
-            var _user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             if (cart.CustomersId != null)
             {
                 var userId = _userManager.GetUserId(HttpContext.User);
@@ -367,12 +292,6 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> OrderConfirmed(Cart cart)
         {
-            var _user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var userId = _userManager.GetUserId(HttpContext.User);
             var user = await _userManager.FindByIdAsync(userId);
 
@@ -475,12 +394,6 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> AdyenPaymentResponse([FromQuery(Name = "redirectResult")] string redirectResult)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             await Task.Delay(0);
 
             var _result = _adyenService.HandlePaymentResponse(redirectResult);

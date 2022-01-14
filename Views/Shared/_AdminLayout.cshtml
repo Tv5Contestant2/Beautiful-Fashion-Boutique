@@ -42,7 +42,7 @@
                 </div>
                 <div class="sidebar-header">
                     @{
-                        if (UserManager.GetUserAsync(User) != null)
+                        if (await UserManager.GetUserAsync(User) != null)
                         {
                             var user = UserManager.GetUserAsync(User).Result;
 
@@ -55,7 +55,6 @@
                                     @user.FirstName
                                     <strong>@user.LastName</strong>
                                 </span>
-                                <span class="user-role text-uppercase">@ViewBag.Role</span>
                                 <span class="user-status">
                                     <i class="fa fa-circle"></i>
                                     <span>Online</span>

@@ -31,36 +31,18 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> AboutUs()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var result = _service.GetAboutUs();
             return View(result);
         }
 
         public async Task<IActionResult> ContactUs()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var result = _service.GetContactUs();
             return View(result);
         }
 
         public async Task<IActionResult> Settings()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var viewModel = new SettingsViewModel()
             {
                 StoreLogo = _service.GetStoreLogo(),
@@ -73,12 +55,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> CreateAboutUs(About about)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             _service.CreateAboutUs(about);
 
             return RedirectToAction(nameof(Index));
@@ -86,12 +62,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> CreateContactUs(SocMed socMed)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             _service.CreateContactUs(socMed);
 
             return RedirectToAction(nameof(Index));
@@ -99,12 +69,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var viewModel = new DashboardViewModel()
             {
                 Sales = _service.GetProductSales(),
@@ -125,12 +89,6 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> Messages()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var result = await _messageService.GetAllCustomerMessages();
 
             var viewModel = new MessageViewModel
@@ -144,12 +102,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> CreateMessage(MessageViewModel message)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             _messageService.CreateMessage(message);
 
             return Redirect(Request.Headers["Referer"].ToString());
@@ -158,12 +110,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> UpdateSettings(SettingsViewModel viewModel)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             _service.UpdateSettings(viewModel);
 
             return RedirectToAction(nameof(Index));
@@ -173,12 +119,6 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> ViewMessage(Guid messageId)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var result = await _messageService.GetMessageConversation(messageId);
 
             var viewModel = new MessageViewModel

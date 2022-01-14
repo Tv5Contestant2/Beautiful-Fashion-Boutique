@@ -31,12 +31,6 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(string id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var _role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = _role;
-
             var model = new PermissionViewModel();
             var allPermissions = new List<RoleClaimsViewModel>();
 
@@ -73,12 +67,6 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePermission([Bind] PermissionViewModel model)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonService.NoImage;
-
-            var _role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = _role;
-
             var role = await _roleManager.FindByIdAsync(model.RoleId);
             var claims = await _roleManager.GetClaimsAsync(role);
             foreach (var claim in claims)

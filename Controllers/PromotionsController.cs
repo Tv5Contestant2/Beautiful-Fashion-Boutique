@@ -33,12 +33,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var data = await _service.GetAllPromos();
 
             var viewModel = new PromoViewModel
@@ -54,12 +48,6 @@ namespace ECommerce1.Controllers
         [HttpGet]
         public async Task<IActionResult> CreatePromo()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var _model = await _service.InitializePromo();
             return View(_model);
         }
@@ -67,12 +55,6 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePromo([Bind] Promos model)
         {
-            var _user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
-
-            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
             if (model.StartDate == null) ModelState.AddModelError("StartDate", "The field Start Date is required.");
@@ -123,12 +105,6 @@ namespace ECommerce1.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePromo(long id, [Bind] Promos model)
         {
-            var _user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
-
-            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
 
             if (model.StartDate == null) ModelState.AddModelError("StartDate", "The field Start Date is required.");
@@ -154,12 +130,6 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> DeletePromo(long id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(user.Image)) ViewBag.Image = _commonServices.NoImage;
-
-            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var PromoDetails = await _service.GetPromoById(id);
             if (PromoDetails == null) return RedirectToAction("Error", "Home");
             return View(PromoDetails);
@@ -168,12 +138,6 @@ namespace ECommerce1.Controllers
         [HttpPost, ActionName("DeletePromo")]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var _user = await _userManager.GetUserAsync(HttpContext.User);
-            if (string.IsNullOrEmpty(_user.Image)) ViewBag.Image = _commonServices.NoImage;
-
-            var role = _userManager.GetRolesAsync(_user).Result.FirstOrDefault();
-            ViewBag.Role = role;
-
             var PromoDetails = await _service.GetPromoById(id);
             if (PromoDetails == null) return RedirectToAction("Error", "Home");
 
