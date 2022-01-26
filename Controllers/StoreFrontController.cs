@@ -51,7 +51,7 @@ namespace ECommerce1.Controllers
         public IActionResult Index(int page = 1)
         {
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
-            ViewBag.HeroVideo = _administratorService.GetHeroVideo();
+            ViewBag.StoreBanner = _administratorService.GetHero();
             return View(new ProductViewModel());
         }
 
@@ -69,7 +69,7 @@ namespace ECommerce1.Controllers
             ViewBag.Products = products;
             ViewBag.CustomersId = userId;
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
-            ViewBag.HeroVideo = _administratorService.GetHeroVideo();
+            ViewBag.StoreBanner = _administratorService.GetHero();
 
             await _userService.ArchiveUsers();
             await _userService.DeleteCustomers();

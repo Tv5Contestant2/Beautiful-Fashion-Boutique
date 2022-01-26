@@ -2,7 +2,6 @@ using ECommerce1.Data;
 using ECommerce1.Data.Services;
 using ECommerce1.Data.Services.Interfaces;
 using ECommerce1.Helper;
-using ECommerce1.Hubs;
 using ECommerce1.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;

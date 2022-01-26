@@ -55,6 +55,7 @@ namespace ECommerce1.Controllers
         public async Task<IActionResult> CreateEmployee([Bind] EmployeeViewModel model)
         {
             if (!string.IsNullOrEmpty(model.Image)) model.Image = _commonServices.GetImageByte64StringFromSplit(model.Image);
+            if (model.RoleList == null) model.RoleList = _roleManager.Roles.Where(x => x.Name.ToLower() != RolesEnum.Admin.ToString().ToLower());
 
             if (model.IsAutoGeneratePassword)
             {
@@ -81,10 +82,11 @@ namespace ECommerce1.Controllers
                 FirstName = model.FirstName,
                 Image = model.Image,
                 IsEmployee = true,
+                IsCustomer = false,
                 IsFirstTimeLogin = false,
                 LastName = model.LastName,
                 UserName = model.Email,
-                LastLoggedIn = DateTime.Now
+                LastLoggedIn = DateTime.Now,
             };
 
             // Store user data in AspNetUsers database table

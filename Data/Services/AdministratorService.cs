@@ -27,9 +27,9 @@ namespace ECommerce1.Data.Services
             return result;
         }
 
-        public string GetHeroVideo() 
+        public string GetHero() 
         {
-            var result = _context.Settings.Select(x => x.HeroVideo).First();
+            var result = _context.Settings.Select(x => x.StoreBanner).First();
             return result;
         }
 
@@ -84,73 +84,78 @@ namespace ECommerce1.Data.Services
         public void UpdateSettings(SettingsViewModel settings)
         {
             var result = _context.Settings.FirstOrDefault();
-            var _split = settings.StoreLogo.Split(",");
 
-            if (_split.Any())
+            if (settings.StoreLogo.Contains("data:image/jpeg"))
             {
-                result.StoreLogo = _split[1]; //Get Base64String only.
+                var _logo = settings.StoreLogo.Split(",");
+                result.StoreLogo = _logo[1]; //Get Base64String only.
             }
 
-            result.HeroVideo = settings.HeroVideo;
+            if (settings.StoreBanner.Contains("data:image/jpeg"))
+            {
+                var _hero = settings.StoreBanner.Split(",");
+                result.StoreBanner = _hero[1]; //Get Base64String only.
+            }
+
             result.EmailLogo = settings.EmailLogo;
 
             _context.Settings.Update(result);
             _context.SaveChanges();
         }
 
-        public decimal GetProductSales()
+        public async Task<decimal> GetProductSales()
         {
-            var result = _context.Orders
+            var result = await _context.Orders
                 .Where(x => x.OrderDate.Month == DateTime.Now.Month && x.OrderDate.Year == DateTime.Now.Year)
-                .ToList();
+                .ToListAsync();
 
             return result != null ? result.Sum(x => x.Total + x.TaxAmount + x.ShippingFee) : 0;
         }
 
-        public long GetProductSold()
+        public async Task<long> GetProductSold()
         {
-            var result = _context.OrdersDetails
+            var result = await _context.OrdersDetails
                 .Where(x => x.Orders.OrderDate.Month == DateTime.Now.Month && x.Orders.OrderDate.Year == DateTime.Now.Year)
-                .ToList();
+                .ToListAsync();
 
             return result != null ? result.Sum(x => x.Quantity) : 0;
         }
 
-        public long GetPendingOrders()
+        public async Task<long> GetPendingOrders()
         {
-            var result = _context.Orders.Count(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Pending 
-                            && x.OrderStatusId != (int)OrderStatusEnum.Cancelled);
-            return result != 0 ? result : 0;
+            var result = await _context.Orders.Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Pending 
+                            && x.OrderStatusId != (int)OrderStatusEnum.Cancelled).ToListAsync();
+            return result != null ? result.Count : 0;
         }
 
-        public IEnumerable<Orders> GetRecentOrders()
+        public async Task<IEnumerable<Orders>> GetRecentOrders()
         {
-            return _context.Orders
+            return await _context.Orders
                 .Include(x => x.Customers)
                 .Include(x => x.OrderStatus)
                 .Include(x => x.DeliveryStatus)
                 .OrderByDescending(x => x.OrderDate)
-                .Take(20).ToList();
+                .Take(20).ToListAsync();
         }
 
-        public IEnumerable<Orders> GetRecentDeliveries()
+        public async Task<IEnumerable<Orders>> GetRecentDeliveries()
         {
-            return _context.Orders
+            return await _context.Orders
                 .Include(x => x.Customers)
                 .Include(x => x.OrderStatus)
                 .Include(x => x.DeliveryStatus)
                 .Where(x => x.DeliveryStatusId == (int)DeliveryStatusEnum.Shipped)
                 .OrderByDescending(x => x.OrderDate)
-                .Take(20).ToList();
+                .Take(20).ToListAsync();
         }
 
-        public IEnumerable<Message> GetRecentMessages()
+        public async Task<IEnumerable<Message>> GetRecentMessages()
         {
-            return _context.Messages
+            return await _context.Messages
                 .Include(x => x.Sender)
                 .Where(x => x.Sender.FirstName != "Administrator")
                 .OrderByDescending(x => x.DateSent)
-                .Take(20).ToList();
+                .Take(20).ToListAsync();
         }
 
         public async Task<IEnumerable<OrderDetails>> GetTopSelling()

@@ -18,30 +18,43 @@
                 <div class="row">
                     <label class="control-label mt-5">Store Logo</label>
                     <div class="row form-group">
-                        <img class="img-thumbnail" id="imgOutput" src="@string.Format("data:image/jpeg;base64,{0}", Model.StoreLogo)"/>
+                        <img class="img-thumbnail" id="imgLogo" src="@string.Format("data:image/jpeg;base64,{0}", Model.StoreLogo)"/>
                         <div style="display: none;">
-                            <input id="Image" asp-for="StoreLogo" class="form-control" />
+                            <input id="Logo" asp-for="StoreLogo" class="form-control" />
                         </div>
                         <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm mt-3">
-                            <input id="inptImageUpload" type="file" onchange="readURL(this);" class="form-control border-0" accept="image/*" name="image">
-                            <input id="inptImageFileName" type="text" class="form-control" style="display:none;" />
-                            <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+                            <input id="inptLogoUpload" type="file" onchange="readURLLogo(this);" class="form-control border-0" accept="image/*" name="image">
+                            <input id="inptLogoFileName" type="text" class="form-control" style="display:none;" />
+                            <label id="upload-label" for="uploadLogo" class="font-weight-light text-muted">Choose file</label>
                             <div class="input-group-append">
-                                <label for="inptImageUpload" class="btn btn-outline-danger m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2"></i><small class="text-uppercase font-weight-bold">Choose file</small></label>
+                                <label for="inptLogoUpload" class="btn btn-outline-danger m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2"></i><small class="text-uppercase font-weight-bold">Choose file</small></label>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <label class="control-label mt-2">Hero Video</label>
-                    <p class="text-danger">Please use any image hosting site</p>
-                    <input asp-for="HeroVideo" class="form-control" />
+                    <label class="control-label mt-5">Store Banner</label>
+                    <p class="text-danger">Recommended Size (pixels): 1871 x 473 </p>
+                    <div class="row form-group">
+                        <img class="img-thumbnail" id="imgBanner" src="@string.Format("data:image/jpeg;base64,{0}", Model.StoreBanner)" />
+                        <div style="display: none;">
+                            <input id="Banner" asp-for="StoreBanner" class="form-control" />
+                        </div>
+                        <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm mt-3">
+                            <input id="inptBannerUpload" type="file" onchange="readURLBanner(this);" class="form-control border-0" accept="image/*" name="image">
+                            <input id="inptBannerFileName" type="text" class="form-control" style="display:none;" />
+                            <label id="upload-label" for="uploadBanner" class="font-weight-light text-muted">Choose file</label>
+                            <div class="input-group-append">
+                                <label for="inptBannerUpload" class="btn btn-outline-danger m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2"></i><small class="text-uppercase font-weight-bold">Choose file</small></label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
                     <label class="control-label mt-2">Email Logo</label>
-                    <p class="text-danger">Please use any image hosting site</p>
+                    <p class="text-danger">Please use any image hosting site of your choice and paste the URL</p>
                     <input asp-for="EmailLogo" class="form-control" />
                 </div>
             </form>
@@ -55,7 +68,11 @@
 </div>
 
 <style>
-    #inptImageUpload {
+    #inptLogoUpload {
+        opacity: 0;
+    }
+    
+    #inptBannerUpload {
         opacity: 0;
     }
 
@@ -67,12 +84,12 @@
     }
 </style>
 <script>
-    function readURL(input) {
+    function readURLLogo(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#imgOutput')
+                $('#imgLogo')
                     .attr('src', e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
@@ -80,8 +97,27 @@
     }
 
     $(function () {
-        $('#upload').on('change', function () {
-            readURL(input);
+        $('#uploadLogo').on('change', function () {
+            readURLLogo(input);
+        });
+    });
+</script>
+<script>
+    function readURLBanner(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgBanner')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $(function () {
+        $('#uploadBanner').on('change', function () {
+            readURLBanner(input);
         });
     });
 </script>
@@ -104,15 +140,10 @@
         document.documentElement.scrollTop = 0;
     }
 
-    $("#ImageFile").on("change", function () {
-        var output = document.getElementById('ImagePreview');
-        output.src = $(this).val();
-    });
-
-    var inptImageUpload = document.querySelector("#inptImageUpload");
+    var inptLogoUpload = document.querySelector("#inptLogoUpload");
 
     // listen for the change event so we can capture the file
-    inptImageUpload.addEventListener("change", (e) => {
+    inptLogoUpload.addEventListener("change", (e) => {
         // get a reference to the file
         const file = e.target.files[0];
 
@@ -123,11 +154,33 @@
                 .replace("data:", "")
                 .replace(/^.+,/, "");
 
-            document.getElementById('imgOutput').setAttribute('src', reader.result);
-            document.getElementById("Image").value = reader.result;
+            document.getElementById('imgLogo').setAttribute('src', reader.result);
+            document.getElementById("Logo").value = reader.result;
 
         };
         reader.readAsDataURL(file);
-        document.getElementById('inptImageFileName').value = file.name;
+        document.getElementById('inptLogoFileName').value = file.name;
+    });
+
+    var inptBannerUpload = document.querySelector("#inptBannerUpload");
+
+    // listen for the change event so we can capture the file
+    inptBannerUpload.addEventListener("change", (e) => {
+        // get a reference to the file
+        const file = e.target.files[0];
+
+        // encode the file using the FileReader API
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result
+                .replace("data:", "")
+                .replace(/^.+,/, "");
+
+            document.getElementById('imgBanner').setAttribute('src', reader.result);
+            document.getElementById("Banner").value = reader.result;
+
+        };
+        reader.readAsDataURL(file);
+        document.getElementById('inptBannerFileName').value = file.name;
     });
 </script>

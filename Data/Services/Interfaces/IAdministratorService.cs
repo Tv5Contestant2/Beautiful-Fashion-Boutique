@@ -9,7 +9,7 @@ namespace ECommerce1.Data.Services.Interfaces
     {
         public string GetStoreLogo();
 
-        public string GetHeroVideo();
+        public string GetHero();
 
         public string GetEmailLogo();
 
@@ -29,17 +29,17 @@ namespace ECommerce1.Data.Services.Interfaces
 
         public void UpdateSettings(SettingsViewModel settings);
 
-        public decimal GetProductSales();
+        public Task<decimal> GetProductSales();
 
-        public long GetProductSold();
+        public Task<long> GetProductSold();
 
-        public long GetPendingOrders();
+        public Task<long> GetPendingOrders();
 
-        public IEnumerable<Orders> GetRecentOrders();
+        public Task<IEnumerable<Orders>> GetRecentOrders();
 
-        public IEnumerable<Orders> GetRecentDeliveries();
+        public Task<IEnumerable<Orders>> GetRecentDeliveries();
 
-        public IEnumerable<Message> GetRecentMessages();
+        public Task<IEnumerable<Message>> GetRecentMessages();
 
         public Task<IEnumerable<OrderDetails>> GetTopSelling();
 

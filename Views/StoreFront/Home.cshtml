@@ -10,12 +10,14 @@
 <div class="container-fluid main-container">
     <div class="row">
         <div class="content mx-auto">
-            @*Hero Section*@
+            @*StoreBanner Section*@
             <section class="position-relative">
-                <video class="hero" autoplay="" muted="" loop="">
-                    <source src="@ViewBag.HeroVideo" type="video/webm">
-                    <source src="@ViewBag.HeroVideo" type="video/mp4">
-                </video>
+                @*<video class="hero" autoplay="" muted="" loop="">*@
+                @*<source src="~/hero.jpeg" type="video/webm">*@
+                @*<img src="~/hero.jpeg" type="">*@
+                <img src="@String.Format("data:image/jpg;base64,{0}", ViewBag.StoreBanner)" class="hero" />
+                @*<source src="@ViewBag.StoreBanner" type="video/mp4">*@
+                @*</video>*@
                 <div class="py-5 video-content">
                     <div class="container py-xl-4 position-relative">
                         <div class="row py-5">

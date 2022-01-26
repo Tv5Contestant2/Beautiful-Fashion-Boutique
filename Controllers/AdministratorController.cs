@@ -29,38 +29,38 @@ namespace ECommerce1.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> AboutUs()
+        public IActionResult AboutUs()
         {
             var result = _service.GetAboutUs();
             return View(result);
         }
 
-        public async Task<IActionResult> ContactUs()
+        public IActionResult ContactUs()
         {
             var result = _service.GetContactUs();
             return View(result);
         }
 
-        public async Task<IActionResult> Settings()
+        public IActionResult Settings()
         {
             var viewModel = new SettingsViewModel()
             {
                 StoreLogo = _service.GetStoreLogo(),
-                HeroVideo = _service.GetHeroVideo(),
+                StoreBanner = _service.GetHero(),
                 EmailLogo = _service.GetEmailLogo(),
             };
 
             return View(viewModel);
         }
 
-        public async Task<IActionResult> CreateAboutUs(About about)
+        public IActionResult CreateAboutUs(About about)
         {
             _service.CreateAboutUs(about);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> CreateContactUs(SocMed socMed)
+        public IActionResult CreateContactUs(SocMed socMed)
         {
             _service.CreateContactUs(socMed);
 
@@ -71,13 +71,13 @@ namespace ECommerce1.Controllers
         {
             var viewModel = new DashboardViewModel()
             {
-                Sales = _service.GetProductSales(),
-                ProductsSold = _service.GetProductSold(),
-                Pending = _service.GetPendingOrders(),
+                Sales = await _service.GetProductSales(),
+                ProductsSold = await _service.GetProductSold(),
+                Pending = await _service.GetPendingOrders(),
 
-                RecentOrders = _service.GetRecentOrders(),
-                RecentDeliveries = _service.GetRecentDeliveries(),
-                RecentMessages = _service.GetRecentMessages(),
+                RecentOrders = await _service.GetRecentOrders(),
+                RecentDeliveries = await _service.GetRecentDeliveries(),
+                RecentMessages = await _service.GetRecentMessages(),
                 TopSelling = await _service.GetTopSelling(),
                 OutOfStock = await _service.GetOutOfStock(),
                 Critical = await _service.GetCritical(),
@@ -100,7 +100,7 @@ namespace ECommerce1.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> CreateMessage(MessageViewModel message)
+        public IActionResult CreateMessage(MessageViewModel message)
         {
             _messageService.CreateMessage(message);
 
@@ -108,7 +108,7 @@ namespace ECommerce1.Controllers
         }
         
 
-        public async Task<IActionResult> UpdateSettings(SettingsViewModel viewModel)
+        public IActionResult UpdateSettings(SettingsViewModel viewModel)
         {
             _service.UpdateSettings(viewModel);
 

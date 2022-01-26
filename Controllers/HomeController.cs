@@ -45,7 +45,7 @@ namespace ECommerce1.Controllers
         public IActionResult Index()
         {
             ViewBag.StoreLogo = _administratorService.GetStoreLogo();
-            ViewBag.HeroVideo = _administratorService.GetHeroVideo();
+            ViewBag.StoreBanner = _administratorService.GetHero();
             return RedirectToAction("Home", "StoreFront");
         }
 
@@ -114,6 +114,7 @@ namespace ECommerce1.Controllers
                 {
                     ViewBag.CartCount = 0;
                     ViewBag.WishlistCount = 0;
+                    ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
                     model.isLogInError = true;
                     ModelState.AddModelError(string.Empty, "Account is blocked");
@@ -125,6 +126,7 @@ namespace ECommerce1.Controllers
                 {
                     ViewBag.CartCount = 0;
                     ViewBag.WishlistCount = 0;
+                    ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
                     model.isLogInError = true;
                     ModelState.AddModelError(string.Empty, "Account is deleted");
@@ -137,13 +139,14 @@ namespace ECommerce1.Controllers
                 {
                     ViewBag.CartCount = 0;
                     ViewBag.WishlistCount = 0;
+                    ViewBag.StoreLogo = _administratorService.GetStoreLogo();
 
                     model.isLogInError = true;
                     ModelState.AddModelError(string.Empty, "Email not confirmed yet");
                     return View(model);
                 }
 
-                if (!user.IsFirstTimeLogin.Value && user.IsCustomer.Value != true)
+                if (!user.IsFirstTimeLogin.Value && !user.IsCustomer.Value)
                 {
                     // Generate the reset password token
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -157,13 +160,22 @@ namespace ECommerce1.Controllers
                 {
                     ViewBag.CartCount = await _cartService.GetCartTotalQty(userId);
                     ViewBag.WishlistCount = await _cartService.GetWishlistCount(userId);
+                    ViewBag.StoreLogo = _administratorService.GetStoreLogo();
                     return RedirectToAction("Home", "StoreFront");
+                }
+                else
+                {
+                    ViewBag.StoreLogo = _administratorService.GetStoreLogo();
+                    model.isLogInError = true;
+                    ModelState.AddModelError(string.Empty, "Password is incorrect");
+                    return View(model);
                 }
             }
             else
             {
                 ViewBag.CartCount = 0;
                 ViewBag.WishlistCount = 0;
+                ViewBag.StoreLogo = _administratorService.GetStoreLogo();
                 model.isLogInError = true;
             }
 
@@ -299,6 +311,7 @@ namespace ECommerce1.Controllers
 
         public async Task<IActionResult> SubmitResetPassword(ResetPasswordViewModel model)
         {
+            ViewBag.StoreLogo = _administratorService.GetStoreLogo();
             if (ModelState.IsValid)
             {
                 // Find the user by email
@@ -318,11 +331,12 @@ namespace ECommerce1.Controllers
                     {
                         ModelState.AddModelError("", error.Description);
                     }
-                    return View(model);
+                    return View("ResetPassword", model);
                 }
 
                 // To avoid account enumeration and brute force attacks, don't
                 // reveal that the user does not exist
+                ViewBag.StoreLogo = _administratorService.GetStoreLogo();
                 return View("ResetPasswordSuccess", model);
             }
             // Display validation errors if model state is not valid
@@ -376,6 +390,7 @@ namespace ECommerce1.Controllers
                 {
                     // reset the user password
                     user.IsFirstTimeLogin = true;
+                    user.EmailConfirmed = true;
                     var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
                     if (result.Succeeded)
                     {

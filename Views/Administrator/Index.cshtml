@@ -100,7 +100,7 @@
                         <span class="small text-muted"><i>as of @DateTime.Now</i></span>
                     </div>
                     <div class="col col-2 mt-3 text-right">
-                        <a class="btn btn-sm btn-outline-danger" asp-action="Messages">View orders</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Orders">View orders</a>
                     </div>
                 </div>
                 <div class="d-flex justify-content-lg-around pb-3">
@@ -118,7 +118,7 @@
                                 </div>
                             </div>
 
-                            @if (Model.RecentOrders.Count() > 0)
+                            @if (Model.RecentOrders != null)
                             {
                                 @foreach (var item in Model.RecentOrders)
                                 {
@@ -161,7 +161,7 @@
                         <span class="small text-muted"><i>as of @DateTime.Now</i></span>
                     </div>
                     <div class="col col-2 mt-3 text-right">
-                        <a class="btn btn-sm btn-outline-danger" asp-action="Messages">View orders</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Orders">View orders</a>
                     </div>
                 </div>
                 <div class="d-flex justify-content-lg-around pb-3">
@@ -177,7 +177,7 @@
                                 </div>
                             </div>
 
-                            @if (Model.RecentDeliveries.Count() > 0)
+                            @if (Model.RecentDeliveries != null)
                             {
                                 @foreach (var item in Model.RecentDeliveries)
                                 {
@@ -232,7 +232,7 @@
                                 </div>
                             </div>
 
-                            @if (Model.RecentMessages.Count() > 0)
+                            @if (Model.RecentMessages != null)
                             {
                                 @foreach (var item in Model.RecentMessages)
                                 {
@@ -275,7 +275,14 @@
                                         <h4 class="text-danger">Critical</h4>
                                     </div>
                                     <div class="col col-3 text-right">
-                                        <h4>@Model.Critical.Count()</h4>
+                                        @if (Model.Critical != null)
+                                        {
+                                            <h4>@Model.Critical.Count()</h4>
+                                        }
+                                        else
+                                        {
+                                            <h4>0</h4>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -283,7 +290,7 @@
                                 <div class="media-body">
                                     <div class="d-flex">
                                         <div class="cart-inner" id="dtOrderList">
-                                            @if (Model.Critical.Count() != 0)
+                                            @if (Model.Critical != null)
                                             {
                                                 <div class="row-item">
                                                     <div class="row text-left">
@@ -326,8 +333,16 @@
                                     <div class="col col-9">
                                         <h4 class="text-danger">Out-of-stock</h4>
                                     </div>
+
                                     <div class="col col-3 text-right">
-                                        <h4>@Model.OutOfStock.Count()</h4>
+                                        @if (Model.OutOfStock != null)
+                                        {
+                                            <h4>@Model.OutOfStock.Count()</h4>
+                                        }
+                                        else
+                                        {
+                                            <h4>0</h4>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -335,7 +350,7 @@
                                 <div class="media-body">
                                     <div class="d-flex">
                                         <div class="cart-inner" id="dtOrderList">
-                                            @if (Model.OutOfStock.Count() != 0)
+                                            @if (Model.OutOfStock != null)
                                             {
                                                 <div class="row-item">
                                                     <div class="row text-left">

@@ -8,7 +8,7 @@ namespace ECommerce1.Models
         [Key]
         public int Id { get; set; }
         public string StoreLogo { get; set; }
-        public string HeroVideo { get; set; }
+        public string StoreBanner { get; set; }
         public string EmailLogo { get; set; }
     }
 }

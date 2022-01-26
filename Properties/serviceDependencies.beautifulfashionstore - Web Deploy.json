@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/ekelldevio/databases/ecommerce",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:DefaultConnectionString",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}
